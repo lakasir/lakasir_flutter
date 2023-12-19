@@ -1,1 +1,3 @@
-const String baseUrl = 'https://lakasir.com/api';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+String baseUrl = dotenv.get('BASE_URL');

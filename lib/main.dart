@@ -27,12 +27,14 @@ import 'package:lakasir/screens/transactions/invoice_screen.dart';
 import 'package:lakasir/screens/transactions/transaction_menu_screen.dart';
 import 'package:lakasir/utils/auth.dart';
 import 'package:lakasir/utils/colors.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   final isAuthenticated = await getToken();
   final bool setup = await isSetup();
+  await dotenv.load();
   runApp(
     MyApp(
       isAuthenticated: isAuthenticated ?? "",

@@ -17,6 +17,7 @@ dependencies:
   image_picker: ^1.0.4
   intl: ^0.18.1
   flutter_launcher_icons: ^0.13.1
+  flutter_dotenv: ^5.0.2
 
 flutter_icons:
   android: "launcher_icon"
@@ -30,6 +31,8 @@ dev_dependencies:
   flutter_lints: ^2.0.0
 flutter:
   uses-material-design: true
+  assets:
+    - .env
 
 fonts:
   - family: SourceSans
