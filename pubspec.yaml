@@ -1,0 +1,59 @@
+name: lakasir
+description: A new Flutter project.
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.1.2 <4.0.0'
+
+dependencies:
+  http: ^1.1.0
+  flutter:
+    sdk: flutter
+
+
+  cupertino_icons: ^1.0.2
+  shared_preferences: ^2.2.1
+  image_picker: ^1.0.4
+  intl: ^0.18.1
+  flutter_launcher_icons: ^0.13.1
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/icons/lakasir.png"
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^2.0.0
+flutter:
+  uses-material-design: true
+
+fonts:
+  - family: SourceSans
+    fonts:
+      - asset: fonts/SourceSans3-BlackItalic.ttf
+      - asset: fonts/SourceSans3-BoldItalic.ttf
+      - asset: fonts/SourceSans3-ExtraBoldItalic.ttf
+      - asset: fonts/SourceSans3-ExtraLightItalic.ttf
+      - asset: fonts/SourceSans3-Italic.ttf
+      - asset: fonts/SourceSans3-LightItalic.ttf
+      - asset: fonts/SourceSans3-MediumItalic.ttf
+      - asset: fonts/SourceSans3-SemiBoldItalic.ttf
+        style: italic
+      - asset: fonts/SourceSans3-Black.ttf
+      - asset: fonts/SourceSans3-Bold.ttf
+      - asset: fonts/SourceSans3-ExtraBold.ttf
+      - asset: fonts/SourceSans3-ExtraLight.ttf
+      - asset: fonts/SourceSans3-Regular.ttf
+      - asset: fonts/SourceSans3-Light.ttf
+      - asset: fonts/SourceSans3-Medium.ttf
+      - asset: fonts/SourceSans3-SemiBold.ttf
+        style: normal
+  - family: Poppins
+    fonts:
+      - asset: fonts/Poppins-Regular.ttf
+        style: normal
+
