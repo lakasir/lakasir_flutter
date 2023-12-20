@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lakasir/config/app.dart';
 import 'package:lakasir/utils/auth.dart';
 import 'package:lakasir/utils/colors.dart';
 import 'package:lakasir/widgets/filled_button.dart';
@@ -89,6 +90,7 @@ class _SetupScreenState extends State<SetupScreen> {
                     Container(
                       margin: const EdgeInsets.only(bottom: 21.0),
                       child: MyTextField(
+                        prefixText: environment == "local" ? "http://" : "https://",
                         controller: registerDomainController,
                         label: "Your Registered Domain",
                         validator: (value) {

@@ -10,19 +10,21 @@ class MyTextField extends StatefulWidget {
   final String hintText;
   final bool mandatory;
   final String errorText;
+  final String prefixText;
   final bool obscureText;
   final int? maxLines;
   final Widget? rightIcon;
   final Function(String)? onSubmitted;
-  ValidatorCallback? validator;
+  final ValidatorCallback? validator;
 
-  MyTextField({
+  const MyTextField({
     super.key,
     this.label,
     this.mandatory = false,
     required this.controller,
     this.hintText = "",
     this.obscureText = false,
+    this.prefixText = "",
     this.errorText = "",
     this.maxLines = 1,
     this.rightIcon,
@@ -85,6 +87,8 @@ class _MyTextFieldState extends State<MyTextField> {
           onFieldSubmitted: widget.onSubmitted,
           // onSubmitted: widget.onSubmitted,
           decoration: InputDecoration(
+            prefixText: widget.prefixText,
+            prefixStyle: const TextStyle(color: secondary),
             suffixIcon: widget.obscureText
                 ? InkWell(
                     onTap: () {
