@@ -65,7 +65,6 @@ class _ForgotScreenState extends State<ForgotScreen> {
                         obscureText: true,
                       ),
                     ),
-
                     Container(
                       margin: const EdgeInsets.only(bottom: 21.0),
                       child: MyTextField(
@@ -76,12 +75,10 @@ class _ForgotScreenState extends State<ForgotScreen> {
                         obscureText: true,
                       ),
                     ),
-
                     MyFilledButton(
-                      isLoading: isLoading,
-                      onPressed: () => {},
-                      child: const Text("Confirm")
-                    ),
+                        isLoading: isLoading,
+                        onPressed: () => {},
+                        child: const Text("Confirm")),
                   ],
                 ),
               ),

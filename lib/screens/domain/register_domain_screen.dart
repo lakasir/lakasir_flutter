@@ -18,7 +18,8 @@ class _RegisterDomainScreenState extends State<RegisterDomainScreen> {
   final passwordController = TextEditingController();
   bool agree = false;
   bool isLoading = false;
-  LoginErrorResponse loginErrorResponse = LoginErrorResponse(password: "", email: "");
+  LoginErrorResponse loginErrorResponse =
+      LoginErrorResponse(password: "", email: "");
 
   @override
   void dispose() {
@@ -73,7 +74,7 @@ class _RegisterDomainScreenState extends State<RegisterDomainScreen> {
                     Container(
                       margin: const EdgeInsets.only(bottom: 21.0),
                       child: MyTextField(
-                        controller: emailController,
+                        controller: emailController, 
                         errorText: loginErrorResponse.email,
                         label: "Full Name",
                         mandatory: true,
@@ -122,7 +123,8 @@ class _RegisterDomainScreenState extends State<RegisterDomainScreen> {
                     Container(
                       margin: const EdgeInsets.only(bottom: 21.0),
                       child: MyCheckbox(
-                        label: "By creating the shop, you agree to our Terms and Conditions",
+                        label:
+                            "By creating the shop, you agree to our Terms and Conditions",
                         onChange: (bool value) {
                           setState(() {
                             agree = value;
@@ -146,4 +148,3 @@ class _RegisterDomainScreenState extends State<RegisterDomainScreen> {
     );
   }
 }
-

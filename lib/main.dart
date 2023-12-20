@@ -53,7 +53,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     var initialRoute = setup
         ? isAuthenticated.isEmpty
-            ? '/domain/register'
+            ? '/login'
             : '/menu'
         : '/domain/setup';
 

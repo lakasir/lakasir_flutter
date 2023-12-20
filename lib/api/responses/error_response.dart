@@ -4,7 +4,8 @@ class ErrorResponse<T> {
 
   ErrorResponse({required this.message, this.errors});
 
-  factory ErrorResponse.fromJson(Map<String, dynamic> json, T Function(Map<String, dynamic>)? fromJson) {
+  factory ErrorResponse.fromJson(
+      Map<String, dynamic> json, T Function(Map<String, dynamic>)? fromJson) {
     return ErrorResponse<T>(
       message: json['message'],
       errors: fromJson!(json['errors']),

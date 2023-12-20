@@ -23,8 +23,7 @@ class _SetupScreenState extends State<SetupScreen> {
     super.dispose();
   }
 
-  void setup() async {
-    final context = this.context;
+  Future<bool> setup() async {
     setState(() {
       isLoading = true;
     });
@@ -32,18 +31,17 @@ class _SetupScreenState extends State<SetupScreen> {
       setState(() {
         isLoading = false;
       });
-      return;
+      return false;
     }
+
     try {
       await storeSetup(registerDomainController.text);
-      Navigator.pushNamed(context, '/login');
+      return true;
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Something went wrong"),
-          backgroundColor: error,
-        ),
-      );
+      setState(() {
+        isLoading = false;
+      });
+      return false;
     }
   }
 
@@ -55,7 +53,6 @@ class _SetupScreenState extends State<SetupScreen> {
         child: ListView(
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           children: [
-            // wellcome text
             Container(
               margin: const EdgeInsets.only(top: 116, bottom: 58),
               child: Center(
@@ -82,7 +79,6 @@ class _SetupScreenState extends State<SetupScreen> {
                 ),
               ),
             ),
-
             Padding(
               padding: const EdgeInsets.all(25.0),
               child: Form(
@@ -90,19 +86,40 @@ class _SetupScreenState extends State<SetupScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Email Input
                     Container(
                       margin: const EdgeInsets.only(bottom: 21.0),
                       child: MyTextField(
                         controller: registerDomainController,
                         label: "Your Registered Domain",
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Please enter your domain";
+                          }
+                          return null;
+                        },
                         mandatory: true,
                       ),
                     ),
                     MyFilledButton(
-                        isLoading: isLoading,
-                        onPressed: setup,
-                        child: const Text("Setup!")),
+                      isLoading: isLoading,
+                      onPressed: () {
+                        setup().then(
+                          (value) {
+                            if (value) {
+                              Navigator.pushNamed(context, '/login');
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text("Something went wrong"),
+                                  backgroundColor: error,
+                                ),
+                              );
+                            }
+                          },
+                        );
+                      },
+                      child: const Text("Setup!"),
+                    ),
                   ],
                 ),
               ),

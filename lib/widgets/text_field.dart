@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lakasir/utils/colors.dart';
 
 typedef MyCallback = void Function(String);
+typedef ValidatorCallback = String? Function(String?);
 
 class MyTextField extends StatefulWidget {
   final TextEditingController controller;
@@ -13,8 +14,9 @@ class MyTextField extends StatefulWidget {
   final int? maxLines;
   final Widget? rightIcon;
   final Function(String)? onSubmitted;
+  ValidatorCallback? validator;
 
-  const MyTextField({
+  MyTextField({
     super.key,
     this.label,
     this.mandatory = false,
@@ -25,6 +27,7 @@ class MyTextField extends StatefulWidget {
     this.maxLines = 1,
     this.rightIcon,
     this.onSubmitted,
+    this.validator,
   });
 
   @override
@@ -66,11 +69,21 @@ class _MyTextFieldState extends State<MyTextField> {
               ),
             ),
           ),
-        TextField(
+        TextFormField(
           maxLines: widget.maxLines,
           controller: widget.controller,
           obscureText: securedText,
-          onSubmitted: widget.onSubmitted,
+          validator: (value) {
+            if (widget.validator != null) {
+              return widget.validator!(value);
+            }
+            if (widget.mandatory && value!.isEmpty) {
+              return "Field tidak boleh kosong";
+            }
+            return null;
+          },
+          onFieldSubmitted: widget.onSubmitted,
+          // onSubmitted: widget.onSubmitted,
           decoration: InputDecoration(
             suffixIcon: widget.obscureText
                 ? InkWell(
