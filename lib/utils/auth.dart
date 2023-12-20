@@ -1,3 +1,4 @@
+import 'package:lakasir/config/app.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<bool> checkAuthentication() async {
@@ -26,7 +27,14 @@ Future<String?> getToken() async {
 
 Future<String> getDomain() async {
   final prefs = await SharedPreferences.getInstance();
-  return prefs.getString('domain') ?? "";
+  if (prefs.getString('domain') == null) {
+    return "";
+  }
+  String certificated = "https://";
+  if (environment == "local") {
+    certificated = "http://";
+  }
+  return "$certificated${prefs.getString('domain')!}/api";
 }
 
 Future<bool> isSetup() async {

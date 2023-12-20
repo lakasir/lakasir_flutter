@@ -1,5 +1,3 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:lakasir/Exceptions/validation.dart';
@@ -28,8 +26,10 @@ class _LoginScreenState extends State<LoginScreen> {
   final passwordController = TextEditingController();
   bool remember = false;
   bool isLoading = false;
-  LoginErrorResponse loginErrorResponse =
-      LoginErrorResponse(password: "", email: "");
+  LoginErrorResponse loginErrorResponse = LoginErrorResponse(
+    password: "",
+    email: "",
+  );
 
   @override
   void dispose() {
@@ -38,8 +38,7 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  void login() async {
-    final context = this.context;
+  Future<bool> login() async {
     setState(() {
       isLoading = true;
     });
@@ -47,11 +46,11 @@ class _LoginScreenState extends State<LoginScreen> {
       setState(() {
         isLoading = false;
       });
-      return;
+      return false;
     }
 
     try {
-      final response = await ApiService(baseUrl).postData('auth/login', {
+      final response = await ApiService(await getDomain()).postData('auth/login', {
         'email': emailController.text,
         'password': passwordController.text,
         'remember': remember
@@ -60,21 +59,14 @@ class _LoginScreenState extends State<LoginScreen> {
       ApiResponse<LoginResponse> apiResponse = ApiResponse.fromJson(
           response, (json) => LoginResponse.fromJson(json));
 
-      Navigator.pushNamed(context, '/menu');
-
       storeToken(apiResponse.data!.token);
+      return true;
     } catch (e) {
       if (e is ValidationException) {
         ErrorResponse<LoginErrorResponse> errorResponse =
             ErrorResponse.fromJson(jsonDecode(e.toString()),
                 (json) => LoginErrorResponse.fromJson(json));
 
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(errorResponse.message),
-            backgroundColor: error,
-          ),
-        );
         setState(() {
           loginErrorResponse = errorResponse.errors!;
         });
@@ -82,6 +74,7 @@ class _LoginScreenState extends State<LoginScreen> {
       setState(() {
         isLoading = false;
       });
+      return false;
     }
   }
 
@@ -165,9 +158,23 @@ class _LoginScreenState extends State<LoginScreen> {
 
                     // Sign In Button
                     MyFilledButton(
-                        isLoading: isLoading,
-                        onPressed: login,
-                        child: const Text("Sign In")),
+                      isLoading: isLoading,
+                      onPressed: () {
+                        login().then((value) {
+                          if (value) {
+                            Navigator.pushNamed(context, '/menu');
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text("Something went wrong"),
+                                backgroundColor: error,
+                              ),
+                            );
+                          }
+                        });
+                      },
+                      child: const Text("Sign In"),
+                    ),
                   ],
                 ),
               ),
