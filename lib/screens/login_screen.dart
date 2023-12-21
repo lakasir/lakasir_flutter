@@ -132,7 +132,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: MyTextField(
                         controller: emailController,
                         errorText: loginErrorResponse.email,
-                        label: "Email or Phone Number",
+                        label: "Email",
                         mandatory: true,
                       ),
                     ),

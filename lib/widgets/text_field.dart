@@ -80,7 +80,7 @@ class _MyTextFieldState extends State<MyTextField> {
               return widget.validator!(value);
             }
             if (widget.mandatory && value!.isEmpty) {
-              return "Field tidak boleh kosong";
+              return "Field is required";
             }
             return null;
           },

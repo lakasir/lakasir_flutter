@@ -1,5 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:lakasir/api/responses/auths/login_error_response.dart';
+import 'package:lakasir/Exceptions/validation.dart';
+import 'package:lakasir/api/api_service.dart';
+import 'package:lakasir/api/responses/domain/register_error_response.dart';
+import 'package:lakasir/api/responses/error_response.dart';
+import 'package:lakasir/config/app.dart';
 import 'package:lakasir/utils/colors.dart';
 import 'package:lakasir/widgets/checkbox.dart';
 import 'package:lakasir/widgets/filled_button.dart';
@@ -14,17 +20,74 @@ class RegisterDomainScreen extends StatefulWidget {
 final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
 class _RegisterDomainScreenState extends State<RegisterDomainScreen> {
-  final emailController = TextEditingController();
+  final fullNameController = TextEditingController();
+  final domainNameController = TextEditingController();
+  final emailOrPhoneController = TextEditingController();
   final passwordController = TextEditingController();
+  final passwordConfirmationController = TextEditingController();
   bool agree = false;
   bool isLoading = false;
-  LoginErrorResponse loginErrorResponse =
-      LoginErrorResponse(password: "", email: "");
+  RegisterErrorResponse registerErrorResponse = RegisterErrorResponse(
+    shopName: "",
+    fullName: "",
+    domainName: "",
+    emailOrPhone: "",
+    password: "",
+  );
+
+  Future<String> register() async {
+    try {
+      setState(() {
+        isLoading = true;
+      });
+      if (!agree) {
+        throw Exception("Please agree to our terms and conditions");
+      }
+      if (!_formKey.currentState!.validate()) {
+        setState(() {
+          isLoading = false;
+        });
+        throw Exception("Please fill the form correctly");
+      }
+
+      await ApiService(baseUrl).postData(
+        'domain/register',
+        {
+          "full_name": fullNameController.text,
+          "domain": domainNameController.text,
+          "email": emailOrPhoneController.text,
+          "password": passwordController.text,
+          "password_confirmation": passwordConfirmationController.text,
+        },
+      );
+
+      return "";
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      if (e is ValidationException) {
+        ErrorResponse<RegisterErrorResponse> errorResponse =
+            ErrorResponse.fromJson(jsonDecode(e.toString()),
+                (json) => RegisterErrorResponse.fromJson(json));
+
+        setState(() {
+          registerErrorResponse = errorResponse.errors!;
+        });
+        return errorResponse.message;
+      }
+
+      return e.toString().replaceAll("Exception: ", "");
+    }
+  }
 
   @override
   void dispose() {
-    emailController.dispose();
+    fullNameController.dispose();
+    domainNameController.dispose();
+    emailOrPhoneController.dispose();
     passwordController.dispose();
+    passwordConfirmationController.dispose();
     super.dispose();
   }
 
@@ -74,17 +137,19 @@ class _RegisterDomainScreenState extends State<RegisterDomainScreen> {
                     Container(
                       margin: const EdgeInsets.only(bottom: 21.0),
                       child: MyTextField(
-                        controller: emailController, 
-                        errorText: loginErrorResponse.email,
-                        label: "Full Name",
+                        controller: fullNameController,
+                        errorText: registerErrorResponse.shopName,
+                        label: "Shop Name",
                         mandatory: true,
                       ),
                     ),
                     Container(
                       margin: const EdgeInsets.only(bottom: 21.0),
                       child: MyTextField(
-                        controller: emailController,
-                        errorText: loginErrorResponse.email,
+                        controller: domainNameController,
+                        errorText: registerErrorResponse.domainName,
+                        prefixText:
+                            environment == "local" ? "http://" : "https://",
                         label: "Domain Name",
                         mandatory: true,
                       ),
@@ -92,17 +157,17 @@ class _RegisterDomainScreenState extends State<RegisterDomainScreen> {
                     Container(
                       margin: const EdgeInsets.only(bottom: 21.0),
                       child: MyTextField(
-                        controller: emailController,
-                        errorText: loginErrorResponse.email,
-                        label: "Email or Phone Number",
+                        controller: emailOrPhoneController,
+                        errorText: registerErrorResponse.emailOrPhone,
+                        label: "Email",
                         mandatory: true,
                       ),
                     ),
                     Container(
                       margin: const EdgeInsets.only(bottom: 21.0),
                       child: MyTextField(
-                        errorText: loginErrorResponse.password,
                         controller: passwordController,
+                        errorText: registerErrorResponse.password,
                         label: "Password",
                         mandatory: true,
                         obscureText: true,
@@ -111,8 +176,7 @@ class _RegisterDomainScreenState extends State<RegisterDomainScreen> {
                     Container(
                       margin: const EdgeInsets.only(bottom: 21.0),
                       child: MyTextField(
-                        errorText: loginErrorResponse.password,
-                        controller: passwordController,
+                        controller: passwordConfirmationController,
                         label: "Password Confirmation",
                         mandatory: true,
                         obscureText: true,
@@ -135,7 +199,29 @@ class _RegisterDomainScreenState extends State<RegisterDomainScreen> {
 
                     MyFilledButton(
                       isLoading: isLoading,
-                      onPressed: () {},
+                      onPressed: () {
+                        register().then((value) {
+                          if (value.isEmpty) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                duration: Duration(seconds: 3),
+                                content: Text(
+                                    "Register Success, check your email to get more information of your shop"),
+                                backgroundColor: Colors.green,
+                              ),
+                            );
+                            Navigator.pushNamed(context, '/domain/setup');
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                duration: const Duration(seconds: 1),
+                                content: Text(value),
+                                backgroundColor: error,
+                              ),
+                            );
+                          }
+                        });
+                      },
                       child: const Text("Create Your Shop"),
                     ),
                   ],
