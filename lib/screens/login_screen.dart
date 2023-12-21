@@ -50,14 +50,19 @@ class _LoginScreenState extends State<LoginScreen> {
     }
 
     try {
-      final response = await ApiService(await getDomain()).postData('auth/login', {
-        'email': emailController.text,
-        'password': passwordController.text,
-        'remember': remember
-      });
+      final response = await ApiService(await getDomain()).postData(
+        'auth/login',
+        {
+          'email': emailController.text,
+          'password': passwordController.text,
+          'remember': remember
+        },
+      );
 
       ApiResponse<LoginResponse> apiResponse = ApiResponse.fromJson(
-          response, (json) => LoginResponse.fromJson(json));
+        response,
+        (json) => LoginResponse.fromJson(json),
+      );
 
       storeToken(apiResponse.data!.token);
       return true;

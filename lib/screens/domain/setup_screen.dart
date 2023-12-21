@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:lakasir/api/api_service.dart';
+import 'package:lakasir/api/responses/api_response.dart';
 import 'package:lakasir/config/app.dart';
 import 'package:lakasir/utils/auth.dart';
 import 'package:lakasir/utils/colors.dart';
@@ -17,6 +19,7 @@ final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 class _SetupScreenState extends State<SetupScreen> {
   final registerDomainController = TextEditingController();
   bool isLoading = false;
+  String domainError = "";
 
   @override
   void dispose() {
@@ -36,10 +39,16 @@ class _SetupScreenState extends State<SetupScreen> {
     }
 
     try {
+      String domain = "https://${registerDomainController.text}";
+      if (environment == "local") {
+        domain = "http://${registerDomainController.text}";
+      }
+      await ApiService(domain).fetchData("api");
       await storeSetup(registerDomainController.text);
       return true;
     } catch (e) {
       setState(() {
+        domainError = "Your domain is not registered yet";
         isLoading = false;
       });
       return false;
@@ -93,6 +102,7 @@ class _SetupScreenState extends State<SetupScreen> {
                         prefixText: environment == "local" ? "http://" : "https://",
                         controller: registerDomainController,
                         label: "Your Registered Domain",
+                        errorText: domainError,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return "Please enter your domain";
