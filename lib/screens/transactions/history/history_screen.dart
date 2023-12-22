@@ -45,7 +45,6 @@ class HistoryScreen extends StatelessWidget {
           category: CategoryResponse(
             id: 1,
             name: 'Food',
-            description: 'Food',
             createdAt: '2021-10-10',
             updatedAt: '2021-10-10',
           ),

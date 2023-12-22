@@ -35,7 +35,6 @@ class _CashierMenuScreenState extends State<CashierMenuScreen> {
       category: CategoryResponse(
         id: 1,
         name: 'Food',
-        description: 'Food',
         createdAt: '2021-10-10',
         updatedAt: '2021-10-10',
       ),
@@ -75,7 +74,6 @@ class _CashierMenuScreenState extends State<CashierMenuScreen> {
       category: CategoryResponse(
         id: 1,
         name: 'Food',
-        description: 'Food',
         createdAt: '2021-10-10',
         updatedAt: '2021-10-10',
       ),
@@ -115,7 +113,6 @@ class _CashierMenuScreenState extends State<CashierMenuScreen> {
       category: CategoryResponse(
         id: 1,
         name: 'Food',
-        description: 'Food',
         createdAt: '2021-10-10',
         updatedAt: '2021-10-10',
       ),

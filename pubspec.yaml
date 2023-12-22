@@ -18,6 +18,7 @@ dependencies:
   intl: ^0.18.1
   flutter_launcher_icons: ^0.13.1
   flutter_dotenv: ^5.0.2
+  get: ^4.6.6
 
 flutter_icons:
   android: "launcher_icon"

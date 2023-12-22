@@ -32,6 +32,11 @@ class _LayoutState extends State<Layout> {
 
   @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
+    double baseHeight = height * 77 / 100;
+    if (widget.bottomNavigationBar == null) {
+      baseHeight = double.infinity;
+    }
     return Scaffold(
       appBar: widget.noAppBar
           ? null
@@ -44,7 +49,7 @@ class _LayoutState extends State<Layout> {
       body: Container(
         margin: const EdgeInsets.only(top: 20),
         width: double.infinity,
-        height: double.infinity,
+        height: baseHeight,
         child: widget.noPadding
             ? widget.child
             : Padding(

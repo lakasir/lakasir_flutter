@@ -38,7 +38,6 @@ class _CashierCartMenuScreenState extends State<CashierCartMenuScreen> {
         category: CategoryResponse(
           id: 1,
           name: 'Minuman',
-          description: '',
           updatedAt: DateTime.now().toString(),
           createdAt: DateTime.now().toString(),
         ),
@@ -67,7 +66,6 @@ class _CashierCartMenuScreenState extends State<CashierCartMenuScreen> {
         category: CategoryResponse(
           id: 1,
           name: 'Minuman',
-          description: '',
           updatedAt: DateTime.now().toString(),
           createdAt: DateTime.now().toString(),
         ),

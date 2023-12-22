@@ -15,7 +15,10 @@ class MyTextField extends StatefulWidget {
   final int? maxLines;
   final Widget? rightIcon;
   final Function(String)? onSubmitted;
+  final Function(String)? onChanged;
+  final Function(PointerDownEvent)? onTapOutside;
   final ValidatorCallback? validator;
+  final bool autofocus;
 
   const MyTextField({
     super.key,
@@ -29,6 +32,9 @@ class MyTextField extends StatefulWidget {
     this.maxLines = 1,
     this.rightIcon,
     this.onSubmitted,
+    this.onChanged,
+    this.onTapOutside,
+    this.autofocus = false,
     this.validator,
   });
 
@@ -39,10 +45,14 @@ class MyTextField extends StatefulWidget {
 class _MyTextFieldState extends State<MyTextField> {
   bool showPassword = false;
   bool securedText = false;
+  final FocusNode _focusNode = FocusNode();
   @override
   void initState() {
     super.initState();
     securedText = widget.obscureText;
+    if (widget.autofocus) {
+      _focusNode.requestFocus();
+    }
   }
 
   @override
@@ -72,6 +82,11 @@ class _MyTextFieldState extends State<MyTextField> {
             ),
           ),
         TextFormField(
+          focusNode: _focusNode,
+          onTapOutside: (value) {
+            widget.onTapOutside != null ? widget.onTapOutside!(value) : null;
+            _focusNode.unfocus();
+          },
           maxLines: widget.maxLines,
           controller: widget.controller,
           obscureText: securedText,
@@ -85,6 +100,7 @@ class _MyTextFieldState extends State<MyTextField> {
             return null;
           },
           onFieldSubmitted: widget.onSubmitted,
+          onChanged: widget.onChanged,
           // onSubmitted: widget.onSubmitted,
           decoration: InputDecoration(
             prefixText: widget.prefixText,

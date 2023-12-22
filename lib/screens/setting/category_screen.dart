@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:lakasir/api/responses/categories/category_response.dart';
+import 'package:get/get.dart';
+import 'package:lakasir/controllers/category_controller.dart';
 import 'package:lakasir/widgets/layout.dart';
 import 'package:lakasir/widgets/my_bottom_bar.dart';
-import 'package:lakasir/widgets/my_bottom_bar_actions.dart';
 import 'package:lakasir/widgets/my_card_list.dart';
 import 'package:lakasir/widgets/text_field.dart';
 
@@ -13,82 +13,121 @@ class CategoryScreen extends StatefulWidget {
 }
 
 class _CategoryScreen extends State<CategoryScreen> {
-  bool showAddCategory = false;
-  final _categoryNameController = TextEditingController();
-  List<CategoryResponse> categories = [
-    CategoryResponse(
-      id: 1,
-      name: 'Category 1',
-      description: 'Category 1',
-      createdAt: '2021-10-10',
-      updatedAt: '2021-10-10',
-    ),
-    CategoryResponse(
-      id: 2,
-      name: 'Category 2',
-      description: 'Category 2',
-      createdAt: '2021-10-10',
-      updatedAt: '2021-10-10',
-    ),
-    CategoryResponse(
-      id: 3,
-      name: 'Category 3',
-      description: 'Category 3',
-      createdAt: '2021-10-10',
-      updatedAt: '2021-10-10',
-    ),
-  ];
+  final CategoryController categoryController = Get.put(CategoryController());
+  final ScrollController scrollController = ScrollController();
+
+  void addCategory() {
+    categoryController.addCategory();
+    scrollController.animateTo(
+      0.0,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.ease,
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
+
     return Layout(
       title: 'Category',
       bottomNavigationBar: MyBottomBar(
-        label: const Text('Add Category'),
+        label: Obx(() => Text(categoryController.labelButton())),
         onPressed: () {
-          setState(() {
-            showAddCategory = !showAddCategory;
-          });
+          categoryController.actionButton();
+          scrollController.animateTo(
+            0.0,
+            duration: const Duration(milliseconds: 500),
+            curve: Curves.ease,
+          );
         },
-        actions: [
-          MyBottomBarActions(
-            label: 'Delete',
-            onPressed: () {},
-            icon: const Icon(Icons.delete_rounded, color: Colors.white),
-          ),
-        ],
       ),
-      child: ListView.separated(
-        itemCount: categories.length + 1,
-        separatorBuilder: (context, index) {
-          return SizedBox(
-            height: height * 2.7 / 100,
-          );
-        },
-        itemBuilder: (context, index) {
-          if (index == categories.length) {
-            return Visibility(
-              visible: showAddCategory,
-              child: MyTextField(
-                label: 'Category Name',
-                mandatory: true,
-                controller: _categoryNameController,
-              ),
+      child: Obx(
+        () => ListView.separated(
+          controller: scrollController,
+          itemCount: categoryController.categories.length + 1,
+          separatorBuilder: (context, index) {
+            return SizedBox(
+              height: height * 2 / 100,
             );
-          }
-          return MyCardList(
-            key: ValueKey(categories[index].id),
-            list: [
-              Text(
-                categories[index].name,
-                style: const TextStyle(
-                  fontSize: 20,
+          },
+          itemBuilder: (context, index) {
+            if (index == 0) {
+              return Obx(
+                () => Visibility(
+                  visible: categoryController.showAddCategory(),
+                  child: MyTextField(
+                    label: 'Category Name',
+                    autofocus: true,
+                    mandatory: true,
+                    controller: categoryController.categoryNameController,
+                    errorText: categoryController.errors().name,
+                    onSubmitted: (value) => addCategory(),
+                    onTapOutside: (value) => addCategory(),
+                    onChanged: (value) {
+                      if (value.isNotEmpty) {
+                        categoryController.labelButton("Save");
+                      } else {
+                        categoryController.labelButton("Cancel");
+                      }
+                    },
+                  ),
                 ),
-              ),
-            ],
-          );
-        },
+              );
+            }
+            return MyCardList(
+              key: ValueKey(categoryController.categories[index - 1].id),
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: Text(
+                          "Delete ${categoryController.categories[index - 1].name}"),
+                      content: const Text(
+                          "Are you sure want to delete this category?"),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Get.back();
+                          },
+                          child: const Text('Cancel'),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            categoryController.deleteCategory(
+                                categoryController.categories[index - 1].id);
+                            Get.back();
+                          },
+                          child: const Text('Delete'),
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
+              list: [
+                Text(
+                  categoryController.categories[index - 1].name,
+                  style: const TextStyle(
+                    fontSize: 20,
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
       ),
     );
   }

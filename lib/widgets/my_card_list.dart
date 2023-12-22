@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class MyCardList extends StatefulWidget {
   const MyCardList({
@@ -28,7 +29,7 @@ class _MyCardListState extends State<MyCardList> {
       onLongPress: () {},
       onTap: () {
         if (widget.route != null) {
-          Navigator.pushNamed(context, widget.route as String);
+          Get.toNamed(widget.route as String);
         }
         if (widget.onTap != null) {
           widget.onTap!();

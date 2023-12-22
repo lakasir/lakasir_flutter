@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:lakasir/screens/about/about_screen.dart';
 import 'package:lakasir/screens/about/edit_screen.dart';
 import 'package:lakasir/screens/domain/register_domain_screen.dart';
@@ -57,7 +58,7 @@ class MyApp extends StatelessWidget {
             : '/menu'
         : '/domain/setup';
 
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'Lakasir',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(

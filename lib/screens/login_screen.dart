@@ -6,7 +6,6 @@ import 'package:lakasir/api/responses/api_response.dart';
 import 'package:lakasir/api/responses/auths/login_error_response.dart';
 import 'package:lakasir/api/responses/auths/login_response.dart';
 import 'package:lakasir/api/responses/error_response.dart';
-import 'package:lakasir/config/app.dart';
 import 'package:lakasir/utils/auth.dart';
 import 'package:lakasir/utils/colors.dart';
 import 'package:lakasir/widgets/checkbox.dart';
@@ -64,7 +63,7 @@ class _LoginScreenState extends State<LoginScreen> {
         (json) => LoginResponse.fromJson(json),
       );
 
-      storeToken(apiResponse.data!.token);
+      storeToken(apiResponse.data!.value.token);
       return true;
     } catch (e) {
       if (e is ValidationException) {
