@@ -179,6 +179,7 @@ class _RegisterDomainScreenState extends State<RegisterDomainScreen> {
                     Container(
                       margin: const EdgeInsets.only(bottom: 21.0),
                       child: MyTextField(
+                        textInputAction: TextInputAction.done,
                         controller: passwordConfirmationController,
                         label: "Password Confirmation",
                         mandatory: true,
@@ -202,12 +203,15 @@ class _RegisterDomainScreenState extends State<RegisterDomainScreen> {
                       onPressed: () {
                         register().then((value) {
                           if (value.isEmpty) {
-                            Get.rawSnackbar(
-                              title:
-                                  "Register Success, check your email to get more information of your shop",
-                              backgroundColor: success,
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                duration: Duration(seconds: 3),
+                                content: Text(
+                                    "Register Success, check your email to get more information of your shop"),
+                                backgroundColor: success,
+                              ),
                             );
-                            Get.offAllNamed("/auth");
+                            Get.back();
                           } else {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(

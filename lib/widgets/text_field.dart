@@ -14,6 +14,7 @@ class MyTextField extends StatefulWidget {
   final String prefixText;
   final bool obscureText;
   final int? maxLines;
+  final TextInputAction? textInputAction;
   final Widget? rightIcon;
   final Function(String)? onSubmitted;
   final Function(String)? onChanged;
@@ -32,6 +33,7 @@ class MyTextField extends StatefulWidget {
     this.prefixText = "",
     this.errorText = "",
     this.maxLines = 1,
+    this.textInputAction = TextInputAction.next,
     this.rightIcon,
     this.onSubmitted,
     this.onChanged,
@@ -102,6 +104,7 @@ class _MyTextFieldState extends State<MyTextField> {
           ),
         TextFormField(
           focusNode: _focusNode,
+          textInputAction: widget.textInputAction,
           onTapOutside: (value) {
             widget.onTapOutside != null ? widget.onTapOutside!(value) : null;
             _focusNode.unfocus();

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lakasir/api/api_service.dart';
-import 'package:lakasir/api/responses/api_response.dart';
 import 'package:lakasir/config/app.dart';
 import 'package:lakasir/utils/auth.dart';
 import 'package:lakasir/utils/colors.dart';
@@ -9,7 +8,7 @@ import 'package:lakasir/widgets/filled_button.dart';
 import 'package:lakasir/widgets/text_field.dart';
 
 class SetupScreen extends StatefulWidget {
-  const SetupScreen({Key? key}) : super(key: key);
+  const SetupScreen({super.key});
 
   @override
   State<SetupScreen> createState() => _SetupScreenState();
@@ -140,7 +139,7 @@ class _SetupScreenState extends State<SetupScreen> {
             Center(
               child: GestureDetector(
                 onTap: () {
-                  Navigator.pushNamed(context, '/domain/register');
+                  Get.toNamed('/domain/register');
                 },
                 child: SizedBox(
                   width: 300,

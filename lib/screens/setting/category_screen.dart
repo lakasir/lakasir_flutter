@@ -69,6 +69,7 @@ class _CategoryScreen extends State<CategoryScreen> {
                   visible: categoryController.showAddCategory(),
                   child: MyTextField(
                     label: 'Category Name',
+                    textInputAction: TextInputAction.done,
                     autofocus: true,
                     mandatory: true,
                     controller: categoryController.categoryNameController,
