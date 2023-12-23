@@ -107,7 +107,8 @@ class _CategoryScreen extends State<CategoryScreen> {
                         TextButton(
                           onPressed: () {
                             categoryController.deleteCategory(
-                                categoryController.categories[index - 1].id);
+                              categoryController.categories[index - 1].id,
+                            );
                             Get.back();
                           },
                           child: const Text('Delete'),

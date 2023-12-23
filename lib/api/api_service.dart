@@ -52,7 +52,6 @@ class ApiService<T> {
   }
 
   Future<T> deleteData(String endpoint) async {
-    print(endpoint);
     final token = await getToken();
     final response = await http.delete(
       Uri.parse('$baseUrl/$endpoint'),
@@ -62,6 +61,10 @@ class ApiService<T> {
         'Authorization': 'Bearer $token'
       },
     );
+
+    if (response.statusCode == 400) {
+      throw ValidationException(response.body);
+    }
 
     if (response.statusCode == 200) {
       var json = jsonDecode(response.body);

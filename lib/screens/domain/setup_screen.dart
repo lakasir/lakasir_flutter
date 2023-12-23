@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:lakasir/api/api_service.dart';
 import 'package:lakasir/api/responses/api_response.dart';
 import 'package:lakasir/config/app.dart';
@@ -118,7 +119,7 @@ class _SetupScreenState extends State<SetupScreen> {
                         setup().then(
                           (value) {
                             if (value) {
-                              Navigator.pushNamed(context, '/login');
+                              Get.offAllNamed('/auth');
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(

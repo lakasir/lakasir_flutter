@@ -1,13 +1,18 @@
 import 'package:lakasir/config/app.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-Future<bool> checkAuthentication() async {
+Future<String> checkAuthentication() async {
+  final setup = await isSetup();
   final token = await getToken(); // Retrieve the user's token
-  if (token != null) {
-    return true; // Authentication is valid
-  } else {
-    return false; // Authentication failed; redirect to login or show an error
+  if (!setup) {
+    return "setup";
   }
+  
+  if (token == null) {
+    return "login";
+  }
+
+  return "menu";
 }
 
 Future<void> logout() async {

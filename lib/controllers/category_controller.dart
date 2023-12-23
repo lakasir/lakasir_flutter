@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lakasir/Exceptions/validation.dart';
@@ -7,6 +6,7 @@ import 'package:lakasir/api/responses/categories/category_error_response.dart';
 import 'package:lakasir/api/responses/categories/category_response.dart';
 import 'package:lakasir/api/responses/error_response.dart';
 import 'package:lakasir/services/category_service.dart';
+import 'package:lakasir/utils/colors.dart';
 
 class CategoryController extends GetxController {
   CategoryService categoryService = CategoryService();
@@ -55,8 +55,16 @@ class CategoryController extends GetxController {
   }
 
   Future<void> deleteCategory(int id) async {
-    await categoryService.deleteCategory(id);
-    fetchCategories();
+    try {
+      await categoryService.deleteCategory(id);
+      fetchCategories();
+    } catch (e) {
+      if (e is ValidationException) {
+        ErrorResponse errorResponses =
+            ErrorResponse.fromJson(jsonDecode(e.toString()), null);
+        Get.rawSnackbar(message: errorResponses.message, backgroundColor: error);
+      }
+    }
   }
 
   void actionButton() {

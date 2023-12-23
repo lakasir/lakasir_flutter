@@ -4,9 +4,7 @@ import 'package:lakasir/widgets/layout.dart';
 import 'package:lakasir/widgets/my_card_list.dart';
 
 class MenuScreen extends StatefulWidget {
-  const MenuScreen({super.key, required this.isAuthenticated});
-  final String isAuthenticated;
-
+  const MenuScreen({super.key});
   @override
   State<MenuScreen> createState() => _MenuScreenState();
 }
@@ -56,7 +54,6 @@ class _MenuScreenState extends State<MenuScreen> {
     var height = MediaQuery.of(context).size.height;
 
     return Layout(
-      // backButton: widget.isAuthenticated.isNotEmpty,
       child: ListView.separated(
         itemCount: menus.length,
         separatorBuilder: (context, index) {

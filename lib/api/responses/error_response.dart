@@ -8,7 +8,7 @@ class ErrorResponse<T> {
       Map<String, dynamic> json, T Function(Map<String, dynamic>)? fromJson) {
     return ErrorResponse<T>(
       message: json['message'],
-      errors: fromJson!(json['errors']),
+      errors: fromJson != null ? fromJson(json['errors']) : null,
     );
   }
 }

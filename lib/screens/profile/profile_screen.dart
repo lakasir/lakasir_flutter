@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:lakasir/api/responses/auths/profile_response.dart';
 import 'package:lakasir/utils/auth.dart';
 import 'package:lakasir/utils/colors.dart';
 import 'package:lakasir/widgets/layout.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+  const ProfileScreen({super.key});
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -231,8 +232,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       child: Center(
                         child: TextButton(
                           onPressed: () {
-                            logout();
-                            Navigator.pushReplacementNamed(context, '/login');
+                            logout().then((value) {
+                              Get.offAllNamed('/auth');
+                            });
                           },
                           child: const Text(
                             "Logout",

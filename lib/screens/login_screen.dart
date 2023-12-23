@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:lakasir/Exceptions/validation.dart';
 import 'package:lakasir/api/api_service.dart';
 import 'package:lakasir/api/responses/api_response.dart';
@@ -80,6 +82,17 @@ class _LoginScreenState extends State<LoginScreen> {
       });
       return false;
     }
+  }
+
+  @override
+  void didChangeDependencies() {
+    // getDomain().then((value) {
+    //   if (value != null) {
+    //     Navigator.pushNamed(context, '/menu');
+    //   }
+    // });
+    print("didChangeDependencies");
+    super.didChangeDependencies();
   }
 
   @override
@@ -166,7 +179,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       onPressed: () {
                         login().then((value) {
                           if (value) {
-                            Navigator.pushNamed(context, '/menu');
+                            Get.offAllNamed('/auth');
                           } else {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(

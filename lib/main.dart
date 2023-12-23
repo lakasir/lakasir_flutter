@@ -2,14 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lakasir/screens/about/about_screen.dart';
 import 'package:lakasir/screens/about/edit_screen.dart';
+import 'package:lakasir/screens/auth_screen.dart';
 import 'package:lakasir/screens/domain/register_domain_screen.dart';
-import 'package:lakasir/screens/domain/setup_screen.dart';
 import 'package:lakasir/screens/forgot_screen.dart';
-import 'package:lakasir/screens/login_screen.dart';
 import 'package:lakasir/screens/members/add_screen.dart';
 import 'package:lakasir/screens/members/edit_screen.dart';
 import 'package:lakasir/screens/members/member_screen.dart';
-import 'package:lakasir/screens/menu_screen.dart';
 import 'package:lakasir/screens/products/add_screen.dart';
 import 'package:lakasir/screens/products/detail_screen.dart';
 import 'package:lakasir/screens/products/detail_stock_screen.dart';
@@ -52,12 +50,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var initialRoute = setup
-        ? isAuthenticated.isEmpty
-            ? '/login'
-            : '/menu'
-        : '/domain/setup';
-
     return GetMaterialApp(
       title: 'Lakasir',
       theme: ThemeData(
@@ -68,13 +60,11 @@ class MyApp extends StatelessWidget {
         fontFamily: 'SourceSans',
         useMaterial3: true,
       ),
-      initialRoute: initialRoute,
+      initialRoute: '/auth',
       routes: {
-        '/domain/setup': (context) => const SetupScreen(),
         '/domain/register': (context) => const RegisterDomainScreen(),
-        '/login': (context) => const LoginScreen(),
+        '/auth': (context) => const AuthScreen(),
         '/forgot': (context) => const ForgotScreen(),
-        '/menu': (context) => MenuScreen(isAuthenticated: isAuthenticated),
         '/menu/transaction': (context) => const TransactionMenuScreen(),
         '/menu/transaction/history': (context) => HistoryScreen(),
         '/menu/transaction/history/detail': (context) =>

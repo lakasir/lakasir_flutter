@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 
 class Layout extends StatefulWidget {
-  const Layout(
-      {super.key,
-      required this.child,
-      this.bottomNavigationBar,
-      this.backButton = false,
-      this.title = 'Menu',
-      this.bottomSheet,
-      this.noAppBar = false,
-      this.noPadding = false,
-      this.padding = 20});
+  const Layout({
+    super.key,
+    required this.child,
+    this.bottomNavigationBar,
+    this.backButton = false,
+    this.title = 'Menu',
+    this.bottomSheet,
+    this.noAppBar = false,
+    this.noPadding = false,
+    this.padding = 20,
+  });
   final Widget child;
   final Widget? bottomNavigationBar;
   final bool backButton;
