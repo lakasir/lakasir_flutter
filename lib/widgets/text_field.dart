@@ -7,6 +7,7 @@ typedef ValidatorCallback = String? Function(String?);
 class MyTextField extends StatefulWidget {
   final TextEditingController controller;
   final String? label;
+  final String? info;
   final String hintText;
   final bool mandatory;
   final String errorText;
@@ -23,6 +24,7 @@ class MyTextField extends StatefulWidget {
   const MyTextField({
     super.key,
     this.label,
+    this.info,
     this.mandatory = false,
     required this.controller,
     this.hintText = "",
@@ -60,25 +62,42 @@ class _MyTextFieldState extends State<MyTextField> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (widget.label != null)
+        if (widget.label != null || widget.info != null)
           Container(
             margin: const EdgeInsets.only(bottom: 5),
-            child: RichText(
-              text: TextSpan(
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: secondary,
-                ),
-                children: [
-                  TextSpan(text: widget.label),
-                  if (widget.mandatory)
-                    const TextSpan(
-                      text: "*",
-                      style: TextStyle(color: error),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                if (widget.label != null)
+                  RichText(
+                    text: TextSpan(
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: secondary,
+                      ),
+                      children: [
+                        TextSpan(text: widget.label),
+                        if (widget.mandatory)
+                          const TextSpan(
+                            text: "*",
+                            style: TextStyle(color: error),
+                          ),
+                      ],
                     ),
-                ],
-              ),
+                  ),
+                if (widget.info != null)
+                  Tooltip(
+                    triggerMode: TooltipTriggerMode.tap,
+                    showDuration: const Duration(seconds: 5),
+                    message: widget.info!,
+                    child: const Icon(
+                      Icons.info_outline,
+                      color: grey,
+                      size: 16,
+                    ),
+                  ),
+              ],
             ),
           ),
         TextFormField(

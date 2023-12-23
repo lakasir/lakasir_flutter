@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:lakasir/Exceptions/validation.dart';
 import 'package:lakasir/api/api_service.dart';
 import 'package:lakasir/api/responses/domain/register_error_response.dart';
@@ -150,6 +151,8 @@ class _RegisterDomainScreenState extends State<RegisterDomainScreen> {
                         errorText: registerErrorResponse.domainName,
                         prefixText:
                             environment == "local" ? "http://" : "https://",
+                        info:
+                            "Your domain should be using your shop name, for example: yourshopname.lakasir.com",
                         label: "Domain Name",
                         mandatory: true,
                       ),
@@ -182,8 +185,6 @@ class _RegisterDomainScreenState extends State<RegisterDomainScreen> {
                         obscureText: true,
                       ),
                     ),
-
-                    // Remember Box
                     Container(
                       margin: const EdgeInsets.only(bottom: 21.0),
                       child: MyCheckbox(
@@ -196,21 +197,17 @@ class _RegisterDomainScreenState extends State<RegisterDomainScreen> {
                         },
                       ),
                     ),
-
                     MyFilledButton(
                       isLoading: isLoading,
                       onPressed: () {
                         register().then((value) {
                           if (value.isEmpty) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                duration: Duration(seconds: 3),
-                                content: Text(
-                                    "Register Success, check your email to get more information of your shop"),
-                                backgroundColor: Colors.green,
-                              ),
+                            Get.rawSnackbar(
+                              title:
+                                  "Register Success, check your email to get more information of your shop",
+                              backgroundColor: success,
                             );
-                            Navigator.pushNamed(context, '/domain/setup');
+                            Get.offAllNamed("/auth");
                           } else {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
