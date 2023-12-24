@@ -1,8 +1,9 @@
 class MemberResponse {
   int id;
   String name;
-  String code;
-  String address;
+  String? code;
+  String? address;
+  String? email;
   final String createdAt;
   final String updatedAt;
 
@@ -11,6 +12,7 @@ class MemberResponse {
     required this.name,
     required this.code,
     required this.address,
+    required this.email,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -23,6 +25,7 @@ class MemberResponse {
       address: json['address'],
       createdAt: json['created_at'],
       updatedAt: json['updated_at'],
+      email: json['email'],
     );
   }
 }

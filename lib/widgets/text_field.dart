@@ -117,7 +117,7 @@ class _MyTextFieldState extends State<MyTextField> {
               return widget.validator!(value);
             }
             if (widget.mandatory && value!.isEmpty) {
-              return "Field is required";
+              return "The ${widget.label} field is required";
             }
             return null;
           },

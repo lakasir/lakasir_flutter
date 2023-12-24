@@ -5,12 +5,14 @@ class MyFilledButton extends StatefulWidget {
   final bool? isLoading;
   final VoidCallback onPressed;
   final Widget child;
+  final Color? color;
 
   const MyFilledButton({
     super.key,
     this.isLoading = false,
     required this.onPressed,
     required this.child,
+    this.color = primary,
   });
 
   @override
@@ -26,7 +28,7 @@ class _MyFilledButton extends State<MyFilledButton> {
       child: FilledButton(
         onPressed: widget.onPressed,
         style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all<Color>(primary),
+          backgroundColor: MaterialStateProperty.all<Color>(widget.color!),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
             const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(12)),

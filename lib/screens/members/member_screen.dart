@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:lakasir/api/responses/members/member_response.dart';
+import 'package:get/get.dart';
+import 'package:lakasir/controllers/members/member_controller.dart';
 import 'package:lakasir/widgets/layout.dart';
 import 'package:lakasir/widgets/my_bottom_bar.dart';
 import 'package:lakasir/widgets/my_bottom_bar_actions.dart';
@@ -12,32 +13,7 @@ class MemberScreen extends StatefulWidget {
 }
 
 class _MemberScreen extends State<MemberScreen> {
-  List<MemberResponse> memebers = [
-    MemberResponse(
-      id: 1,
-      name: 'Member 1',
-      address: 'Lorem ipsum dolor sit amet',
-      code: '1234567890',
-      createdAt: '2021-10-10',
-      updatedAt: '2021-10-10',
-    ),
-    MemberResponse(
-      id: 2,
-      name: 'Member 2',
-      address: 'Lorem ipsum dolor sit amet',
-      code: '1234567890',
-      createdAt: '2021-10-10',
-      updatedAt: '2021-10-10',
-    ),
-    MemberResponse(
-      id: 3,
-      name: 'Member 3',
-      address: 'Lorem ipsum dolor sit amet',
-      code: '1234567890',
-      createdAt: '2021-10-10',
-      updatedAt: '2021-10-10',
-    ),
-  ];
+  MemberController memberController = Get.put(MemberController());
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +23,7 @@ class _MemberScreen extends State<MemberScreen> {
       bottomNavigationBar: MyBottomBar(
         label: const Text('Add Member'),
         onPressed: () {
-          Navigator.pushNamed(context, '/menu/member/add');
+          Get.toNamed('/menu/member/add');
         },
         actions: [
           MyBottomBarActions(
@@ -62,41 +38,69 @@ class _MemberScreen extends State<MemberScreen> {
           ),
         ],
       ),
-      child: ListView.separated(
-        itemCount: memebers.length,
-        separatorBuilder: (context, index) {
-          return SizedBox(
-            height: height * 2.7 / 100,
-          );
-        },
-        itemBuilder: (context, index) {
-          return MyCardList(
-            key: ValueKey(memebers[index].id),
-            onTap: () {
-              Navigator.pushNamed(context, '/menu/member/edit',
-                  arguments: memebers[index]);
+      child: Obx(
+        () {
+          if (memberController.isFetching.value) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
+          if (memberController.members.isEmpty) {
+            return const Center(
+              child: Text('No Member'),
+            );
+          }
+
+          return ListView.separated(
+            itemCount: memberController.members.length,
+            separatorBuilder: (context, index) {
+              return SizedBox(
+                height: height * 2 / 100,
+              );
             },
-            list: [
-              Text(
-                memebers[index].name,
-                style: const TextStyle(
-                  fontSize: 20,
-                ),
-              ),
-              Text(
-                memebers[index].code,
-                style: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w200,
-                ),
-              ),
-              Text(
-                memebers[index].address,
-                style: const TextStyle(
-                  fontSize: 14,
-                ),
-              ),
-            ],
+            itemBuilder: (context, index) {
+              return MyCardList(
+                key: ValueKey(memberController.members[index].id),
+                onTap: () {
+                  Get.toNamed(
+                    '/menu/member/edit',
+                    arguments: memberController.members[index],
+                  );
+                },
+                list: [
+                  Text(
+                    memberController.members[index].name,
+                    style: const TextStyle(
+                      fontSize: 20,
+                    ),
+                  ),
+                  if (memberController.members[index].email != null)
+                    Text(
+                      memberController.members[index].email ?? "-",
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w200,
+                      ),
+                    ),
+                  if (memberController.members[index].code != null)
+                    Text(
+                      memberController.members[index].code ?? "-",
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w200,
+                      ),
+                    ),
+                  if (memberController.members[index].address != null)
+                    Text(
+                      memberController.members[index].address ?? "-",
+                      style: const TextStyle(
+                        fontSize: 14,
+                      ),
+                    ),
+                ],
+              );
+            },
           );
         },
       ),

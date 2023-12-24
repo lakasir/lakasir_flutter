@@ -51,6 +51,31 @@ class ApiService<T> {
     }
   }
 
+  Future<T> putData(String endpoint, Object? request) async {
+    final token = await getToken();
+    final response = await http.put(
+      Uri.parse('$baseUrl/$endpoint'),
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token'
+      },
+      body: jsonEncode(request),
+    );
+
+    if (response.statusCode == 422) {
+      throw ValidationException(response.body);
+    }
+
+    if (response.statusCode == 200) {
+      var json = jsonDecode(response.body);
+
+      return json;
+    } else {
+      throw Exception('Failed to load data');
+    }
+  }
+
   Future<T> deleteData(String endpoint) async {
     final token = await getToken();
     final response = await http.delete(

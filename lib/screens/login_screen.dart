@@ -85,17 +85,6 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   @override
-  void didChangeDependencies() {
-    // getDomain().then((value) {
-    //   if (value != null) {
-    //     Navigator.pushNamed(context, '/menu');
-    //   }
-    // });
-    print("didChangeDependencies");
-    super.didChangeDependencies();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: backgroudWhite,
@@ -103,7 +92,6 @@ class _LoginScreenState extends State<LoginScreen> {
         child: ListView(
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           children: [
-            // wellcome text
             Container(
               margin: const EdgeInsets.only(top: 116, bottom: 58),
               child: Center(

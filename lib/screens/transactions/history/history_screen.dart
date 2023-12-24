@@ -26,6 +26,7 @@ class HistoryScreen extends StatelessWidget {
         address: "lorem ipsum",
         createdAt: "2021-10-20T07:00:00.000000Z",
         updatedAt: "2021-10-20T07:00:00.000000Z",
+        email: '',
       ),
       products: [
         ProductResponse(
