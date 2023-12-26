@@ -9,7 +9,7 @@ import 'package:lakasir/widgets/select_input_feld.dart';
 import 'package:lakasir/widgets/text_field.dart';
 
 class EditProfileScreen extends StatefulWidget {
-  const EditProfileScreen({Key? key}) : super(key: key);
+  const EditProfileScreen({super.key});
 
   static const routeName = '/menu/profile/edit';
 
@@ -48,7 +48,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             children: [
               SizedBox(
                 width: width * 30 / 100,
-                child: const CameraPicker(),
+                child: CameraPicker(
+                  onImageSelected: (file) {},
+                ),
               ),
               SizedBox(
                 width: width * 50 / 100,

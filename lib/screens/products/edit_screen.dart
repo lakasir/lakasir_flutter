@@ -7,7 +7,7 @@ import 'package:lakasir/widgets/select_input_feld.dart';
 import 'package:lakasir/widgets/text_field.dart';
 
 class EditProductScreen extends StatefulWidget {
-  const EditProductScreen({Key? key}) : super(key: key);
+  const EditProductScreen({super.key});
 
   @override
   State<EditProductScreen> createState() => _EditProductScreenState();
@@ -67,7 +67,11 @@ class _EditProductScreenState extends State<EditProductScreen> {
             children: [
               SizedBox(
                 width: width * 30 / 100,
-                child: const CameraPicker(),
+                child: CameraPicker(
+                  onImageSelected: (file) {
+                    print(file);
+                  },
+                ),
               ),
               SizedBox(
                 width: width * 50 / 100,

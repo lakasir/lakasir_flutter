@@ -1,9 +1,16 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'dart:convert';
+import 'package:lakasir/utils/auth.dart';
+import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart'; // Import MediaType from http_parser package
+
+typedef MyCallback = void Function(String?);
 
 class CameraPicker extends StatefulWidget {
-  const CameraPicker({super.key});
+  const CameraPicker({super.key, required this.onImageSelected});
+  final MyCallback onImageSelected;
 
   @override
   State<CameraPicker> createState() => _CameraPickerState();
@@ -13,6 +20,39 @@ class _CameraPickerState extends State<CameraPicker> {
   XFile? _image;
   final ImagePicker imagePicker = ImagePicker();
 
+  Future<String> _uploadImage(File? selectedImage) async {
+    if (selectedImage == null) {
+      // Handle case when no image is selected
+      throw Exception('No image selected');
+    }
+
+    final url = Uri.parse('${await getDomain()}/temp/upload');
+    final request = http.MultipartRequest('POST', url);
+    request.headers.addAll({
+      'Authorization': 'Bearer ${await getToken()}',
+    });
+
+    // Attach the image file to the request
+    request.files.add(await http.MultipartFile.fromPath(
+      'file',
+      selectedImage.path,
+      contentType: MediaType('image', 'jpeg'), // Adjust the content type based on your image format
+    ));
+
+    // Send the request
+    final response = await request.send();
+
+    // Check the response
+    if (response.statusCode == 200) {
+      // Image uploaded successfully
+      final responseBody = await response.stream.bytesToString();
+      return jsonDecode(responseBody)['data']['url'];
+    } else {
+      // Handle error
+      throw Exception('Failed to upload image. Status code: ${response.statusCode}');
+    }
+  }
+
   Future<void> _pickImage() async {
     try {
       XFile? selected = await imagePicker.pickImage(
@@ -21,6 +61,8 @@ class _CameraPickerState extends State<CameraPicker> {
       setState(() {
         _image = selected;
       });
+      String url = await _uploadImage(File(selected!.path));
+      widget.onImageSelected(url);
     } catch (e) {
       debugPrint(e.toString());
     }

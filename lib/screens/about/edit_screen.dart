@@ -1,37 +1,37 @@
 // ignore_for_file: prefer_final_fields
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:lakasir/api/responses/abouts/about_response.dart';
+import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:lakasir/controllers/abouts/about_edit_controller.dart';
 import 'package:lakasir/widgets/camera_picker.dart';
 import 'package:lakasir/widgets/filled_button.dart';
 import 'package:lakasir/widgets/layout.dart';
 import 'package:lakasir/widgets/select_input_feld.dart';
 import 'package:lakasir/widgets/text_field.dart';
 
-class EditAboutScreen extends StatefulWidget {
-  const EditAboutScreen({Key? key}) : super(key: key);
 
-  static const routeName = '/menu/profile/edit';
+class EditAboutScreen extends StatefulWidget {
+  const EditAboutScreen({super.key});
 
   @override
   State<EditAboutScreen> createState() => _EditAboutScreenState();
 }
 
 class _EditAboutScreenState extends State<EditAboutScreen> {
-  TextEditingController _nameInputController = TextEditingController();
-  TextEditingController _bussinessTypeInputController = TextEditingController();
-  TextEditingController _locationInputController = TextEditingController();
-  TextEditingController _ownerNameInputController = TextEditingController();
-  SelectInputWidgetController _currencyInputController =
-      SelectInputWidgetController();
+  AboutEditController aboutEditController = Get.put(AboutEditController());
+
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final AboutResponse profile =
-        ModalRoute.of(context)!.settings.arguments as AboutResponse;
-
-    _nameInputController.text = profile.shopeName;
+    // final AboutResponse profile =
+    //     ModalRoute.of(context)!.settings.arguments as AboutResponse;
+    //
+    // _nameInputController.text = profile.shopeName ?? '';
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -47,12 +47,17 @@ class _EditAboutScreenState extends State<EditAboutScreen> {
             children: [
               SizedBox(
                 width: width * 30 / 100,
-                child: const CameraPicker(),
+                child: CameraPicker(
+                  onImageSelected: (file) {
+                    print("uploading image");
+                    print(file);
+                  },
+                ),
               ),
               SizedBox(
                 width: width * 50 / 100,
                 child: MyTextField(
-                  controller: _nameInputController,
+                  controller: aboutEditController.nameInputController,
                   label: 'Shop Name',
                 ),
               ),
@@ -61,14 +66,14 @@ class _EditAboutScreenState extends State<EditAboutScreen> {
           Container(
             margin: const EdgeInsets.only(top: 20),
             child: MyTextField(
-              controller: _bussinessTypeInputController,
+              controller: aboutEditController.bussinessTypeInputController,
               label: 'Bussiness Type',
             ),
           ),
           Container(
             margin: const EdgeInsets.only(top: 20),
             child: MyTextField(
-              controller: _ownerNameInputController,
+              controller: aboutEditController.ownerNameInputController,
               label: "Owner's Name",
             ),
           ),
@@ -76,8 +81,9 @@ class _EditAboutScreenState extends State<EditAboutScreen> {
             margin: const EdgeInsets.only(top: 20),
             child: MyTextField(
               maxLines: 4,
-              controller: _locationInputController,
+              controller: aboutEditController.locationInputController,
               label: "Location",
+              textInputAction: TextInputAction.newline,
             ),
           ),
           Container(
@@ -85,9 +91,8 @@ class _EditAboutScreenState extends State<EditAboutScreen> {
             child: SelectInputWidget(
               options: [
                 Option(name: "IDR", value: "idr"),
-                Option(name: "USD", value: "usd"),
               ],
-              controller: _currencyInputController,
+              controller: aboutEditController.currencyInputController,
               label: 'Currency',
             ),
           ),
