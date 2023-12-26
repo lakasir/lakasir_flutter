@@ -1,29 +1,41 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart' as image_picker;
 import 'dart:convert';
 import 'package:lakasir/utils/auth.dart';
 import 'package:http/http.dart' as http;
-import 'package:http_parser/http_parser.dart'; // Import MediaType from http_parser package
+import 'package:http_parser/http_parser.dart';
+import 'package:lakasir/utils/colors.dart'; // Import MediaType from http_parser package
 
 typedef MyCallback = void Function(String?);
 
-class CameraPicker extends StatefulWidget {
-  const CameraPicker({super.key, required this.onImageSelected});
+class MyImagePicker extends StatefulWidget {
+  const MyImagePicker({
+    super.key,
+    required this.onImageSelected,
+    this.source = image_picker.ImageSource.camera,
+    this.maxSize = 1000000,
+  });
   final MyCallback onImageSelected;
+  final image_picker.ImageSource source;
+  final int? maxSize;
 
   @override
-  State<CameraPicker> createState() => _CameraPickerState();
+  State<MyImagePicker> createState() => _MyImagePickerState();
 }
 
-class _CameraPickerState extends State<CameraPicker> {
-  XFile? _image;
-  final ImagePicker imagePicker = ImagePicker();
+class _MyImagePickerState extends State<MyImagePicker> {
+  image_picker.XFile? _image;
+  final image_picker.ImagePicker imagePicker = image_picker.ImagePicker();
 
   Future<String> _uploadImage(File? selectedImage) async {
     if (selectedImage == null) {
-      // Handle case when no image is selected
       throw Exception('No image selected');
+    }
+
+    if (selectedImage.lengthSync() > widget.maxSize!) {
+      throw Exception('Image size is too large');
     }
 
     final url = Uri.parse('${await getDomain()}/temp/upload');
@@ -32,31 +44,27 @@ class _CameraPickerState extends State<CameraPicker> {
       'Authorization': 'Bearer ${await getToken()}',
     });
 
-    // Attach the image file to the request
     request.files.add(await http.MultipartFile.fromPath(
       'file',
       selectedImage.path,
-      contentType: MediaType('image', 'jpeg'), // Adjust the content type based on your image format
+      contentType: MediaType('png', 'jpeg'),
     ));
 
-    // Send the request
     final response = await request.send();
 
-    // Check the response
     if (response.statusCode == 200) {
-      // Image uploaded successfully
       final responseBody = await response.stream.bytesToString();
       return jsonDecode(responseBody)['data']['url'];
     } else {
-      // Handle error
-      throw Exception('Failed to upload image. Status code: ${response.statusCode}');
+      throw Exception(
+          'Failed to upload image. Status code: ${response.statusCode}');
     }
   }
 
   Future<void> _pickImage() async {
     try {
-      XFile? selected = await imagePicker.pickImage(
-        source: ImageSource.camera,
+      image_picker.XFile? selected = await imagePicker.pickImage(
+        source: widget.source,
       );
       setState(() {
         _image = selected;
@@ -64,6 +72,11 @@ class _CameraPickerState extends State<CameraPicker> {
       String url = await _uploadImage(File(selected!.path));
       widget.onImageSelected(url);
     } catch (e) {
+      Get.rawSnackbar(
+        title: 'Error',
+        message: e.toString(),
+        backgroundColor: error,
+      );
       debugPrint(e.toString());
     }
   }

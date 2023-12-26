@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:lakasir/Exceptions/unauthenticated.dart';
 import 'package:lakasir/Exceptions/validation.dart';
 import 'package:lakasir/utils/auth.dart';
 
@@ -19,6 +20,11 @@ class ApiService<T> {
       },
     );
 
+    if (response.statusCode == 401) {
+      logout();
+      throw UnauthorizedException(jsonDecode(response.body)['message']);
+    }
+
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
@@ -37,6 +43,11 @@ class ApiService<T> {
       },
       body: jsonEncode(request),
     );
+
+    if (response.statusCode == 401) {
+      logout();
+      throw UnauthorizedException(jsonDecode(response.body)['message']);
+    }
 
     if (response.statusCode == 422) {
       throw ValidationException(response.body);
@@ -63,6 +74,11 @@ class ApiService<T> {
       body: jsonEncode(request),
     );
 
+    if (response.statusCode == 401) {
+      logout();
+      throw UnauthorizedException(jsonDecode(response.body)['message']);
+    }
+
     if (response.statusCode == 422) {
       throw ValidationException(response.body);
     }
@@ -86,6 +102,11 @@ class ApiService<T> {
         'Authorization': 'Bearer $token'
       },
     );
+
+    if (response.statusCode == 401) {
+      logout();
+      throw UnauthorizedException(jsonDecode(response.body)['message']);
+    }
 
     if (response.statusCode == 400) {
       throw ValidationException(response.body);

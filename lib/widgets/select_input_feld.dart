@@ -26,6 +26,12 @@ class _SelectInputWidgetState extends State<SelectInputWidget> {
   String? selectedOption; // Initial selected option
 
   @override
+  void initState() {
+    super.initState();
+    selectedOption = widget.controller.selectedOption;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

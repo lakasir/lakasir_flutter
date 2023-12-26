@@ -2,8 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:lakasir/api/responses/auths/profile_response.dart';
-import 'package:lakasir/widgets/camera_picker.dart';
 import 'package:lakasir/widgets/filled_button.dart';
+import 'package:lakasir/widgets/image_picker.dart';
 import 'package:lakasir/widgets/layout.dart';
 import 'package:lakasir/widgets/select_input_feld.dart';
 import 'package:lakasir/widgets/text_field.dart';
@@ -48,7 +48,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             children: [
               SizedBox(
                 width: width * 30 / 100,
-                child: CameraPicker(
+                child: MyImagePicker(
                   onImageSelected: (file) {},
                 ),
               ),

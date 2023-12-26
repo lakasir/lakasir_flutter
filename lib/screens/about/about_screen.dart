@@ -1,23 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:lakasir/api/responses/abouts/about_response.dart';
+import 'package:get/get.dart';
+import 'package:lakasir/controllers/abouts/about_controller.dart';
 import 'package:lakasir/utils/colors.dart';
 import 'package:lakasir/widgets/layout.dart';
 
 class AboutScreen extends StatefulWidget {
-  const AboutScreen({Key? key}) : super(key: key);
+  const AboutScreen({super.key});
 
   @override
   State<AboutScreen> createState() => _AboutScreenState();
 }
 
 class _AboutScreenState extends State<AboutScreen> {
-  AboutResponse shop = AboutResponse(
-    shopeName: "Profile Name",
-    businessType: "retail",
-    ownerName: "John Doe",
-    location: "lorem ipsum dolor sit amet",
-    currency: "IDR",
-  );
+  AboutController aboutController = Get.put(AboutController());
 
   @override
   Widget build(BuildContext context) {
@@ -53,27 +48,48 @@ class _AboutScreenState extends State<AboutScreen> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Container(
-                                margin:
-                                    const EdgeInsets.only(top: 20, left: 50),
-                                width: 160,
-                                height: 160,
-                                decoration: const BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Colors.white,
-                                ),
-                                child: const Icon(
-                                  Icons.shopping_bag,
-                                  size: 100,
-                                  color: whiteGrey,
-                                ),
+                              Obx(
+                                () {
+                                  Widget photo = const Icon(
+                                    Icons.shopping_bag,
+                                    size: 100,
+                                    color: Colors.grey,
+                                  );
+                                  if (aboutController.shop.value.photo !=
+                                      null) {
+                                    photo = ClipRRect(
+                                      borderRadius: BorderRadius.circular(100),
+                                      child: Image.network(
+                                        aboutController.shop.value.photo
+                                                ?.replaceFirst(
+                                                    "https", "http") ??
+                                            "",
+                                        fit: BoxFit.cover,
+                                      ),
+                                    );
+                                  }
+
+                                  return Container(
+                                    margin: const EdgeInsets.only(
+                                        top: 20, left: 50),
+                                    width: 160,
+                                    height: 160,
+                                    decoration: const BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.white,
+                                    ),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(100),
+                                      child: photo,
+                                    ),
+                                  );
+                                },
                               ),
                               IconButton(
                                 onPressed: () {
-                                  Navigator.pushNamed(
-                                    context,
+                                  Get.toNamed(
                                     '/menu/about/edit',
-                                    arguments: shop,
+                                    arguments: aboutController.shop.value,
                                   );
                                 },
                                 icon: const Icon(
@@ -106,102 +122,112 @@ class _AboutScreenState extends State<AboutScreen> {
             child: Container(
               padding: const EdgeInsets.only(left: 20, top: 20, right: 20),
               child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.only(bottom: 20),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text("Shop Name",
-                              style: TextStyle(fontSize: 16)),
-                          const SizedBox(height: 5),
-                          Text(
-                            shop.shopeName,
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
+                child: Obx(
+                  () {
+                    if (aboutController.isLoading.value) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.only(bottom: 20),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text("Shop Name",
+                                  style: TextStyle(fontSize: 16)),
+                              const SizedBox(height: 5),
+                              Text(
+                                aboutController.shop.value.shopeName ?? '-',
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(bottom: 20),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            "Bussiness Type",
-                            style: TextStyle(fontSize: 16),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.only(bottom: 20),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                "Bussiness Type",
+                                style: TextStyle(fontSize: 16),
+                              ),
+                              const SizedBox(height: 5),
+                              Text(
+                                aboutController.shop.value.businessType ?? '-',
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
                           ),
-                          const SizedBox(height: 5),
-                          Text(
-                            shop.businessType,
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.only(bottom: 20),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text("Owner's Name",
+                                  style: TextStyle(fontSize: 16)),
+                              const SizedBox(height: 5),
+                              Text(
+                                aboutController.shop.value.ownerName ?? '-',
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(bottom: 20),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text("Owner's Name",
-                              style: TextStyle(fontSize: 16)),
-                          const SizedBox(height: 5),
-                          Text(
-                            shop.ownerName,
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.only(bottom: 20),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text("Location",
+                                  style: TextStyle(fontSize: 16)),
+                              const SizedBox(height: 5),
+                              Text(
+                                aboutController.shop.value.location ?? '-',
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(bottom: 20),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text("Location",
-                              style: TextStyle(fontSize: 16)),
-                          const SizedBox(height: 5),
-                          Text(
-                            shop.location,
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.only(bottom: 20),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text("Currency",
+                                  style: TextStyle(fontSize: 16)),
+                              const SizedBox(height: 5),
+                              Text(
+                                aboutController.shop.value.currency ?? '-',
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(bottom: 20),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text("Currency",
-                              style: TextStyle(fontSize: 16)),
-                          const SizedBox(height: 5),
-                          Text(
-                            shop.currency,
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+                        ),
+                      ],
+                    );
+                  },
                 ),
               ),
             ),

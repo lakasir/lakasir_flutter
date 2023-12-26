@@ -49,6 +49,7 @@ Future<bool> isSetup() async {
 
 Future<void> storeSetup(String domain) async {
   final prefs = await SharedPreferences.getInstance();
+  await logout();
   await prefs.setBool('setup', true);
   await prefs.setString('domain', domain);
 }
