@@ -1,7 +1,8 @@
 // ignore_for_file: prefer_final_fields
 
 import 'package:flutter/material.dart';
-import 'package:lakasir/api/responses/auths/profile_response.dart';
+import 'package:get/get.dart';
+import 'package:lakasir/controllers/profiles/profile_edit_controller.dart';
 import 'package:lakasir/widgets/filled_button.dart';
 import 'package:lakasir/widgets/image_picker.dart';
 import 'package:lakasir/widgets/layout.dart';
@@ -18,20 +19,11 @@ class EditProfileScreen extends StatefulWidget {
 }
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
-  TextEditingController _nameInputController = TextEditingController();
-  TextEditingController _phoneInputController = TextEditingController();
-  TextEditingController _emailInputController = TextEditingController();
-  TextEditingController _addressInputController = TextEditingController();
-  SelectInputWidgetController _languageController =
-      SelectInputWidgetController();
+  ProfileEditController _profileController = Get.put(ProfileEditController());
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final ProfileResponse profile =
-        ModalRoute.of(context)!.settings.arguments as ProfileResponse;
-
-    _nameInputController.text = profile.name;
   }
 
   @override
@@ -40,68 +32,79 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
     return Layout(
       title: 'Edit Profile',
-      child: ListView(
-        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              SizedBox(
-                width: width * 30 / 100,
-                child: MyImagePicker(
-                  onImageSelected: (file) {},
+      child: Form(
+        key: _profileController.formKey,
+        child: ListView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SizedBox(
+                  width: width * 30 / 100,
+                  child: MyImagePicker(
+                    onImageSelected: (file) {
+                      _profileController.profile.value.photoUrl = file;
+                    },
+                  ),
                 ),
-              ),
-              SizedBox(
-                width: width * 50 / 100,
-                child: MyTextField(
-                  controller: _nameInputController,
-                  label: 'Name',
+                SizedBox(
+                  width: width * 50 / 100,
+                  child: Obx(
+                    () => MyTextField(
+                      controller: _profileController.nameInputController,
+                      label: 'Name',
+                      errorText: _profileController.profileErrorResponse.value.name,
+                    ),
+                  ),
                 ),
-              ),
-            ],
-          ),
-          Container(
-            margin: const EdgeInsets.only(top: 20),
-            child: MyTextField(
-              controller: _emailInputController,
-              label: 'Email',
-            ),
-          ),
-          Container(
-            margin: const EdgeInsets.only(top: 20),
-            child: MyTextField(
-              controller: _phoneInputController,
-              label: 'Phone',
-            ),
-          ),
-          Container(
-            margin: const EdgeInsets.only(top: 20),
-            child: MyTextField(
-              maxLines: 4,
-              controller: _addressInputController,
-              label: 'Address',
-            ),
-          ),
-          Container(
-            margin: const EdgeInsets.only(top: 20),
-            child: SelectInputWidget(
-              options: [
-                Option(name: "Bahasa Indonesia", value: "indonesian"),
-                Option(name: "English", value: "english"),
               ],
-              controller: _languageController,
-              label: 'Language',
             ),
-          ),
-          Container(
-            margin: const EdgeInsets.only(top: 20),
-            child: MyFilledButton(
-              onPressed: () {},
-              child: const Text('Save'),
+            Container(
+              margin: const EdgeInsets.only(top: 20),
+              child: MyTextField(
+                controller: _profileController.emailInputController,
+                label: 'Email',
+              ),
             ),
-          ),
-        ],
+            Container(
+              margin: const EdgeInsets.only(top: 20),
+              child: Obx(
+                () => MyTextField(
+                  controller: _profileController.phoneInputController,
+                  label: 'Phone',
+                  errorText: _profileController.profileErrorResponse.value.phone,
+                ),
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.only(top: 20),
+              child: MyTextField(
+                maxLines: 4,
+                controller: _profileController.addressInputController,
+                label: 'Address',
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.only(top: 20),
+              child: SelectInputWidget(
+                options: [
+                  Option(name: "English", value: "en"),
+                ],
+                controller: _profileController.languageController,
+                label: 'Language',
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.only(top: 20),
+              child: MyFilledButton(
+                onPressed: _profileController.updateProfile,
+                isLoading: _profileController.isLoading.value,
+                child: const Text('Save'),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

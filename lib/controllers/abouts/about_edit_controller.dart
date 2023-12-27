@@ -19,14 +19,7 @@ class AboutEditController extends GetxController {
       TextEditingController();
   final SelectInputWidgetController currencyInputController =
       SelectInputWidgetController();
-  final Rx<AboutResponse> about = AboutResponse(
-    shopeName: "",
-    businessType: "",
-    ownerName: "",
-    location: "",
-    currency: "",
-    photo: "",
-  ).obs;
+  final Rx<AboutResponse> about = AboutResponse().obs;
   final AboutService _aboutService = AboutService();
 
   Future<void> updateAbout() async {
@@ -50,7 +43,7 @@ class AboutEditController extends GetxController {
       );
       isLoading(false);
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
     }
   }
 

@@ -19,138 +19,121 @@ class _AboutScreenState extends State<AboutScreen> {
     return Layout(
       noAppBar: true,
       noPadding: true,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: CustomScrollView(
-              slivers: <Widget>[
-                SliverAppBar(
-                  automaticallyImplyLeading: false,
-                  title: const Center(
-                    child: Text(
-                      'About',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                  expandedHeight: MediaQuery.of(context).size.height * 0.5,
-                  flexibleSpace: FlexibleSpaceBar(
-                    background: Container(
-                      decoration: const BoxDecoration(
-                        color: primary,
+      child: Obx(
+        () {
+          if (aboutController.isLoading.value) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: CustomScrollView(
+                  slivers: <Widget>[
+                    SliverAppBar(
+                      automaticallyImplyLeading: false,
+                      title: const Center(
+                        child: Text(
+                          'About',
+                          style: TextStyle(color: Colors.white),
+                        ),
                       ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const SizedBox(
-                            height: 20,
+                      expandedHeight: MediaQuery.of(context).size.height * 0.5,
+                      flexibleSpace: FlexibleSpaceBar(
+                        background: Container(
+                          decoration: const BoxDecoration(
+                            color: primary,
                           ),
-                          Row(
+                          child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Obx(
-                                () {
-                                  Widget photo = const Icon(
-                                    Icons.shopping_bag,
-                                    size: 100,
-                                    color: Colors.grey,
-                                  );
-                                  if (aboutController.shop.value.photo !=
-                                      null) {
-                                    photo = ClipRRect(
-                                      borderRadius: BorderRadius.circular(100),
-                                      child: Image.network(
-                                        aboutController.shop.value.photo
-                                                ?.replaceFirst(
-                                                    "https", "http") ??
-                                            "",
-                                        fit: BoxFit.cover,
-                                      ),
-                                    );
-                                  }
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Obx(
+                                    () {
+                                      Widget photo = const Icon(
+                                        Icons.shopping_bag,
+                                        size: 100,
+                                        color: Colors.grey,
+                                      );
+                                      if (aboutController.shop.value.photo !=
+                                          null) {
+                                        photo = ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(100),
+                                          child: Image.network(
+                                            aboutController.shop.value.photo
+                                                    ?.replaceFirst(
+                                                        "https", "http") ??
+                                                "",
+                                            fit: BoxFit.cover,
+                                          ),
+                                        );
+                                      }
 
-                                  return Container(
-                                    margin: const EdgeInsets.only(
-                                        top: 20, left: 50),
-                                    width: 160,
-                                    height: 160,
-                                    decoration: const BoxDecoration(
-                                      shape: BoxShape.circle,
+                                      return Container(
+                                        margin: const EdgeInsets.only(
+                                            top: 20, left: 50),
+                                        width: 160,
+                                        height: 160,
+                                        decoration: const BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Colors.white,
+                                        ),
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(100),
+                                          child: photo,
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                  IconButton(
+                                    onPressed: () {
+                                      Get.toNamed(
+                                        '/menu/about/edit',
+                                        arguments: aboutController.shop.value,
+                                      );
+                                    },
+                                    icon: const Icon(
+                                      size: 30,
+                                      Icons.edit,
                                       color: Colors.white,
                                     ),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(100),
-                                      child: photo,
-                                    ),
-                                  );
-                                },
+                                  ),
+                                ],
                               ),
-                              IconButton(
-                                onPressed: () {
-                                  Get.toNamed(
-                                    '/menu/about/edit',
-                                    arguments: aboutController.shop.value,
-                                  );
-                                },
-                                icon: const Icon(
-                                  size: 30,
-                                  Icons.edit,
-                                  color: Colors.white,
-                                ),
+                              const SizedBox(
+                                height: 20,
                               ),
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          const Text(
-                            'John Doe',
-                            style: TextStyle(
-                              fontSize: 20,
-                              color: Colors.white,
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: Container(
-              padding: const EdgeInsets.only(left: 20, top: 20, right: 20),
-              child: SingleChildScrollView(
-                child: Obx(
-                  () {
-                    if (aboutController.isLoading.value) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.only(bottom: 20),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text("Shop Name",
-                                  style: TextStyle(fontSize: 16)),
-                              const SizedBox(height: 5),
                               Text(
                                 aboutController.shop.value.shopeName ?? '-',
                                 style: const TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                  color: Colors.white,
                                 ),
-                              ),
+                              )
                             ],
                           ),
                         ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  padding: const EdgeInsets.only(left: 20, top: 20, right: 20),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
                         Container(
                           margin: const EdgeInsets.only(bottom: 20),
                           child: Column(
@@ -226,13 +209,13 @@ class _AboutScreenState extends State<AboutScreen> {
                           ),
                         ),
                       ],
-                    );
-                  },
+                    ),
+                  ),
                 ),
-              ),
-            ),
-          )
-        ],
+              )
+            ],
+          );
+        },
       ),
     );
   }

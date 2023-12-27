@@ -66,10 +66,13 @@ class _MyImagePickerState extends State<MyImagePicker> {
       image_picker.XFile? selected = await imagePicker.pickImage(
         source: widget.source,
       );
+      if (selected == null) {
+        return;
+      }
       setState(() {
         _image = selected;
       });
-      String url = await _uploadImage(File(selected!.path));
+      String url = await _uploadImage(File(selected.path));
       widget.onImageSelected(url);
     } catch (e) {
       Get.rawSnackbar(

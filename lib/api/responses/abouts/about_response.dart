@@ -7,12 +7,12 @@ class AboutResponse {
   String? photo;
 
   AboutResponse({
-    required this.shopeName,
-    required this.businessType,
-    required this.ownerName,
-    required this.location,
-    required this.currency,
-    required this.photo,
+    this.shopeName,
+    this.businessType,
+    this.ownerName,
+    this.location,
+    this.currency,
+    this.photo,
   });
 
   factory AboutResponse.fromJson(Map<String, dynamic> json) {
