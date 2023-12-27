@@ -16,7 +16,8 @@ class EditAboutScreen extends StatefulWidget {
 }
 
 class _EditAboutScreenState extends State<EditAboutScreen> {
-  final AboutEditController _aboutEditController = Get.put(AboutEditController());
+  final AboutEditController _aboutEditController =
+      Get.put(AboutEditController());
 
   @override
   void didChangeDependencies() {
@@ -37,13 +38,18 @@ class _EditAboutScreenState extends State<EditAboutScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                SizedBox(
-                  width: width * 30 / 100,
-                  child: MyImagePicker(
-                    source: ImageSource.gallery,
-                    onImageSelected: (file) {
-                      _aboutEditController.about.value.photo = file;
-                    },
+                Obx(
+                  () => SizedBox(
+                    width: width * 30 / 100,
+                    child: MyImagePicker(
+                      source: ImageSource.gallery,
+                      onImageSelected: (file) {
+                        _aboutEditController.about.value.photo = file;
+                      },
+                      defaultImage: _aboutEditController.about.value.photo
+                              ?.replaceFirst("https", "http") ??
+                          '',
+                    ),
                   ),
                 ),
                 SizedBox(

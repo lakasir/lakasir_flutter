@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:lakasir/controllers/profiles/profile_edit_controller.dart';
 import 'package:lakasir/widgets/filled_button.dart';
 import 'package:lakasir/widgets/image_picker.dart';
@@ -11,8 +12,6 @@ import 'package:lakasir/widgets/text_field.dart';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({super.key});
-
-  static const routeName = '/menu/profile/edit';
 
   @override
   State<EditProfileScreen> createState() => _EditProfileScreenState();
@@ -40,12 +39,18 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                SizedBox(
-                  width: width * 30 / 100,
-                  child: MyImagePicker(
-                    onImageSelected: (file) {
-                      _profileController.profile.value.photoUrl = file;
-                    },
+                Obx(
+                  () => SizedBox(
+                    width: width * 30 / 100,
+                    child: MyImagePicker(
+                      onImageSelected: (file) {
+                        _profileController.profile.value.photoUrl = file;
+                      },
+                      usingDynamicSource: true,
+                      defaultImage: _profileController.profile.value.photoUrl
+                              ?.replaceFirst("https", "http") ??
+                          '',
+                    ),
                   ),
                 ),
                 SizedBox(
@@ -54,7 +59,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     () => MyTextField(
                       controller: _profileController.nameInputController,
                       label: 'Name',
-                      errorText: _profileController.profileErrorResponse.value.name,
+                      errorText:
+                          _profileController.profileErrorResponse.value.name,
                     ),
                   ),
                 ),
@@ -73,7 +79,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 () => MyTextField(
                   controller: _profileController.phoneInputController,
                   label: 'Phone',
-                  errorText: _profileController.profileErrorResponse.value.phone,
+                  errorText:
+                      _profileController.profileErrorResponse.value.phone,
                 ),
               ),
             ),
