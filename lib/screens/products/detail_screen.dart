@@ -56,6 +56,7 @@ class _DetailScreen extends State<DetailScreen> {
         return Future.value(false);
       },
       child: Layout(
+        baseHeight: double.infinity,
         noAppBar: true,
         noPadding: true,
         bottomNavigationBar: MyBottomBar(

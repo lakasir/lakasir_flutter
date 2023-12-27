@@ -11,6 +11,7 @@ class Layout extends StatefulWidget {
     this.noAppBar = false,
     this.noPadding = false,
     this.padding = 20,
+    this.baseHeight,
   });
   final Widget child;
   final Widget? bottomNavigationBar;
@@ -20,6 +21,7 @@ class Layout extends StatefulWidget {
   final bool noAppBar;
   final bool noPadding;
   final double padding;
+  final double? baseHeight;
 
   @override
   State<Layout> createState() => _LayoutState();
@@ -38,6 +40,10 @@ class _LayoutState extends State<Layout> {
     if (widget.bottomNavigationBar == null) {
       baseHeight = double.infinity;
     }
+    if (widget.baseHeight != null) {
+      baseHeight = widget.baseHeight!;
+    }
+
     return Scaffold(
       appBar: widget.noAppBar
           ? null
