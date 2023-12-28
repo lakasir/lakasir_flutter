@@ -42,7 +42,7 @@ class _EditAboutScreenState extends State<EditAboutScreen> {
                   () => SizedBox(
                     width: width * 30 / 100,
                     child: MyImagePicker(
-                      source: ImageSource.gallery,
+                      usingDynamicSource: true,
                       onImageSelected: (file) {
                         _aboutEditController.about.value.photo = file;
                       },
@@ -63,9 +63,13 @@ class _EditAboutScreenState extends State<EditAboutScreen> {
             ),
             Container(
               margin: const EdgeInsets.only(top: 20),
-              child: MyTextField(
+              child: SelectInputWidget(
+                options: [
+                  Option(name: "Retail", value: "retail"),
+                  Option(name: "Wholesale", value: "wholesale"),
+                ],
                 controller: _aboutEditController.businessTypeInputController,
-                label: 'Bussiness Type',
+                label: 'Business Type',
               ),
             ),
             Container(
@@ -96,10 +100,12 @@ class _EditAboutScreenState extends State<EditAboutScreen> {
             ),
             Container(
               margin: const EdgeInsets.only(top: 20),
-              child: MyFilledButton(
-                onPressed: _aboutEditController.updateAbout,
-                isLoading: _aboutEditController.isLoading.value,
-                child: const Text('Save'),
+              child: Obx(
+                () => MyFilledButton(
+                  onPressed: _aboutEditController.updateAbout,
+                  isLoading: _aboutEditController.isLoading.value,
+                  child: const Text('Save'),
+                ),
               ),
             ),
           ],

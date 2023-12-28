@@ -14,6 +14,19 @@ class AboutScreen extends StatefulWidget {
 class _AboutScreenState extends State<AboutScreen> {
   AboutController aboutController = Get.put(AboutController());
 
+  String _businessType(String businessType) {
+    switch (businessType) {
+      case 'retail':
+        return 'Retail';
+      case 'wholesale':
+        return 'Wholesale';
+      case 'service':
+        return 'Service';
+      default:
+        return '-';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Layout(
@@ -140,12 +153,12 @@ class _AboutScreenState extends State<AboutScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const Text(
-                                "Bussiness Type",
+                                "Business Type",
                                 style: TextStyle(fontSize: 16),
                               ),
                               const SizedBox(height: 5),
                               Text(
-                                aboutController.shop.value.businessType ?? '-',
+                                _businessType(aboutController.shop.value.businessType!),
                                 style: const TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,

@@ -12,8 +12,8 @@ class AboutEditController extends GetxController {
   RxBool isLoading = false.obs;
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final TextEditingController nameInputController = TextEditingController();
-  final TextEditingController businessTypeInputController =
-      TextEditingController();
+  final SelectInputWidgetController businessTypeInputController =
+      SelectInputWidgetController();
   final TextEditingController locationInputController = TextEditingController();
   final TextEditingController ownerNameInputController =
       TextEditingController();
@@ -28,7 +28,7 @@ class AboutEditController extends GetxController {
       await _aboutService.update(
         AboutRequest(
           shopName: nameInputController.text,
-          businessType: businessTypeInputController.text,
+          businessType: businessTypeInputController.selectedOption,
           ownerName: ownerNameInputController.text,
           shopLocation: locationInputController.text,
           photoUrl: about.value.photo,
@@ -51,7 +51,7 @@ class AboutEditController extends GetxController {
     about.value = Get.arguments as AboutResponse;
 
     nameInputController.text = about.value.shopeName ?? "";
-    businessTypeInputController.text = about.value.businessType ?? "";
+    businessTypeInputController.selectedOption = about.value.businessType ?? "";
     locationInputController.text = about.value.location ?? "";
     ownerNameInputController.text = about.value.ownerName ?? "";
     currencyInputController.selectedOption = about.value.currency ?? "";

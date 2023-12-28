@@ -104,10 +104,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             ),
             Container(
               margin: const EdgeInsets.only(top: 20),
-              child: MyFilledButton(
-                onPressed: _profileController.updateProfile,
-                isLoading: _profileController.isLoading.value,
-                child: const Text('Save'),
+              child: Obx(
+                () => MyFilledButton(
+                  onPressed: _profileController.updateProfile,
+                  isLoading: _profileController.isLoading.value,
+                  child: const Text('Save'),
+                ),
               ),
             ),
           ],
