@@ -9,12 +9,12 @@ class MyBottomBar extends StatefulWidget {
     required this.label,
     required this.onPressed,
     this.actions,
-    this.hidBlockButton = false,
+    this.hideBlockButton = false,
   });
 
   final List<MyBottomBarActions>? actions;
   final Widget label;
-  final bool hidBlockButton;
+  final bool hideBlockButton;
   final void Function() onPressed;
 
   @override
@@ -34,7 +34,7 @@ class _MyBottomBarState extends State<MyBottomBar> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        if (!widget.hidBlockButton)
+        if (!widget.hideBlockButton)
           Positioned(
             bottom: 0,
             left: 0,
@@ -50,7 +50,7 @@ class _MyBottomBarState extends State<MyBottomBar> {
               ),
             ),
           ),
-        if (!widget.hidBlockButton)
+        if (!widget.hideBlockButton)
           Positioned(
             bottom: 0,
             right: MediaQuery.of(context).size.width * 8 / 100,
@@ -87,7 +87,10 @@ class _MyBottomBarState extends State<MyBottomBar> {
                         children: [
                           for (var action in widget.actions!)
                             MyBottomBarActions(
-                              onPressed: action.onPressed,
+                              onPressed: () {
+                                action.onPressed();
+                                toggleActionsVisibility();
+                              },
                               label: action.label!,
                               icon: action.icon!,
                             ),

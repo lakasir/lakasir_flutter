@@ -41,7 +41,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               children: [
                 Obx(
                   () => SizedBox(
-                    width: width * 30 / 100,
+                    width: 100,
                     child: MyImagePicker(
                       onImageSelected: (file) {
                         _profileController.profile.value.photoUrl = file;
@@ -54,7 +54,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   ),
                 ),
                 SizedBox(
-                  width: width * 50 / 100,
+                  width: width * 60 / 100,
                   child: Obx(
                     () => MyTextField(
                       controller: _profileController.nameInputController,

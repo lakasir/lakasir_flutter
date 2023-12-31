@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:lakasir/api/responses/products/product_response.dart';
+import 'package:lakasir/controllers/products/product_detail_controller.dart';
 import 'package:lakasir/utils/colors.dart';
 import 'package:lakasir/utils/utils.dart';
 import 'package:lakasir/widgets/layout.dart';
@@ -16,6 +18,7 @@ class DetailScreen extends StatefulWidget {
 
 class _DetailScreen extends State<DetailScreen> {
   bool isBottomSheetOpen = false;
+  final _productDetailController = Get.put(ProductDetailController());
 
   final Duration initialDuration = const Duration(milliseconds: 300);
 
@@ -39,9 +42,9 @@ class _DetailScreen extends State<DetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final ProductResponse products =
-        ModalRoute.of(context)!.settings.arguments as ProductResponse;
+    final products = Get.arguments as ProductResponse;
     final double height = MediaQuery.of(context).size.height;
+    final double width = MediaQuery.of(context).size.width;
     double percentage = 0.7;
     double containerHeight = height * percentage;
 
@@ -62,11 +65,7 @@ class _DetailScreen extends State<DetailScreen> {
         bottomNavigationBar: MyBottomBar(
           label: const Text('Edit Product'),
           onPressed: () {
-            Navigator.pushNamed(
-              context,
-              '/menu/product/edit',
-              arguments: products,
-            );
+            Get.toNamed('/menu/product/edit', arguments: products);
           },
           actions: [
             MyBottomBarActions(
@@ -76,11 +75,11 @@ class _DetailScreen extends State<DetailScreen> {
                   isBottomSheetOpen = false;
                 });
                 Timer(initialDuration, () {
-                  Navigator.pushNamed(
-                    context,
+                  Get.toNamed(
                     '/menu/product/stock',
                     arguments: products,
-                  ).then((value) {
+                  )!
+                      .then((value) {
                     Timer(initialDuration, () {
                       setState(() {
                         isBottomSheetOpen = true;
@@ -93,7 +92,9 @@ class _DetailScreen extends State<DetailScreen> {
             ),
             MyBottomBarActions(
               label: 'Delete',
-              onPressed: () {},
+              onPressed: () {
+                _productDetailController.showDeleteDialog(products.id);
+              },
               icon: const Icon(Icons.delete_rounded, color: Colors.white),
             ),
           ],
@@ -110,10 +111,16 @@ class _DetailScreen extends State<DetailScreen> {
                       background: Hero(
                         tag: 'product-${products.id}',
                         child: ClipRRect(
-                          child: Image(
-                            image: NetworkImage(products.image),
-                            fit: BoxFit.fitWidth,
-                          ),
+                          child: products.image != null
+                              ? Image.network(
+                                  products.image!,
+                                  fit: BoxFit.cover,
+                                )
+                              : const Image(
+                                  image: AssetImage(
+                                      'assets/no-image-100.png'),
+                                  fit: BoxFit.cover,
+                                ),
                         ),
                       ),
                     ),
@@ -168,18 +175,23 @@ class _DetailScreen extends State<DetailScreen> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  products.name,
-                                  style: const TextStyle(
-                                    fontSize: 23,
-                                    fontWeight: FontWeight.bold,
+                                SizedBox(
+                                  width: width * 0.65,
+                                  child: Text(
+                                    products.name,
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 4,
+                                    style: const TextStyle(
+                                      fontSize: 23,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
                                 Text("Stock ${products.stock}"),
                               ],
                             ),
                             Text(
-                              formatPrice(products.initialPrice),
+                              formatPrice(products.initialPrice ?? 0),
                               style: const TextStyle(
                                 fontSize: 18,
                               ),
@@ -211,7 +223,7 @@ class _DetailScreen extends State<DetailScreen> {
                               ),
                               Expanded(
                                 child: Text(
-                                  formatPrice(products.initialPrice),
+                                  formatPrice(products.initialPrice ?? 0),
                                   style: const TextStyle(
                                     fontSize: 18,
                                   ),
@@ -274,7 +286,7 @@ class _DetailScreen extends State<DetailScreen> {
                               ),
                               Expanded(
                                 child: Text(
-                                  products.category!.name,
+                                  products.category!.name ?? '',
                                   style: const TextStyle(
                                     fontSize: 18,
                                   ),

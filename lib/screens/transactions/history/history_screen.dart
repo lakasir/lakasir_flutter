@@ -32,7 +32,6 @@ class HistoryScreen extends StatelessWidget {
         ProductResponse(
           id: 1,
           name: 'Cashier',
-          description: 'Cashier',
           type: "Product",
           unit: "pcs",
           image:

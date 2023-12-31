@@ -28,6 +28,7 @@ class _EditMemberScreenState extends State<EditMemberScreen> {
   Widget build(BuildContext context) {
     return Layout(
       title: 'Edit Member',
+      resizeToAvoidBottomInset: true,
       child: Form(
         key: _memberUpdateController.formKey,
         child: ListView(

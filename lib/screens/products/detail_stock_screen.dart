@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:lakasir/api/responses/products/product_response.dart';
 import 'package:lakasir/utils/colors.dart';
 import 'package:lakasir/utils/utils.dart';
@@ -13,10 +14,9 @@ class DetailStockScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ProductResponse products =
-        ModalRoute.of(context)!.settings.arguments as ProductResponse;
-    String initialFormattedPrice = formatPrice(products.initialPrice);
-    String sellingFormattedPrice = formatPrice(products.sellingPrice);
+    final ProductResponse products = Get.arguments as ProductResponse;
+    String initialFormattedPrice = formatPrice(products.initialPrice ?? 0);
+    String sellingFormattedPrice = formatPrice(products.sellingPrice ?? 0);
 
     return Layout(
       title: 'Detail Stock',
@@ -50,7 +50,7 @@ class DetailStockScreen extends StatelessWidget {
                   child: Image(
                     width: 200,
                     height: 150,
-                    image: NetworkImage(products.image),
+                    image: NetworkImage(products.image!),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -126,7 +126,7 @@ class DetailStockScreen extends StatelessWidget {
           ),
           Expanded(
             child: ListView.builder(
-              itemCount: products.stocks!.length,
+              itemCount: products.stocks!.isEmpty ? 0 : products.stocks!.length,
               itemBuilder: (context, index) {
                 final stockHistory = products.stocks![index];
                 return Container(
@@ -233,14 +233,14 @@ class ActionModalStock extends StatelessWidget {
                         width: 60,
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(99),
-                          child: Image(
-                            width: 200,
-                            height: 150,
-                            image: NetworkImage(
-                              products.image,
-                            ),
-                            fit: BoxFit.cover,
-                          ),
+                          child: products.image != null
+                              ? Image(
+                                  width: 200,
+                                  height: 150,
+                                  image: NetworkImage(products.image!),
+                                  fit: BoxFit.cover,
+                                )
+                              : const Icon(Icons.image_not_supported)
                         ),
                       ),
                       list: [

@@ -44,6 +44,8 @@ class ApiService<T> {
       body: jsonEncode(request),
     );
 
+    print(response.body);
+
     if (response.statusCode == 401) {
       logout();
       throw UnauthorizedException(jsonDecode(response.body)['message']);
@@ -63,6 +65,7 @@ class ApiService<T> {
   }
 
   Future<T> putData(String endpoint, Object? request) async {
+    print(request);
     final token = await getToken();
     final response = await http.put(
       Uri.parse('$baseUrl/$endpoint'),
@@ -73,6 +76,8 @@ class ApiService<T> {
       },
       body: jsonEncode(request),
     );
+
+    print(response.body);
 
     if (response.statusCode == 401) {
       logout();

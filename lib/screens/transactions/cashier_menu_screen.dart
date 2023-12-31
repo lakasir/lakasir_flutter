@@ -21,7 +21,6 @@ class _CashierMenuScreenState extends State<CashierMenuScreen> {
     ProductResponse(
       id: 1,
       name: 'Cashier',
-      description: 'Cashier',
       type: "Product",
       unit: "pcs",
       image:
@@ -60,7 +59,6 @@ class _CashierMenuScreenState extends State<CashierMenuScreen> {
     ProductResponse(
       id: 2,
       name: 'Cashier',
-      description: 'Cashier',
       type: "Product",
       unit: "pcs",
       image:
@@ -99,7 +97,6 @@ class _CashierMenuScreenState extends State<CashierMenuScreen> {
     ProductResponse(
       id: 3,
       name: 'Cashier',
-      description: 'Cashier',
       type: "Service",
       unit: "KG",
       image:
@@ -194,7 +191,7 @@ class _CashierMenuScreenState extends State<CashierMenuScreen> {
           key: ValueKey(product.id),
           list: [
             Text(
-              product.name,
+              product.name!,
               style: const TextStyle(
                 fontSize: 20,
               ),
@@ -202,7 +199,7 @@ class _CashierMenuScreenState extends State<CashierMenuScreen> {
             SizedBox(
               width: 220,
               child: Text(
-                product.description,
+                "deskripsi",
                 style: const TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w200,
@@ -228,7 +225,7 @@ class _CashierMenuScreenState extends State<CashierMenuScreen> {
               child: Image(
                 width: 200,
                 height: 150,
-                image: NetworkImage(product.image),
+                image: NetworkImage(product.image!),
                 fit: BoxFit.cover,
               ),
             ),

@@ -11,7 +11,8 @@ class Layout extends StatefulWidget {
     this.noAppBar = false,
     this.noPadding = false,
     this.padding = 20,
-    this.baseHeight,
+    this.baseHeight = 0,
+    this.resizeToAvoidBottomInset = false,
   });
   final Widget child;
   final Widget? bottomNavigationBar;
@@ -21,7 +22,8 @@ class Layout extends StatefulWidget {
   final bool noAppBar;
   final bool noPadding;
   final double padding;
-  final double? baseHeight;
+  final double baseHeight;
+  final bool resizeToAvoidBottomInset;
 
   @override
   State<Layout> createState() => _LayoutState();
@@ -40,8 +42,8 @@ class _LayoutState extends State<Layout> {
     if (widget.bottomNavigationBar == null) {
       baseHeight = double.infinity;
     }
-    if (widget.baseHeight != null) {
-      baseHeight = widget.baseHeight!;
+    if (widget.baseHeight != 0) {
+      baseHeight = widget.baseHeight;
     }
 
     return Scaffold(
@@ -53,10 +55,10 @@ class _LayoutState extends State<Layout> {
                 child: Text(widget.title),
               ),
             ),
-      body: Container(
-        margin: const EdgeInsets.only(top: 20),
+      body: SizedBox(
+        // margin: const EdgeInsets.only(top: 20),
         width: double.infinity,
-        height: baseHeight,
+        // height: baseHeight,
         child: widget.noPadding
             ? widget.child
             : Padding(
@@ -67,7 +69,7 @@ class _LayoutState extends State<Layout> {
       floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
       floatingActionButton: widget.bottomNavigationBar,
       bottomSheet: widget.bottomSheet,
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
     );
   }
 }

@@ -26,7 +26,6 @@ class _CashierCartMenuScreenState extends State<CashierCartMenuScreen> {
       product: ProductResponse(
         id: 1,
         name: 'Kopi',
-        description: 'Kopi Mantap',
         initialPrice: 10000,
         sellingPrice: 10000,
         categoryId: 1,
@@ -54,7 +53,6 @@ class _CashierCartMenuScreenState extends State<CashierCartMenuScreen> {
       product: ProductResponse(
         id: 1,
         name: 'Kopi',
-        description: 'Kopi Mantap',
         initialPrice: 10000,
         sellingPrice: 10000,
         categoryId: 1,
@@ -131,7 +129,7 @@ class _CashierCartMenuScreenState extends State<CashierCartMenuScreen> {
   }
 
   Widget buildMyCardList(CartResponse item) {
-    String sellingFormattedPrice = formatPrice(item.product.sellingPrice);
+    String sellingFormattedPrice = formatPrice(item.product.sellingPrice!);
     return Column(
       children: [
         SizedBox(height: MediaQuery.of(context).size.height * 2.7 / 100),
@@ -147,7 +145,7 @@ class _CashierCartMenuScreenState extends State<CashierCartMenuScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        item.product.name,
+                        item.product.name!,
                         style: const TextStyle(
                           fontSize: 20,
                         ),

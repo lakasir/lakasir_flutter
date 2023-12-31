@@ -42,6 +42,7 @@ class _CategoryScreen extends State<CategoryScreen> {
 
     return Layout(
       title: 'Category',
+      resizeToAvoidBottomInset: true,
       bottomNavigationBar: MyBottomBar(
         label: Obx(() => Text(categoryController.labelButton())),
         onPressed: () {
@@ -75,7 +76,9 @@ class _CategoryScreen extends State<CategoryScreen> {
                     controller: categoryController.categoryNameController,
                     errorText: categoryController.errors().name,
                     onSubmitted: (value) => addCategory(),
-                    onTapOutside: (value) => addCategory(),
+                    onTapOutside: (value) {
+                      categoryController.showAddCategory(false);
+                    },
                     onChanged: (value) {
                       if (value.isNotEmpty) {
                         categoryController.labelButton("Save");

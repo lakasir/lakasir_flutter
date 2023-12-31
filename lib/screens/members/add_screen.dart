@@ -8,8 +8,6 @@ import 'package:lakasir/widgets/text_field.dart';
 class AddMemberScreen extends StatefulWidget {
   const AddMemberScreen({super.key});
 
-  static const routeName = '/menu/profile/edit';
-
   @override
   State<AddMemberScreen> createState() => _AddMemberScreenState();
 }
@@ -33,6 +31,7 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
   @override
   Widget build(BuildContext context) {
     return Layout(
+      resizeToAvoidBottomInset: true,
       title: 'Add Member',
       child: Form(
         key: _memberAddController.formKey,

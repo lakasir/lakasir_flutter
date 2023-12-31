@@ -9,13 +9,13 @@ class SelectInputWidget extends StatefulWidget {
     this.label = "",
     this.hintText = "",
     this.mandatory = false,
-    this.errorText = "",
+    this.errorText,
   });
   final List<Option> options;
   final String label;
   final String hintText;
   final bool mandatory;
-  final String errorText;
+  final String? errorText;
   final SelectInputWidgetController controller;
 
   @override
@@ -28,7 +28,9 @@ class _SelectInputWidgetState extends State<SelectInputWidget> {
   @override
   void initState() {
     super.initState();
-    selectedOption = widget.controller.selectedOption;
+    selectedOption = widget.controller.selectedOption == ''
+        ? null
+        : widget.controller.selectedOption;
   }
 
   @override
@@ -57,51 +59,66 @@ class _SelectInputWidgetState extends State<SelectInputWidget> {
               ),
             ),
           ),
-        Container(
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: widget.errorText.isNotEmpty ? error : secondary,
+        DropdownButtonFormField<String>(
+          hint: Text(widget.hintText),
+          value: selectedOption,
+          validator: (value) {
+            if (widget.mandatory && value == null) {
+              return "Field ${widget.label} is required";
+            }
+            return null;
+          },
+          onChanged: (String? newValue) {
+            setState(() {
+              selectedOption = newValue;
+              widget.controller.selectedOption = newValue;
+              widget.controller.selectedLabel = widget.options
+                  .firstWhere((element) => element.value == newValue)
+                  .name;
+            });
+          },
+          items: widget.options.map((Option option) {
+            return DropdownMenuItem<String>(
+              value: option.value,
+              onTap: option.onTap,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(option.name),
+                  if (option.icon != null) option.icon!,
+                ],
+              ),
+            );
+          }).toList(),
+          isExpanded: true,
+          decoration: InputDecoration(
+            contentPadding: const EdgeInsets.symmetric(vertical: 13, horizontal: 10),
+            errorText: widget.errorText == "" ? null : widget.errorText,
+            errorStyle: const TextStyle(color: error, fontSize: 12),
+            border: const OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.transparent),
             ),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 1),
-          width: double.infinity,
-          child: DropdownButton<String>(
-            hint: Text(widget.hintText),
-            value: selectedOption,
-            onChanged: (String? newValue) {
-              setState(() {
-                selectedOption = newValue;
-                widget.controller.selectedOption = newValue;
-              });
-            },
-            items: widget.options.map((Option option) {
-              return DropdownMenuItem<String>(
-                value: option.value,
-                onTap: option.onTap,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(option.name),
-                    if (option.icon != null) option.icon!,
-                  ],
-                ),
-              );
-            }).toList(),
-            isExpanded: true,
-            underline: Container(
-              color: Colors.transparent,
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(color: secondary),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12), // Border radius
+              borderSide: const BorderSide(color: primary),
+            ),
+            fillColor: Colors.white,
+            filled: true,
+            hintText: widget.hintText,
+            hintStyle: TextStyle(color: Colors.grey[500]),
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(color: error),
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
             ),
           ),
         ),
-        if (widget.errorText.isNotEmpty)
-          Container(
-            margin: const EdgeInsets.only(top: 5, left: 10),
-            child: Text(
-              widget.errorText,
-              style: const TextStyle(color: error, fontSize: 12),
-            ),
-          ),
       ],
     );
   }
@@ -118,4 +135,5 @@ class Option {
 
 class SelectInputWidgetController {
   String? selectedOption;
+  String? selectedLabel;
 }

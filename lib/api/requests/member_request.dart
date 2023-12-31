@@ -1,14 +1,14 @@
 class MemberRequest {
-  final String name;
-  final String address;
-  final String code;
-  final String email;
+  final String? name;
+  final String? address;
+  final String? code;
+  final String? email;
 
   MemberRequest({
-    required this.name,
-    required this.address,
-    required this.code,
-    required this.email,
+    this.name,
+    this.address,
+    this.code,
+    this.email,
   });
 
   Map<String, dynamic> toJson() {
@@ -18,6 +18,24 @@ class MemberRequest {
       'code': code,
       'email': email,
     };
+  }
+
+  String? toQuery() {
+    final query = <String>[];
+    if (name != null) {
+      query.add('filter[name]=$name');
+    }
+    if (address != null) {
+      query.add('filter[address]=$address');
+    }
+    if (code != null) {
+      query.add('filter[code]=$code');
+    }
+    if (email != null) {
+      query.add('filter[email]=$email');
+    }
+    
+    return query.join('&');
   }
 }
 

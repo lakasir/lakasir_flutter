@@ -30,6 +30,7 @@ class _EditAboutScreenState extends State<EditAboutScreen> {
 
     return Layout(
       title: 'Edit About',
+      resizeToAvoidBottomInset: true,
       child: Form(
         key: _aboutEditController.formKey,
         child: ListView(
@@ -40,7 +41,7 @@ class _EditAboutScreenState extends State<EditAboutScreen> {
               children: [
                 Obx(
                   () => SizedBox(
-                    width: width * 30 / 100,
+                    width: 100,
                     child: MyImagePicker(
                       usingDynamicSource: true,
                       onImageSelected: (file) {
@@ -53,7 +54,7 @@ class _EditAboutScreenState extends State<EditAboutScreen> {
                   ),
                 ),
                 SizedBox(
-                  width: width * 50 / 100,
+                  width: width * 60 / 100,
                   child: MyTextField(
                     controller: _aboutEditController.nameInputController,
                     label: 'Shop Name',

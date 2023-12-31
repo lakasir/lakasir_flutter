@@ -72,7 +72,7 @@ class _MyImagePickerState extends State<MyImagePicker> {
     try {
       image_picker.XFile? selected = await imagePicker.pickImage(
         source: dynamicSource!,
-        imageQuality: 25,
+        imageQuality: 50,
       );
 
       if (selected == null) {
@@ -157,7 +157,7 @@ class _MyImagePickerState extends State<MyImagePicker> {
           }
         },
         child: Container(
-          width: 100,
+          width: double.infinity,
           height: 100,
           decoration: BoxDecoration(
             color: Colors.grey[200],

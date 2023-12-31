@@ -8,9 +8,10 @@ import 'package:lakasir/utils/auth.dart';
 class MemberService {
   MemberService();
 
-  Future<RxList<MemberResponse>> get() async {
+  Future<RxList<MemberResponse>> get(MemberRequest? memberRequest) async {
+    final query = memberRequest?.toQuery();
     final response =
-        await ApiService(await getDomain()).fetchData('master/member');
+        await ApiService(await getDomain()).fetchData('master/member?$query');
     final apiResponse = ApiResponse.fromJsonList(response, (json) {
       return RxList<MemberResponse>.from(
           json.map((x) => MemberResponse.fromJson(x)));

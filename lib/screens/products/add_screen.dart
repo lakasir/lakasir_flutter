@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:lakasir/controllers/category_controller.dart';
+import 'package:lakasir/controllers/products/product_add_controller.dart';
 import 'package:lakasir/widgets/image_picker.dart';
 import 'package:lakasir/widgets/filled_button.dart';
 import 'package:lakasir/widgets/layout.dart';
@@ -13,121 +16,163 @@ class AddProductScreen extends StatefulWidget {
 }
 
 class _AddProductScreenState extends State<AddProductScreen> {
-  final SelectInputWidgetController _categoryController =
-      SelectInputWidgetController();
-  final SelectInputWidgetController _typeController =
-      SelectInputWidgetController();
-  final TextEditingController _nameInputController = TextEditingController();
-  final TextEditingController _stockInputController = TextEditingController();
-  final TextEditingController _initialPriceInputController =
-      TextEditingController();
-  final TextEditingController _sellingPriceInputController =
-      TextEditingController();
-  final TextEditingController _unitInputController = TextEditingController();
+  final ProductAddEditController _productAddController =
+      Get.put(ProductAddEditController());
+  final CategoryController _categoryController = Get.put(CategoryController());
+
+  @override
+  void dispose() {
+    _productAddController.clearInput();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
 
     return Layout(
+      resizeToAvoidBottomInset: true,
       title: 'Add Product',
-      child: ListView(
-        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              SizedBox(
-                width: width * 30 / 100,
-                child: MyImagePicker(
-                  onImageSelected: (file) {
-                    print(file);
+      child: Form(
+        key: _productAddController.formKey,
+        child: ListView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SizedBox(
+                  width: width * 25 / 100,
+                  child: MyImagePicker(
+                    usingDynamicSource: true,
+                    onImageSelected: (file) {
+                      _productAddController.photoUrl = file;
+                    },
+                  ),
+                ),
+                SizedBox(
+                  width: width * 60 / 100,
+                  child: Obx(
+                    () => MyTextField(
+                      controller: _productAddController.nameInputController,
+                      label: 'Product Name',
+                      mandatory: true,
+                      errorText:
+                          _productAddController.productErrorResponse.value.name ??
+                              '',
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Container(
+              margin: const EdgeInsets.only(top: 20),
+              child: Obx(
+                () => SelectInputWidget(
+                  hintText: 'Select Category',
+                  mandatory: true,
+                  controller: _productAddController.categoryController,
+                  label: 'Category',
+                  errorText:
+                      _productAddController.productErrorResponse.value.category ??
+                          '',
+                  options: _categoryController.categories
+                      .map(
+                        (e) => Option(
+                          name: e.name,
+                          value: e.id.toString(),
+                        ),
+                      )
+                      .toList(),
+                ),
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.only(top: 20),
+              child: Obx(
+                () => MyTextField(
+                  controller: _productAddController.stockInputController,
+                  label: 'Stock',
+                  errorText:
+                      _productAddController.productErrorResponse.value.stock ??
+                          '',
+                ),
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.only(top: 20),
+              child: Obx(
+                () => MyTextField(
+                  controller: _productAddController.initialPriceInputController,
+                  label: 'Initial Price',
+                  errorText: _productAddController
+                          .productErrorResponse.value.initialPrice ??
+                      '',
+                ),
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.only(top: 20),
+              child: Obx(
+                () => MyTextField(
+                  controller: _productAddController.sellingPriceInputController,
+                  label: 'Selling Price',
+                  errorText: _productAddController
+                          .productErrorResponse.value.sellingPrice ??
+                      '',
+                ),
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.only(top: 20),
+              child: Obx(
+                () => SelectInputWidget(
+                  controller: _productAddController.typeController,
+                  label: 'Type',
+                  errorText:
+                      _productAddController.productErrorResponse.value.type ?? '',
+                  options: [
+                    Option(
+                      name: "Product",
+                      value: "product",
+                    ),
+                    Option(
+                      name: "Service",
+                      value: "service",
+                    )
+                  ],
+                ),
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.only(top: 20),
+              child: Obx(
+                () => MyTextField(
+                  controller: _productAddController.unitInputController,
+                  label: 'Unit',
+                  mandatory: true,
+                  errorText:
+                      _productAddController.productErrorResponse.value.unit ?? '',
+                ),
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.only(top: 30),
+              child: Obx(
+                () => MyFilledButton(
+                  onPressed: () {
+                    _productAddController.create();
                   },
+                  isLoading: _productAddController.isLoading.value,
+                  child: const Text('Save'),
                 ),
               ),
-              SizedBox(
-                width: width * 50 / 100,
-                child: MyTextField(
-                  controller: _nameInputController,
-                  label: 'Product Name',
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          SelectInputWidget(
-            controller: _categoryController,
-            label: 'Category',
-            errorText: "Category is required",
-            options: [
-              Option(
-                name: "Option 1",
-                value: "option_1",
-              ),
-              Option(
-                name: "Option 2",
-                value: "option_2",
-              )
-            ],
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          MyTextField(
-            controller: _stockInputController,
-            label: 'Stock',
-            errorText: "Stock is required",
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          MyTextField(
-            controller: _initialPriceInputController,
-            label: 'Initial Price',
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          MyTextField(
-            controller: _sellingPriceInputController,
-            label: 'Selling Price',
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          SelectInputWidget(
-            controller: _typeController,
-            label: 'Type',
-            options: [
-              Option(
-                name: "Product",
-                value: "product",
-              ),
-              Option(
-                name: "Service",
-                value: "service",
-              )
-            ],
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          MyTextField(
-            controller: _unitInputController,
-            label: 'Unit',
-          ),
-          const SizedBox(
-            height: 40,
-          ),
-          MyFilledButton(
-            onPressed: () {},
-            child: const Text('Save'),
-          ),
-          const SizedBox(
-            height: 40,
-          ),
-        ],
+            ),
+            const SizedBox(
+              height: 40,
+            ),
+          ],
+        ),
       ),
     );
   }
