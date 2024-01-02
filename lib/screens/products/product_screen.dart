@@ -47,7 +47,7 @@ class _ProductScreen extends State<ProductScreen> {
             icon: const Icon(Icons.search, color: Colors.white),
           ),
           MyBottomBarActions(
-            label: 'Catgory',
+            label: 'Category',
             onPressed: () => {Get.toNamed('/menu/setting/category')},
             icon: const Icon(Icons.category, color: Colors.white),
           ),
@@ -234,6 +234,7 @@ class FilteredWidget extends StatelessWidget {
               IconButton(
                 onPressed: () {
                   _productController.isFiltered(false);
+                  _productController.clearSearch();
                   _productController.getProducts();
                 },
                 icon: const Icon(Icons.close),

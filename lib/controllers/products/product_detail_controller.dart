@@ -9,6 +9,7 @@ import 'package:lakasir/utils/colors.dart';
 class ProductDetailController extends GetxController {
   final _productService = ProductService();
   final ProductController _productController = Get.find();
+  final RxBool isLoading = false.obs;
   final Rx<ProductResponse> product = ProductResponse(
     id: 0,
     name: '',
@@ -22,8 +23,10 @@ class ProductDetailController extends GetxController {
   }
 
   Future<void> get(int id) async {
+    isLoading(true);
     final response = await _productService.getById(id);
     product.value = response;
+    isLoading(false);
   }
 
   void showDeleteDialog(int id) {

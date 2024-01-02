@@ -93,6 +93,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 () => MyTextField(
                   controller: _productAddController.stockInputController,
                   label: 'Stock',
+                  keyboardType: TextInputType.number,
                   errorText:
                       _productAddController.productErrorResponse.value.stock ??
                           '',
@@ -105,6 +106,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 () => MyTextField(
                   controller: _productAddController.initialPriceInputController,
                   label: 'Initial Price',
+                  keyboardType: TextInputType.number,
                   errorText: _productAddController
                           .productErrorResponse.value.initialPrice ??
                       '',
@@ -117,6 +119,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 () => MyTextField(
                   controller: _productAddController.sellingPriceInputController,
                   label: 'Selling Price',
+                  keyboardType: TextInputType.number,
                   errorText: _productAddController
                           .productErrorResponse.value.sellingPrice ??
                       '',
@@ -150,6 +153,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 () => MyTextField(
                   controller: _productAddController.unitInputController,
                   label: 'Unit',
+                  textCapitalization: TextCapitalization.words,
                   mandatory: true,
                   errorText:
                       _productAddController.productErrorResponse.value.unit ?? '',
