@@ -51,19 +51,9 @@ class HistoryScreen extends StatelessWidget {
           stocks: [
             StockResponse(
               id: 1,
-              productId: 1,
               stock: 100,
               type: 'add',
-              createdAt: '2021-10-10',
-              updatedAt: '2021-10-10',
-            ),
-            StockResponse(
-              id: 2,
-              productId: 1,
-              stock: 100,
-              type: 'reduce',
-              createdAt: '2021-10-10',
-              updatedAt: '2021-10-10',
+              date: '2021-10-10',
             ),
           ],
         ),

@@ -2,8 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:lakasir/utils/colors.dart';
 
 class MyRadioGroup extends StatefulWidget {
-  const MyRadioGroup({super.key, required this.options});
+  const MyRadioGroup({
+    super.key,
+    required this.options,
+    required this.onSelected,
+    this.defaultSelectedValue = '',
+  });
   final List<RadioOption> options;
+  final Function(String) onSelected;
+  final String defaultSelectedValue;
 
   @override
   State<MyRadioGroup> createState() => _MyRadioGroupState();
@@ -11,6 +18,14 @@ class MyRadioGroup extends StatefulWidget {
 
 class _MyRadioGroupState extends State<MyRadioGroup> {
   String selectedValue = '';
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.defaultSelectedValue != '') {
+      selectedValue = widget.defaultSelectedValue;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +47,7 @@ class _MyRadioGroupState extends State<MyRadioGroup> {
                     setState(() {
                       selectedValue = value ?? "";
                     });
+                    widget.onSelected(value!);
                   },
                 ),
               ),
@@ -40,6 +56,7 @@ class _MyRadioGroupState extends State<MyRadioGroup> {
                   setState(() {
                     selectedValue = option.value;
                   });
+                  widget.onSelected(option.value);
                 },
                 child: Text(option.label),
               ),
@@ -55,4 +72,11 @@ class RadioOption {
   final String value;
 
   RadioOption({required this.label, required this.value});
+}
+
+class MyRadioGroupController {
+  String selectedValue = '';
+  void setSelectedValue(String value) {
+    selectedValue = value;
+  }
 }

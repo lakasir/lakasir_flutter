@@ -1,28 +1,29 @@
 class StockResponse {
   final int id;
-  final int productId;
-  final int stock;
+  final int? stock;
   final String type;
-  final String createdAt;
-  final String updatedAt;
+  final double? initialPrice;
+  final double? sellingPrice;
+  final String date;
+  
 
   StockResponse({
     required this.id,
-    required this.productId,
     required this.stock,
     required this.type,
-    required this.createdAt,
-    required this.updatedAt,
+    this.initialPrice,
+    this.sellingPrice,
+    required this.date,
   });
 
   factory StockResponse.fromJson(Map<String, dynamic> json) {
     return StockResponse(
       id: json['id'],
-      productId: json['product_id'],
       stock: json['stock'],
-      type: json['type'],
-      createdAt: json['created_at'],
-      updatedAt: json['updated_at'],
+      type: json['type'], 
+      initialPrice: double.parse(json['initial_price'].toString()),
+      sellingPrice: double.parse(json['selling_price'].toString()),
+      date: json['date'],
     );
   }
 }

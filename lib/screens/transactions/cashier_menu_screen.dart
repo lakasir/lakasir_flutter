@@ -40,19 +40,9 @@ class _CashierMenuScreenState extends State<CashierMenuScreen> {
       stocks: [
         StockResponse(
           id: 1,
-          productId: 1,
           stock: 100,
           type: 'add',
-          createdAt: '2021-10-10',
-          updatedAt: '2021-10-10',
-        ),
-        StockResponse(
-          id: 2,
-          productId: 1,
-          stock: 100,
-          type: 'reduce',
-          createdAt: '2021-10-10',
-          updatedAt: '2021-10-10',
+          date: '2021-10-10',
         ),
       ],
     ),
@@ -78,19 +68,9 @@ class _CashierMenuScreenState extends State<CashierMenuScreen> {
       stocks: [
         StockResponse(
           id: 1,
-          productId: 2,
           stock: 100,
           type: 'add',
-          createdAt: '2021-10-10',
-          updatedAt: '2021-10-10',
-        ),
-        StockResponse(
-          id: 2,
-          productId: 2,
-          stock: 100,
-          type: 'reduce',
-          createdAt: '2021-10-10',
-          updatedAt: '2021-10-10',
+          date: '2021-10-10',
         ),
       ],
     ),
@@ -116,19 +96,9 @@ class _CashierMenuScreenState extends State<CashierMenuScreen> {
       stocks: [
         StockResponse(
           id: 1,
-          productId: 3,
           stock: 100,
           type: 'add',
-          createdAt: '2021-10-10',
-          updatedAt: '2021-10-10',
-        ),
-        StockResponse(
-          id: 2,
-          productId: 3,
-          stock: 100,
-          type: 'reduce',
-          createdAt: '2021-10-10',
-          updatedAt: '2021-10-10',
+          date: '2021-10-10',
         ),
       ],
     ),
@@ -191,16 +161,16 @@ class _CashierMenuScreenState extends State<CashierMenuScreen> {
           key: ValueKey(product.id),
           list: [
             Text(
-              product.name!,
+              product.name,
               style: const TextStyle(
                 fontSize: 20,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               width: 220,
               child: Text(
                 "deskripsi",
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w200,
                 ),

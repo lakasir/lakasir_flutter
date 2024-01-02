@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:lakasir/utils/colors.dart';
 
 typedef MyCallback = void Function(String);
@@ -15,6 +16,8 @@ class MyTextField extends StatefulWidget {
   final bool obscureText;
   final int? maxLines;
   final TextInputAction? textInputAction;
+  final TextInputType? keyboardType;
+  final TextCapitalization? textCapitalization;
   final Widget? rightIcon;
   final Function(String)? onSubmitted;
   final Function(String)? onChanged;
@@ -34,6 +37,8 @@ class MyTextField extends StatefulWidget {
     this.errorText = "",
     this.maxLines = 1,
     this.textInputAction = TextInputAction.next,
+    this.keyboardType = TextInputType.text,
+    this.textCapitalization = TextCapitalization.none,
     this.rightIcon,
     this.onSubmitted,
     this.onChanged,
@@ -105,6 +110,9 @@ class _MyTextFieldState extends State<MyTextField> {
         TextFormField(
           focusNode: _focusNode,
           textInputAction: widget.textInputAction,
+          keyboardType: widget.keyboardType,
+          // inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}'))]
+          textCapitalization: widget.textCapitalization!,
           onTapOutside: (value) {
             widget.onTapOutside != null ? widget.onTapOutside!(value) : null;
             _focusNode.unfocus();
