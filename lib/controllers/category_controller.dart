@@ -9,6 +9,7 @@ import 'package:lakasir/services/category_service.dart';
 import 'package:lakasir/utils/colors.dart';
 
 class CategoryController extends GetxController {
+  final formKey = GlobalKey<FormState>();
   CategoryService categoryService = CategoryService();
   Rx<bool> showAddCategory = false.obs;
   TextEditingController categoryNameController = TextEditingController();
@@ -28,18 +29,21 @@ class CategoryController extends GetxController {
   }
 
   Future<void> addCategory() async {
-    labelButton("Add Category");
-    if (categoryNameController.text.isEmpty) {
-      showAddCategory(false);
-      return;
-    }
     try {
+      if (!formKey.currentState!.validate()) {
+        return;
+      }
       await categoryService.addCategory(
         categoryNameController.text,
       );
       showAddCategory(false);
       categoryNameController.clear();
       fetchCategories();
+      Get.back();
+      Get.rawSnackbar(
+        message: 'Category Added',
+        backgroundColor: success,
+      );
     } catch (e) {
       if (e is ValidationException) {
         ErrorResponse<CategoryErrorResponse> errorResponses =
@@ -67,13 +71,34 @@ class CategoryController extends GetxController {
     }
   }
 
-  void actionButton() {
-    if (showAddCategory()) {
-      addCategory();
-      labelButton("Add Category");
-    } else {
-      showAddCategory(true);
-      labelButton("Cancel");
+  Future<void> updateCategory(int id) async {
+    try {
+      if (!formKey.currentState!.validate()) {
+        return;
+      }
+      await categoryService.updateCategory(
+        id,
+        categoryNameController.text,
+      );
+      showAddCategory(false);
+      categoryNameController.clear();
+      fetchCategories();
+      Get.back();
+      Get.rawSnackbar(
+        message: 'Category Updated',
+        backgroundColor: success,
+      );
+    } catch (e) {
+      if (e is ValidationException) {
+        ErrorResponse<CategoryErrorResponse> errorResponses =
+            ErrorResponse.fromJson(
+          jsonDecode(
+            e.toString(),
+          ),
+          (json) => CategoryErrorResponse.fromJson(json),
+        );
+        errors(errorResponses.errors);
+      }
     }
   }
 

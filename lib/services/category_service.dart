@@ -27,4 +27,10 @@ class CategoryService {
   Future<void> deleteCategory(int id) async {
     await ApiService(await getDomain()).deleteData('master/category/$id');
   }
+
+  Future<void> updateCategory(int id, String name) async {
+    await ApiService(await getDomain()).putData('master/category/$id', {
+      'name': name,
+    });
+  }
 }
