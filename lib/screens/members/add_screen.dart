@@ -75,7 +75,7 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
               margin: const EdgeInsets.only(top: 20),
               child: MyTextField(
                 maxLines: 4,
-                textInputAction: TextInputAction.newline,
+                keyboardType: TextInputType.multiline,
                 controller: _memberAddController.memberAddressController,
                 label: "Address",
               ),

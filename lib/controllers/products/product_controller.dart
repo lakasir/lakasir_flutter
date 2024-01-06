@@ -4,6 +4,7 @@ import 'package:lakasir/api/requests/product_request.dart';
 import 'package:lakasir/api/responses/products/product_response.dart';
 import 'package:lakasir/controllers/category_controller.dart';
 import 'package:lakasir/services/product_service.dart';
+import 'package:lakasir/utils/utils.dart';
 import 'package:lakasir/widgets/dialog.dart';
 import 'package:lakasir/widgets/filled_button.dart';
 import 'package:lakasir/widgets/select_input_feld.dart';
@@ -138,6 +139,15 @@ class ProductController extends GetxController {
     searchByTypeController.selectedOption = null;
     searchByUnitController.clear();
     getProducts();
+  }
+
+  String buildPrice(index) {
+    if (products.isEmpty) {
+      return '';
+    }
+    final price = products[index].sellingPrice;
+    final unit = products[index].unit;
+    return '${formatPrice(price!, isSymbol: false)} / $unit';
   }
 
   @override

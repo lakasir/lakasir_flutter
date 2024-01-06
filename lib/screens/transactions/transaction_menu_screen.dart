@@ -16,11 +16,11 @@ class _TransactionMenuScreenState extends State<TransactionMenuScreen> {
       'icon': Icons.shopping_basket_rounded,
       'route': '/menu/transaction/cashier',
     },
-    {
-      'title': 'PPOB',
-      'icon': Icons.food_bank_rounded,
-      'route': '/menu/transaction/ppob',
-    },
+    // {
+    //   'title': 'PPOB',
+    //   'icon': Icons.food_bank_rounded,
+    //   'route': '/menu/transaction/ppob',
+    // },
     {
       'title': 'History',
       'icon': Icons.list_rounded,

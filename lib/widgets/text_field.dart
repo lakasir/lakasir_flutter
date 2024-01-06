@@ -9,9 +9,9 @@ class MyTextField extends StatefulWidget {
   final TextEditingController controller;
   final String? label;
   final String? info;
-  final String hintText;
+  final String? hintText;
   final bool mandatory;
-  final String errorText;
+  final String? errorText;
   final String prefixText;
   final bool obscureText;
   final int? maxLines;
@@ -24,6 +24,8 @@ class MyTextField extends StatefulWidget {
   final Function(PointerDownEvent)? onTapOutside;
   final ValidatorCallback? validator;
   final bool autofocus;
+  final bool readOnly;
+  final Function()? onTap;
 
   const MyTextField({
     super.key,
@@ -31,7 +33,7 @@ class MyTextField extends StatefulWidget {
     this.info,
     this.mandatory = false,
     required this.controller,
-    this.hintText = "",
+    this.hintText,
     this.obscureText = false,
     this.prefixText = "",
     this.errorText = "",
@@ -45,6 +47,8 @@ class MyTextField extends StatefulWidget {
     this.onTapOutside,
     this.autofocus = false,
     this.validator,
+    this.readOnly = false,
+    this.onTap,
   });
 
   @override
@@ -109,6 +113,8 @@ class _MyTextFieldState extends State<MyTextField> {
           ),
         TextFormField(
           focusNode: _focusNode,
+          onTap: widget.onTap,
+          readOnly: widget.readOnly,
           textInputAction: widget.textInputAction,
           keyboardType: widget.keyboardType,
           // inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}'))]

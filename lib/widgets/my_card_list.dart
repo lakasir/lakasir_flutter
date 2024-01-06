@@ -8,10 +8,12 @@ class MyCardList extends StatefulWidget {
     this.imagebox,
     this.route,
     this.onTap,
+    this.trailing,
   });
   final String? route;
   final List<Widget> list;
   final Widget? imagebox;
+  final Widget? trailing;
   final Function? onTap;
 
   @override
@@ -25,7 +27,7 @@ class _MyCardListState extends State<MyCardList> {
     if (widget.imagebox == null) {
       marginLeft = 0;
     }
-    return GestureDetector(
+    return InkWell(
       onLongPress: () {},
       onTap: () {
         if (widget.route != null) {
@@ -39,16 +41,19 @@ class _MyCardListState extends State<MyCardList> {
         width: double.infinity,
         child: Row(
           children: [
-            widget.imagebox ?? const SizedBox(),
-            Container(
-              margin: EdgeInsets.only(
-                left: marginLeft,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: widget.list,
+            if (widget.imagebox != null) widget.imagebox!,
+            Flexible(
+              child: Container(
+                margin: EdgeInsets.only(
+                  left: marginLeft,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: widget.list,
+                ),
               ),
             ),
+            if (widget.trailing != null) widget.trailing!,
           ],
         ),
       ),

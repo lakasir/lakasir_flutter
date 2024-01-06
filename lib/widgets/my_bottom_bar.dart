@@ -10,9 +10,15 @@ class MyBottomBar extends StatefulWidget {
     required this.onPressed,
     this.actions,
     this.hideBlockButton = false,
+    this.singleAction = false,
+    this.singleActionOnPressed,
+    this.singleActionIcon
   });
 
   final List<MyBottomBarActions>? actions;
+  final bool? singleAction;
+  final IconData? singleActionIcon;
+  final void Function()? singleActionOnPressed;
   final Widget label;
   final bool hideBlockButton;
   final void Function() onPressed;
@@ -25,6 +31,10 @@ class _MyBottomBarState extends State<MyBottomBar> {
   bool showActions = false;
 
   void toggleActionsVisibility() {
+    if (widget.singleAction!) {
+      widget.singleActionOnPressed!();
+      return;
+    }
     setState(() {
       showActions = !showActions;
     });
@@ -56,16 +66,30 @@ class _MyBottomBarState extends State<MyBottomBar> {
             right: MediaQuery.of(context).size.width * 8 / 100,
             child: SizedBox(
               height: 50,
-              width: widget.actions != null
+              width: widget.actions != null || widget.singleAction!
                   ? MediaQuery.of(context).size.width * 73 / 100
                   : MediaQuery.of(context).size.width * 92 / 100,
-              child: MyFilledButton(
-                onPressed: widget.onPressed,
-                child: widget.label,
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      blurRadius: 1,
+                      spreadRadius: -5,
+                      offset: const Offset(-3, 7),
+                      blurStyle: BlurStyle.normal,
+                    ),
+                  ],
+                ),
+                child: MyFilledButton(
+                  onPressed: widget.onPressed,
+                  child: widget.label,
+                ),
               ),
             ),
           ),
-        if (widget.actions != null)
+        if (widget.actions != null || widget.singleAction!)
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
@@ -130,7 +154,7 @@ class _MyBottomBarState extends State<MyBottomBar> {
                       color: primary,
                     ),
                     child: Icon(
-                      showActions ? Icons.close_rounded : Icons.list_rounded,
+                      getIcon(),
                       color: Colors.white,
                       size: 30,
                     ),
@@ -141,5 +165,12 @@ class _MyBottomBarState extends State<MyBottomBar> {
           ),
       ],
     );
+  }
+
+  IconData getIcon() {
+    if (widget.singleActionIcon != null) {
+      return widget.singleActionIcon!;
+    }
+    return showActions ? Icons.close_rounded : Icons.list_rounded;
   }
 }

@@ -86,7 +86,7 @@ class _EditAboutScreenState extends State<EditAboutScreen> {
                 maxLines: 4,
                 controller: _aboutEditController.locationInputController,
                 label: "Location",
-                textInputAction: TextInputAction.newline,
+                keyboardType: TextInputType.multiline,
               ),
             ),
             Container(

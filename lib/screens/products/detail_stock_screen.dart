@@ -5,6 +5,7 @@ import 'package:lakasir/controllers/products/product_detail_controller.dart';
 import 'package:lakasir/controllers/products/stocks/product_stock_controller.dart';
 import 'package:lakasir/utils/colors.dart';
 import 'package:lakasir/utils/utils.dart';
+import 'package:lakasir/widgets/date_picker.dart';
 import 'package:lakasir/widgets/dialog.dart';
 import 'package:lakasir/widgets/filled_button.dart';
 import 'package:lakasir/widgets/layout.dart';
@@ -357,10 +358,13 @@ class _ActionModalStockState extends State<ActionModalStock> {
                   margin: const EdgeInsets.only(
                     bottom: 10,
                   ),
-                  child: MyTextField(
+                  child: MyDatePicker(
+                    label: "Date",
                     controller: widget
                         .productStockController.dateInputEditingController,
-                    label: "Date",
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(2000),
+                    lastDate: DateTime(2100),
                   ),
                 ),
                 Container(

@@ -87,8 +87,8 @@ class _ProductScreen extends State<ProductScreen> {
                 child: ListView.separated(
                   itemCount: _productController.products.length + 1,
                   separatorBuilder: (context, index) {
-                    return SizedBox(
-                      height: height * 2.0 / 100,
+                    return const SizedBox(
+                      height: 10,
                     );
                   },
                   itemBuilder: (context, index) {
@@ -109,31 +109,31 @@ class _ProductScreen extends State<ProductScreen> {
   }
 
   MyCardList buildMyCardList(int index, BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
     return MyCardList(
       key: ValueKey(_productController.products[index].id),
       list: [
-        SizedBox(
-          width: width * 0.6,
-          child: Text(
-            _productController.products[index].name ?? '',
-            overflow: TextOverflow.ellipsis,
-            maxLines: 4,
-            style: const TextStyle(
-              fontSize: 20,
-            ),
+        Text(
+          _productController.products[index].name ?? '',
+          overflow: TextOverflow.ellipsis,
+          maxLines: 4,
+          style: const TextStyle(
+            fontSize: 20,
           ),
         ),
-        SizedBox(
-          width: 220,
-          child: Text(
-            '${formatPrice(_productController.products[index].sellingPrice!, isSymbol: false)} / ${_productController.products[index].unit}',
-            style: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w400,
-            ),
+        Text(
+          "stock: ${_productController.products[index].stock}",
+          style: const TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w200,
           ),
         ),
+        Text(
+          _productController.buildPrice(index),
+          style: const TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w400,
+          ),
+        )
       ],
       imagebox: Hero(
         tag: 'product-${_productController.products[index].id}',
