@@ -5,6 +5,7 @@ import 'package:lakasir/controllers/products/product_controller.dart';
 import 'package:lakasir/controllers/transactions/cart_controller.dart';
 import 'package:lakasir/utils/colors.dart';
 import 'package:lakasir/utils/utils.dart';
+import 'package:lakasir/widgets/build_list_image.dart';
 import 'package:lakasir/widgets/layout.dart';
 import 'package:lakasir/widgets/my_bottom_bar.dart';
 import 'package:lakasir/widgets/my_card_list.dart';
@@ -28,19 +29,21 @@ class CashierMenuScreen extends StatelessWidget {
       child: Layout(
         title: 'Cashier',
         bottomNavigationBar: MyBottomBar(
-          label: Row(
-            children: [
-              const Icon(Icons.shopping_cart_rounded, color: Colors.white),
-              Obx(
-                () => Text(
-                  _cartController.cartSessions.value.cartItems.length.toString(),
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
+          label: Obx(
+            () => Row(
+              children: [
+                if (_cartController.cartSessions.value.cartItems.isEmpty)
+                  const Icon(Icons.shopping_cart_rounded, color: Colors.white),
+                if (_cartController.cartSessions.value.cartItems.isNotEmpty)
+                  Text(
+                    '${_cartController.cartSessions.value.cartItems.length} Items' ' - ${formatPrice(_cartController.cartSessions.value.getTotalPrice)}',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
           onPressed: () {
             if (_cartController.cartSessions.value.cartItems.isEmpty) {
@@ -85,9 +88,9 @@ class CashierMenuScreen extends StatelessWidget {
                     IconButton(
                       color: primary,
                       onPressed: () {
-                        _productController.showFilterDialog();
+                        _productController.searchProduct();
                       },
-                      icon: const Icon(Icons.filter_list),
+                      icon: const Icon(Icons.search),
                     ),
                   ],
                 ),
@@ -157,19 +160,7 @@ class CashierMenuScreen extends StatelessWidget {
             ),
           ),
         ],
-        imagebox: SizedBox(
-          height: 90,
-          width: 90,
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: Image(
-              width: 200,
-              height: 150,
-              image: NetworkImage(product.image!),
-              fit: BoxFit.cover,
-            ),
-          ),
-        ),
+        imagebox: BuildListImage(url: product.image),
       ),
     );
   }

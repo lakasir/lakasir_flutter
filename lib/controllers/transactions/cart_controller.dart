@@ -60,6 +60,9 @@ class CartController extends GetxController {
     if (cartItem.qty == 1) {
       cartSessions.value.cartItems.remove(cartItem);
       cartSessions.refresh();
+      if (cartSessions.value.cartItems.isEmpty) {
+        Get.back();
+      }
       return;
     }
     cartSessions

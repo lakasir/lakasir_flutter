@@ -94,6 +94,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                 () => MyTextField(
                   controller: _productAddEditController.stockInputController,
                   label: 'Stock',
+                  keyboardType: TextInputType.number,
                   errorText: _productAddEditController
                           .productErrorResponse.value.stock ??
                       '',
@@ -107,6 +108,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   controller:
                       _productAddEditController.initialPriceInputController,
                   label: 'Initial Price',
+                  keyboardType: TextInputType.number,
                   errorText: _productAddEditController
                           .productErrorResponse.value.initialPrice ??
                       '',
@@ -120,6 +122,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   controller:
                       _productAddEditController.sellingPriceInputController,
                   label: 'Selling Price',
+                  keyboardType: TextInputType.number,
                   errorText: _productAddEditController
                           .productErrorResponse.value.sellingPrice ??
                       '',
@@ -132,9 +135,9 @@ class _EditProductScreenState extends State<EditProductScreen> {
                 () => SelectInputWidget(
                   controller: _productAddEditController.typeController,
                   label: 'Type',
-                  errorText:
-                      _productAddEditController.productErrorResponse.value.type ??
-                          '',
+                  errorText: _productAddEditController
+                          .productErrorResponse.value.type ??
+                      '',
                   options: [
                     Option(
                       name: "Product",
@@ -155,9 +158,9 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   controller: _productAddEditController.unitInputController,
                   label: 'Unit',
                   mandatory: true,
-                  errorText:
-                      _productAddEditController.productErrorResponse.value.unit ??
-                          '',
+                  errorText: _productAddEditController
+                          .productErrorResponse.value.unit ??
+                      '',
                 ),
               ),
             ),

@@ -130,8 +130,7 @@ class _CashierCartMenuScreenState extends State<CashierCartMenuScreen> {
                                           size: 15,
                                         ),
                                       ),
-                                      SizedBox(
-                                        width: 20,
+                                      Flexible(
                                         child: Center(
                                           child: Text(
                                             cartItems[i].qty.toString(),

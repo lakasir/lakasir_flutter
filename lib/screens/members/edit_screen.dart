@@ -72,7 +72,7 @@ class _EditMemberScreenState extends State<EditMemberScreen> {
               child: MyTextField(
                 maxLines: 4,
                 controller: _memberUpdateController.memberAddressController,
-                textInputAction: TextInputAction.newline,
+                keyboardType: TextInputType.multiline,
                 label: "Address",
               ),
             ),

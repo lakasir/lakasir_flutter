@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:lakasir/controllers/category_controller.dart';
 import 'package:lakasir/controllers/products/product_controller.dart';
 import 'package:lakasir/utils/utils.dart';
+import 'package:lakasir/widgets/build_list_image.dart';
 import 'package:lakasir/widgets/dialog.dart';
 import 'package:lakasir/widgets/filled_button.dart';
 import 'package:lakasir/widgets/layout.dart';
@@ -137,33 +138,7 @@ class _ProductScreen extends State<ProductScreen> {
       ],
       imagebox: Hero(
         tag: 'product-${_productController.products[index].id}',
-        child: SizedBox(
-          height: 90,
-          width: 90,
-          child: ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: _productController.products[index].image != null
-                  ? Image.network(
-                      _productController.products[index].image!,
-                      fit: BoxFit.cover,
-                      frameBuilder: (BuildContext context, Widget child,
-                          int? frame, bool wasSynchronouslyLoaded) {
-                        if (wasSynchronouslyLoaded) {
-                          return child;
-                        }
-                        return AnimatedOpacity(
-                          opacity: frame == null ? 0 : 1,
-                          duration: const Duration(seconds: 1),
-                          curve: Curves.easeOut,
-                          child: child,
-                        );
-                      },
-                    )
-                  : Image.asset(
-                      'assets/no-image-100.png',
-                      fit: BoxFit.cover,
-                    )),
-        ),
+        child: BuildListImage(url: _productController.products[index].image),
       ),
       onTap: () {
         Get.toNamed(

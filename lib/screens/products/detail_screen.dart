@@ -191,7 +191,7 @@ class _DetailScreen extends State<DetailScreen> {
                               ],
                             ),
                             Text(
-                              formatPrice(products.initialPrice ?? 0),
+                              formatPrice(products.sellingPrice ?? 0),
                               style: const TextStyle(
                                 fontSize: 18,
                               ),
