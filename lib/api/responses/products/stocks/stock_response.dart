@@ -1,6 +1,7 @@
 class StockResponse {
   final int id;
   final int? stock;
+  final int? initStock;
   final String type;
   final double? initialPrice;
   final double? sellingPrice;
@@ -10,6 +11,7 @@ class StockResponse {
   StockResponse({
     required this.id,
     required this.stock,
+    required this.initStock,
     required this.type,
     this.initialPrice,
     this.sellingPrice,
@@ -20,6 +22,7 @@ class StockResponse {
     return StockResponse(
       id: json['id'],
       stock: json['stock'],
+      initStock: json['init_stock'],
       type: json['type'], 
       initialPrice: double.parse(json['initial_price'].toString()),
       sellingPrice: double.parse(json['selling_price'].toString()),

@@ -177,7 +177,7 @@ class _DetailStockScreenState extends State<DetailStockScreen> {
                         child: ListTile(
                           contentPadding: const EdgeInsets.all(0),
                           title: Text(
-                            "${stockHistory.stock} Items${stockHistory.type == "in" ? " Added" : " Reduced"}",
+                            "${stockHistory.initStock} Items${stockHistory.type == "in" ? " Added" : " Reduced"}",
                           ),
                           subtitle: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,

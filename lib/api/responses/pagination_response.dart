@@ -47,7 +47,7 @@ class MetaPaginationResponse {
   int? currentPage;
   int? from;
   String? path;
-  int? perPage;
+  String? perPage;
   int? to;
   MetaPaginationResponse({
     this.currentPage,
@@ -62,7 +62,7 @@ class MetaPaginationResponse {
       currentPage: json['current_page'],
       from: json['from'],
       path: json['path'],
-      perPage: json['per_page'],
+      perPage: json['per_page'].toString(),
       to: json['to'],
     );
   }

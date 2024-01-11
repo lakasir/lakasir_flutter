@@ -1,20 +1,18 @@
 import 'package:get/get.dart';
 import 'package:lakasir/Exceptions/validation.dart';
+import 'package:lakasir/api/requests/pagination_request.dart';
 import 'package:lakasir/api/requests/payment_request.dart';
-import 'package:lakasir/api/responses/error_response.dart';
 import 'package:lakasir/controllers/products/product_controller.dart';
 import 'package:lakasir/controllers/transactions/cart_controller.dart';
 import 'package:lakasir/controllers/transactions/history_controller.dart';
-import 'package:lakasir/screens/menu_screen.dart';
-import 'package:lakasir/screens/transactions/carts/payment_screen.dart';
 import 'package:lakasir/services/payment_service.dart';
 import 'package:lakasir/utils/colors.dart';
 
 class PaymentController extends GetxController {
-  final _productController = Get.find<ProductController>();
+  final _productController = Get.put(ProductController());
   final _paymentService = PaymentSerivce();
-  final _cartController = Get.find<CartController>();
-  final _transactionController = Get.find<HistoryController>();
+  final _cartController = Get.put(CartController());
+  final _transactionController = Get.put(HistoryController());
   final RxBool isLoading = false.obs;
 
   void store() async {
@@ -39,7 +37,12 @@ class PaymentController extends GetxController {
       );
       _cartController.cartSessions.refresh();
       _productController.getProducts();
-      _transactionController.getTransactionHistory();
+      _transactionController.fetchTransaction(
+        PaginationRequest(
+          page: 1,
+          perPage: _transactionController.perPage,
+        ),
+      );
       Get.offAllNamed("/auth");
       Get.toNamed("/menu/transaction/cashier");
       Get.rawSnackbar(

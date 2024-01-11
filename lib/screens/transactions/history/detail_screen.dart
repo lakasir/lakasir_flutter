@@ -22,7 +22,19 @@ class _HistoryDetailScreenState extends State<HistoryDetailScreen> {
       title: "Transaction Detail",
       child: ListView(
         children: [
+          const SizedBox(height: 10),
           ...headerDetail(history),
+          const Divider(),
+          Container(
+            margin: const EdgeInsets.only(bottom: 10),
+            child: const Text(
+              "Products",
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
           ...List.generate(
             history.sellingDetails!.length,
             (index) {
@@ -124,9 +136,9 @@ class _HistoryDetailScreenState extends State<HistoryDetailScreen> {
                     ),
                   ),
                   Text(
-                    DateFormat('dd MMMM yyyy').format(
-                      DateTime.parse(history.date!),
-                    ),
+                    DateFormat('dd-MM-yyyy HH:mm')
+                        .format(DateTime.parse(history.createdAt!))
+                        .toString(),
                   ),
                 ],
               ),
