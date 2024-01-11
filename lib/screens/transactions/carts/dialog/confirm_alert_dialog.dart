@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lakasir/controllers/transactions/cart_controller.dart';
 import 'package:lakasir/controllers/transactions/payment_controller.dart';
+import 'package:lakasir/utils/colors.dart';
 import 'package:lakasir/utils/utils.dart';
 import 'package:lakasir/widgets/dialog.dart';
 import 'package:lakasir/widgets/filled_button.dart';
@@ -105,6 +106,7 @@ class ConfirmAlertDialog extends StatelessWidget {
             children: [
               Flexible(
                 child: MyFilledButton(
+                  color: grey,
                   onPressed: () {
                     Get.back();
                   },

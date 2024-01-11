@@ -50,7 +50,6 @@ class ProfileEditController extends GetxController {
       );
       isLoading(false);
     } catch (e) {
-      print(e);
       isLoading(false);
       if (e is ValidationException) {
         ErrorResponse<ProfileErrorResponse> errorResponse =

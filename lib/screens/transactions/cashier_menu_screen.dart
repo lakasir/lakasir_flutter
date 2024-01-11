@@ -6,6 +6,8 @@ import 'package:lakasir/controllers/transactions/cart_controller.dart';
 import 'package:lakasir/utils/colors.dart';
 import 'package:lakasir/utils/utils.dart';
 import 'package:lakasir/widgets/build_list_image.dart';
+import 'package:lakasir/widgets/dialog.dart';
+import 'package:lakasir/widgets/filled_button.dart';
 import 'package:lakasir/widgets/layout.dart';
 import 'package:lakasir/widgets/my_bottom_bar.dart';
 import 'package:lakasir/widgets/my_card_list.dart';
@@ -29,6 +31,29 @@ class CashierMenuScreen extends StatelessWidget {
       child: Layout(
         title: 'Cashier',
         bottomNavigationBar: MyBottomBar(
+          singleAction: true,
+          singleActionIcon: Icons.edit_note,
+          singleActionOnPressed: () {
+            Get.dialog(
+              MyDialog(
+                title: 'Set Cash Drawer',
+                content: Column(
+                  children: [
+                    MyTextField(
+                      label: 'Cash Drawer',
+                      keyboardType: TextInputType.number,
+                      controller: TextEditingController(),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.only(top: 10),
+                      child: MyFilledButton(
+                          onPressed: () {}, child: const Text('Save')),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
           label: Obx(
             () => Row(
               children: [
@@ -36,7 +61,8 @@ class CashierMenuScreen extends StatelessWidget {
                   const Icon(Icons.shopping_cart_rounded, color: Colors.white),
                 if (_cartController.cartSessions.value.cartItems.isNotEmpty)
                   Text(
-                    '${_cartController.cartSessions.value.cartItems.length} Items' ' - ${formatPrice(_cartController.cartSessions.value.getTotalPrice)}',
+                    '${_cartController.cartSessions.value.cartItems.length} Items'
+                    ' - ${formatPrice(_cartController.cartSessions.value.getTotalPrice)}',
                     style: const TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,

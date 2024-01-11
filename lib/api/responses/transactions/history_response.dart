@@ -1,49 +1,64 @@
 import 'package:lakasir/api/responses/members/member_response.dart';
-import 'package:lakasir/api/responses/products/product_response.dart';
+import 'package:lakasir/api/responses/payment_methods/payment_method_response.dart';
+import 'package:lakasir/api/responses/transactions/selling_detail.dart';
 
 class TransactionHistoryResponse {
   int id;
-  String date;
-  String items;
-  double total;
-  double moneyBack;
-  double moneyPaid;
+  int? memberId;
+  String? date;
+  String? code;
+  double? payedMoney;
+  double? moneyChange;
+  double? totalPrice;
+  bool friendPrice;
+  int paymentMethodId;
+  double? tax;
+  int? totalQuantity;
   MemberResponse? member;
-  int productId;
-  List<ProductResponse>? products;
-  final String createdAt;
-  final String updatedAt;
+  PaymentMethodRespone? paymentMethod;
+  List<SellingDetail>? sellingDetails;
 
   TransactionHistoryResponse({
     required this.id,
-    required this.date,
-    required this.items,
-    required this.total,
-    required this.moneyBack,
-    required this.moneyPaid,
-    required this.productId,
+    this.memberId,
+    this.date,
+    this.code,
+    this.payedMoney,
+    this.moneyChange,
+    this.totalPrice,
+    required this.friendPrice,
+    required this.paymentMethodId,
+    this.tax,
+    this.totalQuantity,
     this.member,
-    this.products,
-    required this.createdAt,
-    required this.updatedAt,
+    this.paymentMethod,
+    this.sellingDetails,
   });
 
   factory TransactionHistoryResponse.fromJson(Map<String, dynamic> json) {
     return TransactionHistoryResponse(
       id: json['id'],
+      memberId: json['member_id'],
       date: json['date'],
-      items: json['items'],
-      productId: json['product_id'],
-      moneyBack: json['money_back'],
-      moneyPaid: json['money_paid'],
-      products: json['products'] != null
-          ? (json['products'] as List)
-              .map((e) => ProductResponse.fromJson(e))
+      code: json['code'],
+      payedMoney: double.parse(json['payed_money'].toString()),
+      moneyChange: double.parse(json['money_changes'].toString()),
+      totalPrice: double.parse(json['total_price'].toString()),
+      friendPrice: bool.fromEnvironment(json['friend_price'].toString()),
+      paymentMethodId: json['payment_method_id'],
+      tax: double.parse(json['tax'].toString()),
+      totalQuantity: json['total_qty'],
+      member: json['member'] != null
+          ? MemberResponse.fromJson(json['member'])
+          : null,
+      paymentMethod: json['payment_method'] != null
+          ? PaymentMethodRespone.fromJson(json['payment_method'])
+          : null,
+      sellingDetails: json['selling_details'] != null
+          ? (json['selling_details'] as List)
+              .map((e) => SellingDetail.fromJson(e))
               .toList()
           : null,
-      total: json['total'],
-      createdAt: json['created_at'],
-      updatedAt: json['updated_at'],
     );
   }
 }

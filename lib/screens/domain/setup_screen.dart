@@ -43,8 +43,8 @@ class _SetupScreenState extends State<SetupScreen> {
       if (environment == "local") {
         domain = "http://${registerDomainController.text}";
       }
-      await ApiService(domain).fetchData("api");
-      await storeSetup(registerDomainController.text);
+      await ApiService("$domain.lakasir.com").fetchData('api');
+      await storeSetup("${registerDomainController.text}.lakasir.com");
       return true;
     } catch (e) {
       setState(() {
@@ -100,6 +100,7 @@ class _SetupScreenState extends State<SetupScreen> {
                       margin: const EdgeInsets.only(bottom: 21.0),
                       child: MyTextField(
                         prefixText: environment == "local" ? "http://" : "https://",
+                        suffixText: ".lakasir.com",
                         controller: registerDomainController,
                         label: "Your Registered Domain",
                         errorText: domainError,

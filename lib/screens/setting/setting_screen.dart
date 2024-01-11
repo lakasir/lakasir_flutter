@@ -4,7 +4,7 @@ import 'package:lakasir/widgets/layout.dart';
 import 'package:lakasir/widgets/my_card_list.dart';
 
 class SettingScreen extends StatelessWidget {
-  const SettingScreen({Key? key}) : super(key: key);
+  const SettingScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

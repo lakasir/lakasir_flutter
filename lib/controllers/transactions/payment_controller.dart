@@ -4,6 +4,7 @@ import 'package:lakasir/api/requests/payment_request.dart';
 import 'package:lakasir/api/responses/error_response.dart';
 import 'package:lakasir/controllers/products/product_controller.dart';
 import 'package:lakasir/controllers/transactions/cart_controller.dart';
+import 'package:lakasir/controllers/transactions/history_controller.dart';
 import 'package:lakasir/screens/menu_screen.dart';
 import 'package:lakasir/screens/transactions/carts/payment_screen.dart';
 import 'package:lakasir/services/payment_service.dart';
@@ -13,6 +14,7 @@ class PaymentController extends GetxController {
   final _productController = Get.find<ProductController>();
   final _paymentService = PaymentSerivce();
   final _cartController = Get.find<CartController>();
+  final _transactionController = Get.find<HistoryController>();
   final RxBool isLoading = false.obs;
 
   void store() async {
@@ -37,6 +39,7 @@ class PaymentController extends GetxController {
       );
       _cartController.cartSessions.refresh();
       _productController.getProducts();
+      _transactionController.getTransactionHistory();
       Get.offAllNamed("/auth");
       Get.toNamed("/menu/transaction/cashier");
       Get.rawSnackbar(

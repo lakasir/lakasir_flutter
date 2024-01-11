@@ -10,6 +10,7 @@ import 'package:lakasir/config/app.dart';
 import 'package:lakasir/utils/colors.dart';
 import 'package:lakasir/widgets/checkbox.dart';
 import 'package:lakasir/widgets/filled_button.dart';
+import 'package:lakasir/widgets/select_input_feld.dart';
 import 'package:lakasir/widgets/text_field.dart';
 
 class RegisterDomainScreen extends StatefulWidget {
@@ -23,6 +24,7 @@ final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 class _RegisterDomainScreenState extends State<RegisterDomainScreen> {
   final fullNameController = TextEditingController();
   final domainNameController = TextEditingController();
+  final businessTypeController = SelectInputWidgetController();
   final emailOrPhoneController = TextEditingController();
   final passwordController = TextEditingController();
   final passwordConfirmationController = TextEditingController();
@@ -55,10 +57,11 @@ class _RegisterDomainScreenState extends State<RegisterDomainScreen> {
         'domain/register',
         {
           "full_name": fullNameController.text,
-          "domain": domainNameController.text,
+          "domain": "${domainNameController.text}.lakasir.com",
           "email": emailOrPhoneController.text,
           "password": passwordController.text,
           "password_confirmation": passwordConfirmationController.text,
+          "business_type": businessTypeController.selectedOption,
         },
       );
 
@@ -154,6 +157,23 @@ class _RegisterDomainScreenState extends State<RegisterDomainScreen> {
                         info:
                             "Your domain should be using your shop name, for example: yourshopname.lakasir.com",
                         label: "Domain Name",
+                        suffixText: ".lakasir.com",
+                        mandatory: true,
+                      ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.only(bottom: 21.0),
+                      child: SelectInputWidget(
+                        options: [
+                          Option(name: "Retail", value: "retail"),
+                          Option(name: "Wholesale", value: "wholesale"),
+                          Option(name: "F&B", value: "fnb"),
+                          Option(name: "Fashion", value: "fashion"),
+                          Option(name: "Pharmacy", value: "pharmacy"),
+                          // Option(name: "Other", value: "other"),
+                        ],
+                        controller: businessTypeController,
+                        label: "Business Type",
                         mandatory: true,
                       ),
                     ),

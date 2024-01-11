@@ -1,76 +1,36 @@
 import 'package:flutter/material.dart';
-import 'package:lakasir/api/responses/categories/category_response.dart';
-import 'package:lakasir/api/responses/members/member_response.dart';
-import 'package:lakasir/api/responses/products/product_response.dart';
-import 'package:lakasir/api/responses/products/stocks/stock_response.dart';
+import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:lakasir/api/responses/transactions/history_response.dart';
+import 'package:lakasir/controllers/transactions/history_controller.dart';
 import 'package:lakasir/utils/utils.dart';
 import 'package:lakasir/widgets/layout.dart';
 import 'package:lakasir/widgets/my_card_list.dart';
 
 class HistoryScreen extends StatelessWidget {
   HistoryScreen({super.key});
-  final List<TransactionHistoryResponse> histories = [
-    TransactionHistoryResponse(
-      id: 1,
-      date: "20-10-2021",
-      items: "3 Items",
-      total: 100000,
-      productId: 1,
-      moneyBack: 5000,
-      moneyPaid: 10000,
-      member: MemberResponse(
-        id: 1,
-        name: "Member 1",
-        code: "XL20190",
-        address: "lorem ipsum",
-        createdAt: "2021-10-20T07:00:00.000000Z",
-        updatedAt: "2021-10-20T07:00:00.000000Z",
-        email: '',
-      ),
-      products: [
-        ProductResponse(
-          id: 1,
-          name: 'Cashier',
-          type: "Product",
-          unit: "pcs",
-          image:
-              'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg',
-          initialPrice: 5200,
-          sellingPrice: 5500,
-          stock: 100,
-          categoryId: 1,
-          createdAt: '2021-10-10',
-          updatedAt: '2021-10-10',
-          category: CategoryResponse(
-            id: 1,
-            name: 'Food',
-            createdAt: '2021-10-10',
-            updatedAt: '2021-10-10',
-          ),
-          stocks: [
-            StockResponse(
-              id: 1,
-              stock: 100,
-              type: 'add',
-              date: '2021-10-10',
-            ),
-          ],
-        ),
-      ],
-      createdAt: "2021-10-20T07:00:00.000000Z",
-      updatedAt: "2021-10-20T07:00:00.000000Z",
-    ),
-  ];
+
+  final _historyController = Get.put(HistoryController());
 
   @override
   Widget build(BuildContext context) {
     return Layout(
       title: "Transaction History",
-      child: ListView(
-        children: [
-          for (var history in histories) CardList(history: history),
-        ],
+      child: Obx(
+        () {
+          if (_historyController.isLoading.value) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
+          return ListView(
+            children: [
+              for (var history in _historyController.histories)
+                CardList(history: history),
+            ],
+          );
+        },
       ),
     );
   }
@@ -86,34 +46,37 @@ class CardList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 20),
-      child: MyCardList(
-        onTap: () {
-          Navigator.pushNamed(context, '/menu/transaction/history/detail',
-              arguments: history);
-        },
-        list: [
-          Text(
-            history.date,
-            style: const TextStyle(
-              fontSize: 20,
+    return Column(
+      children: [
+        MyCardList(
+          onTap: () {
+            Get.toNamed('/menu/transaction/history/detail', arguments: history);
+          },
+          list: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  DateFormat('dd MMMM yyyy').format(
+                    DateTime.parse(history.date!),
+                  ),
+                ),
+                Text(
+                  "Total Qty: ${history.totalQuantity}",
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w200,
+                  ),
+                ),
+              ],
             ),
-          ),
-          Text(
-            history.items,
-            style: const TextStyle(
-              fontWeight: FontWeight.w200,
+            const SizedBox(height: 10),
+            Text(
+              "Total Price: ${formatPrice(history.totalPrice!, isSymbol: false)}",
             ),
-          ),
-          Text(
-            formatPrice(history.total),
-            style: const TextStyle(
-              fontWeight: FontWeight.w400,
-            ),
-          ),
-        ],
-      ),
+          ],
+        ),
+        const Divider(),
+      ],
     );
   }
 }

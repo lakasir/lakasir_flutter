@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:lakasir/utils/colors.dart';
 
 typedef MyCallback = void Function(String);
@@ -12,7 +11,8 @@ class MyTextField extends StatefulWidget {
   final String? hintText;
   final bool mandatory;
   final String? errorText;
-  final String prefixText;
+  final String? prefixText;
+  final String? suffixText;
   final bool obscureText;
   final int? maxLines;
   final TextInputAction? textInputAction;
@@ -35,7 +35,8 @@ class MyTextField extends StatefulWidget {
     required this.controller,
     this.hintText,
     this.obscureText = false,
-    this.prefixText = "",
+    this.prefixText,
+    this.suffixText,
     this.errorText = "",
     this.maxLines = 1,
     this.textInputAction = TextInputAction.next,
@@ -140,6 +141,7 @@ class _MyTextFieldState extends State<MyTextField> {
           // onSubmitted: widget.onSubmitted,
           decoration: InputDecoration(
             prefixText: widget.prefixText,
+            suffixText: widget.suffixText,
             prefixStyle: const TextStyle(color: secondary),
             suffixIcon: widget.obscureText
                 ? InkWell(

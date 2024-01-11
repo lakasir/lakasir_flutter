@@ -1,5 +1,6 @@
 import 'package:lakasir/api/responses/categories/category_response.dart';
 import 'package:lakasir/api/responses/products/stocks/stock_response.dart';
+import 'package:lakasir/utils/utils.dart';
 
 class ProductResponse {
   final int id;
@@ -45,7 +46,9 @@ class ProductResponse {
       sellingPrice: json['selling_price'].toDouble(),
       stock: json['stock'],
       categoryId: json['category_id'],
-      category: CategoryResponse.fromJson(json['category']),
+      category: json['category'] != null
+          ? CategoryResponse.fromJson(json['category'])
+          : null,
       stocks: json['stocks'] != null
           ? (json['stocks'] as List)
               .map((e) => StockResponse.fromJson(e))
