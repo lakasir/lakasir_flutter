@@ -76,7 +76,7 @@ class _AboutScreenState extends State<AboutScreen> {
                                         color: Colors.grey,
                                       );
                                       if (aboutController.shop.value.photo !=
-                                          null) {
+                                          null || aboutController.shop.value.photo != "") {
                                         photo = ClipRRect(
                                           borderRadius:
                                               BorderRadius.circular(100),
