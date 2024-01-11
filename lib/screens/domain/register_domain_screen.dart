@@ -36,6 +36,7 @@ class _RegisterDomainScreenState extends State<RegisterDomainScreen> {
     domainName: "",
     emailOrPhone: "",
     password: "",
+    businessType: "",
   );
 
   Future<String> register() async {
@@ -92,6 +93,7 @@ class _RegisterDomainScreenState extends State<RegisterDomainScreen> {
     emailOrPhoneController.dispose();
     passwordController.dispose();
     passwordConfirmationController.dispose();
+    businessTypeController.selectedOption = "";
     super.dispose();
   }
 
@@ -175,6 +177,7 @@ class _RegisterDomainScreenState extends State<RegisterDomainScreen> {
                         controller: businessTypeController,
                         label: "Business Type",
                         mandatory: true,
+                        errorText: registerErrorResponse.businessType,
                       ),
                     ),
                     Container(
