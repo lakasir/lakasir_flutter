@@ -30,8 +30,10 @@ class _DetailScreen extends State<DetailScreen> {
 
   @override
   void initState() {
-    super.initState();
+    final product = Get.arguments as ProductResponse;
+    _productDetailController.get(product.id);
     Timer(initialDuration, openBottomSheet);
+    super.initState();
   }
 
   @override
@@ -42,7 +44,6 @@ class _DetailScreen extends State<DetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final products = Get.arguments as ProductResponse;
     final double height = MediaQuery.of(context).size.height;
     final double width = MediaQuery.of(context).size.width;
     double percentage = 0.7;
@@ -58,251 +59,260 @@ class _DetailScreen extends State<DetailScreen> {
         });
         return Future.value(false);
       },
-      child: Layout(
-        baseHeight: double.infinity,
-        noAppBar: true,
-        noPadding: true,
-        bottomNavigationBar: MyBottomBar(
-          label: const Text('Edit Product'),
-          onPressed: () {
-            Get.toNamed('/menu/product/edit', arguments: products);
-          },
-          actions: [
-            MyBottomBarActions(
-              label: 'Stock',
+      child: Obx(
+        () {
+          final products = _productDetailController.product.value;
+          return Layout(
+            baseHeight: double.infinity,
+            noAppBar: true,
+            noPadding: true,
+            bottomNavigationBar: MyBottomBar(
+              label: const Text('Edit Product'),
               onPressed: () {
-                setState(() {
-                  isBottomSheetOpen = false;
-                });
-                Timer(initialDuration, () {
-                  Get.toNamed(
-                    '/menu/product/stock',
-                    arguments: products,
-                  )!
-                      .then((value) {
+                Get.toNamed('/menu/product/edit',
+                    arguments: products);
+              },
+              actions: [
+                MyBottomBarActions(
+                  label: 'Stock',
+                  onPressed: () {
+                    setState(() {
+                      isBottomSheetOpen = false;
+                    });
                     Timer(initialDuration, () {
-                      setState(() {
-                        isBottomSheetOpen = true;
+                      Get.toNamed(
+                        '/menu/product/stock',
+                        arguments: products,
+                      )!
+                          .then((value) {
+                        Timer(initialDuration, () {
+                          setState(() {
+                            isBottomSheetOpen = true;
+                          });
+                        });
                       });
                     });
-                  });
-                });
-              },
-              icon: const Icon(Icons.inventory, color: Colors.white),
-            ),
-            MyBottomBarActions(
-              label: 'Delete',
-              onPressed: () {
-                _productDetailController.showDeleteDialog(products.id);
-              },
-              icon: const Icon(Icons.delete_rounded, color: Colors.white),
-            ),
-          ],
-        ),
-        child: Column(
-          children: [
-            Expanded(
-              child: CustomScrollView(
-                slivers: <Widget>[
-                  SliverAppBar(
-                    automaticallyImplyLeading: false, // Remove the back button
-                    expandedHeight: 300.0,
-                    flexibleSpace: FlexibleSpaceBar(
-                      background: Hero(
-                        tag: 'product-${products.id}',
-                        child: ClipRRect(
-                          child: products.image != null
-                              ? Image.network(
-                                  products.image!,
-                                  fit: BoxFit.cover,
-                                )
-                              : const Image(
-                                  image: AssetImage(
-                                      'assets/no-image-100.png'),
-                                  fit: BoxFit.cover,
-                                ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 500),
-              curve: Curves.easeInOut,
-              height: isBottomSheetOpen ? containerHeight : 0,
-              width: double.infinity,
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  topRight: Radius.circular(20),
-                  bottomLeft: Radius.zero,
-                  bottomRight: Radius.zero,
+                  },
+                  icon: const Icon(Icons.inventory, color: Colors.white),
                 ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey,
-                    offset: Offset(0, 2),
-                    blurRadius: 19,
-                    spreadRadius: 1,
-                  ),
-                ],
-              ),
-              child: GestureDetector(
-                onVerticalDragUpdate: (details) {},
-                child: SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 14, right: 14),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Center(
-                          child: Container(
-                            width: 100,
-                            height: 10,
-                            decoration: BoxDecoration(
-                              color: whiteGrey,
-                              borderRadius: BorderRadius.circular(12),
+                MyBottomBarActions(
+                  label: 'Delete',
+                  onPressed: () {
+                    _productDetailController.showDeleteDialog(
+                        products.id);
+                  },
+                  icon: const Icon(Icons.delete_rounded, color: Colors.white),
+                ),
+              ],
+            ),
+            child: Column(
+              children: [
+                Expanded(
+                  child: CustomScrollView(
+                    slivers: <Widget>[
+                      SliverAppBar(
+                        automaticallyImplyLeading:
+                            false, // Remove the back button
+                        expandedHeight: 300.0,
+                        flexibleSpace: FlexibleSpaceBar(
+                          background: Hero(
+                            tag:
+                                'product-${products.id}',
+                            child: ClipRRect(
+                              child: products.image != null
+                                  ? Image.network(
+                                      products.image!,
+                                      fit: BoxFit.cover,
+                                    )
+                                  : const Image(
+                                      image:
+                                          AssetImage('assets/no-image-100.png'),
+                                      fit: BoxFit.cover,
+                                    ),
                             ),
-                            margin: const EdgeInsets.all(12),
                           ),
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      ),
+                    ],
+                  ),
+                ),
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 500),
+                  curve: Curves.easeInOut,
+                  height: isBottomSheetOpen ? containerHeight : 0,
+                  width: double.infinity,
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
+                      bottomLeft: Radius.zero,
+                      bottomRight: Radius.zero,
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey,
+                        offset: Offset(0, 2),
+                        blurRadius: 19,
+                        spreadRadius: 1,
+                      ),
+                    ],
+                  ),
+                  child: GestureDetector(
+                    onVerticalDragUpdate: (details) {},
+                    child: SingleChildScrollView(
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 14, right: 14),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                            Center(
+                              child: Container(
+                                width: 100,
+                                height: 10,
+                                decoration: BoxDecoration(
+                                  color: whiteGrey,
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                margin: const EdgeInsets.all(12),
+                              ),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                SizedBox(
-                                  width: width * 0.65,
-                                  child: Text(
-                                    products.name,
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 4,
-                                    style: const TextStyle(
-                                      fontSize: 23,
-                                      fontWeight: FontWeight.bold,
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    SizedBox(
+                                      width: width * 0.65,
+                                      child: Text(
+                                        products.name,
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 4,
+                                        style: const TextStyle(
+                                          fontSize: 23,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
                                     ),
+                                    Text("Stock ${products.stock}"),
+                                  ],
+                                ),
+                                Text(
+                                  formatPrice(products.sellingPrice ?? 0),
+                                  style: const TextStyle(
+                                    fontSize: 18,
                                   ),
                                 ),
-                                Text("Stock ${products.stock}"),
                               ],
                             ),
-                            Text(
-                              formatPrice(products.sellingPrice ?? 0),
-                              style: const TextStyle(
-                                fontSize: 18,
+                            const SizedBox(
+                              height: 33,
+                            ),
+                            Container(
+                              margin: const EdgeInsets.only(bottom: 12),
+                              child: const Text(
+                                "Details",
+                                style: TextStyle(
+                                  fontSize: 23,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            Container(
+                              margin: const EdgeInsets.only(bottom: 12),
+                              child: Row(
+                                children: [
+                                  const Expanded(
+                                    child: Text(
+                                      "Initial Price",
+                                      style: TextStyle(fontSize: 18),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Text(
+                                      formatPrice(products.initialPrice ?? 0),
+                                      style: const TextStyle(
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              margin: const EdgeInsets.only(bottom: 12),
+                              child: Row(
+                                children: [
+                                  const Expanded(
+                                    child: Text(
+                                      "Type",
+                                      style: TextStyle(fontSize: 18),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Text(
+                                      products.type,
+                                      style: const TextStyle(
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              margin: const EdgeInsets.only(bottom: 12),
+                              child: Row(
+                                children: [
+                                  const Expanded(
+                                    child: Text(
+                                      "Unit",
+                                      style: TextStyle(fontSize: 18),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Text(
+                                      products.unit,
+                                      style: const TextStyle(
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              margin: const EdgeInsets.only(bottom: 12),
+                              child: Row(
+                                children: [
+                                  const Expanded(
+                                    child: Text(
+                                      "Category",
+                                      style: TextStyle(fontSize: 18),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Text(
+                                      products.category!.name ?? '',
+                                      style: const TextStyle(
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ],
                         ),
-                        const SizedBox(
-                          height: 33,
-                        ),
-                        Container(
-                          margin: const EdgeInsets.only(bottom: 12),
-                          child: const Text(
-                            "Details",
-                            style: TextStyle(
-                              fontSize: 23,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.only(bottom: 12),
-                          child: Row(
-                            children: [
-                              const Expanded(
-                                child: Text(
-                                  "Initial Price",
-                                  style: TextStyle(fontSize: 18),
-                                ),
-                              ),
-                              Expanded(
-                                child: Text(
-                                  formatPrice(products.initialPrice ?? 0),
-                                  style: const TextStyle(
-                                    fontSize: 18,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.only(bottom: 12),
-                          child: Row(
-                            children: [
-                              const Expanded(
-                                child: Text(
-                                  "Type",
-                                  style: TextStyle(fontSize: 18),
-                                ),
-                              ),
-                              Expanded(
-                                child: Text(
-                                  products.type,
-                                  style: const TextStyle(
-                                    fontSize: 18,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.only(bottom: 12),
-                          child: Row(
-                            children: [
-                              const Expanded(
-                                child: Text(
-                                  "Unit",
-                                  style: TextStyle(fontSize: 18),
-                                ),
-                              ),
-                              Expanded(
-                                child: Text(
-                                  products.unit,
-                                  style: const TextStyle(
-                                    fontSize: 18,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.only(bottom: 12),
-                          child: Row(
-                            children: [
-                              const Expanded(
-                                child: Text(
-                                  "Category",
-                                  style: TextStyle(fontSize: 18),
-                                ),
-                              ),
-                              Expanded(
-                                child: Text(
-                                  products.category!.name ?? '',
-                                  style: const TextStyle(
-                                    fontSize: 18,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
                   ),
                 ),
-              ),
+              ],
             ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }

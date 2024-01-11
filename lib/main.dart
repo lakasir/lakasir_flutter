@@ -66,7 +66,7 @@ class MyApp extends StatelessWidget {
         '/auth': (context) => const AuthScreen(),
         '/forgot': (context) => const ForgotScreen(),
         '/menu/transaction': (context) => const TransactionMenuScreen(),
-        '/menu/transaction/history': (context) => HistoryScreen(),
+        '/menu/transaction/history': (context) => const HistoryScreen(),
         '/menu/transaction/history/detail': (context) =>
             const HistoryDetailScreen(),
         '/menu/transaction/cashier': (context) => CashierMenuScreen(),

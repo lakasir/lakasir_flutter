@@ -7,6 +7,7 @@ import 'package:lakasir/api/requests/product_stock_request.dart';
 import 'package:lakasir/api/responses/error_response.dart';
 import 'package:lakasir/api/responses/products/stocks/stock_error_response.dart';
 import 'package:lakasir/api/responses/products/stocks/stock_response.dart';
+import 'package:lakasir/controllers/products/product_controller.dart';
 import 'package:lakasir/controllers/products/product_detail_controller.dart';
 import 'package:lakasir/services/product_stock_service.dart';
 import 'package:lakasir/utils/colors.dart';
@@ -15,8 +16,9 @@ class ProductStockController extends GetxController {
   final formKey = GlobalKey<FormState>();
   final RxBool isLoading = false.obs;
   final _productStockService = ProductStockService();
+  final _productDetailController = Get.put(ProductDetailController());
+  final _productController = Get.put(ProductController());
   final RxList<StockResponse> stocks = <StockResponse>[].obs;
-  final _productDetailController = Get.find<ProductDetailController>();
   TextEditingController dateInputEditingController = TextEditingController();
   TextEditingController initialPriceInputEditingController =
       TextEditingController();
@@ -37,8 +39,7 @@ class ProductStockController extends GetxController {
   Future<void> delete(int productId, int id) async {
     isLoading(true);
     await _productStockService.delete(productId, id);
-    await get(productId);
-    await _productDetailController.get(productId);
+    refetch();
     isLoading(false);
   }
 
@@ -59,8 +60,7 @@ class ProductStockController extends GetxController {
           date: dateInputEditingController.text,
         ),
       );
-      await get(id);
-      await _productDetailController.get(id);
+      refetch();
       isLoading(false);
       clear();
       Get.back();
@@ -82,6 +82,13 @@ class ProductStockController extends GetxController {
         stockErrorResponse(errorResponse.errors);
       }
     }
+  }
+
+  void refetch() {
+    var id = _productDetailController.product.value.id;
+    get(id);
+    _productDetailController.get(id);
+    _productController.getProducts();
   }
 
   void clear() {
