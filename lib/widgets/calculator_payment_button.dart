@@ -151,7 +151,7 @@ class _CalculatorPaymentButtonState extends State<CalculatorPaymentButton> {
       CalculatorButton(
           text: Text(formatPrice(30000, isSymbol: false)),
           onPressed: () {
-            _onPressed('20000');
+            _onPressed('30000');
           },
           color: whiteGrey),
       CalculatorButton(
