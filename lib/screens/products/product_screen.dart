@@ -1,17 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lakasir/controllers/category_controller.dart';
 import 'package:lakasir/controllers/products/product_controller.dart';
-import 'package:lakasir/utils/utils.dart';
 import 'package:lakasir/widgets/build_list_image.dart';
-import 'package:lakasir/widgets/dialog.dart';
-import 'package:lakasir/widgets/filled_button.dart';
 import 'package:lakasir/widgets/layout.dart';
 import 'package:lakasir/widgets/my_bottom_bar.dart';
 import 'package:lakasir/widgets/my_bottom_bar_actions.dart';
 import 'package:lakasir/widgets/my_card_list.dart';
-import 'package:lakasir/widgets/select_input_feld.dart';
-import 'package:lakasir/widgets/text_field.dart';
 
 class ProductScreen extends StatefulWidget {
   const ProductScreen({super.key});
@@ -26,29 +20,29 @@ class _ProductScreen extends State<ProductScreen> {
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     return Layout(
-      title: 'Product',
+      title: 'menu_product'.tr,
       bottomNavigationBar: MyBottomBar(
-        label: const Text('Add Product'),
+        label: Text('product_add'.tr),
         onPressed: () {
           Get.toNamed('/menu/product/add');
         },
         actions: [
           MyBottomBarActions(
-            label: 'Filter',
+            label: 'global_filter'.tr,
             onPressed: () {
               _productController.showFilterDialog();
             },
             icon: const Icon(Icons.filter_list, color: Colors.white),
           ),
           MyBottomBarActions(
-            label: 'Search',
+            label: 'global_search'.tr,
             onPressed: () {
               _productController.showSearchDialog();
             },
             icon: const Icon(Icons.search, color: Colors.white),
           ),
           MyBottomBarActions(
-            label: 'Category',
+            label: 'setting_category'.tr,
             onPressed: () => {Get.toNamed('/menu/setting/category')},
             icon: const Icon(Icons.category, color: Colors.white),
           ),
@@ -69,9 +63,13 @@ class _ProductScreen extends State<ProductScreen> {
                   FilteredWidget(productController: _productController),
                 if (_productController.searchByNameController.text.isNotEmpty)
                   SearchedWidget(productController: _productController),
-                const Expanded(
+                Expanded(
                   child: Center(
-                    child: Text('No Product'),
+                    child: Text('global_no_item'.trParams(
+                      {
+                        'item': 'menu_product'.tr,
+                      },
+                    )),
                   ),
                 ),
               ],
@@ -114,7 +112,7 @@ class _ProductScreen extends State<ProductScreen> {
       key: ValueKey(_productController.products[index].id),
       list: [
         Text(
-          _productController.products[index].name ?? '',
+          _productController.products[index].name,
           overflow: TextOverflow.ellipsis,
           maxLines: 4,
           style: const TextStyle(

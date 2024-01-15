@@ -1,6 +1,5 @@
 import 'package:lakasir/api/responses/categories/category_response.dart';
 import 'package:lakasir/api/responses/products/stocks/stock_response.dart';
-import 'package:lakasir/utils/utils.dart';
 
 class ProductResponse {
   final int id;

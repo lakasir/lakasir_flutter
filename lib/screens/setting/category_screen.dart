@@ -30,10 +30,12 @@ class _CategoryScreen extends State<CategoryScreen> {
   @override
   Widget build(BuildContext context) {
     return Layout(
-      title: 'Category',
+      title: 'setting_category'.tr,
       resizeToAvoidBottomInset: true,
       bottomNavigationBar: MyBottomBar(
-        label: const Text("Add Category"),
+        label: Text("global_add_item".trParams({
+          "item": "setting_category".tr,
+        })),
         onPressed: () {
           showDialog(
             context: context,
@@ -45,7 +47,7 @@ class _CategoryScreen extends State<CategoryScreen> {
                     key: categoryController.formKey,
                     child: MyTextField(
                         textInputAction: TextInputAction.done,
-                        label: "Category Name",
+                        label: "field_category_name".tr,
                         autofocus: true,
                         mandatory: true,
                         controller: categoryController.categoryNameController,
@@ -82,7 +84,7 @@ class _CategoryScreen extends State<CategoryScreen> {
                             key: categoryController.formKey,
                             child: MyTextField(
                               textInputAction: TextInputAction.done,
-                              label: "Category Name",
+                              label: "field_category_name".tr,
                               autofocus: true,
                               mandatory: true,
                               controller:
@@ -119,15 +121,18 @@ class _CategoryScreen extends State<CategoryScreen> {
                           context: context,
                           builder: (context) {
                             return AlertDialog(
-                              title: const Text("Delete Category"),
-                              content: const Text(
-                                  "Are you sure want to delete this category?"),
+                              title: Text("global_delete".tr),
+                              content: Text(
+                                "global_sure_content".trParams(
+                                  {"item": category.name},
+                                ),
+                              ),
                               actions: [
                                 TextButton(
                                   onPressed: () {
                                     Navigator.pop(context);
                                   },
-                                  child: const Text("Cancel"),
+                                  child: Text("global_cancel".tr),
                                 ),
                                 TextButton(
                                   onPressed: () {
@@ -135,7 +140,7 @@ class _CategoryScreen extends State<CategoryScreen> {
                                         .deleteCategory(category.id);
                                     Navigator.pop(context);
                                   },
-                                  child: const Text("Delete"),
+                                  child: Text('global_delete'.tr),
                                 ),
                               ],
                             );

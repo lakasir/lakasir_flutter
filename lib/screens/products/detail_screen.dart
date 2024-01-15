@@ -67,14 +67,13 @@ class _DetailScreen extends State<DetailScreen> {
             noAppBar: true,
             noPadding: true,
             bottomNavigationBar: MyBottomBar(
-              label: const Text('Edit Product'),
+              label: Text('product_edit'.tr),
               onPressed: () {
-                Get.toNamed('/menu/product/edit',
-                    arguments: products);
+                Get.toNamed('/menu/product/edit', arguments: products);
               },
               actions: [
                 MyBottomBarActions(
-                  label: 'Stock',
+                  label: 'field_stock'.tr,
                   onPressed: () {
                     setState(() {
                       isBottomSheetOpen = false;
@@ -96,10 +95,11 @@ class _DetailScreen extends State<DetailScreen> {
                   icon: const Icon(Icons.inventory, color: Colors.white),
                 ),
                 MyBottomBarActions(
-                  label: 'Delete',
+                  label: 'global_delete'.tr,
                   onPressed: () {
                     _productDetailController.showDeleteDialog(
-                        products.id);
+                      products.id,
+                    );
                   },
                   icon: const Icon(Icons.delete_rounded, color: Colors.white),
                 ),
@@ -116,8 +116,7 @@ class _DetailScreen extends State<DetailScreen> {
                         expandedHeight: 300.0,
                         flexibleSpace: FlexibleSpaceBar(
                           background: Hero(
-                            tag:
-                                'product-${products.id}',
+                            tag: 'product-${products.id}',
                             child: ClipRRect(
                               child: products.image != null
                                   ? Image.network(
@@ -195,7 +194,8 @@ class _DetailScreen extends State<DetailScreen> {
                                         ),
                                       ),
                                     ),
-                                    Text("Stock ${products.stock}"),
+                                    Text(
+                                        "${"field_stock".tr}: ${products.stock}"),
                                   ],
                                 ),
                                 Text(
@@ -211,9 +211,9 @@ class _DetailScreen extends State<DetailScreen> {
                             ),
                             Container(
                               margin: const EdgeInsets.only(bottom: 12),
-                              child: const Text(
-                                "Details",
-                                style: TextStyle(
+                              child: Text(
+                                "global_detail".tr,
+                                style: const TextStyle(
                                   fontSize: 23,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -223,10 +223,10 @@ class _DetailScreen extends State<DetailScreen> {
                               margin: const EdgeInsets.only(bottom: 12),
                               child: Row(
                                 children: [
-                                  const Expanded(
+                                  Expanded(
                                     child: Text(
-                                      "Initial Price",
-                                      style: TextStyle(fontSize: 18),
+                                      "field_initial_price".tr,
+                                      style: const TextStyle(fontSize: 18),
                                     ),
                                   ),
                                   Expanded(
@@ -244,10 +244,10 @@ class _DetailScreen extends State<DetailScreen> {
                               margin: const EdgeInsets.only(bottom: 12),
                               child: Row(
                                 children: [
-                                  const Expanded(
+                                  Expanded(
                                     child: Text(
-                                      "Type",
-                                      style: TextStyle(fontSize: 18),
+                                      "field_type".tr,
+                                      style: const TextStyle(fontSize: 18),
                                     ),
                                   ),
                                   Expanded(
@@ -265,10 +265,10 @@ class _DetailScreen extends State<DetailScreen> {
                               margin: const EdgeInsets.only(bottom: 12),
                               child: Row(
                                 children: [
-                                  const Expanded(
+                                  Expanded(
                                     child: Text(
-                                      "Unit",
-                                      style: TextStyle(fontSize: 18),
+                                      "field_unit".tr,
+                                      style: const TextStyle(fontSize: 18),
                                     ),
                                   ),
                                   Expanded(
@@ -286,15 +286,15 @@ class _DetailScreen extends State<DetailScreen> {
                               margin: const EdgeInsets.only(bottom: 12),
                               child: Row(
                                 children: [
-                                  const Expanded(
+                                  Expanded(
                                     child: Text(
-                                      "Category",
-                                      style: TextStyle(fontSize: 18),
+                                      "field_category".tr,
+                                      style: const TextStyle(fontSize: 18),
                                     ),
                                   ),
                                   Expanded(
                                     child: Text(
-                                      products.category!.name ?? '',
+                                      products.category!.name,
                                       style: const TextStyle(
                                         fontSize: 18,
                                       ),

@@ -3,13 +3,14 @@ import 'package:get/get.dart';
 import 'package:lakasir/controllers/profiles/profile_controller.dart';
 import 'package:lakasir/utils/auth.dart';
 import 'package:lakasir/utils/colors.dart';
+import 'package:lakasir/utils/utils.dart';
 import 'package:lakasir/widgets/layout.dart';
 
 String Function(String) locale = (String locale) {
   switch (locale) {
-    case 'en':
+    case 'en_US':
       return 'English';
-    case 'id':
+    case 'id_ID':
       return 'Indonesia';
     default:
       return 'English';
@@ -25,6 +26,17 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   final ProfileController _profileController = Get.put(ProfileController());
+  String _locale = 'en_US';
+
+  @override
+  initState() {
+    super.initState();
+    getLanguageCode().then((value) {
+      setState(() {
+        _locale = value;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,10 +59,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   slivers: <Widget>[
                     SliverAppBar(
                       automaticallyImplyLeading: false,
-                      title: const Center(
+                      title: Center(
                         child: Text(
-                          'Profile',
-                          style: TextStyle(color: Colors.white),
+                          'menu_profile'.tr,
+                          style: const TextStyle(color: Colors.white),
                         ),
                       ),
                       expandedHeight: MediaQuery.of(context).size.height * 0.5,
@@ -152,9 +164,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text(
-                                "Role User",
-                                style: TextStyle(fontSize: 16),
+                              Text(
+                                'field_role_user'.tr,
+                                style: const TextStyle(fontSize: 16),
                               ),
                               const SizedBox(height: 5),
                               Text(
@@ -172,8 +184,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text("Email",
-                                  style: TextStyle(fontSize: 16)),
+                              Text(
+                                "field_email".tr,
+                                style: const TextStyle(fontSize: 16),
+                              ),
                               const SizedBox(height: 5),
                               Text(
                                 _profileController.profile.value.email ?? "-",
@@ -190,8 +204,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text("Phone",
-                                  style: TextStyle(fontSize: 16)),
+                              Text(
+                                "field_phone".tr,
+                                style: const TextStyle(fontSize: 16),
+                              ),
                               const SizedBox(height: 5),
                               Text(
                                 _profileController.profile.value.phone ?? "-",
@@ -208,8 +224,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text("Address",
-                                  style: TextStyle(fontSize: 16)),
+                              Text(
+                                "field_address".tr,
+                                style: const TextStyle(fontSize: 16),
+                              ),
                               const SizedBox(height: 5),
                               Text(
                                 _profileController.profile.value.address ?? "-",
@@ -226,14 +244,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text(
-                                "Language",
-                                style: TextStyle(fontSize: 16),
+                              Text(
+                                "field_language".tr,
+                                style: const TextStyle(fontSize: 16),
                               ),
                               const SizedBox(height: 5),
-                              Text(
-                                locale(
-                                    _profileController.profile.value.locale!),
+                              Text(locale(_locale),
                                 style: const TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
@@ -257,9 +273,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   Get.offAllNamed('/auth');
                                 });
                               },
-                              child: const Text(
-                                "Logout",
-                                style: TextStyle(color: primary),
+                              child: Text(
+                                "logout".tr,
+                                style: const TextStyle(color: primary),
                               ),
                             ),
                           ),

@@ -43,7 +43,7 @@ class _EditDetailAlertState extends State<EditDetailAlert> {
   @override
   Widget build(BuildContext context) {
     return MyDialog(
-      title: "Edit Detail",
+      title: "cart_edit_detail".tr,
       content: Column(
         children: [
           Container(
@@ -51,9 +51,14 @@ class _EditDetailAlertState extends State<EditDetailAlert> {
               bottom: 10,
             ),
             child: SelectInputWidget(
+              label: "field_member".tr,
               hintText: _memberController.members.isEmpty
-                  ? "No Member"
-                  : "Select Member",
+                  ? "global_no_item".trParams(
+                      {"item": "menu_member".tr},
+                    )
+                  : "field_select_item".trParams(
+                      {"item": "menu_member".tr},
+                    ),
               options: _memberController.members
                   .map(
                     (e) => Option(
@@ -70,7 +75,7 @@ class _EditDetailAlertState extends State<EditDetailAlert> {
               bottom: 10,
             ),
             child: MyTextField(
-              label: "TAX",
+              label: "field_tax".tr,
               hintText: "%",
               controller: taxController,
               keyboardType: TextInputType.number,
@@ -89,9 +94,9 @@ class _EditDetailAlertState extends State<EditDetailAlert> {
                   margin: const EdgeInsets.only(
                     bottom: 10,
                   ),
-                  child: const Text(
-                    "Payment Method",
-                    style: TextStyle(
+                  child: Text(
+                    "field_payment_method".tr,
+                    style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                       color: secondary,
@@ -175,7 +180,9 @@ class _EditDetailAlertState extends State<EditDetailAlert> {
               _cartController.cartSessions.refresh();
               Get.back();
             },
-            child: const Text("Save Detail"),
+            child: Text("global_save_title".trParams(
+              {"title": "detail".tr},
+            )),
           ),
         ],
       ),

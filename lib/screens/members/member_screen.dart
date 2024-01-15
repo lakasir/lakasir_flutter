@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lakasir/controllers/members/member_controller.dart';
-import 'package:lakasir/widgets/dialog.dart';
 import 'package:lakasir/widgets/layout.dart';
 import 'package:lakasir/widgets/my_bottom_bar.dart';
 import 'package:lakasir/widgets/my_bottom_bar_actions.dart';
 import 'package:lakasir/widgets/my_card_list.dart';
-import 'package:lakasir/widgets/text_field.dart';
 
 class MemberScreen extends StatefulWidget {
   const MemberScreen({super.key});
+
   @override
   State<MemberScreen> createState() => _MemberScreen();
 }
@@ -21,21 +20,19 @@ class _MemberScreen extends State<MemberScreen> {
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     return Layout(
-      title: 'Member',
+      title: 'menu_member'.tr,
       bottomNavigationBar: MyBottomBar(
-        label: const Text('Add Member'),
+        label: Text('global_add_item'.trParams({
+          'item': 'menu_member'.tr,
+        })),
         onPressed: () {
           Get.toNamed('/menu/member/add');
         },
-        actions: [
-          MyBottomBarActions(
-            label: 'Search',
-            onPressed: () {
-              _memberController.showDialogSearch();
-            },
-            icon: const Icon(Icons.search_rounded, color: Colors.white),
-          ),
-        ],
+        singleAction: true,
+        singleActionIcon: Icons.search_rounded,
+        singleActionOnPressed: () {
+          _memberController.showDialogSearch();
+        },
       ),
       child: Obx(
         () {
@@ -46,8 +43,10 @@ class _MemberScreen extends State<MemberScreen> {
           }
 
           if (_memberController.members.isEmpty) {
-            return const Center(
-              child: Text('No Member'),
+            return Center(
+              child: Text('global_no_item'.trParams({
+                'item': 'menu_member'.tr,
+              })),
             );
           }
 

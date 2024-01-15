@@ -40,7 +40,9 @@ class MemberAddController extends GetxController {
       );
       Get.back();
       Get.rawSnackbar(
-        message: "Success to add member",
+        message: "global_added_item".trParams({
+          'item': 'menu_member'.tr,
+        }),
         backgroundColor: success,
       );
       isSubmitting(false);

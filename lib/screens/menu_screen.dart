@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:lakasir/utils/colors.dart';
 import 'package:lakasir/widgets/layout.dart';
 import 'package:lakasir/widgets/my_card_list.dart';
@@ -12,38 +13,38 @@ class MenuScreen extends StatefulWidget {
 class _MenuScreenState extends State<MenuScreen> {
   var menus = [
     {
-      'title': 'Transaction',
-      'subtitle': 'Sell your product or service',
+      'title': 'menu_transaction'.tr,
+      'subtitle': 'menu_transaction_subtitle'.tr,
       'icon': Icons.money,
       'route': '/menu/transaction',
     },
     {
-      'title': 'Product',
-      'subtitle': 'Manage your product',
+      'title': 'menu_product'.tr,
+      'subtitle': 'menu_product_subtitle'.tr,
       'icon': Icons.food_bank_rounded,
       'route': '/menu/product',
     },
     {
-      'title': 'Member',
-      'subtitle': 'Member is a success key for your  bussiness',
+      'title': 'menu_member'.tr,
+      'subtitle': 'menu_member_subtitle'.tr,
       'icon': Icons.people,
       'route': '/menu/member',
     },
     {
-      'title': 'Profile',
-      'subtitle': 'Every person is has an iconic profile',
+      'title': 'menu_profile'.tr,
+      'subtitle': 'menu_profile_subtitle'.tr,
       'icon': Icons.person,
       'route': '/menu/profile',
     },
     {
-      'title': 'About',
-      'subtitle': 'Every bussiness is has an iconic purpose',
+      'title': 'menu_about'.tr,
+      'subtitle': 'menu_about_subtitle'.tr,
       'icon': Icons.info,
       'route': '/menu/about',
     },
     {
-      'title': 'Setting',
-      'subtitle': 'Lakasir is configurable',
+      'title': 'menu_setting'.tr,
+      'subtitle': 'menu_setting_subtitle'.tr,
       'icon': Icons.settings,
       'route': '/menu/setting',
     },
@@ -54,6 +55,7 @@ class _MenuScreenState extends State<MenuScreen> {
     var height = MediaQuery.of(context).size.height;
 
     return Layout(
+      title: 'menu'.tr,
       child: ListView.separated(
         itemCount: menus.length,
         separatorBuilder: (context, index) {

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:lakasir/Exceptions/validation.dart';
 import 'package:lakasir/api/api_service.dart';
 import 'package:lakasir/api/responses/auths/forgot_password_error_response.dart';
@@ -33,7 +34,7 @@ class _ForgotScreenState extends State<ForgotScreen> {
         setState(() {
           isLoading = false;
         });
-        throw Exception("Please fill the form correctly");
+        throw Exception("please_fill_form".tr);
       }
       await ApiService(await getDomain()).postData(
         'auth/forgot-password',
@@ -78,12 +79,13 @@ class _ForgotScreenState extends State<ForgotScreen> {
           children: [
             Container(
               margin: const EdgeInsets.only(top: 116, bottom: 58),
-              child: const Center(
+              child: Center(
                 child: Text(
-                  "Forgot Password",
-                  style: TextStyle(
+                  "forgot_password".tr,
+                  style: const TextStyle(
                     fontSize: 32,
                     fontWeight: FontWeight.w600,
+                    color: primary,
                   ),
                 ),
               ),
@@ -100,7 +102,7 @@ class _ForgotScreenState extends State<ForgotScreen> {
                       child: MyTextField(
                         errorText: forgotErrorResponse.email,
                         controller: emailController,
-                        label: "Email",
+                        label: "field_email".tr,
                         mandatory: true,
                       ),
                     ),
@@ -130,7 +132,7 @@ class _ForgotScreenState extends State<ForgotScreen> {
                           }
                         })
                       },
-                      child: const Text("Submit"),
+                      child: Text("global_submit".tr),
                     ),
                   ],
                 ),

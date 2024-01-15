@@ -67,20 +67,20 @@ class _SetupScreenState extends State<SetupScreen> {
               margin: const EdgeInsets.only(top: 116, bottom: 58),
               child: Center(
                 child: RichText(
-                  text: const TextSpan(
-                    style: TextStyle(
+                  text: TextSpan(
+                    style: const TextStyle(
                       fontSize: 32,
                       fontWeight: FontWeight.w600,
                     ),
                     children: [
                       TextSpan(
-                        text: "Access to your",
-                        style: TextStyle(color: Colors.black),
+                        text: 'setup_title'.tr,
+                        style: const TextStyle(color: Colors.black),
                       ),
-                      WidgetSpan(
+                      const WidgetSpan(
                         child: SizedBox(width: 8.0), // Add space between spans
                       ),
-                      TextSpan(
+                      const TextSpan(
                         text: "LAKASIR",
                         style: TextStyle(color: primary),
                       ),
@@ -102,11 +102,11 @@ class _SetupScreenState extends State<SetupScreen> {
                         prefixText: environment == "local" ? "http://" : "https://",
                         suffixText: ".lakasir.com",
                         controller: registerDomainController,
-                        label: "Your Registered Domain",
+                        label: "setup_your_registered_domain".tr,
                         errorText: domainError,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return "Please enter your domain";
+                            return "setup_please_enter_your_domain".tr;
                           }
                           return null;
                         },
@@ -146,21 +146,21 @@ class _SetupScreenState extends State<SetupScreen> {
                   width: 300,
                   child: RichText(
                     textAlign: TextAlign.center,
-                    text: const TextSpan(
-                      style: TextStyle(
+                    text: TextSpan(
+                      style: const TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: 16,
                       ),
                       children: [
                         TextSpan(
                           text:
-                              "Are you the owner, and you don’t have the Domain yet?",
-                          style: TextStyle(color: Colors.grey),
+                              "setup_doesnt_have_domain".tr,
+                          style: const TextStyle(color: Colors.grey),
                         ),
-                        WidgetSpan(child: SizedBox(width: 4.0)),
+                        const WidgetSpan(child: SizedBox(width: 4.0)),
                         TextSpan(
-                          text: "Please create!",
-                          style: TextStyle(
+                          text: "setup_please_create".tr,
+                          style: const TextStyle(
                             color: primary,
                           ),
                         ),

@@ -19,7 +19,7 @@ class _HistoryDetailScreenState extends State<HistoryDetailScreen> {
   Widget build(BuildContext context) {
     TransactionHistoryResponse history = Get.arguments;
     return Layout(
-      title: "Transaction Detail",
+      title: "transaction_detail".tr,
       child: ListView(
         children: [
           const SizedBox(height: 10),
@@ -27,9 +27,9 @@ class _HistoryDetailScreenState extends State<HistoryDetailScreen> {
           const Divider(),
           Container(
             margin: const EdgeInsets.only(bottom: 10),
-            child: const Text(
-              "Products",
-              style: TextStyle(
+            child: Text(
+              "menu_product".tr,
+              style: const TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
@@ -53,14 +53,18 @@ class _HistoryDetailScreenState extends State<HistoryDetailScreen> {
                       ),
                     ),
                     Text(
-                      "Quantity: ${sellingDetail.quantity}",
+                      "${sellingDetail.quantity} x ${formatPrice(sellingDetail.price / sellingDetail.quantity)}",
                       style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w200,
                       ),
                     ),
                     Text(
-                      "Total Sub price: ${formatPrice(sellingDetail.price)}",
+                      "field_subtotal".trParams(
+                        {
+                          "price": formatPrice(sellingDetail.price),
+                        },
+                      ),
                       style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w400,
@@ -92,9 +96,9 @@ class _HistoryDetailScreenState extends State<HistoryDetailScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    "Code:",
-                    style: TextStyle(
+                  Text(
+                    "${"field_code".tr}:",
+                    style: const TextStyle(
                       fontWeight: FontWeight.w200,
                     ),
                   ),
@@ -108,9 +112,9 @@ class _HistoryDetailScreenState extends State<HistoryDetailScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    "Total Quantity:",
-                    style: TextStyle(
+                  Text(
+                    "${"field_total_quantity".tr}:",
+                    style: const TextStyle(
                       fontWeight: FontWeight.w200,
                     ),
                   ),
@@ -129,15 +133,15 @@ class _HistoryDetailScreenState extends State<HistoryDetailScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    "Date:",
-                    style: TextStyle(
+                  Text(
+                    "${"field_date".tr}:",
+                    style: const TextStyle(
                       fontWeight: FontWeight.w200,
                     ),
                   ),
                   Text(
                     DateFormat('dd-MM-yyyy HH:mm')
-                        .format(DateTime.parse(history.createdAt!))
+                        .format(DateTime.parse(history.createdAt!).toLocal())
                         .toString(),
                   ),
                 ],
@@ -147,9 +151,9 @@ class _HistoryDetailScreenState extends State<HistoryDetailScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    "Total Price:",
-                    style: TextStyle(
+                  Text(
+                    "${"field_total_price".tr}:",
+                    style: const TextStyle(
                       fontWeight: FontWeight.w200,
                     ),
                   ),
@@ -168,15 +172,17 @@ class _HistoryDetailScreenState extends State<HistoryDetailScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    "Member:",
-                    style: TextStyle(
+                  Text(
+                    "${"field_member".tr}:",
+                    style: const TextStyle(
                       fontWeight: FontWeight.w200,
                     ),
                   ),
                   Text(
                     history.member == null
-                        ? "Non Member"
+                        ? "global_no_item".trParams(
+                            {"item": "menu_member".tr},
+                          )
                         : history.member!.name,
                   ),
                 ],
@@ -186,9 +192,9 @@ class _HistoryDetailScreenState extends State<HistoryDetailScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    "Payed Money:",
-                    style: TextStyle(
+                  Text(
+                    "${"field_payed_money".tr}:",
+                    style: const TextStyle(
                       fontWeight: FontWeight.w200,
                     ),
                   ),
@@ -207,9 +213,9 @@ class _HistoryDetailScreenState extends State<HistoryDetailScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    "Payment Method:",
-                    style: TextStyle(
+                  Text(
+                    "${"field_payment_method".tr}:",
+                    style: const TextStyle(
                       fontWeight: FontWeight.w200,
                     ),
                   ),
@@ -221,9 +227,9 @@ class _HistoryDetailScreenState extends State<HistoryDetailScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    "Money Changes:",
-                    style: TextStyle(
+                  Text(
+                    "${"field_change".tr}:",
+                    style: const TextStyle(
                       fontWeight: FontWeight.w200,
                     ),
                   ),
@@ -242,13 +248,13 @@ class _HistoryDetailScreenState extends State<HistoryDetailScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    "Friend Price:",
-                    style: TextStyle(
+                  Text(
+                    "${"field_friend_price".tr}:",
+                    style: const TextStyle(
                       fontWeight: FontWeight.w200,
                     ),
                   ),
-                  Text(history.friendPrice ? "Yes" : "No"),
+                  Text(history.friendPrice ? "global_yes".tr : "global_no".tr),
                 ],
               ),
             ),
@@ -256,9 +262,9 @@ class _HistoryDetailScreenState extends State<HistoryDetailScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    "Tax:",
-                    style: TextStyle(
+                  Text(
+                    "field_tax".tr,
+                    style: const TextStyle(
                       fontWeight: FontWeight.w200,
                     ),
                   ),

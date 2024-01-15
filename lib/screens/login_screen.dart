@@ -96,20 +96,20 @@ class _LoginScreenState extends State<LoginScreen> {
               margin: const EdgeInsets.only(top: 116, bottom: 58),
               child: Center(
                 child: RichText(
-                  text: const TextSpan(
-                    style: TextStyle(
+                  text: TextSpan(
+                    style: const TextStyle(
                       fontSize: 32,
                       fontWeight: FontWeight.w600,
                     ),
                     children: [
                       TextSpan(
-                        text: "Sign In",
-                        style: TextStyle(color: Colors.black),
+                        text: "sign_in".tr,
+                        style: const TextStyle(color: Colors.black),
                       ),
-                      WidgetSpan(
+                      const WidgetSpan(
                         child: SizedBox(width: 8.0), // Add space between spans
                       ),
-                      TextSpan(
+                      const TextSpan(
                         text: "LAKASIR",
                         style: TextStyle(color: primary),
                       ),
@@ -132,7 +132,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: MyTextField(
                         controller: emailController,
                         errorText: loginErrorResponse.email,
-                        label: "Email",
+                        label: "field_email".tr,
                         mandatory: true,
                       ),
                     ),
@@ -142,7 +142,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: MyTextField(
                         errorText: loginErrorResponse.password,
                         controller: passwordController,
-                        label: "Password",
+                        label: "field_password".tr,
                         mandatory: true,
                         obscureText: true,
                       ),
@@ -152,7 +152,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     Container(
                       margin: const EdgeInsets.only(bottom: 21.0),
                       child: MyCheckbox(
-                        label: "Remember me",
+                        label: "field_remember_me".tr,
                         onChange: (bool value) {
                           setState(() {
                             remember = value;
@@ -178,7 +178,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           }
                         });
                       },
-                      child: const Text("Sign In"),
+                      child: Text("sign_in".tr),
                     ),
                   ],
                 ),
@@ -192,9 +192,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   onTap: () {
                     Navigator.pushNamed(context, '/forgot');
                   },
-                  child: const Text(
-                    "Forgot the password?",
-                    style: TextStyle(
+                  child: Text(
+                    "forgot_password".tr,
+                    style: const TextStyle(
                       color: primary,
                       fontSize: 16,
                       fontWeight: FontWeight.w600,

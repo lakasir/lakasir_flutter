@@ -12,7 +12,6 @@ import 'package:lakasir/controllers/products/product_controller.dart';
 import 'package:lakasir/controllers/products/product_detail_controller.dart';
 import 'package:lakasir/services/product_service.dart';
 import 'package:lakasir/utils/colors.dart';
-import 'package:lakasir/utils/utils.dart';
 import 'package:lakasir/widgets/select_input_feld.dart';
 
 class ProductAddEditController extends GetxController {
@@ -62,7 +61,10 @@ class ProductAddEditController extends GetxController {
       _productController.getProducts();
       clearInput();
       Get.back();
-      Get.rawSnackbar(message: 'Product Created', backgroundColor: success);
+      Get.rawSnackbar(
+        message: 'product_add_success'.tr,
+        backgroundColor: success,
+      );
     } catch (e) {
       isLoading(false);
       if (e is ValidationException) {
@@ -112,8 +114,12 @@ class ProductAddEditController extends GetxController {
       Get.back();
       Get.offAndToNamed('/menu/product/detail',
           arguments: _productDetailController.product.value);
-      Get.rawSnackbar(message: 'Product Updated', backgroundColor: success);
+      Get.rawSnackbar(
+        message: 'global_updated_item'.trParams({'item': 'menu_product'.tr}),
+        backgroundColor: success,
+      );
     } catch (e) {
+      debugPrint(e.toString());
       isLoading(false);
       if (e is ValidationException) {
         ErrorResponse<ProductErrorResponse> errorResponse =

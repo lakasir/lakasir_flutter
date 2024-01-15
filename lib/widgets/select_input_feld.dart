@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:lakasir/utils/colors.dart';
 
 class SelectInputWidget extends StatefulWidget {
@@ -64,7 +65,7 @@ class _SelectInputWidgetState extends State<SelectInputWidget> {
           value: selectedOption,
           validator: (value) {
             if (widget.mandatory && value == null) {
-              return "Field ${widget.label} is required";
+              return "validation_required".trParams({"field": widget.label});
             }
             return null;
           },

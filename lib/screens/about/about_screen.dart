@@ -47,10 +47,10 @@ class _AboutScreenState extends State<AboutScreen> {
                   slivers: <Widget>[
                     SliverAppBar(
                       automaticallyImplyLeading: false,
-                      title: const Center(
+                      title: Center(
                         child: Text(
-                          'About',
-                          style: TextStyle(color: Colors.white),
+                          'menu_about'.tr,
+                          style: const TextStyle(color: Colors.white),
                         ),
                       ),
                       expandedHeight: MediaQuery.of(context).size.height * 0.5,
@@ -76,7 +76,9 @@ class _AboutScreenState extends State<AboutScreen> {
                                         color: Colors.grey,
                                       );
                                       if (aboutController.shop.value.photo !=
-                                          null || aboutController.shop.value.photo != "") {
+                                              null ||
+                                          aboutController.shop.value.photo !=
+                                              "") {
                                         photo = ClipRRect(
                                           borderRadius:
                                               BorderRadius.circular(100),
@@ -152,13 +154,14 @@ class _AboutScreenState extends State<AboutScreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text(
-                                "Business Type",
-                                style: TextStyle(fontSize: 16),
+                              Text(
+                                "field_business_type".tr,
+                                style: const TextStyle(fontSize: 16),
                               ),
                               const SizedBox(height: 5),
                               Text(
-                                _businessType(aboutController.shop.value.businessType!),
+                                _businessType(
+                                    aboutController.shop.value.businessType!),
                                 style: const TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
@@ -172,8 +175,10 @@ class _AboutScreenState extends State<AboutScreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text("Owner's Name",
-                                  style: TextStyle(fontSize: 16)),
+                              Text(
+                                "field_owner_name".tr,
+                                style: const TextStyle(fontSize: 16),
+                              ),
                               const SizedBox(height: 5),
                               Text(
                                 aboutController.shop.value.ownerName ?? '-',
@@ -190,8 +195,10 @@ class _AboutScreenState extends State<AboutScreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text("Location",
-                                  style: TextStyle(fontSize: 16)),
+                              Text(
+                                'field_location'.tr,
+                                style: const TextStyle(fontSize: 16),
+                              ),
                               const SizedBox(height: 5),
                               Text(
                                 aboutController.shop.value.location ?? '-',
@@ -208,8 +215,10 @@ class _AboutScreenState extends State<AboutScreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text("Currency",
-                                  style: TextStyle(fontSize: 16)),
+                              Text(
+                                "field_currency".tr,
+                                style: const TextStyle(fontSize: 16),
+                              ),
                               const SizedBox(height: 5),
                               Text(
                                 aboutController.shop.value.currency ?? '-',

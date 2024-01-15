@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lakasir/messages.dart';
 import 'package:lakasir/screens/about/about_screen.dart';
 import 'package:lakasir/screens/about/edit_screen.dart';
 import 'package:lakasir/screens/auth_screen.dart';
@@ -27,6 +28,7 @@ import 'package:lakasir/screens/transactions/transaction_menu_screen.dart';
 import 'package:lakasir/utils/auth.dart';
 import 'package:lakasir/utils/colors.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:lakasir/utils/utils.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -50,45 +52,73 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      title: 'Lakasir',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: primary,
-          background: Colors.white,
-        ),
-        fontFamily: 'SourceSans',
-        useMaterial3: true,
-      ),
-      initialRoute: '/auth',
-      routes: {
-        '/domain/register': (context) => const RegisterDomainScreen(),
-        '/auth': (context) => const AuthScreen(),
-        '/forgot': (context) => const ForgotScreen(),
-        '/menu/transaction': (context) => const TransactionMenuScreen(),
-        '/menu/transaction/history': (context) => const HistoryScreen(),
-        '/menu/transaction/history/detail': (context) =>
-            const HistoryDetailScreen(),
-        '/menu/transaction/cashier': (context) => CashierMenuScreen(),
-        '/menu/transaction/cashier/cart': (context) =>
-            const CashierCartMenuScreen(),
-        '/menu/transaction/cashier/payment': (context) => const PaymentScreen(),
-        '/menu/transaction/cashier/receipt': (context) => const InvoiceScreen(),
-        '/menu/product': (context) => const ProductScreen(),
-        '/menu/product/add': (context) => const AddProductScreen(),
-        '/menu/product/detail': (context) => const DetailScreen(),
-        '/menu/product/stock': (context) => const DetailStockScreen(),
-        '/menu/product/edit': (context) => const EditProductScreen(),
-        '/menu/profile': (context) => const ProfileScreen(),
-        '/menu/profile/edit': (context) => const EditProfileScreen(),
-        '/menu/about': (context) => const AboutScreen(),
-        '/menu/about/edit': (context) => const EditAboutScreen(),
-        '/menu/member': (context) => const MemberScreen(),
-        '/menu/member/add': (context) => const AddMemberScreen(),
-        '/menu/member/edit': (context) => const EditMemberScreen(),
-        '/menu/setting': (context) => const SettingScreen(),
-        '/menu/setting/category': (context) => const CategoryScreen(),
+    return FutureBuilder(
+      future: _fetchLocale(),
+      builder: (context, snapshot) {
+        switch (snapshot.connectionState) {
+          case ConnectionState.none:
+          case ConnectionState.waiting:
+            return const CircularProgressIndicator();
+
+          default:
+            if (snapshot.hasError) {
+              return Text('Error: ${snapshot.error}');
+            } else {
+              Locale locale = snapshot.data!;
+
+              return GetMaterialApp(
+                translations: Messages(),
+                locale: locale,
+                title: 'Lakasir',
+                theme: ThemeData(
+                  colorScheme: ColorScheme.fromSeed(
+                    seedColor: primary,
+                    background: Colors.white,
+                  ),
+                  fontFamily: 'SourceSans',
+                  useMaterial3: true,
+                ),
+                initialRoute: '/auth',
+                routes: {
+                  '/domain/register': (context) => const RegisterDomainScreen(),
+                  '/auth': (context) => const AuthScreen(),
+                  '/forgot': (context) => const ForgotScreen(),
+                  '/menu/transaction': (context) =>
+                      const TransactionMenuScreen(),
+                  '/menu/transaction/history': (context) =>
+                      const HistoryScreen(),
+                  '/menu/transaction/history/detail': (context) =>
+                      const HistoryDetailScreen(),
+                  '/menu/transaction/cashier': (context) => CashierMenuScreen(),
+                  '/menu/transaction/cashier/cart': (context) =>
+                      const CashierCartMenuScreen(),
+                  '/menu/transaction/cashier/payment': (context) =>
+                      const PaymentScreen(),
+                  '/menu/transaction/cashier/receipt': (context) =>
+                      const InvoiceScreen(),
+                  '/menu/product': (context) => const ProductScreen(),
+                  '/menu/product/add': (context) => const AddProductScreen(),
+                  '/menu/product/detail': (context) => const DetailScreen(),
+                  '/menu/product/stock': (context) => const DetailStockScreen(),
+                  '/menu/product/edit': (context) => const EditProductScreen(),
+                  '/menu/profile': (context) => const ProfileScreen(),
+                  '/menu/profile/edit': (context) => const EditProfileScreen(),
+                  '/menu/about': (context) => const AboutScreen(),
+                  '/menu/about/edit': (context) => const EditAboutScreen(),
+                  '/menu/member': (context) => const MemberScreen(),
+                  '/menu/member/add': (context) => const AddMemberScreen(),
+                  '/menu/member/edit': (context) => const EditMemberScreen(),
+                  '/menu/setting': (context) => const SettingScreen(),
+                  '/menu/setting/category': (context) => const CategoryScreen(),
+                },
+              );
+            }
+        }
       },
     );
+  }
+
+  Future<Locale> _fetchLocale() async {
+    return await getLocale();
   }
 }

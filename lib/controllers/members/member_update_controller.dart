@@ -51,7 +51,9 @@ class MemberUpdateController extends GetxController {
       );
       Get.back();
       Get.rawSnackbar(
-        message: "Success to update member",
+        message: "global_updated_item".trParams({
+          'item': 'menu_member'.tr,
+        }),
         backgroundColor: success,
       );
       isSubmitting(false);
@@ -76,14 +78,16 @@ class MemberUpdateController extends GetxController {
       context: Get.context!,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Delete Member'),
-          content: const Text('Are you sure to delete this member?'),
+          title: Text('global_sure?'.tr),
+          content: Text('global_sure_content'.trParams({
+            'item': 'menu_member'.tr,
+          })),
           actions: [
             TextButton(
               onPressed: () {
                 Get.back();
               },
-              child: const Text('Cancel'),
+              child: Text('global_cancel'.tr),
             ),
             TextButton(
               onPressed: () async {
@@ -93,7 +97,9 @@ class MemberUpdateController extends GetxController {
                   await _memberService.delete(member.value.id);
                   Get.back();
                   Get.rawSnackbar(
-                    message: "Success to delete member",
+                    message: "global_deleted_item".trParams({
+                      'item': 'menu_member'.tr,
+                    }),
                     backgroundColor: success,
                   );
                   isSubmitting(false);
@@ -112,7 +118,7 @@ class MemberUpdateController extends GetxController {
                   }
                 }
               },
-              child: const Text('Delete'),
+              child: Text('global_yes'.tr),
             ),
           ],
         );

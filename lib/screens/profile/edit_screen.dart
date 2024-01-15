@@ -29,7 +29,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     double width = MediaQuery.of(context).size.width;
 
     return Layout(
-      title: 'Edit Profile',
+      title: 'global_edit_item'.trParams({
+        'item': 'menu_profile'.tr,
+      }),
       child: Form(
         key: _profileController.formKey,
         child: ListView(
@@ -57,7 +59,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   child: Obx(
                     () => MyTextField(
                       controller: _profileController.nameInputController,
-                      label: 'Name',
+                      label: 'field_name'.tr,
                       errorText:
                           _profileController.profileErrorResponse.value.name,
                     ),
@@ -69,7 +71,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               margin: const EdgeInsets.only(top: 20),
               child: MyTextField(
                 controller: _profileController.emailInputController,
-                label: 'Email',
+                label: 'field_email'.tr,
               ),
             ),
             Container(
@@ -77,7 +79,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               child: Obx(
                 () => MyTextField(
                   controller: _profileController.phoneInputController,
-                  label: 'Phone',
+                  label: 'field_phone'.tr,
                   errorText:
                       _profileController.profileErrorResponse.value.phone,
                 ),
@@ -88,17 +90,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               child: MyTextField(
                 maxLines: 4,
                 controller: _profileController.addressInputController,
-                label: 'Address',
-              ),
-            ),
-            Container(
-              margin: const EdgeInsets.only(top: 20),
-              child: SelectInputWidget(
-                options: [
-                  Option(name: "English", value: "en"),
-                ],
-                controller: _profileController.languageController,
-                label: 'Language',
+                label: 'field_address'.tr,
               ),
             ),
             Container(
@@ -107,7 +99,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 () => MyFilledButton(
                   onPressed: _profileController.updateProfile,
                   isLoading: _profileController.isLoading.value,
-                  child: const Text('Save'),
+                  child: Text('global_save'.tr),
                 ),
               ),
             ),

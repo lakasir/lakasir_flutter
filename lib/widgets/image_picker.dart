@@ -112,12 +112,12 @@ class _MyImagePickerState extends State<MyImagePicker> {
   void getImageSource() {
     Get.defaultDialog(
       titlePadding: const EdgeInsets.only(top: 20),
-      title: 'Select Image Source',
+      title: 'global_select_image_source'.tr,
       content: Column(
         children: [
           ListTile(
             leading: const Icon(Icons.camera_alt),
-            title: const Text('Camera'),
+            title: Text('global_camera'.tr),
             onTap: () {
               setState(() {
                 dynamicSource = image_picker.ImageSource.camera;
@@ -127,7 +127,7 @@ class _MyImagePickerState extends State<MyImagePicker> {
             },
           ),
           ListTile(
-            title: const Text('Gallery'),
+            title: Text('global_gallery'.tr),
             leading: const Icon(Icons.photo),
             onTap: () {
               setState(() {

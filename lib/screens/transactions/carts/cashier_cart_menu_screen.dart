@@ -24,9 +24,9 @@ class _CashierCartMenuScreenState extends State<CashierCartMenuScreen> {
   @override
   Widget build(BuildContext context) {
     return Layout(
-      title: 'Cart List',
+      title: 'cart_list'.tr,
       bottomNavigationBar: MyBottomBar(
-        label: const Text("Proceed to Payment"),
+        label: Text('cart_list_proceed'.tr),
         onPressed: () {
           _cartController.cartSessions.update((val) {
             val!.payedMoney = _cartController.cartSessions.value.getTotalPrice;
@@ -37,14 +37,14 @@ class _CashierCartMenuScreenState extends State<CashierCartMenuScreen> {
         singleActionIcon: Icons.delete,
         singleActionOnPressed: () {
           Get.dialog(AlertDialog(
-            title: const Text('Delete All Cart'),
-            content: const Text('Are you sure to delete all cart?'),
+            title: Text('cart_delete_all'.tr),
+            content: Text('cart_delete_all_content'.tr),
             actions: [
               TextButton(
                 onPressed: () {
                   Get.back();
                 },
-                child: const Text('Cancel'),
+                child: Text('global_cancel'.tr),
               ),
               TextButton(
                 onPressed: () {
@@ -57,7 +57,7 @@ class _CashierCartMenuScreenState extends State<CashierCartMenuScreen> {
                   Get.back();
                   Get.back();
                 },
-                child: const Text('Delete'),
+                child: Text('global_delete'.tr),
               ),
             ],
           ));

@@ -48,7 +48,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
   @override
   Widget build(BuildContext context) {
     return Layout(
-      title: "Transaction History",
+      title: "transaction_history".tr,
       child: PagedListView(
         pagingController: _pagingController,
         builderDelegate: PagedChildBuilderDelegate<TransactionHistoryResponse>(
@@ -79,6 +79,7 @@ class CardList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        const SizedBox(height: 10),
         MyCardList(
           onTap: () {
             Get.toNamed('/menu/transaction/history/detail', arguments: history);
@@ -89,7 +90,7 @@ class CardList extends StatelessWidget {
               children: [
                 Text(
                   DateFormat('dd-MM-yyyy HH:mm')
-                      .format(DateTime.parse(history.createdAt!))
+                      .format(DateTime.parse(history.createdAt!).toLocal())
                       .toString(),
                 ),
                 Text(

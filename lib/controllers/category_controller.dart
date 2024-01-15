@@ -19,8 +19,6 @@ class CategoryController extends GetxController {
     name: "",
   ).obs;
 
-  Rx<String> labelButton = "Add Category".obs;
-
   Future<void> fetchCategories() async {
     isFetching(true);
     final response = await categoryService.getCategories();
@@ -41,7 +39,9 @@ class CategoryController extends GetxController {
       fetchCategories();
       Get.back();
       Get.rawSnackbar(
-        message: 'Category Added',
+        message: 'global_added_item'.trParams({
+          'item': 'setting_category'.tr,
+        }),
         backgroundColor: success,
       );
     } catch (e) {
@@ -85,7 +85,9 @@ class CategoryController extends GetxController {
       fetchCategories();
       Get.back();
       Get.rawSnackbar(
-        message: 'Category Updated',
+        message: 'global_updated_item'.trParams({
+          'item': 'setting_category'.tr,
+        }),
         backgroundColor: success,
       );
     } catch (e) {

@@ -39,7 +39,7 @@ class MemberController extends GetxController {
           content: Column(
             children: [
               MyTextField(
-                hintText: 'Search Member',
+                hintText: 'field_name'.tr,
                 controller: searchByNameController,
                 textInputAction: TextInputAction.search,
                 onSubmitted: (value) {

@@ -45,13 +45,13 @@ class _RegisterDomainScreenState extends State<RegisterDomainScreen> {
         isLoading = true;
       });
       if (!agree) {
-        throw Exception("Please agree to our terms and conditions");
+        throw Exception("please_agree".tr);
       }
       if (!_formKey.currentState!.validate()) {
         setState(() {
           isLoading = false;
         });
-        throw Exception("Please fill the form correctly");
+        throw Exception("please_fill_form".tr);
       }
 
       await ApiService(baseUrl).postData(
@@ -110,20 +110,20 @@ class _RegisterDomainScreenState extends State<RegisterDomainScreen> {
               margin: const EdgeInsets.only(top: 80, bottom: 35),
               child: Center(
                 child: RichText(
-                  text: const TextSpan(
-                    style: TextStyle(
+                  text: TextSpan(
+                    style: const TextStyle(
                       fontSize: 32,
                       fontWeight: FontWeight.w600,
                     ),
                     children: [
                       TextSpan(
-                        text: "Sign Up",
-                        style: TextStyle(color: Colors.black),
+                        text: "sign_up".tr,
+                        style: const TextStyle(color: Colors.black),
                       ),
-                      WidgetSpan(
+                      const WidgetSpan(
                         child: SizedBox(width: 8.0), // Add space between spans
                       ),
-                      TextSpan(
+                      const TextSpan(
                         text: "LAKASIR",
                         style: TextStyle(color: primary),
                       ),
@@ -145,7 +145,7 @@ class _RegisterDomainScreenState extends State<RegisterDomainScreen> {
                       child: MyTextField(
                         controller: fullNameController,
                         errorText: registerErrorResponse.shopName,
-                        label: "Shop Name",
+                        label: "field_shop_name".tr,
                         mandatory: true,
                       ),
                     ),
@@ -156,9 +156,8 @@ class _RegisterDomainScreenState extends State<RegisterDomainScreen> {
                         errorText: registerErrorResponse.domainName,
                         prefixText:
                             environment == "local" ? "http://" : "https://",
-                        info:
-                            "Your domain should be using your shop name, for example: yourshopname.lakasir.com",
-                        label: "Domain Name",
+                        info: "info_domain".tr,
+                        label: "field_domain_name".tr,
                         suffixText: ".lakasir.com",
                         mandatory: true,
                       ),
@@ -175,7 +174,7 @@ class _RegisterDomainScreenState extends State<RegisterDomainScreen> {
                           // Option(name: "Other", value: "other"),
                         ],
                         controller: businessTypeController,
-                        label: "Business Type",
+                        label: "field_business_type".tr,
                         mandatory: true,
                         errorText: registerErrorResponse.businessType,
                       ),
@@ -185,7 +184,7 @@ class _RegisterDomainScreenState extends State<RegisterDomainScreen> {
                       child: MyTextField(
                         controller: emailOrPhoneController,
                         errorText: registerErrorResponse.emailOrPhone,
-                        label: "Email",
+                        label: "field_email".tr,
                         mandatory: true,
                       ),
                     ),
@@ -194,7 +193,7 @@ class _RegisterDomainScreenState extends State<RegisterDomainScreen> {
                       child: MyTextField(
                         controller: passwordController,
                         errorText: registerErrorResponse.password,
-                        label: "Password",
+                        label: "field_password".tr,
                         mandatory: true,
                         obscureText: true,
                       ),
@@ -204,7 +203,7 @@ class _RegisterDomainScreenState extends State<RegisterDomainScreen> {
                       child: MyTextField(
                         textInputAction: TextInputAction.done,
                         controller: passwordConfirmationController,
-                        label: "Password Confirmation",
+                        label: "field_password_confirmation".tr,
                         mandatory: true,
                         obscureText: true,
                       ),
@@ -212,8 +211,7 @@ class _RegisterDomainScreenState extends State<RegisterDomainScreen> {
                     Container(
                       margin: const EdgeInsets.only(bottom: 21.0),
                       child: MyCheckbox(
-                        label:
-                            "By creating the shop, you agree to our Terms and Conditions",
+                        label: "agreement_sentence".tr,
                         onChange: (bool value) {
                           setState(() {
                             agree = value;
@@ -227,10 +225,9 @@ class _RegisterDomainScreenState extends State<RegisterDomainScreen> {
                         register().then((value) {
                           if (value.isEmpty) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                duration: Duration(seconds: 3),
-                                content: Text(
-                                    "Register Success, check your email to get more information of your shop"),
+                              SnackBar(
+                                duration: const Duration(seconds: 3),
+                                content: Text("register_success".tr),
                                 backgroundColor: success,
                               ),
                             );
@@ -246,7 +243,7 @@ class _RegisterDomainScreenState extends State<RegisterDomainScreen> {
                           }
                         });
                       },
-                      child: const Text("Create Your Shop"),
+                      child: Text("create_your_shop".tr),
                     ),
                   ],
                 ),

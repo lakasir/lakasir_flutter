@@ -16,14 +16,14 @@ class ConfirmAlertDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final cartItems = _cartController.cartSessions.value.cartItems;
     return MyDialog(
-      title: "Are you sure?",
+      title: "global_sure?".tr,
       content: Column(
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
-                "Member:",
+              Text(
+                "field_member".tr,
               ),
               Text(
                 _cartController.cartSessions.value.getMemberName,
@@ -33,8 +33,8 @@ class ConfirmAlertDialog extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
-                "Payment Method:",
+              Text(
+                "field_payment_method".tr,
               ),
               Text(
                 _cartController.cartSessions.value.getPaymentMethodName,
@@ -65,7 +65,7 @@ class ConfirmAlertDialog extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text("Total:"),
+              Text("global_total".tr),
               Text(
                 formatPrice(
                   _cartController.cartSessions.value.getTotalPrice,
@@ -76,8 +76,8 @@ class ConfirmAlertDialog extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
-                "Payed Money: ",
+              Text(
+                "field_payed_money".tr,
               ),
               Text(
                 formatPrice(
@@ -89,8 +89,8 @@ class ConfirmAlertDialog extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
-                "Change: ",
+              Text(
+                "field_change".tr,
               ),
               Text(
                 formatPrice(
@@ -110,7 +110,7 @@ class ConfirmAlertDialog extends StatelessWidget {
                   onPressed: () {
                     Get.back();
                   },
-                  child: const Text("Cancel"),
+                  child: Text("global_cancel".tr),
                 ),
               ),
               const SizedBox(
@@ -123,7 +123,7 @@ class ConfirmAlertDialog extends StatelessWidget {
                     onPressed: () {
                       _paymentController.store();
                     },
-                    child: const Text("Yes"),
+                    child: Text("global_yes".tr),
                   ),
                 ),
               ),

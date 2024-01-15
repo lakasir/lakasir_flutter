@@ -29,25 +29,25 @@ class CashierMenuScreen extends StatelessWidget {
         _productController.getProducts();
       },
       child: Layout(
-        title: 'Cashier',
+        title: 'transaction_cashier'.tr,
         bottomNavigationBar: MyBottomBar(
           singleAction: true,
           singleActionIcon: Icons.edit_note,
           singleActionOnPressed: () {
             Get.dialog(
               MyDialog(
-                title: 'Set Cash Drawer',
+                title: 'cashier_set_cash_drawer'.tr,
                 content: Column(
                   children: [
                     MyTextField(
-                      label: 'Cash Drawer',
+                      label: 'cashier_cash_drawer'.tr,
                       keyboardType: TextInputType.number,
                       controller: TextEditingController(),
                     ),
                     Container(
                       margin: const EdgeInsets.only(top: 10),
                       child: MyFilledButton(
-                          onPressed: () {}, child: const Text('Save')),
+                          onPressed: () {}, child: Text('global_save'.tr)),
                     ),
                   ],
                 ),
@@ -97,7 +97,7 @@ class CashierMenuScreen extends StatelessWidget {
               child: MyTextField(
                 key: const ValueKey('search'),
                 controller: _productController.searchByNameController,
-                hintText: 'Type min 3 character to trigger search',
+                hintText: 'cashier_search_trigger'.tr,
                 onChanged: (value) {
                   if (value.length >= 3) {
                     _productController.searchProduct();
@@ -131,8 +131,10 @@ class CashierMenuScreen extends StatelessWidget {
                     );
                   }
                   if (_productController.products.isEmpty) {
-                    return const Center(
-                      child: Text('No Product'),
+                    return Center(
+                      child: Text('global_no_item'.trParams(
+                        {'item': 'menu_product'.tr},
+                      )),
                     );
                   }
                   return ListView(

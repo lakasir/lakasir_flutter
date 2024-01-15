@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lakasir/utils/colors.dart';
+import 'package:lakasir/utils/utils.dart';
 import 'package:lakasir/widgets/dialog.dart';
 import 'package:lakasir/widgets/filled_button.dart';
 import 'package:lakasir/widgets/layout.dart';
@@ -14,14 +15,14 @@ class SettingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Layout(
-      title: 'Setting',
+      title: 'setting'.tr,
       child: ListView.separated(
         itemCount: 1,
         itemBuilder: (context, index) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text("General", style: TextStyle(fontSize: 20)),
+              Text("setting_general".tr, style: const TextStyle(fontSize: 20)),
               const SizedBox(height: 19),
               MyCardList(
                 route: "/menu/setting/category",
@@ -40,8 +41,9 @@ class SettingScreen extends StatelessWidget {
                     size: 32,
                   ),
                 ),
-                list: const [
-                  Text("Category", style: TextStyle(fontSize: 20)),
+                list: [
+                  Text("setting_category".tr,
+                      style: const TextStyle(fontSize: 20)),
                 ],
               ),
               const SizedBox(height: 19),
@@ -54,7 +56,7 @@ class SettingScreen extends StatelessWidget {
                       children: [
                         SelectInputWidget(
                           controller: currencyController,
-                          label: "Currency",
+                          label: "setting_currency".tr,
                           options: [
                             Option(
                               name: "IDR",
@@ -67,7 +69,7 @@ class SettingScreen extends StatelessWidget {
                           onPressed: () {
                             Get.back();
                           },
-                          child: const Text("Save"),
+                          child: Text("global_save".tr),
                         ),
                       ],
                     ),
@@ -88,36 +90,48 @@ class SettingScreen extends StatelessWidget {
                     size: 32,
                   ),
                 ),
-                list: const [
-                  Text("Currency", style: TextStyle(fontSize: 20)),
+                list: [
+                  Text("setting_currency".tr,
+                      style: const TextStyle(fontSize: 20)),
                 ],
               ),
               const SizedBox(height: 19),
-              const Text("System", style: TextStyle(fontSize: 20)),
+              Text("setting_system".tr, style: const TextStyle(fontSize: 20)),
               const SizedBox(height: 19),
               MyCardList(
-                onTap: () {
+                onTap: () async {
                   var languageController = SelectInputWidgetController();
-                  languageController.selectedOption = "en";
+                  languageController.selectedOption = await getLanguageCode();
                   Get.dialog(MyDialog(
                     content: Column(
                       children: [
                         SelectInputWidget(
                           controller: languageController,
-                          label: "Language",
+                          label: "setting_language".tr,
                           options: [
                             Option(
                               name: "English",
-                              value: "en",
+                              value: "en_US",
+                            ),
+                            Option(
+                              name: "Indonesia",
+                              value: "id_ID",
                             ),
                           ],
                         ),
                         const SizedBox(height: 20),
                         MyFilledButton(
-                          onPressed: () {
+                          onPressed: () async {
+                            setLocale(languageController.selectedOption!);
+                            await Get.forceAppUpdate();
+                            // Get.updateLocale(Locale(languageController.selectedOption!));
                             Get.back();
+                            Get.rawSnackbar(
+                              message: "setting_language_success".tr,
+                              backgroundColor: success,
+                            );
                           },
-                          child: const Text("Save"),
+                          child: Text("global_save".tr),
                         ),
                       ],
                     ),
@@ -138,22 +152,23 @@ class SettingScreen extends StatelessWidget {
                     size: 32,
                   ),
                 ),
-                list: const [
-                  Text("Language", style: TextStyle(fontSize: 20)),
+                list: [
+                  Text("setting_language".tr,
+                      style: const TextStyle(fontSize: 20)),
                 ],
               ),
               const SizedBox(height: 19),
               MyCardList(
                 onTap: () {
                   Get.dialog(AlertDialog(
-                    title: const Text("Dark Mode"),
-                    content: const Text("Coming Soon"),
+                    title: Text("setting_dark_mode".tr),
+                    content: Text("global_comming_soon".tr),
                     actions: [
                       TextButton(
                         onPressed: () {
                           Get.back();
                         },
-                        child: const Text("OK"),
+                        child: Text("global_ok".tr),
                       ),
                     ],
                   ));
@@ -173,8 +188,9 @@ class SettingScreen extends StatelessWidget {
                     size: 32,
                   ),
                 ),
-                list: const [
-                  Text("Dark Mode", style: TextStyle(fontSize: 20)),
+                list: [
+                  Text("setting_dark_mode".tr,
+                      style: const TextStyle(fontSize: 20)),
                 ],
               ),
             ],

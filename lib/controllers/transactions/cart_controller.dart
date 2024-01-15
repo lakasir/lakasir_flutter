@@ -92,43 +92,37 @@ class CartController extends GetxController {
         .qty
         .toString();
 
-    showDialog(
-      context: Get.context!,
-      builder: (context) {
-        return MyDialog(
-          title: 'Add to Cart',
-          content: Form(
-            key: globalKey,
-            child: Column(
-              children: [
-                Container(
-                  margin: const EdgeInsets.only(bottom: 15),
-                  child: MyTextField(
-                    label: 'Qty',
-                    hintText: 'Qty Name',
-                    controller: qtyController,
-                    mandatory: true,
-                    keyboardType: TextInputType.number,
-                  ),
-                ),
-                Obx(
-                  () => MyFilledButton(
-                    onPressed: () {
-                      addToCart(CartItem(
-                        product: product,
-                        qty: int.parse(qtyController.text),
-                      ));
-                    },
-                    isLoading: isAddToCartLoading.value,
-                    child: const Text("Save"),
-                  ),
-                ),
-              ],
+    Get.dialog(MyDialog(
+      title: 'cashier_add_to_cart'.tr,
+      content: Form(
+        key: globalKey,
+        child: Column(
+          children: [
+            Container(
+              margin: const EdgeInsets.only(bottom: 15),
+              child: MyTextField(
+                label: 'field_qty'.tr,
+                controller: qtyController,
+                mandatory: true,
+                keyboardType: TextInputType.number,
+              ),
             ),
-          ),
-        );
-      },
-    );
+            Obx(
+              () => MyFilledButton(
+                onPressed: () {
+                  addToCart(CartItem(
+                    product: product,
+                    qty: int.parse(qtyController.text),
+                  ));
+                },
+                isLoading: isAddToCartLoading.value,
+                child: Text("global_save".tr),
+              ),
+            ),
+          ],
+        ),
+      ),
+    ));
   }
 }
 
@@ -154,7 +148,10 @@ class CartSession {
   });
 
   String get getMemberName {
-    return member?.name ?? 'No Member';
+    return member?.name ??
+        'global_no_item'.trParams({
+          'item': 'menu_member'.tr,
+        });
   }
 
   String get getPaymentMethodName {

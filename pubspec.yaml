@@ -21,6 +21,7 @@ dependencies:
   get: ^4.6.6
   image_cropper: ^5.0.1
   http_parser: ^4.0.2
+  flutter_masked_text2: ^0.9.1
 
 flutter_icons:
   android: "launcher_icon"

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:lakasir/utils/colors.dart';
 
 typedef MyCallback = void Function(String);
@@ -132,7 +133,9 @@ class _MyTextFieldState extends State<MyTextField> {
               return widget.validator!(value);
             }
             if (widget.mandatory && value!.isEmpty) {
-              return "The ${widget.label} field is required";
+              return "validation_required".trParams(
+                {"field": widget.label!},
+              );
             }
             return null;
           },

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:lakasir/utils/colors.dart';
 import 'package:lakasir/widgets/layout.dart';
 import 'package:lakasir/widgets/my_card_list.dart';
@@ -12,7 +13,7 @@ class TransactionMenuScreen extends StatefulWidget {
 class _TransactionMenuScreenState extends State<TransactionMenuScreen> {
   var menus = [
     {
-      'title': 'Cashier',
+      'title': 'transaction_cashier'.tr,
       'icon': Icons.shopping_basket_rounded,
       'route': '/menu/transaction/cashier',
     },
@@ -22,7 +23,7 @@ class _TransactionMenuScreenState extends State<TransactionMenuScreen> {
     //   'route': '/menu/transaction/ppob',
     // },
     {
-      'title': 'History',
+      'title': 'transaction_history'.tr,
       'icon': Icons.list_rounded,
       'route': '/menu/transaction/history',
     },
@@ -32,7 +33,7 @@ class _TransactionMenuScreenState extends State<TransactionMenuScreen> {
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     return Layout(
-      title: 'Transaction',
+      title: 'menu_transaction'.tr,
       child: ListView.separated(
         itemCount: menus.length,
         separatorBuilder: (context, index) {

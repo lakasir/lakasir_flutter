@@ -41,96 +41,88 @@ class ProductController extends GetxController {
   }
 
   void showSearchDialog() {
-    showDialog(
-      context: Get.context!,
-      builder: (context) {
-        return MyDialog(
-          noPadding: true,
-          content: Column(
-            children: [
-              MyTextField(
-                hintText: 'Search Product',
-                controller: searchByNameController,
-                textInputAction: TextInputAction.search,
-                onSubmitted: (value) {
-                  searchProduct();
-                },
-                rightIcon: IconButton(
-                  onPressed: searchProduct,
-                  icon: const Icon(Icons.search),
-                ),
+    Get.dialog(
+      MyDialog(
+        noPadding: true,
+        content: Column(
+          children: [
+            MyTextField(
+              hintText: 'field_product_name'.tr,
+              controller: searchByNameController,
+              textInputAction: TextInputAction.search,
+              onSubmitted: (value) {
+                searchProduct();
+              },
+              rightIcon: IconButton(
+                onPressed: searchProduct,
+                icon: const Icon(Icons.search),
               ),
-            ],
-          ),
-        );
-      },
+            ),
+          ],
+        ),
+      ),
     );
   }
 
   void showFilterDialog() {
-    showDialog(
-      context: Get.context!,
-      builder: (context) {
-        return MyDialog(
-          title: 'Filter Product',
-          content: Column(
-            children: [
-              Container(
-                margin: const EdgeInsets.only(bottom: 15),
-                child: MyTextField(
-                  hintText: 'Search Name',
-                  controller: searchByNameController,
-                ),
-              ),
-              Container(
-                margin: const EdgeInsets.only(bottom: 15),
-                child: SelectInputWidget(
-                  hintText: 'Select Category',
-                  controller: searchByCategoryController,
-                  options: _categoryController.categories
-                      .map((e) => Option(
-                            value: e.id.toString(),
-                            name: e.name,
-                          ))
-                      .toList(),
-                ),
-              ),
-              Container(
-                margin: const EdgeInsets.only(bottom: 15),
-                child: SelectInputWidget(
-                    hintText: 'Type',
-                    controller: searchByTypeController,
-                    options: [
-                      Option(
-                        value: 'product',
-                        name: 'Product',
-                      ),
-                      Option(
-                        value: 'service',
-                        name: 'Service',
-                      ),
-                    ]),
-              ),
-              Container(
-                margin: const EdgeInsets.only(bottom: 15),
-                child: MyTextField(
-                  hintText: 'Search Unit',
-                  controller: searchByUnitController,
-                ),
-              ),
-              MyFilledButton(
-                onPressed: () {
-                  isFiltered(true);
-                  searchProduct();
-                  Get.back();
-                },
-                child: const Text("Submit"),
-              ),
-            ],
+    Get.dialog(MyDialog(
+      title: 'global_filter_item'.trParams({'item': 'menu_product'.tr}),
+      content: Column(
+        children: [
+          Container(
+            margin: const EdgeInsets.only(bottom: 15),
+            child: MyTextField(
+              hintText: 'field_product_name'.tr,
+              controller: searchByNameController,
+            ),
           ),
-        );
-      },
-    );
+          Container(
+            margin: const EdgeInsets.only(bottom: 15),
+            child: SelectInputWidget(
+              hintText: 'field_select_category'.tr,
+              controller: searchByCategoryController,
+              options: _categoryController.categories
+                  .map((e) => Option(
+                        value: e.id.toString(),
+                        name: e.name,
+                      ))
+                  .toList(),
+            ),
+          ),
+          Container(
+            margin: const EdgeInsets.only(bottom: 15),
+            child: SelectInputWidget(
+                hintText: 'field_type'.tr,
+                controller: searchByTypeController,
+                options: [
+                  Option(
+                    value: 'product',
+                    name: 'option_product'.tr,
+                  ),
+                  Option(
+                    value: 'service',
+                    name: 'option_service'.tr,
+                  ),
+                ]),
+          ),
+          Container(
+            margin: const EdgeInsets.only(bottom: 15),
+            child: MyTextField(
+              hintText: 'field_unit'.tr,
+              controller: searchByUnitController,
+            ),
+          ),
+          MyFilledButton(
+            onPressed: () {
+              isFiltered(true);
+              searchProduct();
+              Get.back();
+            },
+            child: Text("global_filter".tr),
+          ),
+        ],
+      ),
+    ));
   }
 
   void clearSearch() {

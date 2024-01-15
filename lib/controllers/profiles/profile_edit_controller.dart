@@ -45,7 +45,9 @@ class ProfileEditController extends GetxController {
       await _profileController.getProfile();
       Get.back();
       Get.rawSnackbar(
-        message: 'Profile Updated',
+        message: 'global_updated_item'.trParams({
+          'item': 'menu_profile'.tr,
+        }),
         backgroundColor: Colors.green,
       );
       isLoading(false);

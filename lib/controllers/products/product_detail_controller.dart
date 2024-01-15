@@ -33,14 +33,14 @@ class ProductDetailController extends GetxController {
     showDialog(
       context: Get.context!,
       builder: (context) => AlertDialog(
-        title: const Text('Delete Product'),
-        content: const Text('Are you sure want to delete this product?'),
+        title: Text('global_sure?'.tr),
+        content: Text('global_sure_content'.trParams({"item": "product"})),
         actions: [
           TextButton(
             onPressed: () {
               Get.back();
             },
-            child: const Text('Cancel'),
+            child: Text('global_cancel'.tr),
           ),
           TextButton(
             onPressed: () async {
@@ -49,12 +49,12 @@ class ProductDetailController extends GetxController {
               Get.back();
               Get.back();
               Get.rawSnackbar(
-                message: 'Product deleted',
+                message: 'global_deleted_item'.trParams({"item": "menu_product".tr}),
                 duration: const Duration(seconds: 2),
                 backgroundColor: success,
               );
             },
-            child: const Text('Delete'),
+            child: Text('global_delete'.tr),
           ),
         ],
       )

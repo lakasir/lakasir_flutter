@@ -46,7 +46,7 @@ class PaymentController extends GetxController {
       Get.offAllNamed("/auth");
       Get.toNamed("/menu/transaction/cashier");
       Get.rawSnackbar(
-        message: 'Selling success',
+        message: 'cashier_success_message'.tr,
         backgroundColor: success,
         duration: const Duration(seconds: 2),
       );

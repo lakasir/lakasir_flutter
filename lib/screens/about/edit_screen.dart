@@ -29,7 +29,9 @@ class _EditAboutScreenState extends State<EditAboutScreen> {
     double width = MediaQuery.of(context).size.width;
 
     return Layout(
-      title: 'Edit About',
+      title: 'global_edit_item'.trParams({
+        'item': 'menu_about'.tr,
+      }),
       resizeToAvoidBottomInset: true,
       child: Form(
         key: _aboutEditController.formKey,
@@ -57,7 +59,7 @@ class _EditAboutScreenState extends State<EditAboutScreen> {
                   width: width * 60 / 100,
                   child: MyTextField(
                     controller: _aboutEditController.nameInputController,
-                    label: 'Shop Name',
+                    label: 'field_shop_name'.tr,
                   ),
                 ),
               ],
@@ -70,14 +72,14 @@ class _EditAboutScreenState extends State<EditAboutScreen> {
                   Option(name: "Wholesale", value: "wholesale"),
                 ],
                 controller: _aboutEditController.businessTypeInputController,
-                label: 'Business Type',
+                label: 'field_business_type'.tr,
               ),
             ),
             Container(
               margin: const EdgeInsets.only(top: 20),
               child: MyTextField(
                 controller: _aboutEditController.ownerNameInputController,
-                label: "Owner's Name",
+                label: 'field_owner_name'.tr
               ),
             ),
             Container(
@@ -85,7 +87,7 @@ class _EditAboutScreenState extends State<EditAboutScreen> {
               child: MyTextField(
                 maxLines: 4,
                 controller: _aboutEditController.locationInputController,
-                label: "Location",
+                label: 'field_location'.tr,
                 keyboardType: TextInputType.multiline,
               ),
             ),
@@ -96,7 +98,7 @@ class _EditAboutScreenState extends State<EditAboutScreen> {
                   Option(name: "IDR", value: "IDR"),
                 ],
                 controller: _aboutEditController.currencyInputController,
-                label: 'Currency',
+                label: 'field_currency'.tr,
               ),
             ),
             Container(
@@ -105,7 +107,7 @@ class _EditAboutScreenState extends State<EditAboutScreen> {
                 () => MyFilledButton(
                   onPressed: _aboutEditController.updateAbout,
                   isLoading: _aboutEditController.isLoading.value,
-                  child: const Text('Save'),
+                  child: Text('global_save'.tr),
                 ),
               ),
             ),
