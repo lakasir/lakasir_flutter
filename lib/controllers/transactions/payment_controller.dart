@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:get/get.dart';
 import 'package:lakasir/Exceptions/validation.dart';
 import 'package:lakasir/api/requests/pagination_request.dart';
 import 'package:lakasir/api/requests/payment_request.dart';
+import 'package:lakasir/api/responses/error_response.dart';
 import 'package:lakasir/controllers/products/product_controller.dart';
 import 'package:lakasir/controllers/transactions/cart_controller.dart';
 import 'package:lakasir/controllers/transactions/history_controller.dart';
@@ -54,6 +57,11 @@ class PaymentController extends GetxController {
     } catch (e) {
       isLoading(false);
       if (e is ValidationException) {
+        ErrorResponse errorResponse = ErrorResponse.fromJson(jsonDecode(e.toString()), (json) => ());
+        Get.rawSnackbar(
+          message: errorResponse.message,
+          backgroundColor: error,
+        );
       }
     }
   }

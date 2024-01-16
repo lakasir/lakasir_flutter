@@ -15,6 +15,8 @@ class ProductDetailController extends GetxController {
     name: '',
     unit: '',
     type: '',
+    isNonStock: false,
+    sku: '',
     category: CategoryResponse(id: 0, name: '', createdAt: '', updatedAt: '')
   ).obs;
 

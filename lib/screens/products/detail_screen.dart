@@ -72,28 +72,29 @@ class _DetailScreen extends State<DetailScreen> {
                 Get.toNamed('/menu/product/edit', arguments: products);
               },
               actions: [
-                MyBottomBarActions(
-                  label: 'field_stock'.tr,
-                  onPressed: () {
-                    setState(() {
-                      isBottomSheetOpen = false;
-                    });
-                    Timer(initialDuration, () {
-                      Get.toNamed(
-                        '/menu/product/stock',
-                        arguments: products,
-                      )!
-                          .then((value) {
-                        Timer(initialDuration, () {
-                          setState(() {
-                            isBottomSheetOpen = true;
+                if (!products.isNonStock)
+                  MyBottomBarActions(
+                    label: 'field_stock'.tr,
+                    onPressed: () {
+                      setState(() {
+                        isBottomSheetOpen = false;
+                      });
+                      Timer(initialDuration, () {
+                        Get.toNamed(
+                          '/menu/product/stock',
+                          arguments: products,
+                        )!
+                            .then((value) {
+                          Timer(initialDuration, () {
+                            setState(() {
+                              isBottomSheetOpen = true;
+                            });
                           });
                         });
                       });
-                    });
-                  },
-                  icon: const Icon(Icons.inventory, color: Colors.white),
-                ),
+                    },
+                    icon: const Icon(Icons.inventory, color: Colors.white),
+                  ),
                 MyBottomBarActions(
                   label: 'global_delete'.tr,
                   onPressed: () {
@@ -194,8 +195,18 @@ class _DetailScreen extends State<DetailScreen> {
                                         ),
                                       ),
                                     ),
-                                    Text(
-                                        "${"field_stock".tr}: ${products.stock}"),
+                                    if (!products.isNonStock)
+                                      Text(
+                                        "${"field_stock".tr}: ${products.stock}",
+                                      ),
+                                    if (products.isNonStock)
+                                      Text(
+                                        "field_is_non_stock".tr,
+                                        style: const TextStyle(
+                                          color: Colors.red,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
                                   ],
                                 ),
                                 Text(
@@ -217,6 +228,48 @@ class _DetailScreen extends State<DetailScreen> {
                                   fontSize: 23,
                                   fontWeight: FontWeight.bold,
                                 ),
+                              ),
+                            ),
+                            Container(
+                              margin: const EdgeInsets.only(bottom: 12),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      "field_sku".tr,
+                                      style: const TextStyle(fontSize: 18),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Text(
+                                      products.sku,
+                                      style: const TextStyle(
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              margin: const EdgeInsets.only(bottom: 12),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      "field_barcode".tr,
+                                      style: const TextStyle(fontSize: 18),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Text(
+                                      products.barcode ?? '',
+                                      style: const TextStyle(
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                             Container(

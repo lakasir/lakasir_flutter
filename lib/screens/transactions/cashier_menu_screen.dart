@@ -172,10 +172,13 @@ class CashierMenuScreen extends StatelessWidget {
             ),
           ),
           Text(
-            "stock: ${product.stock}",
-            style: const TextStyle(
+            product.isNonStock
+                ? 'field_is_non_stock'.tr
+                : "stock: ${product.stock}",
+            style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w200,
+              color: product.isNonStock ? Colors.red : Colors.black,
             ),
           ),
           SizedBox(

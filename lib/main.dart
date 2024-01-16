@@ -53,6 +53,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
+      initialData: const Locale('en', 'US'),
       future: _fetchLocale(),
       builder: (context, snapshot) {
         switch (snapshot.connectionState) {

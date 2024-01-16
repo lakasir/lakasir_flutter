@@ -2,19 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lakasir/controllers/category_controller.dart';
 import 'package:lakasir/controllers/products/product_add_controller.dart';
+import 'package:lakasir/widgets/checkbox.dart';
 import 'package:lakasir/widgets/filled_button.dart';
 import 'package:lakasir/widgets/image_picker.dart';
 import 'package:lakasir/widgets/select_input_feld.dart';
 import 'package:lakasir/widgets/text_field.dart';
 
-class ProductForm extends StatelessWidget {
-  ProductForm({
+class ProductForm extends StatefulWidget {
+  const ProductForm({
     super.key,
     required this.onSubmit,
     required this.controller,
   });
   final VoidCallback onSubmit;
   final ProductAddEditController controller;
+
+  @override
+  State<ProductForm> createState() => _ProductFormState();
+}
+
+class _ProductFormState extends State<ProductForm> {
   final CategoryController _categoryController = Get.put(CategoryController());
 
   @override
@@ -32,7 +39,7 @@ class ProductForm extends StatelessWidget {
               child: MyImagePicker(
                 usingDynamicSource: true,
                 onImageSelected: (file) {
-                  controller.photoUrl = file;
+                  widget.controller.photoUrl = file;
                 },
               ),
             ),
@@ -40,10 +47,11 @@ class ProductForm extends StatelessWidget {
               width: width * 60 / 100,
               child: Obx(
                 () => MyTextField(
-                  controller: controller.nameInputController,
+                  controller: widget.controller.nameInputController,
                   label: 'field_product_name'.tr,
                   mandatory: true,
-                  errorText: controller.productErrorResponse.value.name ?? '',
+                  errorText:
+                      widget.controller.productErrorResponse.value.name ?? '',
                 ),
               ),
             ),
@@ -52,12 +60,38 @@ class ProductForm extends StatelessWidget {
         Container(
           margin: const EdgeInsets.only(top: 20),
           child: Obx(
+            () => MyTextField(
+              mandatory: true,
+              controller: widget.controller.skuInputController,
+              label: 'field_sku'.tr,
+              errorText:
+                  widget.controller.productErrorResponse.value.sku ??
+                      '',
+            ),
+          ),
+        ),
+        Container(
+          margin: const EdgeInsets.only(top: 20),
+          child: Obx(
+            () => MyTextField(
+              controller: widget.controller.barcodeInputController,
+              label: 'field_barcode'.tr,
+              errorText:
+                  widget.controller.productErrorResponse.value.barcode ??
+                      '',
+            ),
+          ),
+        ),
+        Container(
+          margin: const EdgeInsets.only(top: 20),
+          child: Obx(
             () => SelectInputWidget(
               hintText: 'field_select_category'.tr,
               mandatory: true,
-              controller: controller.categoryController,
+              controller: widget.controller.categoryController,
               label: 'field_category'.tr,
-              errorText: controller.productErrorResponse.value.category ?? '',
+              errorText:
+                  widget.controller.productErrorResponse.value.category ?? '',
               options: _categoryController.categories
                   .map(
                     (e) => Option(
@@ -73,10 +107,39 @@ class ProductForm extends StatelessWidget {
           margin: const EdgeInsets.only(top: 20),
           child: Obx(
             () => MyTextField(
-              controller: controller.stockInputController,
+              readOnly: widget.controller.enabledStock.value,
+              rightIcon: InkWell(
+                onTap: () {},
+                child: Container(
+                  padding: const EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Colors.grey,
+                      width: 2,
+                    ),
+                    borderRadius: const BorderRadius.only(
+                      topRight: Radius.circular(12),
+                      bottomRight: Radius.circular(12),
+                    ),
+                    color: Colors.grey[200],
+                  ),
+                  child: Container(
+                    margin: const EdgeInsets.only(left: 7),
+                    child: MyCheckbox(
+                      isChecked: widget.controller.enabledStock.value,
+                      onChange: (value) {
+                        widget.controller.enabledStock.value = value;
+                      },
+                    ),
+                  ),
+                ),
+              ),
+              controller: widget.controller.stockInputController,
               label: 'field_stock'.tr,
+              info: 'field_stock_info'.tr,
               keyboardType: TextInputType.number,
-              errorText: controller.productErrorResponse.value.stock ?? '',
+              errorText:
+                  widget.controller.productErrorResponse.value.stock ?? '',
             ),
           ),
         ),
@@ -84,11 +147,12 @@ class ProductForm extends StatelessWidget {
           margin: const EdgeInsets.only(top: 20),
           child: Obx(
             () => MyTextField(
-              controller: controller.initialPriceInputController,
+              controller: widget.controller.initialPriceInputController,
               label: 'field_initial_price'.tr,
               keyboardType: TextInputType.number,
               errorText:
-                  controller.productErrorResponse.value.initialPrice ?? '',
+                  widget.controller.productErrorResponse.value.initialPrice ??
+                      '',
             ),
           ),
         ),
@@ -96,11 +160,12 @@ class ProductForm extends StatelessWidget {
           margin: const EdgeInsets.only(top: 20),
           child: Obx(
             () => MyTextField(
-              controller: controller.sellingPriceInputController,
+              controller: widget.controller.sellingPriceInputController,
               label: 'field_selling_price'.tr,
               keyboardType: TextInputType.number,
               errorText:
-                  controller.productErrorResponse.value.sellingPrice ?? '',
+                  widget.controller.productErrorResponse.value.sellingPrice ??
+                      '',
             ),
           ),
         ),
@@ -108,9 +173,10 @@ class ProductForm extends StatelessWidget {
           margin: const EdgeInsets.only(top: 20),
           child: Obx(
             () => SelectInputWidget(
-              controller: controller.typeController,
+              controller: widget.controller.typeController,
               label: 'field_type'.tr,
-              errorText: controller.productErrorResponse.value.type ?? '',
+              errorText:
+                  widget.controller.productErrorResponse.value.type ?? '',
               options: [
                 Option(
                   name: "option_product".tr,
@@ -128,11 +194,12 @@ class ProductForm extends StatelessWidget {
           margin: const EdgeInsets.only(top: 20),
           child: Obx(
             () => MyTextField(
-              controller: controller.unitInputController,
+              controller: widget.controller.unitInputController,
               label: 'field_unit'.tr,
               textCapitalization: TextCapitalization.words,
               mandatory: true,
-              errorText: controller.productErrorResponse.value.unit ?? '',
+              errorText:
+                  widget.controller.productErrorResponse.value.unit ?? '',
             ),
           ),
         ),
@@ -141,9 +208,9 @@ class ProductForm extends StatelessWidget {
           child: Obx(
             () => MyFilledButton(
               onPressed: () {
-                onSubmit();
+                widget.onSubmit();
               },
-              isLoading: controller.isLoading.value,
+              isLoading: widget.controller.isLoading.value,
               child: Text('global_save'.tr),
             ),
           ),

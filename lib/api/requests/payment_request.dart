@@ -17,7 +17,7 @@ class PaymentRequest {
     final data = <String, dynamic>{};
     data['payed_money'] = payedMoney;
     data['friend_price'] = friendPrice;
-    data['member_id'] = memberId;
+    if (memberId != null) data['member_id'] = memberId;
     if (tax != null) data['tax'] = tax;
     if (products != null) {
       data['products'] = products!.map((v) => v.toJson()).toList();

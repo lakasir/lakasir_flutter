@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lakasir/controllers/products/product_controller.dart';
+import 'package:lakasir/utils/colors.dart';
 import 'package:lakasir/widgets/build_list_image.dart';
 import 'package:lakasir/widgets/layout.dart';
 import 'package:lakasir/widgets/my_bottom_bar.dart';
@@ -119,13 +120,23 @@ class _ProductScreen extends State<ProductScreen> {
             fontSize: 20,
           ),
         ),
-        Text(
-          "stock: ${_productController.products[index].stock}",
-          style: const TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w200,
+        if (_productController.products[index].isNonStock)
+          Text(
+            "field_is_non_stock".tr,
+            style: const TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w200,
+              color: error,
+            ),
           ),
-        ),
+        if (!_productController.products[index].isNonStock)
+          Text(
+            "stock: ${_productController.products[index].stock}",
+            style: const TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w200,
+            ),
+          ),
         Text(
           _productController.buildPrice(index),
           style: const TextStyle(

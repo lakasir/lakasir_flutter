@@ -13,6 +13,9 @@ class ProductResponse {
   final int? categoryId;
   final String? createdAt;
   final String? updatedAt;
+  final bool isNonStock;
+  final String sku;
+  final String? barcode;
   final CategoryResponse? category;
   final List<StockResponse>? stocks;
 
@@ -21,6 +24,9 @@ class ProductResponse {
     required this.name,
     required this.type,
     required this.unit,
+    required this.isNonStock,
+    required this.sku,
+    this.barcode,
     this.image,
     this.initialPrice,
     this.sellingPrice,
@@ -38,6 +44,9 @@ class ProductResponse {
     return ProductResponse(
       id: json['id'],
       name: json['name'],
+      sku: json['sku'] ?? '',
+      barcode: json['barcode'],
+      isNonStock: json['is_non_stock'] ?? false,
       type: json['type'],
       unit: json['unit'],
       image: heroImages.firstOrNull,

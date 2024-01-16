@@ -7,6 +7,9 @@ class ProductRequest {
   String? type;
   String? unit;
   String? photoUrl;
+  bool isNonStock;
+  String? sku;
+  String? barcode;
 
 
   ProductRequest({
@@ -18,6 +21,9 @@ class ProductRequest {
     this.type,
     this.unit,
     this.photoUrl,
+    this.isNonStock = false,
+    this.sku,
+    this.barcode,
   });
 
   Map<String, dynamic> toJson() {
@@ -29,6 +35,9 @@ class ProductRequest {
       'selling_price': sellingPrice,
       'type': type ?? '',
       'unit': unit ?? '',
+      'is_non_stock': isNonStock,
+      'sku': sku,
+      'barcode': barcode ?? '',
     };
     if (photoUrl != '') {
       data['hero_images_url'] = photoUrl;

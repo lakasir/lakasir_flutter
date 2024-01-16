@@ -21,6 +21,21 @@ class CartController extends GetxController {
 
   final qtyController = TextEditingController();
 
+  bool isNotEnoughStock() {
+    bool isNotEnoughStock = _productDetailController.product.value.stock! <
+        int.parse(qtyController.text);
+    if (!_productDetailController.product.value.isNonStock && isNotEnoughStock) {
+      Get.rawSnackbar(
+        message: 'Stock is not enough',
+        backgroundColor: error,
+        duration: const Duration(seconds: 2),
+      );
+      isAddToCartLoading(false);
+      return true;
+    }
+    return false;
+  }
+
   void addCartSession(CartSession cartSession) {
     cartSessions.value = cartSession;
     Get.toNamed('/menu/transaction/cashier/cart');
@@ -29,14 +44,7 @@ class CartController extends GetxController {
   void addToCart(CartItem cartItem) async {
     isAddToCartLoading(true);
     await _productDetailController.get(cartItem.product.id);
-    if (_productDetailController.product.value.stock! <
-        int.parse(qtyController.text)) {
-      Get.rawSnackbar(
-        message: 'Stock is not enough',
-        backgroundColor: error,
-        duration: const Duration(seconds: 2),
-      );
-      isAddToCartLoading(false);
+    if (isNotEnoughStock()) {
       return;
     }
     if (!globalKey.currentState!.validate()) {
@@ -71,12 +79,7 @@ class CartController extends GetxController {
   }
 
   void addQty(CartItem cartItem) {
-    if (_productDetailController.product.value.stock! < cartItem.qty + 1) {
-      Get.rawSnackbar(
-        message: 'Stock is not enough',
-        backgroundColor: error,
-        duration: const Duration(seconds: 2),
-      );
+    if (isNotEnoughStock()) {
       return;
     }
     cartSessions

@@ -28,12 +28,15 @@ class ProductAddEditController extends GetxController {
   final MoneyMaskedTextController sellingPriceInputController =
       MoneyMaskedTextController();
   final TextEditingController unitInputController = TextEditingController();
+  final TextEditingController skuInputController = TextEditingController();
+  final TextEditingController barcodeInputController = TextEditingController();
   String? photoUrl = '';
   Rx<ProductErrorResponse> productErrorResponse = ProductErrorResponse().obs;
   final RxBool isLoading = false.obs;
   final ProductController _productController = Get.find();
   final ProductDetailController _productDetailController =
       Get.put(ProductDetailController());
+  RxBool enabledStock = false.obs;
   // final CategoryController _categoryController = Get.find();
 
   void create() async {
@@ -46,6 +49,9 @@ class ProductAddEditController extends GetxController {
         return;
       }
       await _productService.create(ProductRequest(
+        isNonStock: enabledStock.value,
+        sku: skuInputController.text,
+        barcode: barcodeInputController.text,
         name: nameInputController.text,
         categoryId: categoryController.selectedOption,
         stock: stockInputController.text != ''
@@ -76,6 +82,10 @@ class ProductAddEditController extends GetxController {
           (json) => ProductErrorResponse.fromJson(json),
         );
         productErrorResponse(errorResponse.errors);
+        Get.rawSnackbar(
+          message: errorResponse.message,
+          backgroundColor: error,
+        );
       }
     }
   }
@@ -91,17 +101,16 @@ class ProductAddEditController extends GetxController {
       await _productService.update(
         (Get.arguments as ProductResponse).id,
         ProductRequest(
+          isNonStock: enabledStock.value,
+          sku: skuInputController.text,
+          barcode: barcodeInputController.text,
           name: nameInputController.text,
           categoryId: categoryController.selectedOption,
           stock: stockInputController.text != ''
               ? double.parse(stockInputController.text)
               : 0,
-          initialPrice: initialPriceInputController.text != ''
-              ? double.parse(initialPriceInputController.text)
-              : 0,
-          sellingPrice: sellingPriceInputController.text != ''
-              ? double.parse(sellingPriceInputController.text)
-              : 0,
+          initialPrice: initialPriceInputController.numberValue,
+          sellingPrice: sellingPriceInputController.numberValue,
           type: typeController.selectedOption,
           unit: unitInputController.text,
           photoUrl: photoUrl ?? '',
@@ -142,6 +151,9 @@ class ProductAddEditController extends GetxController {
     unitInputController.clear();
     photoUrl = '';
     categoryController.selectedOption = null;
+    skuInputController.clear();
+    barcodeInputController.clear();
+    enabledStock(false);
   }
 
   void clearError() {
@@ -164,6 +176,9 @@ class ProductAddEditController extends GetxController {
       sellingPriceInputController.updateValue(products.sellingPrice ?? 0);
       unitInputController.text = products.unit;
       photoUrl = products.image;
+      skuInputController.text = products.sku;
+      barcodeInputController.text = products.barcode ?? '';
+      enabledStock(products.isNonStock);
     }
   }
 }

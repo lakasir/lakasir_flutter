@@ -174,7 +174,7 @@ class _MyTextFieldState extends State<MyTextField> {
               borderRadius: BorderRadius.circular(12), // Border radius
               borderSide: const BorderSide(color: primary),
             ),
-            fillColor: Colors.white,
+            fillColor: widget.readOnly ? Colors.grey[200] : Colors.white,
             filled: true,
             hintText: widget.hintText,
             hintStyle: TextStyle(color: Colors.grey[500]),

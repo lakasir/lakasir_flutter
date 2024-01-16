@@ -4,9 +4,15 @@ import 'package:lakasir/utils/colors.dart';
 typedef MyCallback = void Function(bool);
 
 class MyCheckbox extends StatefulWidget {
-  const MyCheckbox({super.key, this.label = "", required this.onChange});
+  const MyCheckbox({
+    super.key,
+    this.label = "",
+    required this.onChange,
+    this.isChecked = false,
+  });
   final String label;
   final MyCallback onChange;
+  final bool isChecked;
 
   @override
   State<MyCheckbox> createState() => _MyCheckboxState();
@@ -14,6 +20,12 @@ class MyCheckbox extends StatefulWidget {
 
 class _MyCheckboxState extends State<MyCheckbox> {
   bool isChecked = false;
+
+  @override
+  void initState() {
+    super.initState();
+    isChecked = widget.isChecked;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +42,7 @@ class _MyCheckboxState extends State<MyCheckbox> {
       child: Container(
         padding: EdgeInsets.zero,
         child: Row(
+          mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -37,7 +50,7 @@ class _MyCheckboxState extends State<MyCheckbox> {
               padding: EdgeInsets.zero,
               decoration: BoxDecoration(
                 border: Border.all(color: primary),
-                borderRadius: BorderRadius.zero,
+                borderRadius: BorderRadius.circular(4.0),
                 color: isChecked ? primary : Colors.white,
               ),
               child: Icon(
@@ -47,10 +60,11 @@ class _MyCheckboxState extends State<MyCheckbox> {
               ),
             ),
             const SizedBox(width: 8.0),
-            SizedBox(
-              width: widthScreen.ceil().toDouble(),
-              child: Text(widget.label),
-            ),
+            if (widget.label.isNotEmpty)
+              SizedBox(
+                width: widthScreen.ceil().toDouble(),
+                child: Text(widget.label),
+              ),
           ],
         ),
       ),
