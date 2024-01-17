@@ -90,7 +90,7 @@ class MyApp extends StatelessWidget {
                       const HistoryScreen(),
                   '/menu/transaction/history/detail': (context) =>
                       const HistoryDetailScreen(),
-                  '/menu/transaction/cashier': (context) => CashierMenuScreen(),
+                  '/menu/transaction/cashier': (context) => const CashierMenuScreen(),
                   '/menu/transaction/cashier/cart': (context) =>
                       const CashierCartMenuScreen(),
                   '/menu/transaction/cashier/payment': (context) =>

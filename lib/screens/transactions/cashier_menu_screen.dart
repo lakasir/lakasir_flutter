@@ -1,24 +1,45 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lakasir/api/responses/products/product_response.dart';
 import 'package:lakasir/controllers/products/product_controller.dart';
+import 'package:lakasir/controllers/setting_controller.dart';
 import 'package:lakasir/controllers/transactions/cart_controller.dart';
+import 'package:lakasir/controllers/transactions/cash_drawer_controller.dart';
 import 'package:lakasir/utils/colors.dart';
 import 'package:lakasir/utils/utils.dart';
 import 'package:lakasir/widgets/build_list_image.dart';
-import 'package:lakasir/widgets/dialog.dart';
-import 'package:lakasir/widgets/filled_button.dart';
 import 'package:lakasir/widgets/layout.dart';
 import 'package:lakasir/widgets/my_bottom_bar.dart';
 import 'package:lakasir/widgets/my_card_list.dart';
 import 'package:lakasir/widgets/text_field.dart';
 
-class CashierMenuScreen extends StatelessWidget {
-  CashierMenuScreen({super.key});
+class CashierMenuScreen extends StatefulWidget {
+  const CashierMenuScreen({super.key});
 
+  @override
+  State<CashierMenuScreen> createState() => _CashierMenuScreenState();
+}
+
+class _CashierMenuScreenState extends State<CashierMenuScreen> {
   final _productController = Get.put(ProductController());
-
   final _cartController = Get.put(CartController());
+  final _settingController = Get.put(SettingController());
+  final _cashDrawerController = Get.put(CashDrawerController());
+  bool showCashDrawer = false;
+  final Duration initialDuration = const Duration(milliseconds: 300);
+
+  @override
+  void initState() {
+    Timer(initialDuration, () {
+      if (_settingController.setting.value.cashDrawerEnabled) {
+        if (!_cashDrawerController.isOpened.value) return;
+        _cashDrawerController.showCashDrawerDialog();
+      }
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,25 +55,7 @@ class CashierMenuScreen extends StatelessWidget {
           singleAction: true,
           singleActionIcon: Icons.edit_note,
           singleActionOnPressed: () {
-            Get.dialog(
-              MyDialog(
-                title: 'cashier_set_cash_drawer'.tr,
-                content: Column(
-                  children: [
-                    MyTextField(
-                      label: 'cashier_cash_drawer'.tr,
-                      keyboardType: TextInputType.number,
-                      controller: TextEditingController(),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(top: 10),
-                      child: MyFilledButton(
-                          onPressed: () {}, child: Text('global_save'.tr)),
-                    ),
-                  ],
-                ),
-              ),
-            );
+            _cashDrawerController.showCashDrawerDialog();
           },
           label: Obx(
             () => Row(
@@ -72,6 +75,11 @@ class CashierMenuScreen extends StatelessWidget {
             ),
           ),
           onPressed: () {
+            if (_settingController.setting.value.cashDrawerEnabled) {
+              if (!_cashDrawerController.isOpened.value) return;
+              _cashDrawerController.showCashDrawerDialog();
+              return;
+            }
             if (_cartController.cartSessions.value.cartItems.isEmpty) {
               Get.rawSnackbar(
                 message: 'Cart is empty',

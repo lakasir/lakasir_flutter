@@ -44,8 +44,6 @@ class ApiService<T> {
       body: jsonEncode(request),
     );
 
-    print(request);
-    print(response.body);
 
     if (response.statusCode == 401) {
       logout();

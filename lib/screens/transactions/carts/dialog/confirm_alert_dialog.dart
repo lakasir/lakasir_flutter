@@ -113,9 +113,7 @@ class ConfirmAlertDialog extends StatelessWidget {
                   child: Text("global_cancel".tr),
                 ),
               ),
-              const SizedBox(
-                width: 10,
-              ),
+              const SizedBox(width: 10),
               Flexible(
                 child: Obx(
                   () => MyFilledButton(

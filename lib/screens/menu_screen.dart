@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lakasir/controllers/setting_controller.dart';
 import 'package:lakasir/utils/colors.dart';
 import 'package:lakasir/widgets/layout.dart';
 import 'package:lakasir/widgets/my_card_list.dart';
@@ -49,6 +50,7 @@ class _MenuScreenState extends State<MenuScreen> {
       'route': '/menu/setting',
     },
   ];
+  SettingController settingController = Get.put(SettingController());
 
   @override
   Widget build(BuildContext context) {
