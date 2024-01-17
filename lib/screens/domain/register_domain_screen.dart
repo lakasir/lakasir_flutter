@@ -166,12 +166,11 @@ class _RegisterDomainScreenState extends State<RegisterDomainScreen> {
                       margin: const EdgeInsets.only(bottom: 21.0),
                       child: SelectInputWidget(
                         options: [
-                          Option(name: "Retail", value: "retail"),
-                          Option(name: "Wholesale", value: "wholesale"),
-                          Option(name: "F&B", value: "fnb"),
-                          Option(name: "Fashion", value: "fashion"),
-                          Option(name: "Pharmacy", value: "pharmacy"),
-                          // Option(name: "Other", value: "other"),
+                          Option(name: "field_option_retail_business_type".tr, value: "retail"),
+                          Option(name: "field_option_wholesale_business_type".tr, value: "wholesale"),
+                          Option(name: "field_option_fnb_business_type".tr, value: "fnb"),
+                          Option(name: "field_option_fashion_business_type".tr, value: "fashion"),
+                          Option(name: "field_option_pharmacy_business_type".tr, value: "pharmacy"),
                         ],
                         controller: businessTypeController,
                         label: "field_business_type".tr,

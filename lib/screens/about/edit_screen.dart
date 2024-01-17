@@ -64,17 +64,20 @@ class _EditAboutScreenState extends State<EditAboutScreen> {
                 ),
               ],
             ),
-            Container(
-              margin: const EdgeInsets.only(top: 20),
-              child: SelectInputWidget(
-                options: [
-                  Option(name: "Retail", value: "retail"),
-                  Option(name: "Wholesale", value: "wholesale"),
-                ],
-                controller: _aboutEditController.businessTypeInputController,
-                label: 'field_business_type'.tr,
-              ),
-            ),
+            // Container(
+            //   margin: const EdgeInsets.only(top: 20),
+            //   child: SelectInputWidget(
+            //     options: [
+            //       Option(name: "field_option_retail_business_type".tr, value: "retail"),
+            //       Option(name: "field_option_wholesale_business_type".tr, value: "wholesale"),
+            //       Option(name: "field_option_fnb_business_type".tr, value: "fnb"),
+            //       Option(name: "field_option_fashion_business_type".tr, value: "fashion"),
+            //       Option(name: "field_option_pharmacy_business_type".tr, value: "pharmacy"),
+            //     ],
+            //     controller: _aboutEditController.businessTypeInputController,
+            //     label: 'field_business_type'.tr,
+            //   ),
+            // ),
             Container(
               margin: const EdgeInsets.only(top: 20),
               child: MyTextField(

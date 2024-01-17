@@ -17,11 +17,15 @@ class _AboutScreenState extends State<AboutScreen> {
   String _businessType(String businessType) {
     switch (businessType) {
       case 'retail':
-        return 'Retail';
+        return 'field_option_retail_business_type'.tr;
       case 'wholesale':
-        return 'Wholesale';
-      case 'service':
-        return 'Service';
+        return 'field_option_wholesale_business_type'.tr;
+      case 'fnb':
+        return 'field_option_fnb_business_type'.tr;
+      case 'fashion':
+        return 'field_option_fashion_business_type'.tr;
+      case 'pharmacy':
+        return 'field_option_pharmacy_business_type'.tr;
       default:
         return '-';
     }
