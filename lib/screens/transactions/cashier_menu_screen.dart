@@ -55,6 +55,28 @@ class _CashierMenuScreenState extends State<CashierMenuScreen> {
           singleAction: true,
           singleActionIcon: Icons.edit_note,
           singleActionOnPressed: () {
+            if (!_settingController.setting.value.cashDrawerEnabled) {
+              Get.dialog(AlertDialog
+                (title: Text('cashier_set_cash_drawer'.tr),
+                content: Text('cashier_set_cash_drawer_enabled_info'.tr),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Get.back();
+                    },
+                    child: Text('global_no'.tr),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Get.back();
+                      Get.toNamed('/menu/setting');
+                    },
+                    child: Text('global_yes'.tr),
+                  ),
+                ],
+              ));
+              return;
+            }
             _cashDrawerController.showCashDrawerDialog();
           },
           label: Obx(
@@ -76,9 +98,10 @@ class _CashierMenuScreenState extends State<CashierMenuScreen> {
           ),
           onPressed: () {
             if (_settingController.setting.value.cashDrawerEnabled) {
-              if (!_cashDrawerController.isOpened.value) return;
-              _cashDrawerController.showCashDrawerDialog();
-              return;
+              if (_cashDrawerController.isOpened.value) {
+                _cashDrawerController.showCashDrawerDialog();
+                return;
+              }
             }
             if (_cartController.cartSessions.value.cartItems.isEmpty) {
               Get.rawSnackbar(

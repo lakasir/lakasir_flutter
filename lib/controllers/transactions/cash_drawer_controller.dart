@@ -3,6 +3,7 @@ import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:get/get.dart';
 import 'package:lakasir/api/requests/cash_drawer_request.dart';
 import 'package:lakasir/api/responses/cash_drawers/cash_drawer_response.dart';
+import 'package:lakasir/controllers/setting_controller.dart';
 import 'package:lakasir/services/cash_drawer_service.dart';
 import 'package:lakasir/utils/colors.dart';
 import 'package:lakasir/utils/utils.dart';
