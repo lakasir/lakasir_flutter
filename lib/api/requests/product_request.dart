@@ -49,7 +49,7 @@ class ProductRequest {
   String? toQuery() {
     final query = <String>[];
     if (name != null) {
-      query.add('filter[name]=$name');
+      query.add('filter[global]=$name');
     }
     if (categoryId != null) {
       query.add('filter[category_id]=$categoryId');
