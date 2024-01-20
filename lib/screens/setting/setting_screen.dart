@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:heroicons/heroicons.dart';
 import 'package:lakasir/controllers/setting_controller.dart';
 import 'package:lakasir/services/setting_service.dart';
 import 'package:lakasir/utils/colors.dart';
@@ -241,45 +242,82 @@ class _SettingScreenState extends State<SettingScreen> {
                   ],
                   trailing: Obx(
                     () {
-                      var cashDrawerEnabled = settingController.setting.value.cashDrawerEnabled;
+                      var cashDrawerEnabled =
+                          settingController.setting.value.cashDrawerEnabled;
                       return SizedBox(
-                      width: Get.width * 0.47,
-                      child: Align(
-                        alignment: Alignment.centerRight,
-                        child: Switch(
-                          focusColor: primary,
-                          value: cashDrawerEnabled,
-                          onChanged: (value) {
-                            Get.dialog(AlertDialog(
-                              title: Text("global_warning".tr),
-                              content: Text(cashDrawerEnabled
-                                  ? "cashier_cash_drawer_question_deactivate".tr
-                                  : "cashier_cash_drawer_question_activate".tr),
-                              actions: [
-                                TextButton(
-                                  onPressed: () {
-                                    Get.back();
-                                  },
-                                  child: Text("global_cancel".tr),
-                                ),
-                                TextButton(
-                                  onPressed: () {
-                                    settingController.updateSetting(
-                                      "cash_drawer_enabled",
-                                      value,
-                                    );
-                                    Get.back();
-                                  },
-                                  child: Text("global_ok".tr),
-                                ),
-                              ],
-                            ));
-                          },
+                        width: Get.width * 0.47,
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: Switch(
+                            focusColor: primary,
+                            value: cashDrawerEnabled,
+                            onChanged: (value) {
+                              Get.dialog(AlertDialog(
+                                title: Text("global_warning".tr),
+                                content: Text(cashDrawerEnabled
+                                    ? "cashier_cash_drawer_question_deactivate"
+                                        .tr
+                                    : "cashier_cash_drawer_question_activate"
+                                        .tr),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Get.back();
+                                    },
+                                    child: Text("global_cancel".tr),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      settingController.updateSetting(
+                                        "cash_drawer_enabled",
+                                        value,
+                                      );
+                                      Get.back();
+                                    },
+                                    child: Text("global_ok".tr),
+                                  ),
+                                ],
+                              ));
+                            },
+                          ),
                         ),
-                      ),
-                    );
+                      );
                     },
                   ),
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.only(top: 10),
+                child: Text("menu_product".tr,
+                    style: const TextStyle(fontSize: 20)),
+              ),
+              Container(
+                margin: const EdgeInsets.only(top: 15),
+                child: MyCardList(
+                  onTap: () {
+                    Get.toNamed("/menu/setting/hide_initial_price");
+                  },
+                  imagebox: Container(
+                    width: 52,
+                    height: 52,
+                    decoration: const BoxDecoration(
+                      color: primary,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(10),
+                      ),
+                    ),
+                    child: const HeroIcon(
+                      HeroIcons.eyeSlash,
+                      color: Colors.white,
+                      size: 32,
+                    ),
+                  ),
+                  list: [
+                    Text(
+                      "setting_secure_initial_price".tr,
+                      style: const TextStyle(fontSize: 20),
+                    ),
+                  ],
                 ),
               ),
             ],

@@ -17,6 +17,7 @@ import 'package:lakasir/screens/products/product_screen.dart';
 import 'package:lakasir/screens/profile/edit_screen.dart';
 import 'package:lakasir/screens/profile/profile_screen.dart';
 import 'package:lakasir/screens/setting/category_screen.dart';
+import 'package:lakasir/screens/setting/hide_initial_price_screen.dart';
 import 'package:lakasir/screens/setting/setting_screen.dart';
 import 'package:lakasir/screens/transactions/carts/cashier_cart_menu_screen.dart';
 import 'package:lakasir/screens/transactions/carts/payment_screen.dart';
@@ -110,6 +111,7 @@ class MyApp extends StatelessWidget {
                   '/menu/member/add': (context) => const AddMemberScreen(),
                   '/menu/member/edit': (context) => const EditMemberScreen(),
                   '/menu/setting': (context) => const SettingScreen(),
+                  '/menu/setting/hide_initial_price': (context) => const HideInitialPriceScreen(),
                   '/menu/setting/category': (context) => const CategoryScreen(),
                 },
               );

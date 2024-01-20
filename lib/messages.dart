@@ -25,11 +25,27 @@ class Messages extends Translations {
           'setting_language': 'Language',
           'setting_language_success': 'Language has been changed',
           'setting_dark_mode': 'Dark Mode',
+          'setting_secure_initial_price': 'Hide Initial Price',
+          'setting_secure_initial_price_description':
+              'If you enable this, initial price will be hidden and you must enter password to see it',
+          'setting_secure_initial_price_info':
+              'Password by default is your login password',
+          'setting_secure_initial_price_enabled':
+              'Activate Secure Initial Price',
+          'setting_secure_initial_price_disable':
+              'Unactivate Secure Initial Price',
+          'setting_secure_initial_price_using_pin':
+              'Use pin to see initial price',
+          'setting_secure_initial_price_using_password':
+              'Use password to see initial price',
+          'setting_secure_initial_price_old_password_info':
+              'If you already set password, you must enter your old password to change it',
           'global_cancel': 'Cancel',
           'global_delete': 'Delete',
           'global_deleted_item': '@item has been deleted',
           'global_save': 'Save',
           'global_submit': 'Submit',
+          'global_verify': 'Verify',
           'transaction_cashier': 'Cashier',
           'transaction_history': 'Transaction History',
           'transaction_list': 'Transaction List',
@@ -54,14 +70,18 @@ class Messages extends Translations {
           'field_total_price': 'Total Price',
           'field_subtotal': 'Total sub price @price',
           'cashier_set_cash_drawer': 'Set Cash Drawer',
-          'cashier_set_cash_drawer_info': 'You can\'t use cashier before you set cash drawer',
-          'cashier_set_cash_drawer_enabled_info': 'You can\'t use cash drawer before you enabled cash drawer in setting, do you want to enable it now?',
+          'cashier_set_cash_drawer_info':
+              'You can\'t use cashier before you set cash drawer',
+          'cashier_set_cash_drawer_enabled_info':
+              'You can\'t use cash drawer before you enabled cash drawer in setting, do you want to enable it now?',
           'cashier_cash_drawer_current': 'Current Cash Drawer: @cash',
           'cashier_cash_drawer': 'Cash Drawer',
           'cashier_cash_drawer_close': 'Close!',
           'cashier_cash_drawer_closed': 'Cash Drawer Closed',
-          'cashier_cash_drawer_question_activate': 'If you activate this, you will be asked to enter the amount of money in the cash drawer before you can use the cashier',
-          'cashier_cash_drawer_question_deactivate': 'If you deactivate this, your cashier will be aboe to use without enter the amount of money in the cash drawer',
+          'cashier_cash_drawer_question_activate':
+              'If you activate this, you will be asked to enter the amount of money in the cash drawer before you can use the cashier',
+          'cashier_cash_drawer_question_deactivate':
+              'If you deactivate this, your cashier will be aboe to use without enter the amount of money in the cash drawer',
           'cashier_search_trigger': 'Type min 3 character to trigger search',
           'cashier_add_to_cart': 'Add to cart',
           'cashier_success_message': 'Selling success',
@@ -100,7 +120,8 @@ class Messages extends Translations {
           'field_barcode': 'Barcode',
           'field_is_non_stock': 'Product Without Stock',
           'field_stock': 'Stock',
-          'field_stock_info': 'If you enable this, stock will be used as product without stock',
+          'field_stock_info':
+              'If you enable this, stock will be used as product without stock',
           'field_initial_price': 'Initial Price',
           'field_selling_price': 'Selling Price',
           'field_category': 'Category',
@@ -142,23 +163,29 @@ class Messages extends Translations {
           'setup_title': 'Access to your',
           'setup_your_registered_domain': 'Your registered domain',
           'setup': 'Setup',
-          'setup_doesnt_have_domain': 'Are you the owner, and you don’t have the Domain yet?',
+          'setup_doesnt_have_domain':
+              'Are you the owner, and you don’t have the Domain yet?',
           'setup_please_create': 'Please create!',
           'setup_domain_error': 'Domain not found',
           'setup_please_enter_your_domain': 'Please enter your domain',
           'please_agree': 'Please agree to our terms and conditions',
-          'agreement_sentence': 'By creating the shop, you agree to our Terms and Conditions',
+          'agreement_sentence':
+              'By creating the shop, you agree to our Terms and Conditions',
           'please_fill_form': 'Please fill the form correctly',
-          'info_domain': 'Your domain will be your shop name, for example: yourshopname.lakasir.com',
+          'info_domain':
+              'Your domain will be your shop name, for example: yourshopname.lakasir.com',
           'sign_up': 'Sign Up',
           'sign_in': 'Sign In',
           'field_domain_name': 'Domain Name',
+          'field_old_password': 'Old Password',
           'field_password': 'Password',
           'field_password_confirmation': 'Password Confirmation',
           'field_remember_me': 'Remember Me',
           'forgot_password': 'Forgot Password?',
-          'register_success': 'Register Success, check your email to get more information of your shop',
+          'register_success':
+              'Register Success, check your email to get more information of your shop',
           'create_your_shop': 'Create your shop',
+          'click_to_show': 'Click to show',
         },
         'id_ID': {
           'menu': 'Menu',
@@ -182,11 +209,27 @@ class Messages extends Translations {
           'setting_language': 'Bahasa',
           'setting_language_success': 'Bahasa telah diubah',
           'setting_dark_mode': 'Mode Gelap',
+          'setting_secure_initial_price': 'Sembunyikan Harga Awal',
+          'setting_secure_initial_price_description':
+              'Jika anda mengaktifkan ini, harga awal akan disembunyikan dan anda harus memasukkan password untuk melihatnya',
+          'setting_secure_initial_price_info':
+              'Kata sandi secara default adalah kata sandi masuk anda',
+          'setting_secure_initial_price_enabled':
+              'Aktifkan Secure Initial Price',
+          'setting_secure_initial_price_disable':
+              'Nonaktifkan Secure Initial Price',
+          'setting_secure_initial_price_using_pin':
+              'Gunakan pin untuk melihat harga awal',
+          'setting_secure_initial_price_using_password':
+              'Gunakan password untuk melihat harga awal',
+          'setting_secure_initial_price_old_password_info':
+              'Jika anda sudah mengatur password, anda harus memasukkan password lama anda untuk mengubahnya',
           'global_cancel': 'Batal',
           'global_delete': 'Hapus',
           'global_deleted_item': '@item berhasil dihapus',
           'global_save': 'Simpan',
           'global_submit': 'Submit',
+          'global_verify': 'Verifikasi',
           'transaction_cashier': 'Kasir',
           'transaction_history': 'Riwayat Transaksi',
           'transaction_list': 'Dafar Transaksi',
@@ -211,14 +254,18 @@ class Messages extends Translations {
           'field_total_price': 'Total Harga',
           'field_subtotal': 'Total sub price @price',
           'cashier_set_cash_drawer': 'Atur Uang Laci',
-          'cashier_set_cash_drawer_info': 'Anda tidak dapat menggunakan kasir sebelum anda mengatur uang laci',
-          'cashier_set_cash_drawer_enabled_info': 'Anda tidak dapat menggunakan uang laci sebelum anda mengaktifkan uang laci di pengaturan, apakah anda ingin mengaktifkannya sekarang?',
+          'cashier_set_cash_drawer_info':
+              'Anda tidak dapat menggunakan kasir sebelum anda mengatur uang laci',
+          'cashier_set_cash_drawer_enabled_info':
+              'Anda tidak dapat menggunakan uang laci sebelum anda mengaktifkan uang laci di pengaturan, apakah anda ingin mengaktifkannya sekarang?',
           'cashier_cash_drawer_current': 'Uang Laci Sekarang: @cash',
           'cashier_cash_drawer': 'Uang Laci',
           'cashier_cash_drawer_close': 'Tutup!',
           'cashier_cash_drawer_closed': 'Uang Laci Ditutup',
-          'cashier_cash_drawer_question_activate': 'Jika anda mengaktifkan ini, anda akan diminta untuk memasukkan jumlah uang di laci sebelum anda dapat menggunakan kasir',
-          'cashier_cash_drawer_question_deactivate': 'Jika anda menonaktifkan ini, kasir anda akan dapat digunakan tanpa memasukkan jumlah uang di laci',
+          'cashier_cash_drawer_question_activate':
+              'Jika anda mengaktifkan ini, anda akan diminta untuk memasukkan jumlah uang di laci sebelum anda dapat menggunakan kasir',
+          'cashier_cash_drawer_question_deactivate':
+              'Jika anda menonaktifkan ini, kasir anda akan dapat digunakan tanpa memasukkan jumlah uang di laci',
           'cashier_search_trigger': 'Ketik minimal 3 karakter untuk mencari',
           'cashier_add_to_cart': 'Tambahkan ke keranjang',
           'cashier_success_message': 'Penjualan berhasil',
@@ -258,7 +305,8 @@ class Messages extends Translations {
           'field_barcode': 'Barcode',
           'field_is_non_stock': 'Produk Tanpa Stok',
           'field_stock': 'Stok',
-          'field_stock_info': 'Jika anda mengaktifkan ini, stok akan digunakan sebagai produk tanpa stok',
+          'field_stock_info':
+              'Jika anda mengaktifkan ini, stok akan digunakan sebagai produk tanpa stok',
           'field_initial_price': 'Harga Awal',
           'field_selling_price': 'Harga Jual',
           'field_category': 'Kategori',
@@ -300,23 +348,29 @@ class Messages extends Translations {
           'setup_title': 'Masuk ke',
           'setup_your_registered_domain': 'Domainmu yang terdaftar',
           'setup': 'Setup',
-          'setup_doesnt_have_domain': 'Anda pemilik, dan anda belum memiliki domain?',
+          'setup_doesnt_have_domain':
+              'Anda pemilik, dan anda belum memiliki domain?',
           'setup_please_create': 'Buat sekarang!',
           'setup_domain_error': 'Domain tidak ditemukan',
           'setup_please_enter_your_domain': 'Silahkan masukkan domain anda',
           'please_agree': 'Mohon setujui syarat dan ketentuan kami',
-          'agreement_sentence': 'Dengan membuat toko, anda setuju dengan Syarat dan Ketentuan kami',
+          'agreement_sentence':
+              'Dengan membuat toko, anda setuju dengan Syarat dan Ketentuan kami',
           'please_fill_form': 'Isi form dengan benar',
-          'info_domain': 'Domain anda akan menjadi nama toko anda, contoh: nama-toko.lakasir.com',
+          'info_domain':
+              'Domain anda akan menjadi nama toko anda, contoh: nama-toko.lakasir.com',
           'sign_up': 'Dafar',
           'sign_in': 'Masuk',
           'field_domain_name': 'Nama Domain',
+          'field_old_password': 'Kata Sandi Lama',
           'field_password': 'Kata Sandi',
           'field_password_confirmation': 'Konfirmasi Kata Sandi',
           'field_remember_me': 'Ingat Saya',
           'forgot_password': 'Lupa Kata Sandi?',
-          'register_success': 'Pendaftaran berhasil, cek email anda untuk mendapatkan informasi lebih lanjut tentang toko anda',
+          'register_success':
+              'Pendaftaran berhasil, cek email anda untuk mendapatkan informasi lebih lanjut tentang toko anda',
           'create_your_shop': 'Buata toko anda',
+          'click_to_show': 'Klik untuk menampilkan',
         },
       };
 }

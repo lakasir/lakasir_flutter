@@ -3,8 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lakasir/api/responses/products/product_response.dart';
 import 'package:lakasir/controllers/products/product_detail_controller.dart';
+import 'package:lakasir/controllers/setting_controller.dart';
+import 'package:lakasir/screens/products/product_detail_widget.dart';
 import 'package:lakasir/utils/colors.dart';
 import 'package:lakasir/utils/utils.dart';
+import 'package:lakasir/widgets/dialog.dart';
 import 'package:lakasir/widgets/layout.dart';
 import 'package:lakasir/widgets/my_bottom_bar.dart';
 import 'package:lakasir/widgets/my_bottom_bar_actions.dart';
@@ -19,6 +22,7 @@ class DetailScreen extends StatefulWidget {
 class _DetailScreen extends State<DetailScreen> {
   bool isBottomSheetOpen = false;
   final _productDetailController = Get.put(ProductDetailController());
+  final _settingController = Get.put(SettingController());
 
   final Duration initialDuration = const Duration(milliseconds: 300);
 
@@ -161,203 +165,10 @@ class _DetailScreen extends State<DetailScreen> {
                   child: GestureDetector(
                     onVerticalDragUpdate: (details) {},
                     child: SingleChildScrollView(
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 14, right: 14),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Center(
-                              child: Container(
-                                width: 100,
-                                height: 10,
-                                decoration: BoxDecoration(
-                                  color: whiteGrey,
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                margin: const EdgeInsets.all(12),
-                              ),
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    SizedBox(
-                                      width: width * 0.65,
-                                      child: Text(
-                                        products.name,
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 4,
-                                        style: const TextStyle(
-                                          fontSize: 23,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                    if (!products.isNonStock)
-                                      Text(
-                                        "${"field_stock".tr}: ${products.stock}",
-                                      ),
-                                    if (products.isNonStock)
-                                      Text(
-                                        "field_is_non_stock".tr,
-                                        style: const TextStyle(
-                                          color: Colors.red,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                  ],
-                                ),
-                                Text(
-                                  formatPrice(products.sellingPrice ?? 0),
-                                  style: const TextStyle(
-                                    fontSize: 18,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 33,
-                            ),
-                            Container(
-                              margin: const EdgeInsets.only(bottom: 12),
-                              child: Text(
-                                "global_detail".tr,
-                                style: const TextStyle(
-                                  fontSize: 23,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.only(bottom: 12),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: Text(
-                                      "field_sku".tr,
-                                      style: const TextStyle(fontSize: 18),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Text(
-                                      products.sku,
-                                      style: const TextStyle(
-                                        fontSize: 18,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.only(bottom: 12),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: Text(
-                                      "field_barcode".tr,
-                                      style: const TextStyle(fontSize: 18),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Text(
-                                      products.barcode ?? '',
-                                      style: const TextStyle(
-                                        fontSize: 18,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.only(bottom: 12),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: Text(
-                                      "field_initial_price".tr,
-                                      style: const TextStyle(fontSize: 18),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Text(
-                                      formatPrice(products.initialPrice ?? 0),
-                                      style: const TextStyle(
-                                        fontSize: 18,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.only(bottom: 12),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: Text(
-                                      "field_type".tr,
-                                      style: const TextStyle(fontSize: 18),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Text(
-                                      products.type,
-                                      style: const TextStyle(
-                                        fontSize: 18,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.only(bottom: 12),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: Text(
-                                      "field_unit".tr,
-                                      style: const TextStyle(fontSize: 18),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Text(
-                                      products.unit,
-                                      style: const TextStyle(
-                                        fontSize: 18,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.only(bottom: 12),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: Text(
-                                      "field_category".tr,
-                                      style: const TextStyle(fontSize: 18),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Text(
-                                      products.category!.name,
-                                      style: const TextStyle(
-                                        fontSize: 18,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
+                      child: ProductDetailWidget(
+                        width: width,
+                        products: products,
+                        settingController: _settingController,
                       ),
                     ),
                   ),
@@ -370,3 +181,4 @@ class _DetailScreen extends State<DetailScreen> {
     );
   }
 }
+

@@ -14,7 +14,7 @@ class _TransactionMenuScreenState extends State<TransactionMenuScreen> {
   var menus = [
     {
       'title': 'transaction_cashier'.tr,
-      'icon': Icons.shopping_basket_rounded,
+      'icon': Icons.trending_up,
       'route': '/menu/transaction/cashier',
     },
     // {

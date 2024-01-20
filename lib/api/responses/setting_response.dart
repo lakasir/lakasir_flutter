@@ -17,12 +17,16 @@ class Setting {
   String? locale;
   String? methodePrice;
   bool cashDrawerEnabled;
+  bool? hideInitialPrice;
+  bool? hideInitialPriceUsingPin;
 
   Setting({
     this.currency,
     this.locale,
     this.methodePrice,
     this.cashDrawerEnabled = false,
+    this.hideInitialPrice = false,
+    this.hideInitialPriceUsingPin = false,
   });
 
   factory Setting.fromJson(Map<String, dynamic> json) {
@@ -31,6 +35,8 @@ class Setting {
       locale: json["locale"],
       methodePrice: json["methode_price"],
       cashDrawerEnabled: json["cash_drawer_enabled"],
+      hideInitialPrice: json["secure_initial_price_enabled"],
+      hideInitialPriceUsingPin: json["secure_initial_price_using_pin"],
     );
   }
 }

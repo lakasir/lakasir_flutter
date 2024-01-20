@@ -45,12 +45,13 @@ class ApiService<T> {
     );
 
 
+
     if (response.statusCode == 401) {
       logout();
       throw UnauthorizedException(jsonDecode(response.body)['message']);
     }
 
-    if (response.statusCode == 422) {
+    if (response.statusCode == 422 || response.statusCode == 403) {
       throw ValidationException(response.body);
     }
 
@@ -80,7 +81,7 @@ class ApiService<T> {
       throw UnauthorizedException(jsonDecode(response.body)['message']);
     }
 
-    if (response.statusCode == 422) {
+    if (response.statusCode == 422 || response.statusCode == 403) {
       throw ValidationException(response.body);
     }
 
