@@ -12,6 +12,7 @@ class AnalyticsCard extends StatefulWidget {
     required this.trendPercentage,
     required this.trendIcon,
     this.backgroundColor = const Color.fromARGB(255, 165, 50, 236),
+    this.hideValue = false,
   });
 
   final String textEmoji;
@@ -21,6 +22,7 @@ class AnalyticsCard extends StatefulWidget {
   final String trendPercentage;
   final HeroIcon trendIcon;
   final Color backgroundColor;
+  final bool hideValue;
 
   @override
   State<AnalyticsCard> createState() => _AnalyticsCardState();
@@ -56,11 +58,12 @@ class _AnalyticsCardState extends State<AnalyticsCard> {
   }
 
   @override
-  void dispose() {
+  void initState() {
     setState(() {
       selectedFilter = "today";
     });
-    super.dispose();
+    widget.onFilter("today");
+    super.initState();
   }
 
   @override
@@ -153,7 +156,7 @@ class _AnalyticsCardState extends State<AnalyticsCard> {
             ),
             const SizedBox(height: 15),
             Text(
-              widget.value,
+              widget.hideValue ? "*****" : widget.value.toString(),
               style: const TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.w600,

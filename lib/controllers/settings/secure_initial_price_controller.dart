@@ -31,6 +31,7 @@ class SecureInitialPriceController extends GetxController {
   }
 
   void verifyPassword({ bool isDisableSetting = false }) {
+    passwordError('');
     passwordController.text = '';
     Get.dialog(
       MyDialog(

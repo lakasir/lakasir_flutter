@@ -5,6 +5,8 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:intl/intl.dart';
 import 'package:lakasir/api/requests/pagination_request.dart';
 import 'package:lakasir/api/responses/transactions/history_response.dart';
+import 'package:lakasir/controllers/setting_controller.dart';
+import 'package:lakasir/controllers/settings/secure_initial_price_controller.dart';
 import 'package:lakasir/controllers/transactions/analytics/analytics_controller.dart';
 import 'package:lakasir/controllers/transactions/history_controller.dart';
 import 'package:lakasir/utils/colors.dart';
@@ -12,7 +14,6 @@ import 'package:lakasir/utils/utils.dart';
 import 'package:lakasir/widgets/analytics_card.dart';
 import 'package:lakasir/widgets/layout.dart';
 import 'package:lakasir/widgets/my_card_list.dart';
-import 'package:lakasir/widgets/shimmer_loading.dart';
 
 class HistoryScreen extends StatefulWidget {
   const HistoryScreen({super.key});
@@ -24,11 +25,14 @@ class HistoryScreen extends StatefulWidget {
 class _HistoryScreenState extends State<HistoryScreen> {
   final _analyticsController = Get.put(AnalyticsController());
   final _historyController = Get.put(HistoryController());
+  final _secureInitialPriceController = Get.put(SecureInitialPriceController());
+  final _settingController = Get.put(SettingController());
   final PagingController<int, TransactionHistoryResponse> _pagingController =
       PagingController(firstPageKey: 0);
 
   @override
   void initState() {
+    _secureInitialPriceController.isOpened.value = false;
     _pagingController.addPageRequestListener((pageKey) async {
       await _historyController.fetchTransaction(
         PaginationRequest(
@@ -60,72 +64,99 @@ class _HistoryScreenState extends State<HistoryScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              "transaction_analytics".tr,
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "transaction_analytics".tr,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                if (_settingController.setting.value.hideInitialPrice!)
+                  IconButton(
+                    onPressed: () {
+                      _secureInitialPriceController.verifyPassword();
+                      // _pagingController.refresh();
+                    },
+                    icon: const Icon(Icons.remove_red_eye),
+                  ),
+              ],
             ),
             const SizedBox(height: 10),
             Row(
               children: [
                 Obx(
-                  () => AnalyticsCard(
-                    textEmoji: "🤑",
-                    title: "transaction_analytics_gross_profit".tr,
-                    trendPercentage: "0.00%",
-                    trendIcon: HeroIcon(
-                      _analyticsController
-                                  .totalGrossProfit.value.percentageChange >=
-                              0
-                          ? HeroIcons.arrowTrendingUp
-                          : HeroIcons.arrowTrendingDown,
-                      color: _analyticsController
-                                  .totalGrossProfit.value.percentageChange >=
-                              0
-                          ? Colors.green
-                          : Colors.red,
-                    ),
-                    onFilter: (value) {
-                      _analyticsController.fetchTotalGrossProfit(
-                        filterType: value,
-                      );
-                    },
-                    value: formatPrice(
-                      _analyticsController
-                          .totalGrossProfit.value.totalGrossProfit,
-                      isSymbol: false,
-                    ),
-                  ),
+                  () {
+                    var isOpen =
+                        _settingController.setting.value.hideInitialPrice! &&
+                            !_secureInitialPriceController.isOpened.value;
+                    return AnalyticsCard(
+                      hideValue: isOpen,
+                      textEmoji: "🤑",
+                      title: "transaction_analytics_gross_profit".tr,
+                      trendPercentage:
+                          "${_analyticsController.totalGrossProfit.value.percentageChange}%",
+                      trendIcon: HeroIcon(
+                        _analyticsController
+                                    .totalGrossProfit.value.percentageChange >=
+                                0
+                            ? HeroIcons.arrowTrendingUp
+                            : HeroIcons.arrowTrendingDown,
+                        color: _analyticsController
+                                    .totalGrossProfit.value.percentageChange >=
+                                0
+                            ? Colors.green
+                            : Colors.red,
+                      ),
+                      onFilter: (value) {
+                        _analyticsController.fetchTotalGrossProfit(
+                          filterType: value,
+                        );
+                      },
+                      value: formatPrice(
+                        _analyticsController
+                            .totalGrossProfit.value.totalGrossProfit,
+                        isSymbol: false,
+                      ),
+                    );
+                  },
                 ),
                 const SizedBox(width: 10),
                 Obx(
-                  () => AnalyticsCard(
-                    backgroundColor: const Color.fromARGB(255, 81, 165, 176),
-                    textEmoji: "💰",
-                    title: "transaction_analytics_total_sales".tr,
-                    trendPercentage:
-                        "${_analyticsController.totalSales.value.percentageChange}%",
-                    trendIcon: HeroIcon(
-                      _analyticsController.totalSales.value.percentageChange >=
-                              0
-                          ? HeroIcons.arrowTrendingUp
-                          : HeroIcons.arrowTrendingDown,
-                      color: _analyticsController
-                                  .totalSales.value.percentageChange >=
-                              0
-                          ? Colors.green
-                          : Colors.red,
-                    ),
-                    onFilter: (value) {
-                      _analyticsController.fetchTotalSales(
-                        filterType: value,
-                      );
-                    },
-                    value: _analyticsController.totalSales.value.totalSales
-                        .toString(),
-                  ),
+                  () {
+                    var isOpen =
+                        _settingController.setting.value.hideInitialPrice! &&
+                            !_secureInitialPriceController.isOpened.value;
+                    return AnalyticsCard(
+                      hideValue: isOpen,
+                      backgroundColor: const Color.fromARGB(255, 81, 165, 176),
+                      textEmoji: "💰",
+                      title: "transaction_analytics_total_sales".tr,
+                      trendPercentage:
+                          "${_analyticsController.totalSales.value.percentageChange}%",
+                      trendIcon: HeroIcon(
+                        _analyticsController
+                                    .totalSales.value.percentageChange >=
+                                0
+                            ? HeroIcons.arrowTrendingUp
+                            : HeroIcons.arrowTrendingDown,
+                        color: _analyticsController
+                                    .totalSales.value.percentageChange >=
+                                0
+                            ? Colors.green
+                            : Colors.red,
+                      ),
+                      onFilter: (value) {
+                        _analyticsController.fetchTotalSales(
+                          filterType: value,
+                        );
+                      },
+                      value: _analyticsController.totalSales.value.totalSales
+                          .toString(),
+                    );
+                  },
                 ),
               ],
             ),
@@ -133,34 +164,40 @@ class _HistoryScreenState extends State<HistoryScreen> {
             Row(
               children: [
                 Obx(
-                  () => AnalyticsCard(
-                    backgroundColor: primary,
-                    textEmoji: "💴",
-                    title: "transaction_analytics_net_profit".tr,
-                    trendPercentage:
-                        "${_analyticsController.totalRevenue.value.percentageChange}%",
-                    trendIcon: HeroIcon(
-                      _analyticsController
-                                  .totalRevenue.value.percentageChange >=
-                              0
-                          ? HeroIcons.arrowTrendingUp
-                          : HeroIcons.arrowTrendingDown,
-                      color: _analyticsController
-                                  .totalRevenue.value.percentageChange >=
-                              0
-                          ? Colors.green
-                          : Colors.red,
-                    ),
-                    onFilter: (value) {
-                      _analyticsController.fetchTotalRevenue(
-                        filterType: value,
-                      );
-                    },
-                    value: formatPrice(
-                      _analyticsController.totalRevenue.value.totalRevenue,
-                      isSymbol: false,
-                    ),
-                  ),
+                  () {
+                    var isOpen =
+                        _settingController.setting.value.hideInitialPrice! &&
+                            !_secureInitialPriceController.isOpened.value;
+                    return AnalyticsCard(
+                      hideValue: isOpen,
+                      backgroundColor: primary,
+                      textEmoji: "💴",
+                      title: "transaction_analytics_net_profit".tr,
+                      trendPercentage:
+                          "${_analyticsController.totalRevenue.value.percentageChange}%",
+                      trendIcon: HeroIcon(
+                        _analyticsController
+                                    .totalRevenue.value.percentageChange >=
+                                0
+                            ? HeroIcons.arrowTrendingUp
+                            : HeroIcons.arrowTrendingDown,
+                        color: _analyticsController
+                                    .totalRevenue.value.percentageChange >=
+                                0
+                            ? Colors.green
+                            : Colors.red,
+                      ),
+                      onFilter: (value) {
+                        _analyticsController.fetchTotalRevenue(
+                          filterType: value,
+                        );
+                      },
+                      value: formatPrice(
+                        _analyticsController.totalRevenue.value.totalRevenue,
+                        isSymbol: false,
+                      ),
+                    );
+                  },
                 ),
               ],
             ),
