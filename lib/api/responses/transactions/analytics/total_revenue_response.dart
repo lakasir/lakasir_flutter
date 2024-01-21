@@ -1,12 +1,12 @@
 class TotalRevenueResponse {
-  double? totalRevenue;
-  double? totalPreviousRevenue;
-  int? percentageChange;
+  double totalRevenue;
+  double totalPreviousRevenue;
+  int percentageChange;
 
   TotalRevenueResponse({
-    this.totalRevenue,
-    this.totalPreviousRevenue,
-    this.percentageChange,
+    this.totalRevenue = 0,
+    this.totalPreviousRevenue = 0,
+    this.percentageChange = 0,
   });
 
   factory TotalRevenueResponse.fromJson(Map<String, dynamic> json) {

@@ -1,12 +1,12 @@
 class TotalGrossProfitRespnose {
-  double? totalGrossProfit;
-  double? totalPreviousGrossProfit;
-  int? percentageChange;
+  double totalGrossProfit;
+  double totalPreviousGrossProfit;
+  int percentageChange;
 
   TotalGrossProfitRespnose({
-    this.totalGrossProfit,
-    this.totalPreviousGrossProfit,
-    this.percentageChange,
+    this.totalGrossProfit = 0,
+    this.totalPreviousGrossProfit = 0,
+    this.percentageChange = 0,
   });
 
   factory TotalGrossProfitRespnose.fromJson(Map<String, dynamic> json) {

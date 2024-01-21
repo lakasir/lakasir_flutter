@@ -12,6 +12,7 @@ import 'package:lakasir/utils/utils.dart';
 import 'package:lakasir/widgets/analytics_card.dart';
 import 'package:lakasir/widgets/layout.dart';
 import 'package:lakasir/widgets/my_card_list.dart';
+import 'package:lakasir/widgets/shimmer_loading.dart';
 
 class HistoryScreen extends StatefulWidget {
   const HistoryScreen({super.key});
@@ -73,16 +74,15 @@ class _HistoryScreenState extends State<HistoryScreen> {
                   () => AnalyticsCard(
                     textEmoji: "🤑",
                     title: "transaction_analytics_gross_profit".tr,
-                    trendPercentage:
-                        "${_analyticsController.totalGrossProfit.value.percentageChange!}%",
+                    trendPercentage: "0.00%",
                     trendIcon: HeroIcon(
                       _analyticsController
-                                  .totalGrossProfit.value.percentageChange! >=
+                                  .totalGrossProfit.value.percentageChange >=
                               0
                           ? HeroIcons.arrowTrendingUp
                           : HeroIcons.arrowTrendingDown,
                       color: _analyticsController
-                                  .totalGrossProfit.value.percentageChange! >=
+                                  .totalGrossProfit.value.percentageChange >=
                               0
                           ? Colors.green
                           : Colors.red,
@@ -94,7 +94,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                     },
                     value: formatPrice(
                       _analyticsController
-                          .totalGrossProfit.value.totalGrossProfit!,
+                          .totalGrossProfit.value.totalGrossProfit,
                       isSymbol: false,
                     ),
                   ),
@@ -106,14 +106,14 @@ class _HistoryScreenState extends State<HistoryScreen> {
                     textEmoji: "💰",
                     title: "transaction_analytics_total_sales".tr,
                     trendPercentage:
-                        "${_analyticsController.totalSales.value.percentageChange!}%",
+                        "${_analyticsController.totalSales.value.percentageChange}%",
                     trendIcon: HeroIcon(
-                      _analyticsController.totalSales.value.percentageChange! >=
+                      _analyticsController.totalSales.value.percentageChange >=
                               0
                           ? HeroIcons.arrowTrendingUp
                           : HeroIcons.arrowTrendingDown,
                       color: _analyticsController
-                                  .totalSales.value.percentageChange! >=
+                                  .totalSales.value.percentageChange >=
                               0
                           ? Colors.green
                           : Colors.red,
@@ -123,7 +123,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                         filterType: value,
                       );
                     },
-                    value: _analyticsController.totalSales.value.totalSales!
+                    value: _analyticsController.totalSales.value.totalSales
                         .toString(),
                   ),
                 ),
@@ -138,15 +138,15 @@ class _HistoryScreenState extends State<HistoryScreen> {
                     textEmoji: "💴",
                     title: "transaction_analytics_net_profit".tr,
                     trendPercentage:
-                        "${_analyticsController.totalRevenue.value.percentageChange!}%",
+                        "${_analyticsController.totalRevenue.value.percentageChange}%",
                     trendIcon: HeroIcon(
                       _analyticsController
-                                  .totalRevenue.value.percentageChange! >=
+                                  .totalRevenue.value.percentageChange >=
                               0
                           ? HeroIcons.arrowTrendingUp
                           : HeroIcons.arrowTrendingDown,
                       color: _analyticsController
-                                  .totalRevenue.value.percentageChange! >=
+                                  .totalRevenue.value.percentageChange >=
                               0
                           ? Colors.green
                           : Colors.red,
@@ -157,7 +157,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                       );
                     },
                     value: formatPrice(
-                      _analyticsController.totalRevenue.value.totalRevenue!,
+                      _analyticsController.totalRevenue.value.totalRevenue,
                       isSymbol: false,
                     ),
                   ),

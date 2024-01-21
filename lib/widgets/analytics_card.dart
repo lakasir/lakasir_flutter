@@ -56,6 +56,14 @@ class _AnalyticsCardState extends State<AnalyticsCard> {
   }
 
   @override
+  void dispose() {
+    setState(() {
+      selectedFilter = "today";
+    });
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     var menuController = MenuController();
     return Expanded(
