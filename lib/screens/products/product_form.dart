@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lakasir/controllers/category_controller.dart';
 import 'package:lakasir/controllers/products/product_add_controller.dart';
+import 'package:lakasir/utils/colors.dart';
 import 'package:lakasir/widgets/checkbox.dart';
 import 'package:lakasir/widgets/filled_button.dart';
 import 'package:lakasir/widgets/image_picker.dart';
@@ -64,9 +65,7 @@ class _ProductFormState extends State<ProductForm> {
               mandatory: true,
               controller: widget.controller.skuInputController,
               label: 'field_sku'.tr,
-              errorText:
-                  widget.controller.productErrorResponse.value.sku ??
-                      '',
+              errorText: widget.controller.productErrorResponse.value.sku ?? '',
             ),
           ),
         ),
@@ -77,8 +76,7 @@ class _ProductFormState extends State<ProductForm> {
               controller: widget.controller.barcodeInputController,
               label: 'field_barcode'.tr,
               errorText:
-                  widget.controller.productErrorResponse.value.barcode ??
-                      '',
+                  widget.controller.productErrorResponse.value.barcode ?? '',
             ),
           ),
         ),
@@ -104,39 +102,62 @@ class _ProductFormState extends State<ProductForm> {
           ),
         ),
         Container(
-          margin: const EdgeInsets.only(top: 20),
+          margin: const EdgeInsets.only(top: 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'field_is_non_stock'.tr,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: secondary,
+                ),
+              ),
+              Obx(
+                () => Switch(
+                  value: widget.controller.enabledStock.value,
+                  onChanged: (value) {
+                    widget.controller.enabledStock.value = value;
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+        Container(
+          margin: const EdgeInsets.only(top: 10),
           child: Obx(
             () => MyTextField(
               readOnly: widget.controller.enabledStock.value,
-              rightIcon: InkWell(
-                onTap: () {},
-                child: Container(
-                  padding: const EdgeInsets.all(5),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.grey,
-                      width: 2,
-                    ),
-                    borderRadius: const BorderRadius.only(
-                      topRight: Radius.circular(12),
-                      bottomRight: Radius.circular(12),
-                    ),
-                    color: Colors.grey[200],
-                  ),
-                  child: Container(
-                    margin: const EdgeInsets.only(left: 7),
-                    child: MyCheckbox(
-                      isChecked: widget.controller.enabledStock.value,
-                      onChange: (value) {
-                        widget.controller.enabledStock.value = value;
-                      },
-                    ),
-                  ),
-                ),
-              ),
+              // rightIcon: InkWell(
+              //   onTap: () {},
+              //   child: Container(
+              //     padding: const EdgeInsets.all(5),
+              //     decoration: BoxDecoration(
+              //       border: Border.all(
+              //         color: Colors.grey,
+              //         width: 2,
+              //       ),
+              //       borderRadius: const BorderRadius.only(
+              //         topRight: Radius.circular(12),
+              //         bottomRight: Radius.circular(12),
+              //       ),
+              //       color: Colors.grey[200],
+              //     ),
+              //     child: Container(
+              //       margin: const EdgeInsets.only(left: 7),
+              //       child: MyCheckbox(
+              //         isChecked: widget.controller.enabledStock.value,
+              //         onChange: (value) {
+              //           widget.controller.enabledStock.value = value;
+              //         },
+              //       ),
+              //     ),
+              //   ),
+              // ),
               controller: widget.controller.stockInputController,
               label: 'field_stock'.tr,
-              info: 'field_stock_info'.tr,
               keyboardType: TextInputType.number,
               errorText:
                   widget.controller.productErrorResponse.value.stock ?? '',
