@@ -15,11 +15,13 @@ class ProductDetailWidget extends StatefulWidget {
     required this.width,
     required this.products,
     required SettingController settingController,
+    this.isLoading = false,
   }) : _settingController = settingController;
 
   final double width;
   final ProductResponse products;
   final SettingController _settingController;
+  final bool isLoading;
 
   @override
   State<ProductDetailWidget> createState() => _ProductDetailWidgetState();
@@ -37,23 +39,17 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 14, right: 14),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Center(
-            child: Container(
-              width: 100,
-              height: 10,
-              decoration: BoxDecoration(
-                color: whiteGrey,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              margin: const EdgeInsets.all(12),
-            ),
-          ),
-          Row(
+    if (widget.isLoading) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          margin: const EdgeInsets.only(bottom: 12),
+          child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Column(
@@ -93,127 +89,124 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
               ),
             ],
           ),
-          const SizedBox(
-            height: 33,
+        ),
+        Container(
+          margin: const EdgeInsets.only(bottom: 12),
+          child: Text(
+            "global_detail".tr,
+            style: const TextStyle(
+              fontSize: 23,
+              fontWeight: FontWeight.bold,
+            ),
           ),
-          Container(
-            margin: const EdgeInsets.only(bottom: 12),
-            child: Text(
-              "global_detail".tr,
-              style: const TextStyle(
-                fontSize: 23,
-                fontWeight: FontWeight.bold,
+        ),
+        Container(
+          margin: const EdgeInsets.only(bottom: 12),
+          child: Row(
+            children: [
+              Expanded(
+                child: Text(
+                  "field_sku".tr,
+                  style: const TextStyle(fontSize: 18),
+                ),
               ),
-            ),
+              Expanded(
+                child: Text(
+                  widget.products.sku,
+                  style: const TextStyle(
+                    fontSize: 18,
+                  ),
+                ),
+              ),
+            ],
           ),
-          Container(
-            margin: const EdgeInsets.only(bottom: 12),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    "field_sku".tr,
-                    style: const TextStyle(fontSize: 18),
+        ),
+        Container(
+          margin: const EdgeInsets.only(bottom: 12),
+          child: Row(
+            children: [
+              Expanded(
+                child: Text(
+                  "field_barcode".tr,
+                  style: const TextStyle(fontSize: 18),
+                ),
+              ),
+              Expanded(
+                child: Text(
+                  widget.products.barcode ?? '',
+                  style: const TextStyle(
+                    fontSize: 18,
                   ),
                 ),
-                Expanded(
-                  child: Text(
-                    widget.products.sku,
-                    style: const TextStyle(
-                      fontSize: 18,
-                    ),
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
-          Container(
-            margin: const EdgeInsets.only(bottom: 12),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    "field_barcode".tr,
-                    style: const TextStyle(fontSize: 18),
+        ),
+        fieldInitialPrice(),
+        Container(
+          margin: const EdgeInsets.only(bottom: 12),
+          child: Row(
+            children: [
+              Expanded(
+                child: Text(
+                  "field_type".tr,
+                  style: const TextStyle(fontSize: 18),
+                ),
+              ),
+              Expanded(
+                child: Text(
+                  widget.products.type,
+                  style: const TextStyle(
+                    fontSize: 18,
                   ),
                 ),
-                Expanded(
-                  child: Text(
-                    widget.products.barcode ?? '',
-                    style: const TextStyle(
-                      fontSize: 18,
-                    ),
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
-          fieldInitialPrice(),
-          Container(
-            margin: const EdgeInsets.only(bottom: 12),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    "field_type".tr,
-                    style: const TextStyle(fontSize: 18),
+        ),
+        Container(
+          margin: const EdgeInsets.only(bottom: 12),
+          child: Row(
+            children: [
+              Expanded(
+                child: Text(
+                  "field_unit".tr,
+                  style: const TextStyle(fontSize: 18),
+                ),
+              ),
+              Expanded(
+                child: Text(
+                  widget.products.unit,
+                  style: const TextStyle(
+                    fontSize: 18,
                   ),
                 ),
-                Expanded(
-                  child: Text(
-                    widget.products.type,
-                    style: const TextStyle(
-                      fontSize: 18,
-                    ),
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
-          Container(
-            margin: const EdgeInsets.only(bottom: 12),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    "field_unit".tr,
-                    style: const TextStyle(fontSize: 18),
+        ),
+        Container(
+          margin: const EdgeInsets.only(bottom: 12),
+          child: Row(
+            children: [
+              Expanded(
+                child: Text(
+                  "field_category".tr,
+                  style: const TextStyle(fontSize: 18),
+                ),
+              ),
+              Expanded(
+                child: Text(
+                  widget.products.category!.name,
+                  style: const TextStyle(
+                    fontSize: 18,
                   ),
                 ),
-                Expanded(
-                  child: Text(
-                    widget.products.unit,
-                    style: const TextStyle(
-                      fontSize: 18,
-                    ),
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
-          Container(
-            margin: const EdgeInsets.only(bottom: 12),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    "field_category".tr,
-                    style: const TextStyle(fontSize: 18),
-                  ),
-                ),
-                Expanded(
-                  child: Text(
-                    widget.products.category!.name,
-                    style: const TextStyle(
-                      fontSize: 18,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 

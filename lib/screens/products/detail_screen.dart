@@ -48,137 +48,92 @@ class _DetailScreen extends State<DetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final double height = MediaQuery.of(context).size.height;
     final double width = MediaQuery.of(context).size.width;
-    double percentage = 0.7;
-    double containerHeight = height * percentage;
 
-    return WillPopScope(
-      onWillPop: () {
-        setState(() {
-          isBottomSheetOpen = false;
-        });
-        Timer(initialDuration, () {
-          Navigator.pop(context);
-        });
-        return Future.value(false);
-      },
-      child: Obx(
-        () {
-          final products = _productDetailController.product.value;
-          return Layout(
-            baseHeight: double.infinity,
-            noAppBar: true,
-            noPadding: true,
-            bottomNavigationBar: MyBottomBar(
-              label: Text('product_edit'.tr),
-              onPressed: () {
-                Get.toNamed('/menu/product/edit', arguments: products);
-              },
-              actions: [
-                if (!products.isNonStock)
-                  MyBottomBarActions(
-                    label: 'field_stock'.tr,
-                    onPressed: () {
-                      setState(() {
-                        isBottomSheetOpen = false;
-                      });
-                      Timer(initialDuration, () {
-                        Get.toNamed(
-                          '/menu/product/stock',
-                          arguments: products,
-                        )!
-                            .then((value) {
-                          Timer(initialDuration, () {
-                            setState(() {
-                              isBottomSheetOpen = true;
-                            });
+    return Obx(
+      () {
+        final products = _productDetailController.product.value;
+        return Layout(
+          baseHeight: double.infinity,
+          noAppBar: true,
+          noPadding: true,
+          bottomNavigationBar: MyBottomBar(
+            label: Text('product_edit'.tr),
+            onPressed: () {
+              Get.toNamed('/menu/product/edit', arguments: products);
+            },
+            actions: [
+              if (!products.isNonStock)
+                MyBottomBarActions(
+                  label: 'field_stock'.tr,
+                  onPressed: () {
+                    setState(() {
+                      isBottomSheetOpen = false;
+                    });
+                    Timer(initialDuration, () {
+                      Get.toNamed(
+                        '/menu/product/stock',
+                        arguments: products,
+                      )!
+                          .then((value) {
+                        Timer(initialDuration, () {
+                          setState(() {
+                            isBottomSheetOpen = true;
                           });
                         });
                       });
-                    },
-                    icon: const Icon(Icons.inventory, color: Colors.white),
-                  ),
-                MyBottomBarActions(
-                  label: 'global_delete'.tr,
-                  onPressed: () {
-                    _productDetailController.showDeleteDialog(
-                      products.id,
-                    );
+                    });
                   },
-                  icon: const Icon(Icons.delete_rounded, color: Colors.white),
+                  icon: const Icon(Icons.inventory, color: Colors.white),
                 ),
-              ],
-            ),
-            child: Column(
-              children: [
-                Expanded(
-                  child: CustomScrollView(
-                    slivers: <Widget>[
-                      SliverAppBar(
-                        automaticallyImplyLeading:
-                            false, // Remove the back button
-                        expandedHeight: 300.0,
-                        flexibleSpace: FlexibleSpaceBar(
-                          background: Hero(
-                            tag: 'product-${products.id}',
-                            child: ClipRRect(
-                              child: products.image != null
-                                  ? Image.network(
-                                      products.image!,
-                                      fit: BoxFit.cover,
-                                    )
-                                  : const Image(
-                                      image:
-                                          AssetImage('assets/no-image-100.png'),
-                                      fit: BoxFit.cover,
-                                    ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+              MyBottomBarActions(
+                label: 'global_delete'.tr,
+                onPressed: () {
+                  _productDetailController.showDeleteDialog(
+                    products.id,
+                  );
+                },
+                icon: const Icon(Icons.delete_rounded, color: Colors.white),
+              ),
+            ],
+          ),
+          child: Column(
+            children: [
+              Hero(
+                tag: 'product-${products.id}',
+                child: ClipRRect(
+                  child: Image.network(
+                    products.image ?? '',
+                    fit: BoxFit.cover,
+                    height: 300,
+                    width: double.infinity,
+                    errorBuilder: (context, error, stackTrace) {
+                      return const Image(
+                        image: AssetImage('assets/no-image-100.png'),
+                        fit: BoxFit.cover,
+                        height: 300,
+                        width: double.infinity,
+                      );
+                    },
                   ),
                 ),
-                AnimatedContainer(
-                  duration: const Duration(milliseconds: 500),
-                  curve: Curves.easeInOut,
-                  height: isBottomSheetOpen ? containerHeight : 0,
-                  width: double.infinity,
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20),
-                      bottomLeft: Radius.zero,
-                      bottomRight: Radius.zero,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey,
-                        offset: Offset(0, 2),
-                        blurRadius: 19,
-                        spreadRadius: 1,
-                      ),
-                    ],
-                  ),
-                  child: GestureDetector(
-                    onVerticalDragUpdate: (details) {},
-                    child: SingleChildScrollView(
-                      child: ProductDetailWidget(
-                        width: width,
-                        products: products,
-                        settingController: _settingController,
-                      ),
-                    ),
-                  ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 16,
                 ),
-              ],
-            ),
-          );
-        },
-      ),
+                child: ProductDetailWidget(
+                  isLoading: _productDetailController.isLoading.value,
+                  width: width,
+                  products: products,
+                  settingController: _settingController,
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
-
