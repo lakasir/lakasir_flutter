@@ -10,15 +10,7 @@ class ProductDetailController extends GetxController {
   final _productService = ProductService();
   final ProductController _productController = Get.find();
   final RxBool isLoading = false.obs;
-  final Rx<ProductResponse> product = ProductResponse(
-    id: 0,
-    name: '',
-    unit: '',
-    type: '',
-    isNonStock: false,
-    sku: '',
-    category: CategoryResponse(id: 0, name: '', createdAt: '', updatedAt: '')
-  ).obs;
+  final Rx<ProductResponse> product = ProductResponse().obs;
 
   Future<void> delete(int id) async {
     await _productService.delete(id);
@@ -51,7 +43,8 @@ class ProductDetailController extends GetxController {
               Get.back();
               Get.back();
               Get.rawSnackbar(
-                message: 'global_deleted_item'.trParams({"item": "menu_product".tr}),
+                message:
+                    'global_deleted_item'.trParams({"item": "menu_product".tr}),
                 duration: const Duration(seconds: 2),
                 backgroundColor: success,
               );
@@ -59,7 +52,7 @@ class ProductDetailController extends GetxController {
             child: Text('global_delete'.tr),
           ),
         ],
-      )
+      ),
     );
   }
 }

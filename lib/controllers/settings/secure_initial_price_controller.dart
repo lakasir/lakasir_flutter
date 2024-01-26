@@ -30,7 +30,7 @@ class SecureInitialPriceController extends GetxController {
     }
   }
 
-  void verifyPassword({ bool isDisableSetting = false }) {
+  void verifyPassword({bool isDisableSetting = false}) {
     passwordError('');
     passwordController.text = '';
     Get.dialog(
@@ -48,10 +48,10 @@ class SecureInitialPriceController extends GetxController {
                     label: 'field_password'.tr,
                     obscureText: true,
                     errorText: passwordError.value,
-                    keyboardType:
-                        _settingController.setting.value.hideInitialPriceUsingPin!
-                            ? TextInputType.number
-                            : TextInputType.text,
+                    keyboardType: _settingController
+                            .setting.value.hideInitialPriceUsingPin!
+                        ? TextInputType.number
+                        : TextInputType.text,
                   ),
                 ),
               ),

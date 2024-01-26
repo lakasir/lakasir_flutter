@@ -20,12 +20,12 @@ class ProductResponse {
   final List<StockResponse>? stocks;
 
   ProductResponse({
-    required this.id,
-    required this.name,
-    required this.type,
-    required this.unit,
-    required this.isNonStock,
-    required this.sku,
+    this.id = 0,
+    this.name = '',
+    this.type = 'product',
+    this.unit = '',
+    this.isNonStock = false,
+    this.sku = '',
     this.barcode,
     this.image,
     this.initialPrice,

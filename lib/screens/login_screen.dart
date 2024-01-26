@@ -12,6 +12,7 @@ import 'package:lakasir/utils/auth.dart';
 import 'package:lakasir/utils/colors.dart';
 import 'package:lakasir/widgets/checkbox.dart';
 import 'package:lakasir/widgets/filled_button.dart';
+import 'package:lakasir/widgets/layout.dart';
 import 'package:lakasir/widgets/text_field.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -86,9 +87,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: backgroudWhite,
-      body: SafeArea(
+    return Layout(
+      noAppBar: true,
+      child: SafeArea(
         child: ListView(
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           children: [
@@ -118,75 +119,70 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
             ),
-
-            Padding(
-              padding: const EdgeInsets.all(25.0),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Email Input
-                    Container(
-                      margin: const EdgeInsets.only(bottom: 21.0),
-                      child: MyTextField(
-                        controller: emailController,
-                        errorText: loginErrorResponse.email,
-                        label: "field_email".tr,
-                        mandatory: true,
-                      ),
+            Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Email Input
+                  Container(
+                    margin: const EdgeInsets.only(bottom: 21.0),
+                    child: MyTextField(
+                      controller: emailController,
+                      errorText: loginErrorResponse.email,
+                      label: "field_email".tr,
+                      mandatory: true,
                     ),
-                    // Password Input
-                    Container(
-                      margin: const EdgeInsets.only(bottom: 21.0),
-                      child: MyTextField(
-                        errorText: loginErrorResponse.password,
-                        controller: passwordController,
-                        label: "field_password".tr,
-                        mandatory: true,
-                        obscureText: true,
-                      ),
+                  ),
+                  // Password Input
+                  Container(
+                    margin: const EdgeInsets.only(bottom: 21.0),
+                    child: MyTextField(
+                      errorText: loginErrorResponse.password,
+                      controller: passwordController,
+                      label: "field_password".tr,
+                      mandatory: true,
+                      obscureText: true,
                     ),
+                  ),
 
-                    // Remember Box
-                    Container(
-                      margin: const EdgeInsets.only(bottom: 21.0),
-                      child: MyCheckbox(
-                        label: "field_remember_me".tr,
-                        onChange: (bool value) {
-                          setState(() {
-                            remember = value;
-                          });
-                        },
-                      ),
-                    ),
-
-                    // Sign In Button
-                    MyFilledButton(
-                      isLoading: isLoading,
-                      onPressed: () {
-                        login().then((value) {
-                          if (value) {
-                            Get.offAllNamed('/auth');
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text("Something went wrong"),
-                                backgroundColor: error,
-                              ),
-                            );
-                          }
+                  // Remember Box
+                  Container(
+                    margin: const EdgeInsets.only(bottom: 21.0),
+                    child: MyCheckbox(
+                      label: "field_remember_me".tr,
+                      onChange: (bool value) {
+                        setState(() {
+                          remember = value;
                         });
                       },
-                      child: Text("sign_in".tr),
                     ),
-                  ],
-                ),
+                  ),
+
+                  // Sign In Button
+                  MyFilledButton(
+                    isLoading: isLoading,
+                    onPressed: () {
+                      login().then((value) {
+                        if (value) {
+                          Get.offAllNamed('/auth');
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text("Something went wrong"),
+                              backgroundColor: error,
+                            ),
+                          );
+                        }
+                      });
+                    },
+                    child: Text("sign_in".tr),
+                  ),
+                ],
               ),
             ),
-
             Container(
-              margin: const EdgeInsets.only(bottom: 40),
+              margin: const EdgeInsets.only(top: 40),
               child: Center(
                 child: GestureDetector(
                   onTap: () {

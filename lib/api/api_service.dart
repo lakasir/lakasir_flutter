@@ -20,6 +20,9 @@ class ApiService<T> {
       },
     );
 
+    print(response.statusCode);
+    print(response.body);
+
     if (response.statusCode == 401) {
       logout();
       throw UnauthorizedException(jsonDecode(response.body)['message']);
@@ -43,8 +46,6 @@ class ApiService<T> {
       },
       body: jsonEncode(request),
     );
-
-
 
     if (response.statusCode == 401) {
       logout();
@@ -118,6 +119,34 @@ class ApiService<T> {
       var json = jsonDecode(response.body);
 
       return json;
+    } else {
+      throw Exception('Failed to load data');
+    }
+  }
+
+  Future<dynamic> fetchByte(String endpoint, Object? request) async {
+    final token = await getToken();
+    final response = await http.post(
+      Uri.parse('$baseUrl/$endpoint'),
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token'
+      },
+      body: jsonEncode(request),
+    );
+
+    if (response.statusCode == 401) {
+      logout();
+      throw UnauthorizedException(jsonDecode(response.body)['message']);
+    }
+
+    if (response.statusCode == 422 || response.statusCode == 403) {
+      throw ValidationException(response.body);
+    }
+
+    if (response.statusCode == 200) {
+      return response.bodyBytes;
     } else {
       throw Exception('Failed to load data');
     }

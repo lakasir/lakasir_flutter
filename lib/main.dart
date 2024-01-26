@@ -25,6 +25,7 @@ import 'package:lakasir/screens/transactions/cashier_menu_screen.dart';
 import 'package:lakasir/screens/transactions/history/detail_screen.dart';
 import 'package:lakasir/screens/transactions/history/history_screen.dart';
 import 'package:lakasir/screens/transactions/invoice_screen.dart';
+import 'package:lakasir/screens/transactions/reports/cashier_screen.dart';
 import 'package:lakasir/screens/transactions/transaction_menu_screen.dart';
 import 'package:lakasir/utils/auth.dart';
 import 'package:lakasir/utils/colors.dart';
@@ -85,13 +86,16 @@ class MyApp extends StatelessWidget {
                   '/domain/register': (context) => const RegisterDomainScreen(),
                   '/auth': (context) => const AuthScreen(),
                   '/forgot': (context) => const ForgotScreen(),
+                  '/menu/transaction/reports/cashier': (context) =>
+                      const CashierReportScreen(),
                   '/menu/transaction': (context) =>
                       const TransactionMenuScreen(),
                   '/menu/transaction/history': (context) =>
                       const HistoryScreen(),
                   '/menu/transaction/history/detail': (context) =>
                       const HistoryDetailScreen(),
-                  '/menu/transaction/cashier': (context) => const CashierMenuScreen(),
+                  '/menu/transaction/cashier': (context) =>
+                      const CashierMenuScreen(),
                   '/menu/transaction/cashier/cart': (context) =>
                       const CashierCartMenuScreen(),
                   '/menu/transaction/cashier/payment': (context) =>
@@ -111,7 +115,8 @@ class MyApp extends StatelessWidget {
                   '/menu/member/add': (context) => const AddMemberScreen(),
                   '/menu/member/edit': (context) => const EditMemberScreen(),
                   '/menu/setting': (context) => const SettingScreen(),
-                  '/menu/setting/hide_initial_price': (context) => const HideInitialPriceScreen(),
+                  '/menu/setting/hide_initial_price': (context) =>
+                      const HideInitialPriceScreen(),
                   '/menu/setting/category': (context) => const CategoryScreen(),
                 },
               );

@@ -38,25 +38,29 @@ class _LayoutState extends State<Layout> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[100],
       appBar: widget.noAppBar
           ? null
           : AppBar(
+              backgroundColor: Colors.grey[100],
               automaticallyImplyLeading: widget.backButton,
               title: Center(
                 child: Text(widget.title),
               ),
             ),
-      body: SizedBox(
-        // margin: const EdgeInsets.only(top: 20),
-        width: double.infinity,
-        // height: baseHeight,
-        child: widget.noPadding
-            ? widget.child
-            : Padding(
-                padding: EdgeInsets.symmetric(horizontal: widget.padding),
-                child: widget.child,
-              ),
-      ),
+      body: OrientationBuilder(builder: (context, orientation) {
+        return SizedBox(
+          // margin: const EdgeInsets.only(top: 20),
+          width: double.infinity,
+          // height: baseHeight,
+          child: widget.noPadding
+              ? widget.child
+              : Padding(
+                  padding: EdgeInsets.symmetric(horizontal: widget.padding),
+                  child: widget.child,
+                ),
+        );
+      }),
       floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
       floatingActionButton: widget.bottomNavigationBar,
       bottomSheet: widget.bottomSheet,

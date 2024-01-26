@@ -9,6 +9,7 @@ import 'package:lakasir/api/responses/error_response.dart';
 import 'package:lakasir/utils/auth.dart';
 import 'package:lakasir/utils/colors.dart';
 import 'package:lakasir/widgets/filled_button.dart';
+import 'package:lakasir/widgets/layout.dart';
 import 'package:lakasir/widgets/text_field.dart';
 
 class ForgotScreen extends StatefulWidget {
@@ -71,9 +72,9 @@ class _ForgotScreenState extends State<ForgotScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: backgroudWhite,
-      body: SafeArea(
+    return Layout(
+      noAppBar: true,
+      child: SafeArea(
         child: ListView(
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           children: [
@@ -90,52 +91,49 @@ class _ForgotScreenState extends State<ForgotScreen> {
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(25.0),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.only(bottom: 21.0),
-                      child: MyTextField(
-                        errorText: forgotErrorResponse.email,
-                        controller: emailController,
-                        label: "field_email".tr,
-                        mandatory: true,
-                      ),
+            Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    margin: const EdgeInsets.only(bottom: 21.0),
+                    child: MyTextField(
+                      errorText: forgotErrorResponse.email,
+                      controller: emailController,
+                      label: "field_email".tr,
+                      mandatory: true,
                     ),
-                    MyFilledButton(
-                      isLoading: isLoading,
-                      onPressed: () => {
-                        forgot().then((value) {
-                          setState(() {
-                            isLoading = false;
-                          });
-                          if (value.isEmpty) {
-                            Navigator.pushNamed(context, '/login');
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text("Please check your email"),
-                                backgroundColor: success,
-                              ),
-                            );
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                duration: const Duration(seconds: 1),
-                                content: Text(value),
-                                backgroundColor: error,
-                              ),
-                            );
-                          }
-                        })
-                      },
-                      child: Text("global_submit".tr),
-                    ),
-                  ],
-                ),
+                  ),
+                  MyFilledButton(
+                    isLoading: isLoading,
+                    onPressed: () => {
+                      forgot().then((value) {
+                        setState(() {
+                          isLoading = false;
+                        });
+                        if (value.isEmpty) {
+                          Navigator.pushNamed(context, '/login');
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text("Please check your email"),
+                              backgroundColor: success,
+                            ),
+                          );
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              duration: const Duration(seconds: 1),
+                              content: Text(value),
+                              backgroundColor: error,
+                            ),
+                          );
+                        }
+                      })
+                    },
+                    child: Text("global_submit".tr),
+                  ),
+                ],
               ),
             ),
           ],

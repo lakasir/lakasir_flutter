@@ -20,30 +20,14 @@ class DetailScreen extends StatefulWidget {
 }
 
 class _DetailScreen extends State<DetailScreen> {
-  bool isBottomSheetOpen = false;
   final _productDetailController = Get.put(ProductDetailController());
   final _settingController = Get.put(SettingController());
-
-  final Duration initialDuration = const Duration(milliseconds: 300);
-
-  void openBottomSheet() {
-    setState(() {
-      isBottomSheetOpen = true;
-    });
-  }
 
   @override
   void initState() {
     final product = Get.arguments as ProductResponse;
     _productDetailController.get(product.id);
-    Timer(initialDuration, openBottomSheet);
     super.initState();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    Timer(initialDuration, openBottomSheet);
   }
 
   @override
@@ -67,22 +51,10 @@ class _DetailScreen extends State<DetailScreen> {
                 MyBottomBarActions(
                   label: 'field_stock'.tr,
                   onPressed: () {
-                    setState(() {
-                      isBottomSheetOpen = false;
-                    });
-                    Timer(initialDuration, () {
-                      Get.toNamed(
-                        '/menu/product/stock',
-                        arguments: products,
-                      )!
-                          .then((value) {
-                        Timer(initialDuration, () {
-                          setState(() {
-                            isBottomSheetOpen = true;
-                          });
-                        });
-                      });
-                    });
+                    Get.toNamed(
+                      '/menu/product/stock',
+                      arguments: products,
+                    );
                   },
                   icon: const Icon(Icons.inventory, color: Colors.white),
                 ),

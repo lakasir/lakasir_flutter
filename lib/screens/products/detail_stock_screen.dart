@@ -20,8 +20,8 @@ class DetailStockScreen extends StatefulWidget {
 }
 
 class _DetailStockScreenState extends State<DetailStockScreen> {
+  final _productDetailController = Get.put(ProductDetailController());
   final _productStockController = Get.put(ProductStockController());
-  final _productDetailController = Get.find<ProductDetailController>();
 
   @override
   void initState() {
@@ -31,7 +31,6 @@ class _DetailStockScreenState extends State<DetailStockScreen> {
 
   void fetchDetail() async {
     final ProductResponse products = Get.arguments;
-    await _productDetailController.get(products.id);
     await _productStockController.get(products.id);
   }
 
@@ -41,7 +40,7 @@ class _DetailStockScreenState extends State<DetailStockScreen> {
       title: 'Detail Stock',
       child: Obx(
         () {
-          if (_productDetailController.isLoading.value) {
+          if (_productStockController.isLoading.value) {
             return const Center(
               child: CircularProgressIndicator(),
             );
@@ -52,9 +51,11 @@ class _DetailStockScreenState extends State<DetailStockScreen> {
             );
           }
           String initialFormattedPrice = formatPrice(
-              _productDetailController.product.value.initialPrice ?? 0);
+            _productDetailController.product.value.initialPrice,
+          );
           String sellingFormattedPrice = formatPrice(
-              _productDetailController.product.value.sellingPrice ?? 0);
+            _productDetailController.product.value.sellingPrice,
+          );
 
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -87,7 +88,8 @@ class _DetailStockScreenState extends State<DetailStockScreen> {
                     height: 90,
                     width: 90,
                     child: MyImage(
-                        images: _productDetailController.product.value.image),
+                      images: _productDetailController.product.value.image,
+                    ),
                   ),
                 ),
               ),

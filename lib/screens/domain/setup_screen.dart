@@ -5,6 +5,7 @@ import 'package:lakasir/config/app.dart';
 import 'package:lakasir/utils/auth.dart';
 import 'package:lakasir/utils/colors.dart';
 import 'package:lakasir/widgets/filled_button.dart';
+import 'package:lakasir/widgets/layout.dart';
 import 'package:lakasir/widgets/text_field.dart';
 
 class SetupScreen extends StatefulWidget {
@@ -57,9 +58,9 @@ class _SetupScreenState extends State<SetupScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: backgroudWhite,
-      body: SafeArea(
+    return Layout(
+      noAppBar: true,
+      child: SafeArea(
         child: ListView(
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           children: [
@@ -89,82 +90,82 @@ class _SetupScreenState extends State<SetupScreen> {
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(25.0),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.only(bottom: 21.0),
-                      child: MyTextField(
-                        prefixText: environment == "local" ? "http://" : "https://",
-                        suffixText: ".lakasir.com",
-                        controller: registerDomainController,
-                        label: "setup_your_registered_domain".tr,
-                        errorText: domainError,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "setup_please_enter_your_domain".tr;
-                          }
-                          return null;
-                        },
-                        mandatory: true,
-                      ),
-                    ),
-                    MyFilledButton(
-                      isLoading: isLoading,
-                      onPressed: () {
-                        setup().then(
-                          (value) {
-                            if (value) {
-                              Get.offAllNamed('/auth');
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text("Something went wrong"),
-                                  backgroundColor: error,
-                                ),
-                              );
-                            }
-                          },
-                        );
+            Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    margin: const EdgeInsets.only(bottom: 21.0),
+                    child: MyTextField(
+                      prefixText:
+                          environment == "local" ? "http://" : "https://",
+                      suffixText: ".lakasir.com",
+                      controller: registerDomainController,
+                      label: "setup_your_registered_domain".tr,
+                      errorText: domainError,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "setup_please_enter_your_domain".tr;
+                        }
+                        return null;
                       },
-                      child: const Text("Setup!"),
+                      mandatory: true,
                     ),
-                  ],
-                ),
+                  ),
+                  MyFilledButton(
+                    isLoading: isLoading,
+                    onPressed: () {
+                      setup().then(
+                        (value) {
+                          if (value) {
+                            Get.offAllNamed('/auth');
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text("Something went wrong"),
+                                backgroundColor: error,
+                              ),
+                            );
+                          }
+                        },
+                      );
+                    },
+                    child: const Text("Setup!"),
+                  ),
+                ],
               ),
             ),
-            Center(
-              child: GestureDetector(
-                onTap: () {
-                  Get.toNamed('/domain/register');
-                },
-                child: SizedBox(
-                  width: 300,
-                  child: RichText(
-                    textAlign: TextAlign.center,
-                    text: TextSpan(
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16,
-                      ),
-                      children: [
-                        TextSpan(
-                          text:
-                              "setup_doesnt_have_domain".tr,
-                          style: const TextStyle(color: Colors.grey),
+            Container(
+              margin: const EdgeInsets.only(top: 28, bottom: 58),
+              child: Center(
+                child: GestureDetector(
+                  onTap: () {
+                    Get.toNamed('/domain/register');
+                  },
+                  child: SizedBox(
+                    width: 300,
+                    child: RichText(
+                      textAlign: TextAlign.center,
+                      text: TextSpan(
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
                         ),
-                        const WidgetSpan(child: SizedBox(width: 4.0)),
-                        TextSpan(
-                          text: "setup_please_create".tr,
-                          style: const TextStyle(
-                            color: primary,
+                        children: [
+                          TextSpan(
+                            text: "setup_doesnt_have_domain".tr,
+                            style: const TextStyle(color: Colors.grey),
                           ),
-                        ),
-                      ],
+                          const WidgetSpan(child: SizedBox(width: 4.0)),
+                          TextSpan(
+                            text: "setup_please_create".tr,
+                            style: const TextStyle(
+                              color: primary,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),

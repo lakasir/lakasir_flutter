@@ -27,6 +27,11 @@ class _TransactionMenuScreenState extends State<TransactionMenuScreen> {
       'icon': Icons.list_rounded,
       'route': '/menu/transaction/history',
     },
+    {
+      'title': 'transaction_cashier_report'.tr,
+      'icon': Icons.note,
+      'route': '/menu/transaction/reports/cashier',
+    },
   ];
 
   @override

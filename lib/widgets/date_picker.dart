@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:lakasir/widgets/text_field.dart';
 
@@ -10,6 +11,7 @@ class MyDatePicker extends StatefulWidget {
   final String? label;
   final String? hintText;
   final String? errorText;
+  final bool usingTimePicker;
 
   const MyDatePicker({
     super.key,
@@ -17,6 +19,7 @@ class MyDatePicker extends StatefulWidget {
     required this.firstDate,
     required this.lastDate,
     required this.controller,
+    this.usingTimePicker = false,
     this.label,
     this.hintText,
     this.errorText,
@@ -33,9 +36,13 @@ class _MyDatePickerState extends State<MyDatePicker> {
   void initState() {
     super.initState();
     _selectedDate = widget.initialDate;
-    setState(() {
-      widget.controller.text = DateFormat("yyyy-MM-dd").format(_selectedDate);
-    });
+    if (widget.usingTimePicker) {
+      widget.controller.text =
+          DateFormat("yyyy-MM-dd HH:mm:ss").format(_selectedDate).toString();
+    } else {
+      widget.controller.text =
+          DateFormat("yyyy-MM-dd").format(_selectedDate).toString();
+    }
   }
 
   @override
@@ -44,15 +51,51 @@ class _MyDatePickerState extends State<MyDatePicker> {
       controller: widget.controller,
       label: widget.label,
       hintText: widget.hintText,
-      onTap: () => _selectDate(context),
-      readOnly: true,
+      onTap: () => widget.usingTimePicker ? _selectDateTime() : _selectDate(),
       errorText: widget.errorText,
     );
   }
 
-  Future<void> _selectDate(BuildContext context) async {
+  Future<void> _selectDateTime() async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: Get.context!,
+      initialDate: _selectedDate,
+      firstDate: widget.firstDate,
+      lastDate: widget.lastDate,
+    );
+
+    if (pickedDate != null) {
+      final TimeOfDay? pickedTime = await showTimePicker(
+        context: Get.context!,
+        initialTime: TimeOfDay.now(),
+        builder: (BuildContext context, Widget? child) {
+          return MediaQuery(
+            data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
+            child: child!,
+          );
+        },
+      );
+
+      if (pickedTime != null) {
+        setState(() {
+          _selectedDate = DateTime(
+            pickedDate.year,
+            pickedDate.month,
+            pickedDate.day,
+            pickedTime.hour,
+            pickedTime.minute,
+          );
+          widget.controller.text = DateFormat("yyyy-MM-dd HH:mm:ss")
+              .format(_selectedDate)
+              .toString();
+        });
+      }
+    }
+  }
+
+  Future<void> _selectDate() async {
     final DateTime? picked = await showDatePicker(
-      context: context,
+      context: Get.context!,
       initialDate: _selectedDate,
       firstDate: widget.firstDate,
       lastDate: widget.lastDate,

@@ -28,7 +28,11 @@ class _MyDialogState extends State<MyDialog> {
       insetPadding: const EdgeInsets.all(0),
       surfaceTintColor: Colors.white,
       contentPadding: const EdgeInsets.all(0),
-      content: SizedBox(
+      content: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          color: Colors.grey[100],
+        ),
         width: 0.9 * MediaQuery.of(context).size.width,
         child: Column(
           mainAxisSize: MainAxisSize.min,

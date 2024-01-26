@@ -3,9 +3,7 @@ import 'package:get/get.dart';
 import 'package:lakasir/controllers/setting_controller.dart';
 import 'package:lakasir/controllers/settings/secure_initial_price_controller.dart';
 import 'package:lakasir/utils/colors.dart';
-import 'package:lakasir/widgets/filled_button.dart';
 import 'package:lakasir/widgets/layout.dart';
-import 'package:lakasir/widgets/text_field.dart';
 
 class HideInitialPriceScreen extends StatefulWidget {
   const HideInitialPriceScreen({super.key});
@@ -51,7 +49,9 @@ class _HideInitialPriceScreenState extends State<HideInitialPriceScreen> {
                   value: _settingController.setting.value.hideInitialPrice!,
                   onChanged: (value) {
                     if (!value) {
-                      _secureInitialPriceController.verifyPassword(isDisableSetting: true);
+                      _secureInitialPriceController.verifyPassword(
+                        isDisableSetting: true,
+                      );
                       return;
                     }
                     _settingController.updateSetting(
