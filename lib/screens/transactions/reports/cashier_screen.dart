@@ -11,6 +11,7 @@ import 'package:lakasir/services/cashier_report_service.dart';
 import 'package:lakasir/widgets/date_picker.dart';
 import 'package:lakasir/widgets/filled_button.dart';
 import 'package:lakasir/widgets/layout.dart';
+import 'package:lakasir/widgets/my_bottom_bar.dart';
 import 'package:path_provider/path_provider.dart';
 
 class CashierReportScreen extends StatefulWidget {
@@ -53,6 +54,7 @@ class _CashierReportScreenState extends State<CashierReportScreen> {
         await file.create();
       }
       await file.writeAsBytes(response);
+
       return file;
     }
     return null;
@@ -70,9 +72,7 @@ class _CashierReportScreenState extends State<CashierReportScreen> {
       });
       if (pdf!.existsSync()) {
         Get.to(
-          () => PdfPreviewScreen(
-            path: pdf.path,
-          ),
+          () => PdfPreviewScreen(pdfFile: pdf),
         );
       }
     } catch (e) {
@@ -129,9 +129,9 @@ class _CashierReportScreenState extends State<CashierReportScreen> {
 }
 
 class PdfPreviewScreen extends StatefulWidget {
-  const PdfPreviewScreen({super.key, required this.path});
+  const PdfPreviewScreen({super.key, required this.pdfFile});
 
-  final String path;
+  final File pdfFile;
 
   @override
   State<PdfPreviewScreen> createState() => _PdfPreviewScreenState();
@@ -141,7 +141,6 @@ class _PdfPreviewScreenState extends State<PdfPreviewScreen> {
   final _secureInitialPriceController = Get.put(SecureInitialPriceController());
   final _settingController = Get.put(SettingController());
   PDFViewController? _pdfViewController;
-  int? _totalPages;
   final Duration initialDuration = const Duration(milliseconds: 300);
 
   @override
@@ -157,6 +156,25 @@ class _PdfPreviewScreenState extends State<PdfPreviewScreen> {
     super.initState();
   }
 
+  void _downloadPdf() async {
+    try {
+      String fileName = "${DateTime.now().microsecondsSinceEpoch}.pdf";
+      String path = "/storage/emulated/0/Download/$fileName";
+      File file = File(path);
+      if (!await file.exists()) {
+        await file.create();
+      }
+      file.writeAsBytesSync(await widget.pdfFile.readAsBytes());
+      Get.rawSnackbar(
+        message: 'global_success_download'.tr,
+        duration: const Duration(seconds: 2),
+        backgroundColor: Colors.green,
+      );
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Obx(
@@ -167,10 +185,15 @@ class _PdfPreviewScreenState extends State<PdfPreviewScreen> {
         return Visibility(
           visible: !isOpen,
           child: Layout(
+            bottomNavigationBar: MyBottomBar(
+              singleAction: true,
+              singleActionOnPressed: _downloadPdf,
+              singleActionIcon: Icons.download,
+            ),
             title: 'transaction_cashier_report'.tr,
             child: PDFView(
               swipeHorizontal: true,
-              filePath: widget.path,
+              filePath: widget.pdfFile.path,
               onError: (error) {
                 debugPrint(error.toString());
               },
@@ -178,10 +201,8 @@ class _PdfPreviewScreenState extends State<PdfPreviewScreen> {
                 debugPrint('$page: ${error.toString()}');
               },
               onViewCreated: (PDFViewController pdfViewController) async {
-                var totalPage = await pdfViewController.getPageCount();
                 setState(() {
                   _pdfViewController = pdfViewController;
-                  _totalPages = totalPage!;
                 });
               },
             ),

@@ -193,6 +193,7 @@ class Messages extends Translations {
               'Register Success, check your email to get more information of your shop',
           'create_your_shop': 'Create your shop',
           'click_to_show': 'Click to show',
+          'global_success_download': 'Success Download',
         },
         'id_ID': {
           'auth': 'Otentikasi',
@@ -385,6 +386,7 @@ class Messages extends Translations {
               'Pendaftaran berhasil, cek email anda untuk mendapatkan informasi lebih lanjut tentang toko anda',
           'create_your_shop': 'Buata toko anda',
           'click_to_show': 'Klik untuk menampilkan',
+          'global_success_download': 'Download Berhasil',
         },
       };
 }

@@ -6,22 +6,22 @@ import 'package:lakasir/widgets/my_bottom_bar_actions.dart';
 class MyBottomBar extends StatefulWidget {
   const MyBottomBar({
     super.key,
-    required this.label,
-    required this.onPressed,
+    this.label,
+    this.onPressed,
     this.actions,
     this.hideBlockButton = false,
     this.singleAction = false,
     this.singleActionOnPressed,
-    this.singleActionIcon
+    this.singleActionIcon,
   });
 
   final List<MyBottomBarActions>? actions;
   final bool? singleAction;
   final IconData? singleActionIcon;
   final void Function()? singleActionOnPressed;
-  final Widget label;
+  final Widget? label;
   final bool hideBlockButton;
-  final void Function() onPressed;
+  final void Function()? onPressed;
 
   @override
   State<MyBottomBar> createState() => _MyBottomBarState();
@@ -69,24 +69,26 @@ class _MyBottomBarState extends State<MyBottomBar> {
               width: widget.actions != null || widget.singleAction!
                   ? MediaQuery.of(context).size.width * 73 / 100
                   : MediaQuery.of(context).size.width * 92 / 100,
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      blurRadius: 1,
-                      spreadRadius: -5,
-                      offset: const Offset(-3, 7),
-                      blurStyle: BlurStyle.normal,
-                    ),
-                  ],
-                ),
-                child: MyFilledButton(
-                  onPressed: widget.onPressed,
-                  child: widget.label,
-                ),
-              ),
+              child: widget.label != null
+                  ? Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            blurRadius: 1,
+                            spreadRadius: -5,
+                            offset: const Offset(-3, 7),
+                            blurStyle: BlurStyle.normal,
+                          ),
+                        ],
+                      ),
+                      child: MyFilledButton(
+                        onPressed: widget.onPressed!,
+                        child: widget.label ?? Container(),
+                      ),
+                    )
+                  : null,
             ),
           ),
         if (widget.actions != null || widget.singleAction!)
