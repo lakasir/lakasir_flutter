@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:lakasir/controllers/setting_controller.dart';
 import 'package:lakasir/services/setting_service.dart';
+import 'package:lakasir/utils/auth.dart';
 import 'package:lakasir/utils/colors.dart';
 import 'package:lakasir/utils/utils.dart';
 import 'package:lakasir/widgets/dialog.dart';
@@ -315,6 +316,70 @@ class _SettingScreenState extends State<SettingScreen> {
                   list: [
                     Text(
                       "setting_secure_initial_price".tr,
+                      style: const TextStyle(fontSize: 20),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.only(top: 10),
+                child: Text("auth".tr, style: const TextStyle(fontSize: 20)),
+              ),
+              Container(
+                margin: const EdgeInsets.only(top: 15),
+                child: MyCardList(
+                  onTap: () {
+                    Get.toNamed("/forgot");
+                  },
+                  imagebox: Container(
+                    width: 52,
+                    height: 52,
+                    decoration: const BoxDecoration(
+                      color: primary,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(10),
+                      ),
+                    ),
+                    child: const HeroIcon(
+                      HeroIcons.key,
+                      color: Colors.white,
+                      size: 32,
+                    ),
+                  ),
+                  list: [
+                    Text(
+                      "forgot_password".tr,
+                      style: const TextStyle(fontSize: 20),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.only(top: 15, bottom: 20),
+                child: MyCardList(
+                  onTap: () {
+                    logout().then((value) {
+                      Get.offAllNamed('/auth');
+                    });
+                  },
+                  imagebox: Container(
+                    width: 52,
+                    height: 52,
+                    decoration: const BoxDecoration(
+                      color: error,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(10),
+                      ),
+                    ),
+                    child: const HeroIcon(
+                      HeroIcons.power,
+                      color: Colors.white,
+                      size: 32,
+                    ),
+                  ),
+                  list: [
+                    Text(
+                      "logout".tr,
                       style: const TextStyle(fontSize: 20),
                     ),
                   ],

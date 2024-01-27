@@ -40,6 +40,11 @@ class _HideInitialPriceScreenState extends State<HideInitialPriceScreen> {
             style: const TextStyle(fontSize: 16, color: error),
           ),
           const SizedBox(height: 10),
+          Text(
+            'setting_secure_feature_affected'.tr,
+            style: const TextStyle(fontSize: 16, color: error),
+          ),
+          const SizedBox(height: 10),
           Obx(
             () {
               return ListTile(

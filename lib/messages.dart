@@ -4,6 +4,7 @@ class Messages extends Translations {
   @override
   Map<String, Map<String, String>> get keys => {
         'en_US': {
+          'auth': 'Auth',
           'menu': 'Menu',
           'menu_transaction': 'Transaction',
           'menu_transaction_subtitle': 'Manage your transaction',
@@ -29,7 +30,9 @@ class Messages extends Translations {
           'setting_secure_initial_price_description':
               'If you enable this, initial price will be hidden and you must enter password to see it',
           'setting_secure_initial_price_info':
-              'Password by default is your login password',
+              'Password by default is your login password and these are feature that will be affected by this setting:',
+          'setting_secure_feature_affected':
+              'Analytics Dashboard History\nInitial Price in Transaction Detail\nTransaction Report',
           'setting_secure_initial_price_enabled':
               'Activate Secure Initial Price',
           'setting_secure_initial_price_disable':
@@ -192,6 +195,7 @@ class Messages extends Translations {
           'click_to_show': 'Click to show',
         },
         'id_ID': {
+          'auth': 'Otentikasi',
           'menu': 'Menu',
           'menu_transaction': 'Transaksi',
           'menu_transaction_subtitle': 'Atur transaksi anda',
@@ -217,7 +221,9 @@ class Messages extends Translations {
           'setting_secure_initial_price_description':
               'Jika anda mengaktifkan ini, harga awal akan disembunyikan dan anda harus memasukkan password untuk melihatnya',
           'setting_secure_initial_price_info':
-              'Kata sandi secara default adalah kata sandi masuk anda',
+              'Kata sandi secara default adalah kata sandi masuk anda dan ini adalah fitur yang akan terpengaruh oleh pengaturan ini:',
+          'setting_secure_feature_affected':
+              'Analitik Dashboard Riwayat\nHarga Awal di Detail Transaksi\nLaporan Transaksi',
           'setting_secure_initial_price_enabled':
               'Aktifkan Secure Initial Price',
           'setting_secure_initial_price_disable':

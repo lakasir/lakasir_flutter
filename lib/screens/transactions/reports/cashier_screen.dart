@@ -1,14 +1,13 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:get/get.dart';
 import 'package:lakasir/api/requests/cashier_report_request.dart';
-import 'package:lakasir/api/responses/transactions/reports/cashier_report_response.dart';
 import 'package:lakasir/controllers/setting_controller.dart';
 import 'package:lakasir/controllers/settings/secure_initial_price_controller.dart';
 import 'package:lakasir/services/cashier_report_service.dart';
-import 'package:lakasir/utils/colors.dart';
 import 'package:lakasir/widgets/date_picker.dart';
 import 'package:lakasir/widgets/filled_button.dart';
 import 'package:lakasir/widgets/layout.dart';
@@ -25,8 +24,6 @@ class _CashierReportScreenState extends State<CashierReportScreen> {
   final _cashierReportService = CashierReportService();
   final _cashierReportStartDateController = TextEditingController();
   final _cashierReportEndDateController = TextEditingController();
-  final _secureInitialPriceController = Get.put(SecureInitialPriceController());
-  final _settingController = Get.put(SettingController());
 
   bool _isLoading = false;
 
@@ -82,7 +79,7 @@ class _CashierReportScreenState extends State<CashierReportScreen> {
       setState(() {
         _isLoading = false;
       });
-      print(e.toString());
+      debugPrint(e.toString());
     }
   }
 
@@ -141,35 +138,56 @@ class PdfPreviewScreen extends StatefulWidget {
 }
 
 class _PdfPreviewScreenState extends State<PdfPreviewScreen> {
+  final _secureInitialPriceController = Get.put(SecureInitialPriceController());
+  final _settingController = Get.put(SettingController());
+  PDFViewController? _pdfViewController;
+  int? _totalPages;
+  final Duration initialDuration = const Duration(milliseconds: 300);
+
+  @override
+  void initState() {
+    _secureInitialPriceController.isOpened.value = false;
+    Timer(initialDuration, () {
+      if (_settingController.setting.value.hideInitialPrice!) {
+        _secureInitialPriceController.verifyPassword();
+        // _secureInitialPriceController.isOpened.value = true;
+        // isVisible = true;
+      }
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Layout(
-      noAppBar: true,
-      child: PDFView(
-        filePath: widget.path,
-        autoSpacing: false,
-        defaultPage: 0,
-        fitPolicy: FitPolicy.BOTH,
-        preventLinkNavigation: false,
-        onRender: (_pages) {
-          print("OK RENDERED!!!!!");
-        },
-        onError: (error) {
-          print(error.toString());
-        },
-        onPageError: (page, error) {
-          print('$page: ${error.toString()}');
-        },
-        onViewCreated: (PDFViewController pdfViewController) {
-          // _controller.complete(pdfViewController);
-        },
-        onLinkHandler: (String? uri) {
-          print('goto uri: $uri');
-        },
-        onPageChanged: (int? page, int? total) {
-          print('page change: $page/$total');
-        },
-      ),
+    return Obx(
+      () {
+        var isOpen = _settingController.setting.value.hideInitialPrice! &&
+            !_secureInitialPriceController.isOpened.value;
+
+        return Visibility(
+          visible: !isOpen,
+          child: Layout(
+            title: 'transaction_cashier_report'.tr,
+            child: PDFView(
+              swipeHorizontal: true,
+              filePath: widget.path,
+              onError: (error) {
+                debugPrint(error.toString());
+              },
+              onPageError: (page, error) {
+                debugPrint('$page: ${error.toString()}');
+              },
+              onViewCreated: (PDFViewController pdfViewController) async {
+                var totalPage = await pdfViewController.getPageCount();
+                setState(() {
+                  _pdfViewController = pdfViewController;
+                  _totalPages = totalPage!;
+                });
+              },
+            ),
+          ),
+        );
+      },
     );
   }
 }
