@@ -24,7 +24,8 @@ class CartController extends GetxController {
   bool isNotEnoughStock() {
     bool isNotEnoughStock = _productDetailController.product.value.stock! <
         int.parse(qtyController.text);
-    if (!_productDetailController.product.value.isNonStock && isNotEnoughStock) {
+    if (!_productDetailController.product.value.isNonStock &&
+        isNotEnoughStock) {
       Get.rawSnackbar(
         message: 'Stock is not enough',
         backgroundColor: error,
@@ -127,14 +128,45 @@ class CartController extends GetxController {
       ),
     ));
   }
+
+  void showDeleteCartDialog() {
+    Get.dialog(AlertDialog(
+      title: Text('cart_delete_all'.tr),
+      content: Text('cart_delete_all_content'.tr),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Get.back();
+          },
+          child: Text('global_cancel'.tr),
+        ),
+        TextButton(
+          onPressed: () {
+            cartSessions.update((val) {
+              val!.cartItems.clear();
+              val.totalPrice = 0;
+              val.totalQty = 0;
+              val.payedMoney = 0;
+            });
+            Get.back();
+            Get.back();
+          },
+          child: Text('global_delete'.tr),
+        ),
+      ],
+    ));
+  }
 }
 
 class CartSession {
   double? totalPrice;
   double? payedMoney;
   MemberResponse? member;
-  int? tax;
-  PaymentMethodRespone? paymentMethod;
+  double? tax;
+  PaymentMethodRespone? paymentMethod = PaymentMethodRespone(
+    id: 1,
+    name: 'Cash',
+  );
   int? totalQty;
   final bool friendPrice;
   final List<CartItem> cartItems;
@@ -162,6 +194,17 @@ class CartSession {
   }
 
   double get getTotalPrice {
+    var tax = this.tax ?? 0;
+    return cartItems.fold(
+      0,
+      (previousValue, element) =>
+          previousValue +
+          (element.qty * element.product.sellingPrice!.toInt()) *
+              (1 + (tax / 100)),
+    );
+  }
+
+  double get getSubTotalPrice {
     return cartItems.fold(
       0,
       (previousValue, element) =>

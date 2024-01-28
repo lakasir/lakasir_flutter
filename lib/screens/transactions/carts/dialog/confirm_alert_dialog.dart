@@ -65,6 +65,26 @@ class ConfirmAlertDialog extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              Text("field_tax".tr),
+              Text(
+                "${_cartController.cartSessions.value.tax!}" "%",
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text("Subtotal".tr),
+              Text(
+                formatPrice(
+                  _cartController.cartSessions.value.getSubTotalPrice,
+                ),
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
               Text("global_total".tr),
               Text(
                 formatPrice(

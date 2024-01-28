@@ -22,7 +22,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
   @override
   Widget build(BuildContext context) {
     return Layout(
-      title: "Total: ${formatPrice(_cartController.cartSessions.value.getTotalPrice)}",
+      title:
+          "Total: ${formatPrice(_cartController.cartSessions.value.getTotalPrice)}",
       bottomNavigationBar: MyBottomBar(
         onPressed: () {
           if (_cartController.cartSessions.value.payedMoney! <
@@ -39,11 +40,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
         label: const Text(
           "Pay it",
         ),
-        singleAction: true,
-        singleActionIcon: Icons.edit_rounded,
-        singleActionOnPressed: () {
-          Get.dialog(const EditDetailAlert());
-        },
       ),
       child: Column(
         children: [

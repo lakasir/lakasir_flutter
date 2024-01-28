@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:get/get.dart';
 import 'package:lakasir/controllers/members/member_controller.dart';
-import 'package:lakasir/controllers/payment_method_controller.dart';
 import 'package:lakasir/controllers/transactions/cart_controller.dart';
-import 'package:lakasir/utils/colors.dart';
 import 'package:lakasir/widgets/dialog.dart';
 import 'package:lakasir/widgets/filled_button.dart';
 import 'package:lakasir/widgets/select_input_feld.dart';
@@ -20,9 +19,9 @@ class _EditDetailAlertState extends State<EditDetailAlert> {
   final SelectInputWidgetController selectInputWidgetController =
       SelectInputWidgetController();
 
-  final TextEditingController taxController = TextEditingController();
+  final MoneyMaskedTextController taxController = MoneyMaskedTextController(
+      thousandSeparator: '.', decimalSeparator: ',', rightSymbol: ' %');
   final _memberController = Get.put(MemberController());
-  final _paymentMethodController = Get.put(PaymentMethodController());
   final _cartController = Get.put(CartController());
 
   @override
@@ -86,81 +85,6 @@ class _EditDetailAlertState extends State<EditDetailAlert> {
             margin: const EdgeInsets.only(
               bottom: 10,
             ),
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  margin: const EdgeInsets.only(
-                    bottom: 10,
-                  ),
-                  child: Text(
-                    "field_payment_method".tr,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: secondary,
-                    ),
-                  ),
-                ),
-                Obx(
-                  () {
-                    if (_paymentMethodController.isFetching.value) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                    return Wrap(
-                      spacing: 8,
-                      runSpacing: 8,
-                      children: List.generate(
-                        _paymentMethodController.paymentMethods.length,
-                        (index) {
-                          double width = Get.width;
-                          return Obx(
-                            () => Container(
-                              width: width * 25 / 100,
-                              height: 55,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: _cartController.cartSessions.value
-                                            .paymentMethod ==
-                                        _paymentMethodController
-                                            .paymentMethods[index]
-                                    ? grey
-                                    : whiteGrey,
-                              ),
-                              child: MaterialButton(
-                                onPressed: () {
-                                  _cartController
-                                          .cartSessions.value.paymentMethod =
-                                      _paymentMethodController
-                                          .paymentMethods[index];
-                                  _cartController.cartSessions.refresh();
-                                },
-                                shape: const RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10)),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    _paymentMethodController
-                                        .paymentMethods[index].name,
-                                    style: const TextStyle(
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    );
-                  },
-                ),
-              ],
-            ),
           ),
           MyFilledButton(
             onPressed: () {
@@ -168,13 +92,14 @@ class _EditDetailAlertState extends State<EditDetailAlert> {
                 if (selectInputWidgetController.selectedOption != null) {
                   for (var element in _memberController.members) {
                     if (element.id ==
-                        int.parse(selectInputWidgetController.selectedOption!)) {
+                        int.parse(
+                            selectInputWidgetController.selectedOption!)) {
                       val!.member = element;
                     }
                   }
                 }
                 if (taxController.text.isNotEmpty) {
-                  val!.tax = int.parse(taxController.text);
+                  val!.tax = taxController.numberValue;
                 }
               });
               _cartController.cartSessions.refresh();

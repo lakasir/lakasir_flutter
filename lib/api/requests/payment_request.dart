@@ -2,7 +2,7 @@ class PaymentRequest {
   double? payedMoney;
   bool? friendPrice;
   int? memberId;
-  int? tax;
+  double? tax;
   List<PaymentRequestItem>? products;
 
   PaymentRequest({
