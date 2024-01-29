@@ -20,17 +20,19 @@ class _EditDetailAlertState extends State<EditDetailAlert> {
       SelectInputWidgetController();
 
   final MoneyMaskedTextController taxController = MoneyMaskedTextController(
-      thousandSeparator: '.', decimalSeparator: ',', rightSymbol: ' %');
-  final _memberController = Get.put(MemberController());
+    thousandSeparator: '.',
+    decimalSeparator: ',',
+    rightSymbol: ' %',
+    precision: 1,
+  );
+  final MemberController _memberController = Get.put(MemberController());
   final _cartController = Get.put(CartController());
 
   @override
   void initState() {
     super.initState();
     if (_cartController.cartSessions.value.tax != null) {
-      taxController.text = _cartController.cartSessions.value.tax.toString();
-    } else {
-      taxController.text = "0";
+      taxController.updateValue(_cartController.cartSessions.value.tax!);
     }
 
     if (_cartController.cartSessions.value.member != null) {
@@ -45,28 +47,30 @@ class _EditDetailAlertState extends State<EditDetailAlert> {
       title: "cart_edit_detail".tr,
       content: Column(
         children: [
-          Container(
-            margin: const EdgeInsets.only(
-              bottom: 10,
-            ),
-            child: SelectInputWidget(
-              label: "field_member".tr,
-              hintText: _memberController.members.isEmpty
-                  ? "global_no_item".trParams(
-                      {"item": "menu_member".tr},
+          Obx(
+            () => Container(
+              margin: const EdgeInsets.only(
+                bottom: 10,
+              ),
+              child: SelectInputWidget(
+                label: "field_member".tr,
+                hintText: _memberController.members.isEmpty
+                    ? "global_no_item".trParams(
+                        {"item": "menu_member".tr},
+                      )
+                    : "field_select_item".trParams(
+                        {"item": "menu_member".tr},
+                      ),
+                options: _memberController.members
+                    .map(
+                      (e) => Option(
+                        value: e.id.toString(),
+                        name: e.name,
+                      ),
                     )
-                  : "field_select_item".trParams(
-                      {"item": "menu_member".tr},
-                    ),
-              options: _memberController.members
-                  .map(
-                    (e) => Option(
-                      value: e.id.toString(),
-                      name: e.name,
-                    ),
-                  )
-                  .toList(),
-              controller: selectInputWidgetController,
+                    .toList(),
+                controller: selectInputWidgetController,
+              ),
             ),
           ),
           Container(

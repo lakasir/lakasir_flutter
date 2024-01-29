@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:lakasir/controllers/members/member_controller.dart';
 import 'package:lakasir/widgets/layout.dart';
 import 'package:lakasir/widgets/my_bottom_bar.dart';
-import 'package:lakasir/widgets/my_bottom_bar_actions.dart';
 import 'package:lakasir/widgets/my_card_list.dart';
 
 class MemberScreen extends StatefulWidget {

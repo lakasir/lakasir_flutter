@@ -56,8 +56,8 @@ class _CashierMenuScreenState extends State<CashierMenuScreen> {
           singleActionIcon: Icons.edit_note,
           singleActionOnPressed: () {
             if (!_settingController.setting.value.cashDrawerEnabled) {
-              Get.dialog(AlertDialog
-                (title: Text('cashier_set_cash_drawer'.tr),
+              Get.dialog(AlertDialog(
+                title: Text('cashier_set_cash_drawer'.tr),
                 content: Text('cashier_set_cash_drawer_enabled_info'.tr),
                 actions: [
                   TextButton(
