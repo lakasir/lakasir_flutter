@@ -20,9 +20,6 @@ class ApiService<T> {
       },
     );
 
-    print(response.statusCode);
-    print(response.body);
-
     if (response.statusCode == 401) {
       logout();
       throw UnauthorizedException(jsonDecode(response.body)['message']);

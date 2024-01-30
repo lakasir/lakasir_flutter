@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lakasir/controllers/payment_method_controller.dart';
+import 'package:lakasir/controllers/setting_controller.dart';
 import 'package:lakasir/controllers/transactions/cart_controller.dart';
 import 'package:lakasir/screens/transactions/carts/dialog/edit_alert_dialog.dart';
 import 'package:lakasir/utils/colors.dart';
@@ -21,9 +22,23 @@ class CashierCartMenuScreen extends StatefulWidget {
 
 class _CashierCartMenuScreenState extends State<CashierCartMenuScreen> {
   final _cartController = Get.put(CartController());
+  final _settingController = Get.put(SettingController());
 
   SelectInputWidgetController selectInputWidgetController =
       SelectInputWidgetController();
+
+  @override
+  void initState() {
+    super.initState();
+    _cartController.cartSessions.value.tax =
+        _settingController.setting.value.defaultTax;
+  }
+
+  @override
+  void dispose() {
+    _cartController.cartSessions.value.tax = null;
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

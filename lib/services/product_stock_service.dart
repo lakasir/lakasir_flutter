@@ -24,7 +24,6 @@ class ProductStockService {
   }
 
   Future<void> create(int id, ProductStockRequest? productStockRequest) async {
-    print(productStockRequest?.toJson());
     await ApiService(await getDomain()).postData(
       'master/product/$id/stock',
       productStockRequest?.toJson(),

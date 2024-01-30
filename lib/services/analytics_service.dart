@@ -7,8 +7,9 @@ import 'package:lakasir/utils/auth.dart';
 
 class AnalyticsService {
   Future<TotalRevenueResponse> fetchTotalRevenue(String filterType) async {
+    String tzName = DateTime.now().timeZoneName;
     final response = await ApiService(await getDomain()).fetchData(
-        'transaction/dashboard/total-revenue?filter_type=$filterType');
+        'transaction/dashboard/total-revenue?filter_type=$filterType&timezone=$tzName');
 
     final apiResponse = ApiResponse.fromJson(response, (json) {
       return TotalRevenueResponse.fromJson(json);
@@ -19,8 +20,9 @@ class AnalyticsService {
 
   Future<TotalGrossProfitRespnose> fetchTotalGrossProfit(
       String filterType) async {
+    String tzName = DateTime.now().timeZoneName;
     final response = await ApiService(await getDomain()).fetchData(
-        'transaction/dashboard/total-gross-profit?filter_type=$filterType');
+        'transaction/dashboard/total-gross-profit?filter_type=$filterType&timezone=$tzName');
 
     final apiResponse = ApiResponse.fromJson(response, (json) {
       return TotalGrossProfitRespnose.fromJson(json);
@@ -29,10 +31,10 @@ class AnalyticsService {
     return apiResponse.data!.value;
   }
 
-  Future<TotalSalesResponse> fetchTotalSales(
-      String filterType) async {
-    final response = await ApiService(await getDomain())
-        .fetchData('transaction/dashboard/total-sales?filter_type=$filterType');
+  Future<TotalSalesResponse> fetchTotalSales(String filterType) async {
+    String tzName = DateTime.now().timeZoneName;
+    final response = await ApiService(await getDomain()).fetchData(
+        'transaction/dashboard/total-sales?filter_type=$filterType&timezone=$tzName');
 
     final apiResponse = ApiResponse.fromJson(response, (json) {
       return TotalSalesResponse.fromJson(json);

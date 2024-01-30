@@ -33,7 +33,7 @@ class ProductAddEditController extends GetxController {
   String? photoUrl = '';
   Rx<ProductErrorResponse> productErrorResponse = ProductErrorResponse().obs;
   final RxBool isLoading = false.obs;
-  final ProductController _productController = Get.find();
+  final ProductController _productController = Get.put(ProductController());
   final ProductDetailController _productDetailController =
       Get.put(ProductDetailController());
   RxBool enabledStock = false.obs;

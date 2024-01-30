@@ -87,7 +87,7 @@ class _CashierMenuScreenState extends State<CashierMenuScreen> {
                 if (_cartController.cartSessions.value.cartItems.isNotEmpty)
                   Text(
                     '${_cartController.cartSessions.value.cartItems.length} Items'
-                    ' - ${formatPrice(_cartController.cartSessions.value.getTotalPrice)}',
+                    ' - ${formatPrice(_cartController.cartSessions.value.getSubTotalPrice)}',
                     style: const TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,

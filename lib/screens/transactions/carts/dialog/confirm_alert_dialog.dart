@@ -67,7 +67,7 @@ class ConfirmAlertDialog extends StatelessWidget {
             children: [
               Text("field_tax".tr),
               Text(
-                "${_cartController.cartSessions.value.tax!}" "%",
+                "${_cartController.cartSessions.value.tax ?? 0}%",
               ),
             ],
           ),

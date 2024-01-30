@@ -12,7 +12,6 @@ class CashDrawerResponse {
   });
 
   factory CashDrawerResponse.fromJson(Map<String, dynamic> json) {
-    print(json);
     return CashDrawerResponse(
       id: json['id'],
       openedBy: json['opened_by'],

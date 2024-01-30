@@ -19,6 +19,7 @@ class Setting {
   bool cashDrawerEnabled;
   bool? hideInitialPrice;
   bool? hideInitialPriceUsingPin;
+  double? defaultTax;
 
   Setting({
     this.currency,
@@ -27,6 +28,7 @@ class Setting {
     this.cashDrawerEnabled = false,
     this.hideInitialPrice = false,
     this.hideInitialPriceUsingPin = false,
+    this.defaultTax = 0,
   });
 
   factory Setting.fromJson(Map<String, dynamic> json) {
@@ -37,6 +39,8 @@ class Setting {
       cashDrawerEnabled: json["cash_drawer_enabled"],
       hideInitialPrice: json["secure_initial_price_enabled"],
       hideInitialPriceUsingPin: json["secure_initial_price_using_pin"],
+      defaultTax:
+          json["default_tax"] == null ? 0 : json["default_tax"].toDouble(),
     );
   }
 }

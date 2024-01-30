@@ -8,7 +8,7 @@ import 'package:lakasir/utils/colors.dart';
 
 class ProductDetailController extends GetxController {
   final _productService = ProductService();
-  final ProductController _productController = Get.find();
+  final ProductController _productController = Get.put(ProductController());
   final RxBool isLoading = false.obs;
   final Rx<ProductResponse> product = ProductResponse().obs;
 

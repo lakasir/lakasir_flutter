@@ -10,6 +10,7 @@ class TotalSalesResponse {
   });
 
   factory TotalSalesResponse.fromJson(Map<String, dynamic> json) {
+    print(json);
     return TotalSalesResponse(
       totalSales: json["total_sales"].toDouble(),
       totalPreviousSales: json["total_prevous_sales"].toDouble(),
