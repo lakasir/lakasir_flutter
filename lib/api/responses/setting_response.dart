@@ -15,7 +15,7 @@ class SettingResponse {
 class Setting {
   String? currency;
   String? locale;
-  String? methodePrice;
+  String? sellingMethod;
   bool cashDrawerEnabled;
   bool? hideInitialPrice;
   bool? hideInitialPriceUsingPin;
@@ -24,7 +24,7 @@ class Setting {
   Setting({
     this.currency,
     this.locale,
-    this.methodePrice,
+    this.sellingMethod,
     this.cashDrawerEnabled = false,
     this.hideInitialPrice = false,
     this.hideInitialPriceUsingPin = false,
@@ -35,7 +35,7 @@ class Setting {
     return Setting(
       currency: json["currency"],
       locale: json["locale"],
-      methodePrice: json["methode_price"],
+      sellingMethod: json["selling_method"],
       cashDrawerEnabled: json["cash_drawer_enabled"],
       hideInitialPrice: json["secure_initial_price_enabled"],
       hideInitialPriceUsingPin: json["secure_initial_price_using_pin"],

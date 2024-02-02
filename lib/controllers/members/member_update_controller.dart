@@ -19,6 +19,7 @@ class MemberUpdateController extends GetxController {
   final memberEmailOrPhoneController = TextEditingController();
   final memberAddressController = TextEditingController();
   final isSubmitting = false.obs;
+  final isDeleting = false.obs;
   final MemberService _memberService = MemberService();
   final Rx<MemberResponse> member = MemberResponse(
     id: 0,
@@ -93,7 +94,7 @@ class MemberUpdateController extends GetxController {
               onPressed: () async {
                 Get.back();
                 try {
-                  isSubmitting(true);
+                  isDeleting(true);
                   await _memberService.delete(member.value.id);
                   Get.back();
                   Get.rawSnackbar(
@@ -102,20 +103,20 @@ class MemberUpdateController extends GetxController {
                     }),
                     backgroundColor: success,
                   );
-                  isSubmitting(false);
+                  isDeleting(false);
                   _memberController.fetchMembers();
                 } catch (e) {
-                  isSubmitting(false);
-                  if (e is ValidationException) {
-                    ErrorResponse<MemberErrorResponse> errorResponse =
-                        ErrorResponse.fromJson(
-                      jsonDecode(
-                        e.toString(),
-                      ),
-                      (json) => MemberErrorResponse.fromJson(json),
-                    );
-                    memberErrorResponse(errorResponse.errors);
-                  }
+                  isDeleting(false);
+                  Get.rawSnackbar(
+                    title: 'global_failed_delete_item'.trParams({
+                      'item': 'menu_member'.tr.toLowerCase(),
+                    }),
+                    message: 'has_an_item'.trParams({
+                      'item': 'menu_transaction'.tr.toLowerCase(),
+                    }),
+                    duration: const Duration(seconds: 2),
+                    backgroundColor: error,
+                  );
                 }
               },
               child: Text('global_yes'.tr),

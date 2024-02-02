@@ -48,8 +48,7 @@ class MemberForm extends StatelessWidget {
               () => MyTextField(
                 controller: controller.memberEmailOrPhoneController,
                 label: "field_email_or_phone".tr,
-                errorText:
-                    controller.memberErrorResponse.value.email ?? "",
+                errorText: controller.memberErrorResponse.value.email ?? "",
               ),
             ),
           ),
@@ -75,18 +74,20 @@ class MemberForm extends StatelessWidget {
           if (isUpdate == true)
             Container(
               margin: const EdgeInsets.only(top: 20),
-              child: MyFilledButton(
-                onPressed: () => controller.deleteMember(),
-                isLoading: controller.isSubmitting.value,
-                color: error,
-                child: const Row(
-                  children: [
-                    Text('Delete'),
-                    Icon(
-                      Icons.delete,
-                      color: Colors.white,
-                    ),
-                  ],
+              child: Obx(
+                () => MyFilledButton(
+                  onPressed: () => controller.deleteMember(),
+                  isLoading: controller.isDeleting.value,
+                  color: error,
+                  child: Row(
+                    children: [
+                      Text('global_delete'.tr),
+                      const Icon(
+                        Icons.delete,
+                        color: Colors.white,
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

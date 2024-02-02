@@ -29,13 +29,22 @@ class GeneralSetting extends StatelessWidget {
                 ),
               ),
               child: const Icon(
-                Icons.category,
+                Icons.category_outlined,
                 color: Colors.white,
                 size: 32,
               ),
             ),
             list: [
-              Text("setting_category".tr, style: const TextStyle(fontSize: 20)),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("setting_category".tr,
+                      style: const TextStyle(fontSize: 20)),
+                  const Icon(
+                    Icons.arrow_forward_ios_rounded,
+                  ),
+                ],
+              ),
             ],
           ),
         ),

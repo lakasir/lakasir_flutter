@@ -121,8 +121,6 @@ class ProductAddEditController extends GetxController {
       await _productDetailController.get(Get.arguments.id);
       clearInput();
       Get.back();
-      Get.offAndToNamed('/menu/product/detail',
-          arguments: _productDetailController.product.value);
       Get.rawSnackbar(
         message: 'global_updated_item'.trParams({'item': 'menu_product'.tr}),
         backgroundColor: success,

@@ -38,16 +38,31 @@ class ProductDetailController extends GetxController {
           ),
           TextButton(
             onPressed: () async {
-              await delete(id);
-              _productController.getProducts();
-              Get.back();
-              Get.back();
-              Get.rawSnackbar(
-                message:
-                    'global_deleted_item'.trParams({"item": "menu_product".tr}),
-                duration: const Duration(seconds: 2),
-                backgroundColor: success,
-              );
+              try {
+                await delete(id);
+                _productController.getProducts();
+                Get.back();
+                Get.back();
+                Get.rawSnackbar(
+                  message: 'global_deleted_item'
+                      .trParams({"item": "menu_product".tr}),
+                  duration: const Duration(seconds: 2),
+                  backgroundColor: success,
+                );
+              } catch (e) {
+                Get.back();
+
+                Get.rawSnackbar(
+                  title: 'global_failed_delete_item'.trParams({
+                    'item': 'menu_product'.tr.toLowerCase(),
+                  }),
+                  message: 'has_an_item'.trParams({
+                    'item': 'menu_transaction'.tr.toLowerCase(),
+                  }),
+                  duration: const Duration(seconds: 2),
+                  backgroundColor: error,
+                );
+              }
             },
             child: Text('global_delete'.tr),
           ),

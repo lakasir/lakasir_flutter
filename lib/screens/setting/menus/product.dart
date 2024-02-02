@@ -38,9 +38,17 @@ class ProductSetting extends StatelessWidget {
               ),
             ),
             list: [
-              Text(
-                "setting_secure_initial_price".tr,
-                style: const TextStyle(fontSize: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "setting_secure_initial_price".tr,
+                    style: const TextStyle(fontSize: 20),
+                  ),
+                  const Icon(
+                    Icons.arrow_forward_ios_rounded,
+                  ),
+                ],
               ),
             ],
           ),

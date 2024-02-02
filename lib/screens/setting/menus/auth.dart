@@ -40,9 +40,17 @@ class AuthSetting extends StatelessWidget {
               ),
             ),
             list: [
-              Text(
-                "forgot_password".tr,
-                style: const TextStyle(fontSize: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "forgot_password".tr,
+                    style: const TextStyle(fontSize: 20),
+                  ),
+                  const Icon(
+                    Icons.arrow_forward_ios_rounded,
+                  ),
+                ],
               ),
             ],
           ),
@@ -67,14 +75,13 @@ class AuthSetting extends StatelessWidget {
               width: 52,
               height: 52,
               decoration: const BoxDecoration(
-                color: error,
+                color: whiteGrey,
                 borderRadius: BorderRadius.all(
                   Radius.circular(10),
                 ),
               ),
               child: const HeroIcon(
                 HeroIcons.power,
-                color: Colors.white,
                 size: 32,
               ),
             ),

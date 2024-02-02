@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:get/get.dart';
+import 'package:heroicons/heroicons.dart';
 import 'package:lakasir/controllers/setting_controller.dart';
 import 'package:lakasir/utils/colors.dart';
 import 'package:lakasir/widgets/confirm_dialog.dart';
@@ -36,7 +37,6 @@ class TransactionSetting extends StatelessWidget {
                 rightSymbol: ' %',
                 precision: 1,
               );
-              print(settingController.setting.value.defaultTax);
               settingController.setting.value.defaultTax != null
                   ? taxController
                       .updateValue(settingController.setting.value.defaultTax!)
@@ -107,41 +107,73 @@ class TransactionSetting extends StatelessWidget {
               ),
             ),
             list: [
-              Text("cashier_cash_drawer".tr,
-                  style: const TextStyle(fontSize: 20)),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("cashier_cash_drawer".tr,
+                      style: const TextStyle(fontSize: 20)),
+                  Obx(
+                    () {
+                      var cashDrawerEnabled =
+                          settingController.setting.value.cashDrawerEnabled;
+                      return Switch(
+                        focusColor: primary,
+                        value: cashDrawerEnabled,
+                        onChanged: (value) {
+                          Get.dialog(MyConfirmDialog(
+                            title: "global_warning".tr,
+                            content: Text(cashDrawerEnabled
+                                ? "cashier_cash_drawer_question_deactivate".tr
+                                : "cashier_cash_drawer_question_activate".tr),
+                            onConfirm: () {
+                              settingController.updateSetting(
+                                "cash_drawer_enabled",
+                                value,
+                              );
+                              Get.back();
+                            },
+                            confirmText: "global_ok".tr,
+                          ));
+                        },
+                      );
+                    },
+                  )
+                ],
+              ),
             ],
-            trailing: Obx(
-              () {
-                var cashDrawerEnabled =
-                    settingController.setting.value.cashDrawerEnabled;
-                return SizedBox(
-                  width: Get.width * 0.47,
-                  child: Align(
-                    alignment: Alignment.centerRight,
-                    child: Switch(
-                      focusColor: primary,
-                      value: cashDrawerEnabled,
-                      onChanged: (value) {
-                        Get.dialog(MyConfirmDialog(
-                          title: "global_warning".tr,
-                          content: Text(cashDrawerEnabled
-                              ? "cashier_cash_drawer_question_deactivate".tr
-                              : "cashier_cash_drawer_question_activate".tr),
-                          onConfirm: () {
-                            settingController.updateSetting(
-                              "cash_drawer_enabled",
-                              value,
-                            );
-                            Get.back();
-                          },
-                          confirmText: "global_ok".tr,
-                        ));
-                      },
-                    ),
-                  ),
-                );
-              },
+          ),
+        ),
+        Container(
+          margin: const EdgeInsets.only(top: 15),
+          child: MyCardList(
+            route: '/menu/setting/selling_method',
+            imagebox: Container(
+              width: 52,
+              height: 52,
+              decoration: const BoxDecoration(
+                color: primary,
+                borderRadius: BorderRadius.all(
+                  Radius.circular(10),
+                ),
+              ),
+              child: const HeroIcon(
+                HeroIcons.arrowsPointingIn,
+                color: Colors.white,
+                size: 32,
+              ),
             ),
+            list: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("selling_method".tr,
+                      style: const TextStyle(fontSize: 20)),
+                  const Icon(
+                    Icons.arrow_forward_ios_rounded,
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
       ],

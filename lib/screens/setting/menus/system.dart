@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:heroicons/heroicons.dart';
 import 'package:lakasir/utils/colors.dart';
 import 'package:lakasir/utils/utils.dart';
 import 'package:lakasir/widgets/dialog.dart';
@@ -71,7 +72,7 @@ class SystemSetting extends StatelessWidget {
                 ),
               ),
               child: const Icon(
-                Icons.flag_rounded,
+                Icons.flag_outlined,
                 color: Colors.white,
                 size: 32,
               ),
@@ -81,23 +82,48 @@ class SystemSetting extends StatelessWidget {
             ],
           ),
         ),
+        // Container(
+        //   margin: const EdgeInsets.only(top: 15),
+        //   child: MyCardList(
+        //     onTap: () {
+        //       Get.dialog(AlertDialog(
+        //         title: Text("setting_dark_mode".tr),
+        //         content: Text("global_comming_soon".tr),
+        //         actions: [
+        //           TextButton(
+        //             onPressed: () {
+        //               Get.back();
+        //             },
+        //             child: Text("global_ok".tr),
+        //           ),
+        //         ],
+        //       ));
+        //     },
+        //     imagebox: Container(
+        //       width: 52,
+        //       height: 52,
+        //       decoration: const BoxDecoration(
+        //         color: primary,
+        //         borderRadius: BorderRadius.all(
+        //           Radius.circular(10),
+        //         ),
+        //       ),
+        //       child: const Icon(
+        //         Icons.app_registration_rounded,
+        //         color: Colors.white,
+        //         size: 32,
+        //       ),
+        //     ),
+        //     list: [
+        //       Text("setting_dark_mode".tr,
+        //           style: const TextStyle(fontSize: 20)),
+        //     ],
+        //   ),
+        // ),
         Container(
           margin: const EdgeInsets.only(top: 15),
           child: MyCardList(
-            onTap: () {
-              Get.dialog(AlertDialog(
-                title: Text("setting_dark_mode".tr),
-                content: Text("global_comming_soon".tr),
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      Get.back();
-                    },
-                    child: Text("global_ok".tr),
-                  ),
-                ],
-              ));
-            },
+            route: "/menu/setting/layout",
             imagebox: Container(
               width: 52,
               height: 52,
@@ -108,14 +134,52 @@ class SystemSetting extends StatelessWidget {
                 ),
               ),
               child: const Icon(
-                Icons.app_registration_rounded,
+                Icons.dashboard_outlined,
                 color: Colors.white,
                 size: 32,
               ),
             ),
             list: [
-              Text("setting_dark_mode".tr,
-                  style: const TextStyle(fontSize: 20)),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("Layout".tr, style: const TextStyle(fontSize: 20)),
+                  const Icon(
+                    Icons.arrow_forward_ios_rounded,
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+        Container(
+          margin: const EdgeInsets.only(top: 15),
+          child: MyCardList(
+            imagebox: Container(
+              width: 52,
+              height: 52,
+              decoration: const BoxDecoration(
+                color: primary,
+                borderRadius: BorderRadius.all(
+                  Radius.circular(10),
+                ),
+              ),
+              child: const HeroIcon(
+                HeroIcons.printer,
+                color: Colors.white,
+                size: 32,
+              ),
+            ),
+            list: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("Print".tr, style: const TextStyle(fontSize: 20)),
+                  const Icon(
+                    Icons.arrow_forward_ios_rounded,
+                  ),
+                ],
+              ),
             ],
           ),
         ),

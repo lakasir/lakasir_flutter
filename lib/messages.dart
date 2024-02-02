@@ -23,6 +23,7 @@ class Messages extends Translations {
           'setting_category': 'Category',
           'setting_currency': 'Currency',
           'setting_system': 'System',
+          'setting_system_layout': 'Layout Setting',
           'setting_language': 'Language',
           'setting_language_success': 'Language has been changed',
           'setting_dark_mode': 'Dark Mode',
@@ -46,6 +47,8 @@ class Messages extends Translations {
           'global_generate': 'Generate',
           'global_cancel': 'Cancel',
           'global_delete': 'Delete',
+          'global_failed_delete_item': 'Failed to delete @item',
+          'has_an_item': 'because has @item',
           'global_deleted_item': '@item has been deleted',
           'global_save': 'Save',
           'global_submit': 'Submit',
@@ -107,6 +110,7 @@ class Messages extends Translations {
           'field_payment_method': 'Payment Method',
           'field_select_item': 'Select @item',
           'global_save_title': 'Save @title',
+          'global_enable_it': 'Enable it',
           'global_sure?': 'Are you sure?',
           'global_sure_ok': 'Ok',
           'global_sure_content': 'Are you sure to delete this @item?',
@@ -197,6 +201,21 @@ class Messages extends Translations {
           'create_your_shop': 'Create your shop',
           'click_to_show': 'Click to show',
           'global_success_download': 'Success Download',
+          'selling_method': 'Selling Method',
+          'selling_method_info':
+              'Choose your selling method here, selling method is your way to reduce your product stock, by default selling method is Fifo',
+          'fifo_info':
+              'Fifo is a selling method that first in is first out, this is the most common selling method used, if you input sotck first, then the sotck will be sold first, and for the next input sotck will be sold after the first sotck sold',
+          'fifo_price_info':
+              'And the selling price will also use the price for the first stock, if the first stock is out, then the selling price will use the second stock, and so on',
+          'lifo_info':
+              'Lifo is a selling method that last in is first out, this is the opposite of Fifo, if you input stock first, then the stock will be sold after the last stock is sold',
+          'lifo_price_info':
+              'And the selling price will also use the price for the last stock, if the last stock is out, then the selling price will use the second last stock, and so on',
+          'normal_info':
+              'Normal is a selling method that doesn\'t care about the stock order, if you input stock first, then the stock will be sold after the last stock is sold',
+          'normal_price_info':
+              'And the selling price will use the price that you set last, if the last stock is out, the selling price will still use the price that you set last',
         },
         'id_ID': {
           'auth': 'Otentikasi',
@@ -218,6 +237,7 @@ class Messages extends Translations {
           'setting_category': 'Kategori',
           'setting_currency': 'Mata Uang',
           'setting_system': 'Sistem',
+          'setting_system_layout': 'Pengaturan Layout',
           'setting_language': 'Bahasa',
           'setting_language_success': 'Bahasa telah diubah',
           'setting_dark_mode': 'Mode Gelap',
@@ -241,6 +261,8 @@ class Messages extends Translations {
           'global_generate': 'Generate',
           'global_cancel': 'Batal',
           'global_delete': 'Hapus',
+          'global_failed_delete_item': 'Gagal menghapus @item',
+          'has_an_item': 'karena memiliki @item',
           'global_deleted_item': '@item berhasil dihapus',
           'global_save': 'Simpan',
           'global_submit': 'Submit',
@@ -303,6 +325,7 @@ class Messages extends Translations {
           'field_payment_method': 'Metode Pembayaran',
           'field_select_item': 'Pilih @item',
           'global_save_title': 'Simpan @title',
+          'global_enable_it': 'Aktifkan',
           'global_sure?': 'Anda yakin?',
           'global_sure_ok': 'Ok',
           'global_sure_content': 'Anda yakin ingin menghapus @item ini?',
@@ -393,6 +416,21 @@ class Messages extends Translations {
           'create_your_shop': 'Buata toko anda',
           'click_to_show': 'Klik untuk menampilkan',
           'global_success_download': 'Download Berhasil',
+          'selling_method': 'Metode Penjualan',
+          'selling_method_info':
+              'Pilih metode penjualan anda disini, metode penjualan adalah cara anda mengurangi stok produk anda, secara default metode penjualan adalah Fifo',
+          'fifo_info':
+              'Fifo adalah metode penjualan yang pertama masuk adalah pertama keluar, ini adalah metode penjualan yang paling umum digunakan, jika anda memasukkan stok pertama, maka stok tersebut akan dijual terlebih dahulu, dan untuk stok berikutnya akan dijual setelah stok pertama terjual',
+          'fifo_price_info':
+              'Dan harga jual juga akan menggunakan harga untuk stok pertama, jika stok pertama habis, maka harga jual akan menggunakan stok kedua, dan seterusnya',
+          'lifo_info':
+              'Lifo adalah metode penjualan yang terakhir masuk adalah pertama keluar, ini adalah kebalikan dari Fifo, jika anda memasukkan stok pertama, maka stok tersebut akan dijual setelah stok terakhir terjual',
+          'lifo_price_info':
+              'Dan harga jual juga akan menggunakan harga untuk stok terakhir, jika stok terakhir habis, maka harga jual akan menggunakan stok kedua terakhir, dan seterusnya',
+          'normal_info':
+              'Normal adalah metode penjualan yang tidak memperdulikan urutan stok, jika anda memasukkan stok pertama, maka stok tersebut akan dijual setelah stok terakhir terjual',
+          'normal_price_info':
+              'Dan harga jual akan menggunakan harga yang anda tentukan terakhir, jika stok terakhir habis, harga jual akan tetap menggunakan harga yang anda tentukan terakhir',
         },
       };
 }

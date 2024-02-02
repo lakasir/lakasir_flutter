@@ -25,6 +25,7 @@ class _DetailScreen extends State<DetailScreen> {
 
   @override
   void initState() {
+    print("initState");
     final product = Get.arguments as ProductResponse;
     _productDetailController.get(product.id);
     super.initState();
