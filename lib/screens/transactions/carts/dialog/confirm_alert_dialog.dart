@@ -41,6 +41,17 @@ class ConfirmAlertDialog extends StatelessWidget {
               ),
             ],
           ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "field_customer_member".tr,
+              ),
+              Text(
+                _cartController.cartSessions.value.getCustomerNumber,
+              ),
+            ],
+          ),
           const Divider(),
           for (var i = 0; i < cartItems.length; i++)
             Row(

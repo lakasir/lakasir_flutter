@@ -162,6 +162,7 @@ class CartSession {
   double? totalPrice;
   double? payedMoney;
   MemberResponse? member;
+  int? customerNumber;
   double? tax;
   PaymentMethodRespone? paymentMethod = PaymentMethodRespone(
     id: 1,
@@ -179,6 +180,7 @@ class CartSession {
     this.member,
     this.tax,
     this.paymentMethod,
+    this.customerNumber,
     required this.cartItems,
   });
 
@@ -217,6 +219,14 @@ class CartSession {
       0,
       (previousValue, element) => previousValue + element.qty,
     );
+  }
+
+  String get getCustomerNumber {
+    return customerNumber == null
+        ? "global_no_item".trParams({
+            'item': 'field_customer_number'.tr,
+          })
+        : customerNumber.toString();
   }
 }
 

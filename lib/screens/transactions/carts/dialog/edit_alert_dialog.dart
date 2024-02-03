@@ -25,6 +25,7 @@ class _EditDetailAlertState extends State<EditDetailAlert> {
     rightSymbol: ' %',
     precision: 1,
   );
+  final customerNumberController = TextEditingController();
   final MemberController _memberController = Get.put(MemberController());
   final _cartController = Get.put(CartController());
 
@@ -38,6 +39,10 @@ class _EditDetailAlertState extends State<EditDetailAlert> {
     if (_cartController.cartSessions.value.member != null) {
       selectInputWidgetController.selectedOption =
           _cartController.cartSessions.value.member!.id.toString();
+    }
+    if (_cartController.cartSessions.value.customerNumber != null) {
+      customerNumberController.text =
+          _cartController.cartSessions.value.customerNumber.toString();
     }
   }
 
@@ -78,6 +83,16 @@ class _EditDetailAlertState extends State<EditDetailAlert> {
               bottom: 10,
             ),
             child: MyTextField(
+              label: "field_customer_number".tr,
+              controller: customerNumberController,
+              keyboardType: TextInputType.number,
+            ),
+          ),
+          Container(
+            margin: const EdgeInsets.only(
+              bottom: 10,
+            ),
+            child: MyTextField(
               label: "field_tax".tr,
               hintText: "%",
               controller: taxController,
@@ -104,6 +119,10 @@ class _EditDetailAlertState extends State<EditDetailAlert> {
                 }
                 if (taxController.text.isNotEmpty) {
                   val!.tax = taxController.numberValue;
+                }
+                if (customerNumberController.text.isNotEmpty) {
+                  val!.customerNumber =
+                      int.parse(customerNumberController.text);
                 }
               });
               _cartController.cartSessions.refresh();

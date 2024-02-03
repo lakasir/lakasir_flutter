@@ -19,6 +19,7 @@ class TransactionHistoryResponse {
   List<SellingDetail>? sellingDetails;
   String? createdAt;
   String? updatedAt;
+  int? customerNumber;
 
   TransactionHistoryResponse({
     required this.id,
@@ -37,6 +38,7 @@ class TransactionHistoryResponse {
     this.sellingDetails,
     this.createdAt,
     this.updatedAt,
+    this.customerNumber,
   });
 
   factory TransactionHistoryResponse.fromJson(Map<String, dynamic> json) {
@@ -65,6 +67,7 @@ class TransactionHistoryResponse {
           : null,
       createdAt: json['created_at'],
       updatedAt: json['updated_at'],
+      customerNumber: json['customer_number'],
     );
   }
 }

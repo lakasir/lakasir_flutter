@@ -275,6 +275,33 @@ class _HistoryDetailScreenState extends State<HistoryDetailScreen> {
           ],
         ),
       ),
+      Container(
+        margin: const EdgeInsets.only(bottom: 10),
+        child: Row(
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "${"field_customer_number".tr}:",
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w200,
+                    ),
+                  ),
+                  Text(
+                    history.customerNumber == null
+                        ? "global_no_item".trParams(
+                            {"item": "field_customer_number".tr},
+                          )
+                        : history.customerNumber.toString(),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
     ];
   }
 }

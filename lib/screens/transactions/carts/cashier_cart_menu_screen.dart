@@ -131,6 +131,27 @@ class DetailField extends StatelessWidget {
           ),
         ),
         MyCard(
+          child: Obx(
+            () => Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'field_customer_number'.tr,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                Text(
+                  _cartController.cartSessions.value.getCustomerNumber,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        MyCard(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
