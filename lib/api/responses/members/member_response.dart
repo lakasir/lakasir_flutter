@@ -9,12 +9,12 @@ class MemberResponse {
 
   MemberResponse({
     required this.id,
-    required this.name,
-    required this.code,
-    required this.address,
-    required this.email,
-    required this.createdAt,
-    required this.updatedAt,
+    this.name = '',
+    this.code = '',
+    this.address = '',
+    this.email = '',
+    this.createdAt = '',
+    this.updatedAt = '',
   });
 
   factory MemberResponse.fromJson(Map<String, dynamic> json) {

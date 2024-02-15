@@ -9,12 +9,14 @@ class MyCardList extends StatefulWidget {
     this.route,
     this.onTap,
     this.trailing,
+    this.enableFeedback = true,
   });
   final String? route;
   final List<Widget> list;
   final Widget? imagebox;
   final Widget? trailing;
   final Function? onTap;
+  final bool enableFeedback;
 
   @override
   State<MyCardList> createState() => _MyCardListState();
@@ -28,7 +30,14 @@ class _MyCardListState extends State<MyCardList> {
       marginLeft = 0;
     }
     return InkWell(
+      splashColor: widget.enableFeedback
+          ? Get.theme.primaryColor.withOpacity(0.12)
+          : Colors.transparent,
+      splashFactory: widget.enableFeedback
+          ? InkRipple.splashFactory
+          : NoSplash.splashFactory,
       onLongPress: () {},
+      enableFeedback: widget.enableFeedback,
       onTap: () {
         if (widget.route != null) {
           Get.toNamed(widget.route as String);

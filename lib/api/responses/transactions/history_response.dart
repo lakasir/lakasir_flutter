@@ -1,3 +1,4 @@
+import 'package:lakasir/api/responses/auths/profile_response.dart';
 import 'package:lakasir/api/responses/members/member_response.dart';
 import 'package:lakasir/api/responses/payment_methods/payment_method_response.dart';
 import 'package:lakasir/api/responses/transactions/selling_detail.dart';
@@ -5,6 +6,8 @@ import 'package:lakasir/api/responses/transactions/selling_detail.dart';
 class TransactionHistoryResponse {
   int id;
   int? memberId;
+  int? userId;
+  ProfileResponse? cashier;
   String? date;
   String? code;
   double? payedMoney;
@@ -24,6 +27,8 @@ class TransactionHistoryResponse {
   TransactionHistoryResponse({
     required this.id,
     this.memberId,
+    this.userId,
+    this.cashier,
     this.date,
     this.code,
     this.payedMoney,
@@ -45,6 +50,10 @@ class TransactionHistoryResponse {
     return TransactionHistoryResponse(
       id: json['id'],
       memberId: json['member_id'],
+      userId: json['user_id'],
+      cashier: json['cashier'] != null
+          ? ProfileResponse.fromJson(json['cashier'])
+          : null,
       date: json['date'],
       code: json['code'],
       payedMoney: double.parse(json['payed_money'].toString()),

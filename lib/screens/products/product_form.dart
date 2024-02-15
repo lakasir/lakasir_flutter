@@ -24,6 +24,7 @@ class ProductForm extends StatefulWidget {
 
 class _ProductFormState extends State<ProductForm> {
   final CategoryController _categoryController = Get.put(CategoryController());
+  bool _isServiceType = false;
 
   @override
   Widget build(BuildContext context) {
@@ -102,6 +103,33 @@ class _ProductFormState extends State<ProductForm> {
           ),
         ),
         Container(
+          margin: const EdgeInsets.only(top: 20),
+          child: Obx(
+            () => SelectInputWidget(
+              controller: widget.controller.typeController,
+              label: 'field_type'.tr,
+              errorText:
+                  widget.controller.productErrorResponse.value.type ?? '',
+              options: [
+                Option(
+                  name: "option_product".tr,
+                  value: "product",
+                ),
+                Option(
+                  name: "option_service".tr,
+                  value: "service",
+                )
+              ],
+              onChanged: (value) {
+                widget.controller.initialPriceInputController.updateValue(0);
+                setState(() {
+                  _isServiceType = value == "service";
+                });
+              },
+            ),
+          ),
+        ),
+        Container(
           margin: const EdgeInsets.only(top: 10),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -130,32 +158,6 @@ class _ProductFormState extends State<ProductForm> {
           child: Obx(
             () => MyTextField(
               readOnly: widget.controller.enabledStock.value,
-              // rightIcon: InkWell(
-              //   onTap: () {},
-              //   child: Container(
-              //     padding: const EdgeInsets.all(5),
-              //     decoration: BoxDecoration(
-              //       border: Border.all(
-              //         color: Colors.grey,
-              //         width: 2,
-              //       ),
-              //       borderRadius: const BorderRadius.only(
-              //         topRight: Radius.circular(12),
-              //         bottomRight: Radius.circular(12),
-              //       ),
-              //       color: Colors.grey[200],
-              //     ),
-              //     child: Container(
-              //       margin: const EdgeInsets.only(left: 7),
-              //       child: MyCheckbox(
-              //         isChecked: widget.controller.enabledStock.value,
-              //         onChange: (value) {
-              //           widget.controller.enabledStock.value = value;
-              //         },
-              //       ),
-              //     ),
-              //   ),
-              // ),
               controller: widget.controller.stockInputController,
               label: 'field_stock'.tr,
               keyboardType: TextInputType.number,
@@ -168,6 +170,7 @@ class _ProductFormState extends State<ProductForm> {
           margin: const EdgeInsets.only(top: 20),
           child: Obx(
             () => MyTextField(
+              readOnly: _isServiceType,
               controller: widget.controller.initialPriceInputController,
               label: 'field_initial_price'.tr,
               keyboardType: TextInputType.number,
@@ -187,27 +190,6 @@ class _ProductFormState extends State<ProductForm> {
               errorText:
                   widget.controller.productErrorResponse.value.sellingPrice ??
                       '',
-            ),
-          ),
-        ),
-        Container(
-          margin: const EdgeInsets.only(top: 20),
-          child: Obx(
-            () => SelectInputWidget(
-              controller: widget.controller.typeController,
-              label: 'field_type'.tr,
-              errorText:
-                  widget.controller.productErrorResponse.value.type ?? '',
-              options: [
-                Option(
-                  name: "option_product".tr,
-                  value: "product",
-                ),
-                Option(
-                  name: "option_service".tr,
-                  value: "service",
-                )
-              ],
             ),
           ),
         ),

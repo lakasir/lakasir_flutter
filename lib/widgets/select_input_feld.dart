@@ -11,12 +11,14 @@ class SelectInputWidget extends StatefulWidget {
     this.hintText = "",
     this.mandatory = false,
     this.errorText,
+    this.onChanged,
   });
   final List<Option> options;
   final String label;
   final String hintText;
   final bool mandatory;
   final String? errorText;
+  final Function(String)? onChanged;
   final SelectInputWidgetController controller;
 
   @override
@@ -77,6 +79,9 @@ class _SelectInputWidgetState extends State<SelectInputWidget> {
                   .firstWhere((element) => element.value == newValue)
                   .name;
             });
+            if (widget.onChanged != null) {
+              widget.onChanged!(newValue!);
+            }
           },
           items: widget.options.map((Option option) {
             return DropdownMenuItem<String>(
@@ -93,7 +98,8 @@ class _SelectInputWidgetState extends State<SelectInputWidget> {
           }).toList(),
           isExpanded: true,
           decoration: InputDecoration(
-            contentPadding: const EdgeInsets.symmetric(vertical: 13, horizontal: 10),
+            contentPadding:
+                const EdgeInsets.symmetric(vertical: 13, horizontal: 10),
             errorText: widget.errorText == "" ? null : widget.errorText,
             errorStyle: const TextStyle(color: error, fontSize: 12),
             border: const OutlineInputBorder(

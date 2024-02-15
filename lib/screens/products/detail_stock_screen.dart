@@ -37,7 +37,7 @@ class _DetailStockScreenState extends State<DetailStockScreen> {
   @override
   Widget build(BuildContext context) {
     return Layout(
-      title: 'Detail Stock',
+      title: 'field_stock_history'.tr,
       child: Obx(
         () {
           if (_productStockController.isLoading.value) {
@@ -46,8 +46,9 @@ class _DetailStockScreenState extends State<DetailStockScreen> {
             );
           }
           if (_productDetailController.product.value.id == 0) {
-            return const Center(
-              child: Text("Product Not Found"),
+            return Center(
+              child:
+                  Text('global_not_found'.trParams({'item': 'menu_product'})),
             );
           }
           String initialFormattedPrice = formatPrice(
@@ -69,7 +70,7 @@ class _DetailStockScreenState extends State<DetailStockScreen> {
                     maxLines: 4,
                   ),
                   Text(
-                    'Stock: ${_productDetailController.product.value.stock}',
+                    'field_stock: ${_productDetailController.product.value.stock}',
                     style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w200,
@@ -108,9 +109,9 @@ class _DetailStockScreenState extends State<DetailStockScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text(
-                          "The last initial price",
-                          style: TextStyle(
+                        Text(
+                          "field_last_initial_price".tr,
+                          style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
                           ),
@@ -143,9 +144,9 @@ class _DetailStockScreenState extends State<DetailStockScreen> {
                             },
                           );
                         },
-                        child: const Text(
-                          "Add / Edit Initial Price",
-                          style: TextStyle(
+                        child: Text(
+                          "add_or_edit_stock".tr,
+                          style: const TextStyle(
                             fontSize: 12,
                             color: Colors.black,
                           ),
@@ -157,9 +158,10 @@ class _DetailStockScreenState extends State<DetailStockScreen> {
               ),
               Container(
                 margin: const EdgeInsets.only(top: 20),
-                child: const Text(
-                  "Stock History",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                child: Text(
+                  "field_stock_history".tr,
+                  style: const TextStyle(
+                      fontSize: 18, fontWeight: FontWeight.w600),
                 ),
               ),
               if (_productStockController.isLoading.value)
@@ -202,15 +204,18 @@ class _DetailStockScreenState extends State<DetailStockScreen> {
                                 context: context,
                                 builder: (context) {
                                   return AlertDialog(
-                                    title: const Text("Delete Stock"),
-                                    content: const Text(
-                                        "Are you sure want to delete this stock?"),
+                                    title: Text("global_delete_item"
+                                        .trParams({"item": "feild_stock"})),
+                                    content: Text("global_sure_content"
+                                        .trParams({
+                                      "item": "field_stock_history".tr
+                                    })),
                                     actions: [
                                       TextButton(
                                         onPressed: () {
                                           Get.back();
                                         },
-                                        child: const Text("Cancel"),
+                                        child: Text("global_cancel".tr),
                                       ),
                                       TextButton(
                                         onPressed: () {
@@ -220,7 +225,7 @@ class _DetailStockScreenState extends State<DetailStockScreen> {
                                               stockHistory.id);
                                           Get.back();
                                         },
-                                        child: const Text("Delete"),
+                                        child: Text("global_ok".tr),
                                       ),
                                     ],
                                   );
@@ -306,7 +311,7 @@ class _ActionModalStockState extends State<ActionModalStock> {
   @override
   Widget build(BuildContext context) {
     return MyDialog(
-      title: "Add / Edit Initial Price",
+      title: "add_or_edit_stock".tr,
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -361,7 +366,7 @@ class _ActionModalStockState extends State<ActionModalStock> {
                     bottom: 10,
                   ),
                   child: MyDatePicker(
-                    label: "Date",
+                    label: "field_date".tr,
                     controller: widget
                         .productStockController.dateInputEditingController,
                     initialDate: DateTime.now(),
@@ -377,7 +382,7 @@ class _ActionModalStockState extends State<ActionModalStock> {
                     () => MyTextField(
                       controller: widget
                           .productStockController.stockInputEditingController,
-                      label: "Stock",
+                      label: "field_stock".tr,
                       keyboardType: TextInputType.number,
                       mandatory: true,
                       errorText: widget.productStockController
@@ -397,7 +402,7 @@ class _ActionModalStockState extends State<ActionModalStock> {
                           () => MyTextField(
                             controller: widget.productStockController
                                 .initialPriceInputEditingController,
-                            label: "Initial Price",
+                            label: "field_initial_price".tr,
                             keyboardType: TextInputType.number,
                             errorText: widget.productStockController
                                     .stockErrorResponse.value.initialPrice ??
@@ -421,7 +426,7 @@ class _ActionModalStockState extends State<ActionModalStock> {
                           () => MyTextField(
                             controller: widget.productStockController
                                 .sellingPriceInputEditingController,
-                            label: "Selling Price",
+                            label: "field_selling_price".tr,
                             keyboardType: TextInputType.number,
                             errorText: widget.productStockController
                                     .stockErrorResponse.value.sellingPrice ??
@@ -439,7 +444,7 @@ class _ActionModalStockState extends State<ActionModalStock> {
                     onPressed: () => widget.productStockController
                         .create(widget.products.id),
                     isLoading: widget.productStockController.isLoading.value,
-                    child: const Text("Save Stock"),
+                    child: Text("global_save".tr),
                   ),
                 ),
               ],

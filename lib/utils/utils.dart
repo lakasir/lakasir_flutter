@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:lakasir/utils/colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 String formatPrice(dynamic price, {bool isSymbol = true}) {
@@ -14,7 +15,8 @@ String formatPrice(dynamic price, {bool isSymbol = true}) {
 Future<Locale> getLocale() async {
   final prefs = await SharedPreferences.getInstance();
 
-  return Locale(prefs.getString('locale') ?? Locale(Get.deviceLocale!.toString()).languageCode);
+  return Locale(prefs.getString('locale') ??
+      Locale(Get.deviceLocale!.toString()).languageCode);
 }
 
 Future<void> setLocale(String locale) async {
@@ -43,3 +45,15 @@ const shimmerGradient = LinearGradient(
   end: Alignment(1.0, 0.3),
   tileMode: TileMode.clamp,
 );
+
+Future show(
+  String message, {
+  Duration duration = const Duration(seconds: 3),
+  Color? color,
+}) async {
+  Get.rawSnackbar(
+    message: message,
+    duration: duration,
+    backgroundColor: color ?? success,
+  );
+}

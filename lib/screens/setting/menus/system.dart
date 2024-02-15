@@ -155,6 +155,7 @@ class SystemSetting extends StatelessWidget {
         Container(
           margin: const EdgeInsets.only(top: 15),
           child: MyCardList(
+            route: '/menu/setting/print',
             imagebox: Container(
               width: 52,
               height: 52,

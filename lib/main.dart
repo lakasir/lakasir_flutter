@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lakasir/messages.dart';
+import 'package:lakasir/models/lakasir_database.dart';
 import 'package:lakasir/screens/about/about_screen.dart';
 import 'package:lakasir/screens/about/edit_screen.dart';
 import 'package:lakasir/screens/auth_screen.dart';
@@ -19,6 +20,8 @@ import 'package:lakasir/screens/profile/profile_screen.dart';
 import 'package:lakasir/screens/setting/category_screen.dart';
 import 'package:lakasir/screens/setting/hide_initial_price_screen.dart';
 import 'package:lakasir/screens/setting/layout_screen.dart';
+import 'package:lakasir/screens/setting/printers/add_printer_page_screen.dart';
+import 'package:lakasir/screens/setting/printers/printer_page_screen.dart';
 import 'package:lakasir/screens/setting/selling_method_screen.dart';
 import 'package:lakasir/screens/setting/setting_screen.dart';
 import 'package:lakasir/screens/transactions/carts/cashier_cart_menu_screen.dart';
@@ -36,6 +39,7 @@ import 'package:lakasir/utils/utils.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await LakasirDatabase.initialize();
 
   final isAuthenticated = await getToken();
   final bool setup = await isSetup();
@@ -123,6 +127,9 @@ class MyApp extends StatelessWidget {
                   '/menu/setting/category': (context) => const CategoryScreen(),
                   '/menu/setting/selling_method': (context) =>
                       SellingMethodScreen(),
+                  '/menu/setting/print': (context) => const PrinterPageScreen(),
+                  '/menu/setting/print/add': (context) =>
+                      const AddPrinterPageScreen(),
                 },
               );
             }

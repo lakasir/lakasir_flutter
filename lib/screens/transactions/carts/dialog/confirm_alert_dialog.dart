@@ -45,7 +45,7 @@ class ConfirmAlertDialog extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "field_customer_member".tr,
+                "field_customer_number".tr,
               ),
               Text(
                 _cartController.cartSessions.value.getCustomerNumber,

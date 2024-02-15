@@ -7,3 +7,4 @@ const Color error = Colors.red;
 const Color whiteGrey = Color.fromRGBO(235, 235, 235, 1);
 const Color grey = Color.fromRGBO(217, 217, 217, 1);
 const Color success = Colors.green;
+const Color warning = Colors.yellow;
