@@ -1,6 +1,14 @@
+import 'package:blue_thermal_printer/blue_thermal_printer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:lakasir/api/responses/auths/profile_response.dart';
+import 'package:lakasir/api/responses/members/member_response.dart';
+import 'package:lakasir/api/responses/payment_methods/payment_method_response.dart';
+import 'package:lakasir/api/responses/products/product_response.dart';
+import 'package:lakasir/api/responses/transactions/history_response.dart';
+import 'package:lakasir/api/responses/transactions/selling_detail.dart';
+import 'package:lakasir/screens/setting/printers/add_printer_page_screen.dart';
 import 'package:lakasir/utils/colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -48,12 +56,90 @@ const shimmerGradient = LinearGradient(
 
 Future show(
   String message, {
-  Duration duration = const Duration(seconds: 3),
+  Duration duration = const Duration(seconds: 2),
   Color? color,
 }) async {
   Get.rawSnackbar(
     message: message,
     duration: duration,
     backgroundColor: color ?? success,
+  );
+}
+
+void printExampleReceipt(BlueThermalPrinter bluetooth) {
+  PrintReceipt(bluetooth: bluetooth).print(
+    TransactionHistoryResponse(
+      id: 1,
+      userId: 1,
+      cashier: ProfileResponse(
+        name: 'Cashier name',
+        email: 'cashier@mail.com',
+      ),
+      friendPrice: false,
+      paymentMethodId: 1,
+      totalPrice: 375000,
+      tax: 25,
+      member: MemberResponse(id: 1, name: 'member_name'.tr),
+      paymentMethod: PaymentMethodRespone(id: 1, name: "Cash"),
+      payedMoney: 400000,
+      moneyChange: 25000,
+      sellingDetails: [
+        SellingDetail(
+          quantity: 3,
+          price: 75000,
+          productId: 1,
+          sellingId: 1,
+          id: 0,
+          product: ProductResponse(
+            name: 'product_name'.tr,
+            sellingPrice: 25000,
+          ),
+        ),
+        SellingDetail(
+          quantity: 3,
+          price: 75000,
+          productId: 1,
+          sellingId: 1,
+          id: 0,
+          product: ProductResponse(
+            name: 'product_name'.tr,
+            sellingPrice: 25000,
+          ),
+        ),
+        SellingDetail(
+          quantity: 3,
+          price: 75000,
+          productId: 1,
+          sellingId: 1,
+          id: 0,
+          product: ProductResponse(
+            name: 'product_name'.tr,
+            sellingPrice: 25000,
+          ),
+        ),
+        SellingDetail(
+          quantity: 3,
+          price: 75000,
+          productId: 1,
+          sellingId: 1,
+          id: 0,
+          product: ProductResponse(
+            name: 'product_name'.tr,
+            sellingPrice: 25000,
+          ),
+        ),
+        SellingDetail(
+          quantity: 3,
+          price: 75000,
+          productId: 1,
+          sellingId: 1,
+          id: 0,
+          product: ProductResponse(
+            name: 'product_name'.tr,
+            sellingPrice: 25000,
+          ),
+        ),
+      ],
+    ),
   );
 }

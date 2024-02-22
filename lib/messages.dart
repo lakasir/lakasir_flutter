@@ -227,6 +227,8 @@ class Messages extends Translations {
           'field_disconnect': 'Disconnect',
           'print_test': 'Print Test',
           'setting_menu_printer': 'Printer',
+          'global_validation_field_exist': '@field already exist',
+          'field_footer': 'Footer',
         },
         'id_ID': {
           'auth': 'Otentikasi',
@@ -383,7 +385,7 @@ class Messages extends Translations {
           'global_updated_item': '@item berhasil diubah',
           'global_add_item': 'Tambah @item',
           'global_edit_item': 'Edit @item',
-          'global_delete_item': 'Haous @item',
+          'global_delete_item': 'Hapus @item',
           'field_email_or_phone': 'Email atau Nomor Telepon',
           'field_email': 'Email',
           'field_phone': 'Nomor Telepon',
@@ -453,6 +455,8 @@ class Messages extends Translations {
           'field_disconnect': 'Putus koneksi',
           'print_test': 'Cetak testing',
           'setting_menu_printer': 'Printer',
+          'global_validation_field_exist': '@field sudah ada',
+          'field_footer': 'Footer',
         },
       };
 }

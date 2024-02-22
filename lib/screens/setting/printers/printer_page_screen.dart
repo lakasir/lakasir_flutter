@@ -1,9 +1,8 @@
+import 'package:blue_thermal_printer/blue_thermal_printer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:heroicons/heroicons.dart';
-import 'package:isar/isar.dart';
-import 'package:lakasir/models/lakasir_database.dart';
-import 'package:lakasir/models/printer.dart';
+import 'package:lakasir/controllers/settings/print_controller.dart';
 import 'package:lakasir/utils/colors.dart';
 import 'package:lakasir/utils/utils.dart';
 import 'package:lakasir/widgets/layout.dart';
@@ -18,10 +17,8 @@ class PrinterPageScreen extends StatefulWidget {
 }
 
 class _PrinterPageScreenState extends State<PrinterPageScreen> {
-  TextEditingController nameController = TextEditingController();
-  TextEditingController addressController = TextEditingController();
+  final _printerController = Get.put(PrintController());
 
-  List<Printer> printers = [];
   @override
   void initState() {
     super.initState();
@@ -29,11 +26,7 @@ class _PrinterPageScreenState extends State<PrinterPageScreen> {
   }
 
   void fetchPrinters() async {
-    var results = await LakasirDatabase().fetchPrinters();
-
-    setState(() {
-      printers = results;
-    });
+    _printerController.fetchPrinters();
   }
 
   @override
@@ -48,91 +41,123 @@ class _PrinterPageScreenState extends State<PrinterPageScreen> {
           Get.toNamed('/menu/setting/print/add');
         },
       ),
-      child: printers.isEmpty
-          ? Center(
+      child: Obx(
+        () {
+          if (_printerController.printers.isEmpty) {
+            return Center(
               child: Text('global_no_item'.trParams({
                 'item': 'setting_menu_printer'.tr,
               })),
-            )
-          : ListView.builder(
-              itemCount: printers.length,
-              itemBuilder: (BuildContext context, int index) {
-                return Container(
-                  margin: const EdgeInsets.only(
-                    bottom: 10,
+            );
+          }
+
+          return ListView.builder(
+            itemCount: _printerController.printers.length,
+            itemBuilder: (BuildContext context, int index) {
+              return Container(
+                margin: const EdgeInsets.only(
+                  bottom: 10,
+                ),
+                child: MyCardList(
+                  enableFeedback: false,
+                  imagebox: const HeroIcon(
+                    HeroIcons.printer,
+                    size: 40,
                   ),
-                  child: MyCardList(
-                    enableFeedback: false,
-                    imagebox: const HeroIcon(
-                      HeroIcons.printer,
-                      size: 40,
-                    ),
-                    list: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                printers[index].name!,
-                              ),
-                              Text(
-                                printers[index].address!,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ],
-                          ),
-                          InkWell(
-                            onTap: () {
-                              Get.dialog(
-                                AlertDialog(
-                                  title: Text('global_delete_item'.trParams({
-                                    'item': 'setting_menu_printer'.tr,
-                                  })),
-                                  content: Text(
-                                      'global_delete_item_content'.trParams({
-                                    'item': 'setting_menu_printer'.tr,
-                                  })),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () {
-                                        Get.back();
-                                      },
-                                      child: Text('global_cancel'.tr),
-                                    ),
-                                    TextButton(
-                                      onPressed: () async {
-                                        await LakasirDatabase()
-                                            .deletePrinters(printers[index]);
-                                        Get.back();
-                                        show(
-                                          'global_deleted_item'.trParams({
-                                            'item': 'setting_menu_printer'.tr,
-                                          }),
-                                          color: success,
-                                        );
-                                      },
-                                      child: Text('global_delete'.tr),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
-                            child: const HeroIcon(
-                              HeroIcons.trash,
-                              color: error,
+                  list: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              _printerController.printers[index].name ?? "",
                             ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
+                            Text(
+                              _printerController.printers[index].isConnected ==
+                                      true
+                                  ? 'global_connected'.tr
+                                  : 'global_not_connected'.tr,
+                            ),
+                            Text(
+                              _printerController.printers[index].address ?? "",
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Wrap(
+                          children: [
+                            InkWell(
+                              onTap: () async {
+                                var printer =
+                                    _printerController.printers[index];
+                                BluetoothDevice device = BluetoothDevice(
+                                  printer.name,
+                                  printer.address,
+                                );
+                                BlueThermalPrinter bluetooth =
+                                    BlueThermalPrinter.instance;
+                                bluetooth.isConnected.then((value) {
+                                  bluetooth.connect(device).then((value) {
+                                    printExampleReceipt(bluetooth);
+                                  });
+                                });
+                              },
+                              child: const HeroIcon(
+                                HeroIcons.printer,
+                                color: primary,
+                              ),
+                            ),
+                            InkWell(
+                              onTap: () {
+                                Get.dialog(
+                                  AlertDialog(
+                                    title: Text('global_delete_item'.trParams({
+                                      'item': 'setting_menu_printer'.tr,
+                                    })),
+                                    content: Text(
+                                        'global_delete_item_content'.trParams({
+                                      'item': 'setting_menu_printer'.tr,
+                                    })),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          Get.back();
+                                        },
+                                        child: Text('global_cancel'.tr),
+                                      ),
+                                      TextButton(
+                                        onPressed: () async {
+                                          await _printerController
+                                              .deletePrinter(
+                                            _printerController.printers[index],
+                                          );
+                                        },
+                                        child: Text('global_delete'.tr),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                              child: const HeroIcon(
+                                HeroIcons.trash,
+                                color: error,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              );
+            },
+          );
+        },
+      ),
     );
   }
 }

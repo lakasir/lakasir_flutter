@@ -19,16 +19,7 @@ class LakasirDatabase extends ChangeNotifier {
     return results;
   }
 
-  Future<void> createPrinters({
-    String? name,
-    String? address,
-    String? footer,
-  }) async {
-    final printer = Printer()
-      ..name = name
-      ..address = address
-      ..footer = footer;
-
+  Future<void> createPrinters(Printer printer) async {
     await isar.writeTxn(() => isar.printers.put(printer));
 
     fetchPrinters();

@@ -9,9 +9,10 @@ import 'package:lakasir/api/responses/products/product_response.dart';
 import 'package:lakasir/api/responses/transactions/history_response.dart';
 import 'package:lakasir/api/responses/transactions/selling_detail.dart';
 import 'package:lakasir/controllers/abouts/about_controller.dart';
-import 'package:lakasir/models/lakasir_database.dart';
+import 'package:lakasir/controllers/settings/print_controller.dart';
 import 'package:lakasir/utils/colors.dart';
 import 'package:lakasir/utils/utils.dart';
+import 'package:lakasir/widgets/checkbox.dart';
 import 'package:lakasir/widgets/filled_button.dart';
 import 'package:lakasir/widgets/layout.dart';
 import 'package:lakasir/widgets/select_input_feld.dart';
@@ -28,21 +29,15 @@ class _AddPrinterPageScreenState extends State<AddPrinterPageScreen> {
   BlueThermalPrinter bluetooth = BlueThermalPrinter.instance;
   List<BluetoothDevice> _devices = [];
   BluetoothDevice? _device;
-  bool _connected = false;
+  bool _bluetoothConnected = false;
   bool _isConnecting = false;
-  SelectInputWidgetController controller = SelectInputWidgetController();
-  TextEditingController nameController = TextEditingController();
-  TextEditingController footerController = TextEditingController();
+  final _printerController = Get.put(PrintController());
 
   @override
   void initState() {
     super.initState();
     initPlatformState();
-    if (_connected) {
-      controller.selectedOption = _device!.address;
-    } else {
-      controller.selectedOption = 'no_device';
-    }
+    _printerController.clear();
   }
 
   Future<void> initPlatformState() async {
@@ -60,49 +55,49 @@ class _AddPrinterPageScreenState extends State<AddPrinterPageScreen> {
       switch (state) {
         case BlueThermalPrinter.CONNECTED:
           setState(() {
-            _connected = true;
+            _bluetoothConnected = true;
           });
           debugPrint("bluetooth device state: connected");
           break;
         case BlueThermalPrinter.DISCONNECTED:
           setState(() {
-            _connected = false;
+            _bluetoothConnected = false;
           });
           debugPrint("bluetooth device state: disconnected");
           break;
         case BlueThermalPrinter.DISCONNECT_REQUESTED:
           setState(() {
-            _connected = false;
+            _bluetoothConnected = false;
           });
           debugPrint("bluetooth device state: disconnect requested");
           break;
         case BlueThermalPrinter.STATE_TURNING_OFF:
           setState(() {
-            _connected = false;
+            _bluetoothConnected = false;
           });
           debugPrint("bluetooth device state: bluetooth turning off");
           break;
         case BlueThermalPrinter.STATE_OFF:
           setState(() {
-            _connected = false;
+            _bluetoothConnected = false;
           });
           debugPrint("bluetooth device state: bluetooth off");
           break;
         case BlueThermalPrinter.STATE_ON:
           setState(() {
-            _connected = false;
+            _bluetoothConnected = false;
           });
           debugPrint("bluetooth device state: bluetooth on");
           break;
         case BlueThermalPrinter.STATE_TURNING_ON:
           setState(() {
-            _connected = false;
+            _bluetoothConnected = false;
           });
           debugPrint("bluetooth device state: bluetooth turning on");
           break;
         case BlueThermalPrinter.ERROR:
           setState(() {
-            _connected = false;
+            _bluetoothConnected = false;
           });
           debugPrint("bluetooth device state: error");
           break;
@@ -119,87 +114,13 @@ class _AddPrinterPageScreenState extends State<AddPrinterPageScreen> {
 
     if (isConnected == true) {
       setState(() {
-        _connected = true;
+        _bluetoothConnected = true;
       });
     }
   }
 
   void _printReceipt() {
-    PrintReceipt(bluetooth: bluetooth).print(
-      TransactionHistoryResponse(
-        id: 1,
-        userId: 1,
-        cashier: ProfileResponse(
-          name: 'Cashier name',
-          email: 'cashier@mail.com',
-        ),
-        friendPrice: false,
-        paymentMethodId: 1,
-        totalPrice: 375000,
-        tax: 25,
-        member: MemberResponse(id: 1, name: 'member_name'.tr),
-        paymentMethod: PaymentMethodRespone(id: 1, name: "Cash"),
-        payedMoney: 400000,
-        moneyChange: 25000,
-        sellingDetails: [
-          SellingDetail(
-            quantity: 3,
-            price: 75000,
-            productId: 1,
-            sellingId: 1,
-            id: 0,
-            product: ProductResponse(
-              name: 'product_name'.tr,
-              sellingPrice: 25000,
-            ),
-          ),
-          SellingDetail(
-            quantity: 3,
-            price: 75000,
-            productId: 1,
-            sellingId: 1,
-            id: 0,
-            product: ProductResponse(
-              name: 'product_name'.tr,
-              sellingPrice: 25000,
-            ),
-          ),
-          SellingDetail(
-            quantity: 3,
-            price: 75000,
-            productId: 1,
-            sellingId: 1,
-            id: 0,
-            product: ProductResponse(
-              name: 'product_name'.tr,
-              sellingPrice: 25000,
-            ),
-          ),
-          SellingDetail(
-            quantity: 3,
-            price: 75000,
-            productId: 1,
-            sellingId: 1,
-            id: 0,
-            product: ProductResponse(
-              name: 'product_name'.tr,
-              sellingPrice: 25000,
-            ),
-          ),
-          SellingDetail(
-            quantity: 3,
-            price: 75000,
-            productId: 1,
-            sellingId: 1,
-            id: 0,
-            product: ProductResponse(
-              name: 'product_name'.tr,
-              sellingPrice: 25000,
-            ),
-          ),
-        ],
-      ),
-    );
+    printExampleReceipt(bluetooth);
   }
 
   List<Option> _getDeviceItems() {
@@ -229,17 +150,19 @@ class _AddPrinterPageScreenState extends State<AddPrinterPageScreen> {
     setState(() => _isConnecting = true);
     if (_device != null) {
       bluetooth.connect(_device!).then((value) async {
+        _printerController.connected.value = true;
         show('success to connect with printer');
         setState(() {
-          _connected = true;
+          _bluetoothConnected = true;
           _isConnecting = false;
         });
       }).catchError((e) {
         show('No device selected.', color: error);
         setState(() {
-          _connected = false;
+          _bluetoothConnected = false;
           _isConnecting = false;
         });
+        _printerController.connected.value = false;
       });
     } else {
       setState(() => _isConnecting = false);
@@ -249,7 +172,7 @@ class _AddPrinterPageScreenState extends State<AddPrinterPageScreen> {
 
   void _disconnect() {
     bluetooth.disconnect();
-    setState(() => _connected = false);
+    setState(() => _bluetoothConnected = false);
     show('success to disconnect with printer');
   }
 
@@ -257,69 +180,86 @@ class _AddPrinterPageScreenState extends State<AddPrinterPageScreen> {
   Widget build(BuildContext context) {
     return Layout(
       title: 'Print'.tr,
-      child: ListView(
-        children: [
-          Container(
-            margin: const EdgeInsets.only(bottom: 10),
-            child: MyTextField(
-              controller: nameController,
-              label: 'field_name'.tr,
-            ),
-          ),
-          Container(
-            margin: const EdgeInsets.only(bottom: 10),
-            child: SelectInputWidget(
-              label: 'field_device'.tr,
-              options: _getDeviceItems(),
-              controller: controller,
-            ),
-          ),
-          Container(
-            margin: const EdgeInsets.only(bottom: 10),
-            child: MyTextField(
-              maxLines: 4,
-              controller: footerController,
-              label: 'field_footer'.tr,
-            ),
-          ),
-          Container(
-            margin: const EdgeInsets.only(bottom: 10),
-            child: MyFilledButton(
-              color: !_connected ? primary : error,
-              onPressed: !_connected ? _connect : _disconnect,
-              isLoading: _isConnecting,
-              child: !_connected
-                  ? Text('field_connect'.tr)
-                  : Text('field_disconnect'.tr),
-            ),
-          ),
-          if (_connected)
-            Container(
-              margin: const EdgeInsets.only(bottom: 10),
-              child: MyFilledButton(
-                color: secondary,
-                onPressed: _printReceipt,
-                child: Text('print_test'.tr),
+      child: Obx(
+        () => Form(
+          key: _printerController.formKey,
+          child: ListView(
+            children: [
+              Container(
+                margin: const EdgeInsets.only(bottom: 10),
+                child: Obx(
+                  () => MyTextField(
+                    mandatory: true,
+                    controller: _printerController.nameController,
+                    label: 'field_name'.tr,
+                    errorText: _printerController.errorRequest.value.name,
+                  ),
+                ),
               ),
-            ),
-          MyFilledButton(
-            onPressed: () {
-              LakasirDatabase().createPrinters(
-                name: nameController.text,
-                address: _device?.address,
-                footer: footerController.text,
-              );
-              Get.back();
-              show(
-                'global_added_item'.trParams({
-                  'item': 'setting_menu_printer'.tr,
-                }),
-                color: success,
-              );
-            },
-            child: Text('global_save'.tr),
+              Container(
+                margin: const EdgeInsets.only(bottom: 10),
+                child: Obx(
+                  () => SelectInputWidget(
+                    mandatory: true,
+                    label: 'field_device'.tr,
+                    options: _getDeviceItems(),
+                    controller: _printerController.deviceController,
+                    errorText: _printerController.errorRequest.value.address,
+                  ),
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.only(bottom: 10),
+                child: MyTextField(
+                  maxLines: 4,
+                  controller: _printerController.footerController,
+                  label: 'field_footer'.tr,
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.only(
+                  bottom: 10,
+                ),
+                child: MyCheckbox(
+                  label: 'field_default'.tr,
+                  isChecked: _printerController.isDefault.value,
+                  onChange: (bool? value) {
+                    _printerController.isDefault.value = value!;
+                  },
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.only(bottom: 10),
+                child: MyFilledButton(
+                  color: !_bluetoothConnected ? primary : error,
+                  onPressed: !_bluetoothConnected ? _connect : _disconnect,
+                  isLoading: _isConnecting,
+                  child: !_bluetoothConnected
+                      ? Text('field_connect'.tr)
+                      : Text('field_disconnect'.tr),
+                ),
+              ),
+              if (_bluetoothConnected)
+                Container(
+                  margin: const EdgeInsets.only(bottom: 10),
+                  child: MyFilledButton(
+                    color: secondary,
+                    onPressed: _printReceipt,
+                    child: Text('print_test'.tr),
+                  ),
+                ),
+              Obx(
+                () => MyFilledButton(
+                  onPressed: () {
+                    _printerController.addPrinter();
+                  },
+                  isLoading: _printerController.isLoding.value,
+                  child: Text('global_save'.tr),
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
