@@ -1,13 +1,11 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lakasir/api/responses/products/product_response.dart';
+import 'package:lakasir/controllers/auths/auth_controller.dart';
 import 'package:lakasir/controllers/products/product_detail_controller.dart';
 import 'package:lakasir/controllers/setting_controller.dart';
 import 'package:lakasir/screens/products/product_detail_widget.dart';
-import 'package:lakasir/utils/colors.dart';
-import 'package:lakasir/utils/utils.dart';
-import 'package:lakasir/widgets/dialog.dart';
+import 'package:lakasir/utils/auth.dart';
 import 'package:lakasir/widgets/layout.dart';
 import 'package:lakasir/widgets/my_bottom_bar.dart';
 import 'package:lakasir/widgets/my_bottom_bar_actions.dart';
@@ -22,10 +20,10 @@ class DetailScreen extends StatefulWidget {
 class _DetailScreen extends State<DetailScreen> {
   final _productDetailController = Get.put(ProductDetailController());
   final _settingController = Get.put(SettingController());
+  final AuthController _authController = Get.put(AuthController());
 
   @override
   void initState() {
-    print("initState");
     final product = Get.arguments as ProductResponse;
     _productDetailController.get(product.id);
     super.initState();
@@ -44,11 +42,14 @@ class _DetailScreen extends State<DetailScreen> {
           noPadding: true,
           bottomNavigationBar: MyBottomBar(
             label: Text('product_edit'.tr),
+            hideBlockButton:
+                !can(_authController.permissions, 'update product'),
             onPressed: () {
               Get.toNamed('/menu/product/edit', arguments: products);
             },
             actions: [
-              if (!products.isNonStock)
+              if (!products.isNonStock &&
+                  can(_authController.permissions, 'read product stock'))
                 MyBottomBarActions(
                   label: 'field_stock'.tr,
                   onPressed: () {
@@ -59,15 +60,16 @@ class _DetailScreen extends State<DetailScreen> {
                   },
                   icon: const Icon(Icons.inventory, color: Colors.white),
                 ),
-              MyBottomBarActions(
-                label: 'global_delete'.tr,
-                onPressed: () {
-                  _productDetailController.showDeleteDialog(
-                    products.id,
-                  );
-                },
-                icon: const Icon(Icons.delete_rounded, color: Colors.white),
-              ),
+              if (can(_authController.permissions, 'delete product'))
+                MyBottomBarActions(
+                  label: 'global_delete'.tr,
+                  onPressed: () {
+                    _productDetailController.showDeleteDialog(
+                      products.id,
+                    );
+                  },
+                  icon: const Icon(Icons.delete_rounded, color: Colors.white),
+                ),
             ],
           ),
           child: Column(

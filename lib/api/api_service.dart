@@ -58,6 +58,7 @@ class ApiService<T> {
 
       return json;
     } else {
+      print(response.body);
       throw Exception('Failed to load data');
     }
   }

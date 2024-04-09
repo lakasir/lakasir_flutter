@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lakasir/controllers/category_controller.dart';
 import 'package:lakasir/controllers/products/product_add_controller.dart';
 import 'package:lakasir/screens/products/product_form.dart';
-import 'package:lakasir/widgets/filled_button.dart';
-import 'package:lakasir/widgets/image_picker.dart';
 import 'package:lakasir/widgets/layout.dart';
-import 'package:lakasir/widgets/select_input_feld.dart';
-import 'package:lakasir/widgets/text_field.dart';
 
 class EditProductScreen extends StatefulWidget {
   const EditProductScreen({super.key});

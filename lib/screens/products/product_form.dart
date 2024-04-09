@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:lakasir/controllers/category_controller.dart';
 import 'package:lakasir/controllers/products/product_add_controller.dart';
 import 'package:lakasir/utils/colors.dart';
-import 'package:lakasir/widgets/checkbox.dart';
 import 'package:lakasir/widgets/filled_button.dart';
 import 'package:lakasir/widgets/image_picker.dart';
 import 'package:lakasir/widgets/select_input_feld.dart';
@@ -63,10 +62,10 @@ class _ProductFormState extends State<ProductForm> {
           margin: const EdgeInsets.only(top: 20),
           child: Obx(
             () => MyTextField(
-              mandatory: true,
               controller: widget.controller.skuInputController,
               label: 'field_sku'.tr,
               errorText: widget.controller.productErrorResponse.value.sku ?? '',
+              info: 'field_sku_info'.tr,
             ),
           ),
         ),

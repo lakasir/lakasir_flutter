@@ -3,10 +3,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lakasir/api/responses/products/product_response.dart';
+import 'package:lakasir/controllers/auths/auth_controller.dart';
 import 'package:lakasir/controllers/products/product_controller.dart';
 import 'package:lakasir/controllers/setting_controller.dart';
 import 'package:lakasir/controllers/transactions/cart_controller.dart';
 import 'package:lakasir/controllers/transactions/cash_drawer_controller.dart';
+import 'package:lakasir/utils/auth.dart';
 import 'package:lakasir/utils/colors.dart';
 import 'package:lakasir/utils/utils.dart';
 import 'package:lakasir/widgets/build_list_image.dart';
@@ -27,6 +29,7 @@ class _CashierMenuScreenState extends State<CashierMenuScreen> {
   final _cartController = Get.put(CartController());
   final _settingController = Get.put(SettingController());
   final _cashDrawerController = Get.put(CashDrawerController());
+  final _authController = Get.put(AuthController());
   bool showCashDrawer = false;
   final Duration initialDuration = const Duration(milliseconds: 300);
 
@@ -52,7 +55,7 @@ class _CashierMenuScreenState extends State<CashierMenuScreen> {
       child: Layout(
         title: 'transaction_cashier'.tr,
         bottomNavigationBar: MyBottomBar(
-          singleAction: true,
+          singleAction: can(_authController.permissions, 'open cash drawer'),
           singleActionIcon: Icons.edit_note,
           singleActionOnPressed: () {
             if (!_settingController.setting.value.cashDrawerEnabled) {

@@ -3,8 +3,9 @@ import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:get/get.dart';
 import 'package:lakasir/api/requests/cash_drawer_request.dart';
 import 'package:lakasir/api/responses/cash_drawers/cash_drawer_response.dart';
-import 'package:lakasir/controllers/setting_controller.dart';
+import 'package:lakasir/controllers/auths/auth_controller.dart';
 import 'package:lakasir/services/cash_drawer_service.dart';
+import 'package:lakasir/utils/auth.dart';
 import 'package:lakasir/utils/colors.dart';
 import 'package:lakasir/utils/utils.dart';
 import 'package:lakasir/widgets/dialog.dart';
@@ -18,6 +19,7 @@ class CashDrawerController extends GetxController {
   RxBool isCanBeClosed = false.obs;
   final MoneyMaskedTextController cashDrawerController =
       MoneyMaskedTextController(thousandSeparator: '.', decimalSeparator: ',');
+  final AuthController _authController = Get.put(AuthController());
 
   Future<void> getCashDrawer() async {
     try {
@@ -80,7 +82,8 @@ class CashDrawerController extends GetxController {
             ),
             Row(
               children: [
-                if (isCanBeClosed.value)
+                if (isCanBeClosed.value &&
+                    can(_authController.permissions, 'close cash drawer'))
                   Expanded(
                     child: Container(
                       margin: const EdgeInsets.only(top: 10),

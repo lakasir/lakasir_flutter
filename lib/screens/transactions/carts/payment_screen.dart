@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lakasir/controllers/transactions/cart_controller.dart';
 import 'package:lakasir/screens/transactions/carts/dialog/confirm_alert_dialog.dart';
-import 'package:lakasir/screens/transactions/carts/dialog/edit_alert_dialog.dart';
 import 'package:lakasir/utils/colors.dart';
 import 'package:lakasir/utils/utils.dart';
 import 'package:lakasir/widgets/calculator_payment_button.dart';

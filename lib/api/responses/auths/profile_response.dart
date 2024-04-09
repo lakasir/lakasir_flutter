@@ -8,10 +8,12 @@ class ProfileResponse {
   final String? locale;
   final String? createdAt;
   final String? updatedAt;
+  final List<String>? permissions;
 
   ProfileResponse({
     this.name,
     this.roles,
+    this.permissions,
     this.email,
     this.phone,
     this.address,
@@ -29,6 +31,9 @@ class ProfileResponse {
       photoUrl: json['photo'],
       address: json['address'],
       roles: json['roles'],
+      permissions: json['permissions'] != null
+          ? List<String>.from(json['permissions'])
+          : [],
       locale: json['locale'] ?? 'en',
       createdAt: json['created_at'],
       updatedAt: json['updated_at'],

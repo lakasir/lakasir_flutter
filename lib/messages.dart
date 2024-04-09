@@ -133,6 +133,7 @@ class Messages extends Translations {
           'field_product_name': 'Product Name',
           'field_name': 'Name',
           'field_sku': 'SKU',
+          'field_sku_info': 'Leave it empty to generate automatically',
           'field_barcode': 'Barcode',
           'field_is_non_stock': 'Product Without Stock',
           'field_stock': 'Stock',
@@ -162,8 +163,7 @@ class Messages extends Translations {
           'field_email': 'Email',
           'field_phone': 'Phone',
           'field_address': 'Address',
-          'info_leave_empty':
-              'You can leave this field empty and will be generated automatically',
+          'info_leave_empty': 'Leave it empty to generate automatically',
           'field_role_user': 'Role User',
           'field_language': 'Language',
           "logout": "Logout",
@@ -191,8 +191,7 @@ class Messages extends Translations {
           'agreement_sentence':
               'By creating the shop, you agree to our Terms and Conditions',
           'please_fill_form': 'Please fill the form correctly',
-          'info_domain':
-              'Your domain will be your shop name, for example: yourshopname.lakasir.com',
+          'info_domain': 'Example: yourshopname.lakasir.com',
           'sign_up': 'Sign Up',
           'sign_in': 'Sign In',
           'field_domain_name': 'Domain Name',
@@ -361,6 +360,7 @@ class Messages extends Translations {
           'field_product_name': 'Nama Produk',
           'field_name': 'Nama',
           'field_sku': 'SKU',
+          'field_sku_info': 'Kosongkan untuk mengisi secara otomatis',
           'field_barcode': 'Barcode',
           'field_is_non_stock': 'Produk Tanpa Stok',
           'field_stock': 'Stok',
@@ -390,8 +390,7 @@ class Messages extends Translations {
           'field_email': 'Email',
           'field_phone': 'Nomor Telepon',
           'field_address': 'Alamat',
-          'info_leave_empty':
-              'Kamu bisa mengosongkan field ini dan akan digenerate secara otomatis',
+          'info_leave_empty': 'Kosongkan untuk mengisi secara otomatis',
           'field_role_user': 'Jabatan Pengguna',
           'field_language': 'Bahasa',
           "logout": "Keluar",
@@ -419,8 +418,7 @@ class Messages extends Translations {
           'agreement_sentence':
               'Dengan membuat toko, anda setuju dengan Syarat dan Ketentuan kami',
           'please_fill_form': 'Isi form dengan benar',
-          'info_domain':
-              'Domain anda akan menjadi nama toko anda, contoh: nama-toko.lakasir.com',
+          'info_domain': 'Contoh: nama-toko.lakasir.com',
           'sign_up': 'Dafar',
           'sign_in': 'Masuk',
           'field_domain_name': 'Nama Domain',

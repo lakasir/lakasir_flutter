@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lakasir/controllers/auths/auth_controller.dart';
 import 'package:lakasir/controllers/members/member_controller.dart';
+import 'package:lakasir/utils/auth.dart';
 import 'package:lakasir/widgets/layout.dart';
 import 'package:lakasir/widgets/my_bottom_bar.dart';
 import 'package:lakasir/widgets/my_card_list.dart';
@@ -14,6 +16,7 @@ class MemberScreen extends StatefulWidget {
 
 class _MemberScreen extends State<MemberScreen> {
   final MemberController _memberController = Get.put(MemberController());
+  final AuthController _authController = Get.put(AuthController());
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +24,7 @@ class _MemberScreen extends State<MemberScreen> {
     return Layout(
       title: 'menu_member'.tr,
       bottomNavigationBar: MyBottomBar(
+        hideBlockButton: !can(_authController.permissions, 'create member'),
         label: Text('global_add_item'.trParams({
           'item': 'menu_member'.tr,
         })),
@@ -101,10 +105,12 @@ class _MemberScreen extends State<MemberScreen> {
     return MyCardList(
       key: ValueKey(_memberController.members[index].id),
       onTap: () {
-        Get.toNamed(
-          '/menu/member/edit',
-          arguments: _memberController.members[index],
-        );
+        if (can(_authController.permissions, 'update member')) {
+          Get.toNamed(
+            '/menu/member/edit',
+            arguments: _memberController.members[index],
+          );
+        }
       },
       list: [
         Text(

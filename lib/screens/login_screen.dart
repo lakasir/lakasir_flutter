@@ -1,14 +1,6 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:lakasir/Exceptions/validation.dart';
-import 'package:lakasir/api/api_service.dart';
-import 'package:lakasir/api/responses/api_response.dart';
-import 'package:lakasir/api/responses/auths/login_error_response.dart';
-import 'package:lakasir/api/responses/auths/login_response.dart';
-import 'package:lakasir/api/responses/error_response.dart';
-import 'package:lakasir/utils/auth.dart';
+import 'package:lakasir/controllers/auths/login_controller.dart';
 import 'package:lakasir/utils/colors.dart';
 import 'package:lakasir/widgets/checkbox.dart';
 import 'package:lakasir/widgets/filled_button.dart';
@@ -21,69 +13,8 @@ class LoginScreen extends StatefulWidget {
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
-final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
 class _LoginScreenState extends State<LoginScreen> {
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
-  bool remember = false;
-  bool isLoading = false;
-  LoginErrorResponse loginErrorResponse = LoginErrorResponse(
-    password: "",
-    email: "",
-  );
-
-  @override
-  void dispose() {
-    emailController.dispose();
-    passwordController.dispose();
-    super.dispose();
-  }
-
-  Future<bool> login() async {
-    setState(() {
-      isLoading = true;
-    });
-    if (!_formKey.currentState!.validate()) {
-      setState(() {
-        isLoading = false;
-      });
-      return false;
-    }
-
-    try {
-      final response = await ApiService(await getDomain()).postData(
-        'auth/login',
-        {
-          'email': emailController.text,
-          'password': passwordController.text,
-          'remember': remember
-        },
-      );
-
-      ApiResponse<LoginResponse> apiResponse = ApiResponse.fromJson(
-        response,
-        (json) => LoginResponse.fromJson(json),
-      );
-
-      storeToken(apiResponse.data!.value.token);
-      return true;
-    } catch (e) {
-      if (e is ValidationException) {
-        ErrorResponse<LoginErrorResponse> errorResponse =
-            ErrorResponse.fromJson(jsonDecode(e.toString()),
-                (json) => LoginErrorResponse.fromJson(json));
-
-        setState(() {
-          loginErrorResponse = errorResponse.errors!;
-        });
-      }
-      setState(() {
-        isLoading = false;
-      });
-      return false;
-    }
-  }
+  final _loginController = Get.put(LoginController());
 
   @override
   Widget build(BuildContext context) {
@@ -120,29 +51,35 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
             Form(
-              key: _formKey,
+              key: _loginController.formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Email Input
                   Container(
                     margin: const EdgeInsets.only(bottom: 21.0),
-                    child: MyTextField(
-                      controller: emailController,
-                      errorText: loginErrorResponse.email,
-                      label: "field_email".tr,
-                      mandatory: true,
+                    child: Obx(
+                      () => MyTextField(
+                        controller: _loginController.emailController,
+                        errorText:
+                            _loginController.loginErrorResponse.value.email,
+                        label: "field_email".tr,
+                        mandatory: true,
+                      ),
                     ),
                   ),
                   // Password Input
                   Container(
                     margin: const EdgeInsets.only(bottom: 21.0),
-                    child: MyTextField(
-                      errorText: loginErrorResponse.password,
-                      controller: passwordController,
-                      label: "field_password".tr,
-                      mandatory: true,
-                      obscureText: true,
+                    child: Obx(
+                      () => MyTextField(
+                        errorText:
+                            _loginController.loginErrorResponse.value.password,
+                        controller: _loginController.passwordController,
+                        label: "field_password".tr,
+                        mandatory: true,
+                        obscureText: true,
+                      ),
                     ),
                   ),
 
@@ -152,31 +89,19 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: MyCheckbox(
                       label: "field_remember_me".tr,
                       onChange: (bool value) {
-                        setState(() {
-                          remember = value;
-                        });
+                        _loginController.remember.value = value;
                       },
                     ),
                   ),
 
-                  // Sign In Button
-                  MyFilledButton(
-                    isLoading: isLoading,
-                    onPressed: () {
-                      login().then((value) {
-                        if (value) {
-                          Get.offAllNamed('/auth');
-                        } else {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text("Something went wrong"),
-                              backgroundColor: error,
-                            ),
-                          );
-                        }
-                      });
-                    },
-                    child: Text("sign_in".tr),
+                  Obx(
+                    () => MyFilledButton(
+                      isLoading: _loginController.isLoading.value,
+                      onPressed: () async {
+                        await _loginController.login();
+                      },
+                      child: Text("sign_in".tr),
+                    ),
                   ),
                 ],
               ),

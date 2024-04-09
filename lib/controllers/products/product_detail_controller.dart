@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lakasir/api/responses/categories/category_response.dart';
 import 'package:lakasir/api/responses/products/product_response.dart';
 import 'package:lakasir/controllers/products/product_controller.dart';
 import 'package:lakasir/services/product_service.dart';

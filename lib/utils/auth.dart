@@ -7,7 +7,7 @@ Future<String> checkAuthentication() async {
   if (!setup) {
     return "setup";
   }
-  
+
   if (token == null) {
     return "login";
   }
@@ -18,6 +18,7 @@ Future<String> checkAuthentication() async {
 Future<void> logout() async {
   final prefs = await SharedPreferences.getInstance();
   await prefs.remove('token');
+  await prefs.remove('permissions');
 }
 
 Future<void> storeToken(String token) async {
@@ -52,4 +53,8 @@ Future<void> storeSetup(String domain) async {
   await logout();
   await prefs.setBool('setup', true);
   await prefs.setString('domain', domain);
+}
+
+bool can(List<String> permissions, String ability) {
+  return permissions.contains(ability);
 }

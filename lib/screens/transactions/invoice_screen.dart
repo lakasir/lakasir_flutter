@@ -74,8 +74,8 @@ class DashedLinePainter extends CustomPainter {
       ..strokeWidth = size.height
       ..style = PaintingStyle.stroke;
 
-    final dashWidth = 5.0; // Adjust the width of each dash
-    final dashSpace = 5.0; // Adjust the space between dashes
+    const dashWidth = 5.0; // Adjust the width of each dash
+    const dashSpace = 5.0; // Adjust the space between dashes
 
     double currentX = 0;
 

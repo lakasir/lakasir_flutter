@@ -1,7 +1,7 @@
 class LoginErrorResponse {
-  String email;
-  String password;
-  LoginErrorResponse({required this.email, required this.password});
+  String? email;
+  String? password;
+  LoginErrorResponse({this.email, this.password});
 
   factory LoginErrorResponse.fromJson(Map<String, dynamic> json) {
     return LoginErrorResponse(

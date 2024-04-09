@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lakasir/api/responses/products/product_response.dart';
+import 'package:lakasir/controllers/auths/auth_controller.dart';
 import 'package:lakasir/controllers/products/product_detail_controller.dart';
 import 'package:lakasir/controllers/products/stocks/product_stock_controller.dart';
+import 'package:lakasir/utils/auth.dart';
 import 'package:lakasir/utils/colors.dart';
 import 'package:lakasir/utils/utils.dart';
 import 'package:lakasir/widgets/date_picker.dart';
@@ -22,6 +24,7 @@ class DetailStockScreen extends StatefulWidget {
 class _DetailStockScreenState extends State<DetailStockScreen> {
   final _productDetailController = Get.put(ProductDetailController());
   final _productStockController = Get.put(ProductStockController());
+  final _authController = Get.put(AuthController());
 
   @override
   void initState() {
@@ -119,40 +122,45 @@ class _DetailStockScreenState extends State<DetailStockScreen> {
                         Text(initialFormattedPrice),
                       ],
                     ),
-                    SizedBox(
-                      height: 33,
-                      child: TextButton(
-                        style: TextButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 28,
+                    if (can(
+                      _authController.permissions,
+                      'create product stock',
+                    ))
+                      SizedBox(
+                        height: 33,
+                        child: TextButton(
+                          style: TextButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 28,
+                            ),
+                            backgroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
                           ),
-                          backgroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return ActionModalStock(
+                                  products:
+                                      _productDetailController.product.value,
+                                  initialFormattedPrice: initialFormattedPrice,
+                                  productStockController:
+                                      _productStockController,
+                                );
+                              },
+                            );
+                          },
+                          child: Text(
+                            "add_or_edit_stock".tr,
+                            style: const TextStyle(
+                              fontSize: 12,
+                              color: Colors.black,
+                            ),
                           ),
                         ),
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return ActionModalStock(
-                                products:
-                                    _productDetailController.product.value,
-                                initialFormattedPrice: initialFormattedPrice,
-                                productStockController: _productStockController,
-                              );
-                            },
-                          );
-                        },
-                        child: Text(
-                          "add_or_edit_stock".tr,
-                          style: const TextStyle(
-                            fontSize: 12,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                    )
+                      )
                   ],
                 ),
               ),
@@ -198,42 +206,48 @@ class _DetailStockScreenState extends State<DetailStockScreen> {
                               ),
                             ],
                           ),
-                          trailing: IconButton(
-                            onPressed: () {
-                              showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return AlertDialog(
-                                    title: Text("global_delete_item"
-                                        .trParams({"item": "feild_stock"})),
-                                    content: Text("global_sure_content"
-                                        .trParams({
-                                      "item": "field_stock_history".tr
-                                    })),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () {
-                                          Get.back();
-                                        },
-                                        child: Text("global_cancel".tr),
-                                      ),
-                                      TextButton(
-                                        onPressed: () {
-                                          _productStockController.delete(
-                                              _productDetailController
-                                                  .product.value.id,
-                                              stockHistory.id);
-                                          Get.back();
-                                        },
-                                        child: Text("global_ok".tr),
-                                      ),
-                                    ],
-                                  );
-                                },
-                              );
-                            },
-                            icon: const Icon(Icons.delete),
-                          ),
+                          trailing: can(
+                            _authController.permissions,
+                            'delete product stock',
+                          )
+                              ? IconButton(
+                                  onPressed: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          title: Text("global_delete_item"
+                                              .trParams(
+                                                  {"item": "feild_stock"})),
+                                          content: Text("global_sure_content"
+                                              .trParams({
+                                            "item": "field_stock_history".tr
+                                          })),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () {
+                                                Get.back();
+                                              },
+                                              child: Text("global_cancel".tr),
+                                            ),
+                                            TextButton(
+                                              onPressed: () {
+                                                _productStockController.delete(
+                                                    _productDetailController
+                                                        .product.value.id,
+                                                    stockHistory.id);
+                                                Get.back();
+                                              },
+                                              child: Text("global_ok".tr),
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  },
+                                  icon: const Icon(Icons.delete),
+                                )
+                              : null,
                         ),
                       );
                     },

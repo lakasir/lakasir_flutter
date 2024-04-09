@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lakasir/controllers/auths/auth_controller.dart';
 import 'package:lakasir/controllers/products/product_controller.dart';
+import 'package:lakasir/utils/auth.dart';
 import 'package:lakasir/utils/colors.dart';
 import 'package:lakasir/widgets/build_list_image.dart';
 import 'package:lakasir/widgets/layout.dart';
@@ -16,6 +18,7 @@ class ProductScreen extends StatefulWidget {
 
 class _ProductScreen extends State<ProductScreen> {
   final ProductController _productController = Get.put(ProductController());
+  final AuthController _authController = Get.put(AuthController());
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +27,7 @@ class _ProductScreen extends State<ProductScreen> {
       title: 'menu_product'.tr,
       bottomNavigationBar: MyBottomBar(
         label: Text('product_add'.tr),
+        hideBlockButton: !can(_authController.permissions, 'create product'),
         onPressed: () {
           Get.toNamed('/menu/product/add');
         },
@@ -42,11 +46,12 @@ class _ProductScreen extends State<ProductScreen> {
             },
             icon: const Icon(Icons.search, color: Colors.white),
           ),
-          MyBottomBarActions(
-            label: 'setting_category'.tr,
-            onPressed: () => {Get.toNamed('/menu/setting/category')},
-            icon: const Icon(Icons.category, color: Colors.white),
-          ),
+          if (can(_authController.permissions, 'read category'))
+            MyBottomBarActions(
+              label: 'setting_category'.tr,
+              onPressed: () => {Get.toNamed('/menu/setting/category')},
+              icon: const Icon(Icons.category, color: Colors.white),
+            ),
         ],
       ),
       child: Obx(

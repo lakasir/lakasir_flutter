@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lakasir/api/responses/products/product_response.dart';
+import 'package:lakasir/controllers/auths/auth_controller.dart';
 import 'package:lakasir/controllers/setting_controller.dart';
 import 'package:lakasir/controllers/settings/secure_initial_price_controller.dart';
-import 'package:lakasir/utils/colors.dart';
+import 'package:lakasir/utils/auth.dart';
 import 'package:lakasir/utils/utils.dart';
-import 'package:lakasir/widgets/dialog.dart';
-import 'package:lakasir/widgets/filled_button.dart';
-import 'package:lakasir/widgets/text_field.dart';
 
 class ProductDetailWidget extends StatefulWidget {
   const ProductDetailWidget({
@@ -29,6 +27,7 @@ class ProductDetailWidget extends StatefulWidget {
 
 class _ProductDetailWidgetState extends State<ProductDetailWidget> {
   final _secureInitialPriceController = Get.put(SecureInitialPriceController());
+  final _authController = Get.put(AuthController());
 
   @override
   void dispose() {
@@ -142,7 +141,8 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
             ],
           ),
         ),
-        fieldInitialPrice(),
+        if (can(_authController.permissions, 'read detail initial price'))
+          fieldInitialPrice(),
         Container(
           margin: const EdgeInsets.only(bottom: 12),
           child: Row(
@@ -224,7 +224,10 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
           Expanded(
             child: InkWell(
               onTap: () {
-                _secureInitialPriceController.verifyPassword();
+                if (widget._settingController.setting.value.hideInitialPrice! &&
+                    !_secureInitialPriceController.isOpened.value) {
+                  _secureInitialPriceController.verifyPassword();
+                }
               },
               child: Obx(
                 () {

@@ -6,7 +6,6 @@ import 'package:lakasir/controllers/profiles/profile_edit_controller.dart';
 import 'package:lakasir/widgets/filled_button.dart';
 import 'package:lakasir/widgets/image_picker.dart';
 import 'package:lakasir/widgets/layout.dart';
-import 'package:lakasir/widgets/select_input_feld.dart';
 import 'package:lakasir/widgets/text_field.dart';
 
 class EditProfileScreen extends StatefulWidget {

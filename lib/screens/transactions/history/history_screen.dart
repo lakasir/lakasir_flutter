@@ -5,10 +5,12 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:intl/intl.dart';
 import 'package:lakasir/api/requests/pagination_request.dart';
 import 'package:lakasir/api/responses/transactions/history_response.dart';
+import 'package:lakasir/controllers/auths/auth_controller.dart';
 import 'package:lakasir/controllers/setting_controller.dart';
 import 'package:lakasir/controllers/settings/secure_initial_price_controller.dart';
 import 'package:lakasir/controllers/transactions/analytics/analytics_controller.dart';
 import 'package:lakasir/controllers/transactions/history_controller.dart';
+import 'package:lakasir/utils/auth.dart';
 import 'package:lakasir/utils/colors.dart';
 import 'package:lakasir/utils/utils.dart';
 import 'package:lakasir/widgets/analytics_card.dart';
@@ -27,6 +29,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
   final _historyController = Get.put(HistoryController());
   final _secureInitialPriceController = Get.put(SecureInitialPriceController());
   final _settingController = Get.put(SettingController());
+  final _authController = Get.put(AuthController());
   final PagingController<int, TransactionHistoryResponse> _pagingController =
       PagingController(firstPageKey: 0);
 
@@ -74,7 +77,11 @@ class _HistoryScreenState extends State<HistoryScreen> {
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                if (_settingController.setting.value.hideInitialPrice!)
+                if (_settingController.setting.value.hideInitialPrice! &&
+                    can(
+                      _authController.permissions,
+                      'verify secure initial price',
+                    ))
                   IconButton(
                     onPressed: () {
                       _secureInitialPriceController.verifyPassword();

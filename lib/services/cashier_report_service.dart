@@ -2,7 +2,6 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:lakasir/api/api_service.dart';
 import 'package:lakasir/api/requests/cashier_report_request.dart';
-import 'package:lakasir/api/responses/api_response.dart';
 import 'package:lakasir/api/responses/transactions/reports/cashier_report_response.dart';
 import 'package:lakasir/utils/auth.dart';
 import 'package:lakasir/utils/utils.dart';

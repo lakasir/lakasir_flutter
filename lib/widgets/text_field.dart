@@ -99,17 +99,22 @@ class _MyTextFieldState extends State<MyTextField> {
                       ],
                     ),
                   ),
+                const SizedBox(width: 20),
                 if (widget.info != null)
-                  Tooltip(
-                    triggerMode: TooltipTriggerMode.tap,
-                    showDuration: const Duration(seconds: 5),
-                    message: widget.info!,
-                    child: const Icon(
-                      Icons.info_outline,
-                      color: grey,
-                      size: 16,
-                    ),
+                  Flexible(
+                    child: Text(widget.info!,
+                        style: const TextStyle(fontSize: 12)),
                   ),
+                // Tooltip(
+                //   triggerMode: TooltipTriggerMode.tap,
+                //   showDuration: const Duration(seconds: 5),
+                //   message: widget.info!,
+                //   child: const Icon(
+                //     Icons.info_outline,
+                //     color: grey,
+                //     size: 16,
+                //   ),
+                // ),
               ],
             ),
           ),

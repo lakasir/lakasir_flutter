@@ -13,7 +13,7 @@ class ProfileController extends GetxController {
     profile(response);
     update();
     isLoading(false);
-  } 
+  }
 
   @override
   void onInit() {

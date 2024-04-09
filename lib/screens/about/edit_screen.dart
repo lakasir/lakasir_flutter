@@ -6,7 +6,6 @@ import 'package:lakasir/widgets/filled_button.dart';
 import 'package:lakasir/widgets/layout.dart';
 import 'package:lakasir/widgets/select_input_feld.dart';
 import 'package:lakasir/widgets/text_field.dart';
-import 'package:image_picker/image_picker.dart';
 
 class EditAboutScreen extends StatefulWidget {
   const EditAboutScreen({super.key});

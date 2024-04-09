@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lakasir/controllers/abouts/about_controller.dart';
+import 'package:lakasir/controllers/auths/auth_controller.dart';
+import 'package:lakasir/utils/auth.dart';
 import 'package:lakasir/utils/colors.dart';
 import 'package:lakasir/widgets/layout.dart';
 
@@ -13,6 +15,7 @@ class AboutScreen extends StatefulWidget {
 
 class _AboutScreenState extends State<AboutScreen> {
   AboutController aboutController = Get.put(AboutController());
+  final AuthController _authController = Get.put(AuthController());
 
   String _businessType(String businessType) {
     switch (businessType) {
@@ -113,19 +116,23 @@ class _AboutScreenState extends State<AboutScreen> {
                                       );
                                     },
                                   ),
-                                  IconButton(
-                                    onPressed: () {
-                                      Get.toNamed(
-                                        '/menu/about/edit',
-                                        arguments: aboutController.shop.value,
-                                      );
-                                    },
-                                    icon: const Icon(
-                                      size: 30,
-                                      Icons.edit,
-                                      color: Colors.white,
+                                  if (can(
+                                    _authController.permissions,
+                                    'update about',
+                                  ))
+                                    IconButton(
+                                      onPressed: () {
+                                        Get.toNamed(
+                                          '/menu/about/edit',
+                                          arguments: aboutController.shop.value,
+                                        );
+                                      },
+                                      icon: const Icon(
+                                        size: 30,
+                                        Icons.edit,
+                                        color: Colors.white,
+                                      ),
                                     ),
-                                  ),
                                 ],
                               ),
                               const SizedBox(

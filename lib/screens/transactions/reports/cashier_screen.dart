@@ -140,7 +140,7 @@ class PdfPreviewScreen extends StatefulWidget {
 class _PdfPreviewScreenState extends State<PdfPreviewScreen> {
   final _secureInitialPriceController = Get.put(SecureInitialPriceController());
   final _settingController = Get.put(SettingController());
-  PDFViewController? _pdfViewController;
+  // PDFViewController? _pdfViewController;
   final Duration initialDuration = const Duration(milliseconds: 300);
 
   @override
@@ -202,7 +202,7 @@ class _PdfPreviewScreenState extends State<PdfPreviewScreen> {
               },
               onViewCreated: (PDFViewController pdfViewController) async {
                 setState(() {
-                  _pdfViewController = pdfViewController;
+                  // _pdfViewController = pdfViewController;
                 });
               },
             ),

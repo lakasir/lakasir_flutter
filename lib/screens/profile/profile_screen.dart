@@ -249,7 +249,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 style: const TextStyle(fontSize: 16),
                               ),
                               const SizedBox(height: 5),
-                              Text(locale(_locale),
+                              Text(
+                                locale(_locale),
                                 style: const TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,

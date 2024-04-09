@@ -56,7 +56,7 @@ class _RegisterDomainScreenState extends State<RegisterDomainScreen> {
       }
 
       await ApiService(baseUrl).postData(
-        'domain/register',
+        'api/domain/register',
         {
           "full_name": fullNameController.text,
           "domain": "${domainNameController.text}.lakasir.com",
@@ -102,6 +102,7 @@ class _RegisterDomainScreenState extends State<RegisterDomainScreen> {
   Widget build(BuildContext context) {
     return Layout(
       noAppBar: true,
+      resizeToAvoidBottomInset: true,
       child: SafeArea(
         child: ListView(
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
