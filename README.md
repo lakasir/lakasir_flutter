@@ -27,8 +27,8 @@
 <div style="display:inline-block">
   <img src="https://lakasir.com/assets/images/dashboard.png" alt="dashboard" width="200" height="auto" />
   <img src="https://lakasir.com/assets/images/stock-management.png" alt="stock-management" width="200" height="auto" />
-  <img src="https://lakasir.com/assets/images/calculator-payment.png" alt="stock-management" width="200" height="auto" />
-  <img src="https://lakasir.com/assets/images/cashier-transaction-1.png" alt="stock-management" width="200" height="auto" />
+  <img src="https://lakasir.com/assets/images/calculator-payment.png" alt="calculator-payment" width="200" height="auto" />
+  <img src="https://lakasir.com/assets/images/cashier-transaction-1.png" alt="cashier-transaction-1.png" width="200" height="auto" />
 </div>
 
 ## Contributing
