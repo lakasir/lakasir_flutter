@@ -21,11 +21,13 @@ class _DetailScreen extends State<DetailScreen> {
   final _productDetailController = Get.put(ProductDetailController());
   final _settingController = Get.put(SettingController());
   final AuthController _authController = Get.put(AuthController());
+  ProductResponse products = ProductResponse();
 
   @override
   void initState() {
-    final product = Get.arguments as ProductResponse;
-    _productDetailController.get(product.id);
+    setState(() {
+      products = Get.arguments as ProductResponse;
+    });
     super.initState();
   }
 
@@ -35,7 +37,6 @@ class _DetailScreen extends State<DetailScreen> {
 
     return Obx(
       () {
-        final products = _productDetailController.product.value;
         return Layout(
           baseHeight: double.infinity,
           noAppBar: true,

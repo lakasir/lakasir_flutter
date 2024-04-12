@@ -9,7 +9,6 @@ import 'package:lakasir/api/responses/error_response.dart';
 import 'package:lakasir/api/responses/products/product_response.dart';
 import 'package:lakasir/api/responses/products/produect_error_response.dart';
 import 'package:lakasir/controllers/products/product_controller.dart';
-import 'package:lakasir/controllers/products/product_detail_controller.dart';
 import 'package:lakasir/services/product_service.dart';
 import 'package:lakasir/utils/colors.dart';
 import 'package:lakasir/widgets/select_input_feld.dart';
@@ -24,9 +23,13 @@ class ProductAddEditController extends GetxController {
   final TextEditingController nameInputController = TextEditingController();
   final TextEditingController stockInputController = TextEditingController();
   final MoneyMaskedTextController initialPriceInputController =
-      MoneyMaskedTextController(thousandSeparator: '.', decimalSeparator: ',');
+      MoneyMaskedTextController(
+    initialValue: 0.0,
+  );
   final MoneyMaskedTextController sellingPriceInputController =
-      MoneyMaskedTextController();
+      MoneyMaskedTextController(
+    initialValue: 0.0,
+  );
   final TextEditingController unitInputController = TextEditingController();
   final TextEditingController skuInputController = TextEditingController();
   final TextEditingController barcodeInputController = TextEditingController();
@@ -34,10 +37,7 @@ class ProductAddEditController extends GetxController {
   Rx<ProductErrorResponse> productErrorResponse = ProductErrorResponse().obs;
   final RxBool isLoading = false.obs;
   final ProductController _productController = Get.put(ProductController());
-  final ProductDetailController _productDetailController =
-      Get.put(ProductDetailController());
   RxBool enabledStock = false.obs;
-  // final CategoryController _categoryController = Get.find();
 
   void create() async {
     try {
@@ -118,8 +118,8 @@ class ProductAddEditController extends GetxController {
       );
       isLoading(false);
       _productController.getProducts();
-      await _productDetailController.get(Get.arguments.id);
       clearInput();
+      Get.back();
       Get.back();
       Get.rawSnackbar(
         message: 'global_updated_item'.trParams({'item': 'menu_product'.tr}),

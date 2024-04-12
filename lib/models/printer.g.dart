@@ -22,8 +22,23 @@ const PrinterSchema = CollectionSchema(
       name: r'address',
       type: IsarType.string,
     ),
-    r'name': PropertySchema(
+    r'footer': PropertySchema(
       id: 1,
+      name: r'footer',
+      type: IsarType.string,
+    ),
+    r'isConnected': PropertySchema(
+      id: 2,
+      name: r'isConnected',
+      type: IsarType.bool,
+    ),
+    r'isDefault': PropertySchema(
+      id: 3,
+      name: r'isDefault',
+      type: IsarType.bool,
+    ),
+    r'name': PropertySchema(
+      id: 4,
       name: r'name',
       type: IsarType.string,
     )
@@ -55,6 +70,12 @@ int _printerEstimateSize(
     }
   }
   {
+    final value = object.footer;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  {
     final value = object.name;
     if (value != null) {
       bytesCount += 3 + value.length * 3;
@@ -70,7 +91,10 @@ void _printerSerialize(
   Map<Type, List<int>> allOffsets,
 ) {
   writer.writeString(offsets[0], object.address);
-  writer.writeString(offsets[1], object.name);
+  writer.writeString(offsets[1], object.footer);
+  writer.writeBool(offsets[2], object.isConnected);
+  writer.writeBool(offsets[3], object.isDefault);
+  writer.writeString(offsets[4], object.name);
 }
 
 Printer _printerDeserialize(
@@ -81,8 +105,11 @@ Printer _printerDeserialize(
 ) {
   final object = Printer();
   object.address = reader.readStringOrNull(offsets[0]);
+  object.footer = reader.readStringOrNull(offsets[1]);
   object.id = id;
-  object.name = reader.readStringOrNull(offsets[1]);
+  object.isConnected = reader.readBoolOrNull(offsets[2]);
+  object.isDefault = reader.readBoolOrNull(offsets[3]);
+  object.name = reader.readStringOrNull(offsets[4]);
   return object;
 }
 
@@ -96,6 +123,12 @@ P _printerDeserializeProp<P>(
     case 0:
       return (reader.readStringOrNull(offset)) as P;
     case 1:
+      return (reader.readStringOrNull(offset)) as P;
+    case 2:
+      return (reader.readBoolOrNull(offset)) as P;
+    case 3:
+      return (reader.readBoolOrNull(offset)) as P;
+    case 4:
       return (reader.readStringOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -337,6 +370,152 @@ extension PrinterQueryFilter
     });
   }
 
+  QueryBuilder<Printer, Printer, QAfterFilterCondition> footerIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'footer',
+      ));
+    });
+  }
+
+  QueryBuilder<Printer, Printer, QAfterFilterCondition> footerIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'footer',
+      ));
+    });
+  }
+
+  QueryBuilder<Printer, Printer, QAfterFilterCondition> footerEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'footer',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Printer, Printer, QAfterFilterCondition> footerGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'footer',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Printer, Printer, QAfterFilterCondition> footerLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'footer',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Printer, Printer, QAfterFilterCondition> footerBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'footer',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Printer, Printer, QAfterFilterCondition> footerStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'footer',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Printer, Printer, QAfterFilterCondition> footerEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'footer',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Printer, Printer, QAfterFilterCondition> footerContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'footer',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Printer, Printer, QAfterFilterCondition> footerMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'footer',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Printer, Printer, QAfterFilterCondition> footerIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'footer',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Printer, Printer, QAfterFilterCondition> footerIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'footer',
+        value: '',
+      ));
+    });
+  }
+
   QueryBuilder<Printer, Printer, QAfterFilterCondition> idEqualTo(Id value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
@@ -385,6 +564,58 @@ extension PrinterQueryFilter
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<Printer, Printer, QAfterFilterCondition> isConnectedIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'isConnected',
+      ));
+    });
+  }
+
+  QueryBuilder<Printer, Printer, QAfterFilterCondition> isConnectedIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'isConnected',
+      ));
+    });
+  }
+
+  QueryBuilder<Printer, Printer, QAfterFilterCondition> isConnectedEqualTo(
+      bool? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'isConnected',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Printer, Printer, QAfterFilterCondition> isDefaultIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'isDefault',
+      ));
+    });
+  }
+
+  QueryBuilder<Printer, Printer, QAfterFilterCondition> isDefaultIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'isDefault',
+      ));
+    });
+  }
+
+  QueryBuilder<Printer, Printer, QAfterFilterCondition> isDefaultEqualTo(
+      bool? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'isDefault',
+        value: value,
       ));
     });
   }
@@ -555,6 +786,42 @@ extension PrinterQuerySortBy on QueryBuilder<Printer, Printer, QSortBy> {
     });
   }
 
+  QueryBuilder<Printer, Printer, QAfterSortBy> sortByFooter() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'footer', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Printer, Printer, QAfterSortBy> sortByFooterDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'footer', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Printer, Printer, QAfterSortBy> sortByIsConnected() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isConnected', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Printer, Printer, QAfterSortBy> sortByIsConnectedDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isConnected', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Printer, Printer, QAfterSortBy> sortByIsDefault() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isDefault', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Printer, Printer, QAfterSortBy> sortByIsDefaultDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isDefault', Sort.desc);
+    });
+  }
+
   QueryBuilder<Printer, Printer, QAfterSortBy> sortByName() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'name', Sort.asc);
@@ -582,6 +849,18 @@ extension PrinterQuerySortThenBy
     });
   }
 
+  QueryBuilder<Printer, Printer, QAfterSortBy> thenByFooter() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'footer', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Printer, Printer, QAfterSortBy> thenByFooterDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'footer', Sort.desc);
+    });
+  }
+
   QueryBuilder<Printer, Printer, QAfterSortBy> thenById() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.asc);
@@ -591,6 +870,30 @@ extension PrinterQuerySortThenBy
   QueryBuilder<Printer, Printer, QAfterSortBy> thenByIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Printer, Printer, QAfterSortBy> thenByIsConnected() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isConnected', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Printer, Printer, QAfterSortBy> thenByIsConnectedDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isConnected', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Printer, Printer, QAfterSortBy> thenByIsDefault() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isDefault', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Printer, Printer, QAfterSortBy> thenByIsDefaultDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isDefault', Sort.desc);
     });
   }
 
@@ -616,6 +919,25 @@ extension PrinterQueryWhereDistinct
     });
   }
 
+  QueryBuilder<Printer, Printer, QDistinct> distinctByFooter(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'footer', caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<Printer, Printer, QDistinct> distinctByIsConnected() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'isConnected');
+    });
+  }
+
+  QueryBuilder<Printer, Printer, QDistinct> distinctByIsDefault() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'isDefault');
+    });
+  }
+
   QueryBuilder<Printer, Printer, QDistinct> distinctByName(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -635,6 +957,24 @@ extension PrinterQueryProperty
   QueryBuilder<Printer, String?, QQueryOperations> addressProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'address');
+    });
+  }
+
+  QueryBuilder<Printer, String?, QQueryOperations> footerProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'footer');
+    });
+  }
+
+  QueryBuilder<Printer, bool?, QQueryOperations> isConnectedProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'isConnected');
+    });
+  }
+
+  QueryBuilder<Printer, bool?, QQueryOperations> isDefaultProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'isDefault');
     });
   }
 

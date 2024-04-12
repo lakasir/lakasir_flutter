@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lakasir/controllers/category_controller.dart';
 import 'package:lakasir/controllers/products/product_add_controller.dart';
+import 'package:lakasir/controllers/products/unit_controller.dart';
 import 'package:lakasir/utils/colors.dart';
 import 'package:lakasir/widgets/filled_button.dart';
 import 'package:lakasir/widgets/image_picker.dart';
@@ -23,13 +24,35 @@ class ProductForm extends StatefulWidget {
 
 class _ProductFormState extends State<ProductForm> {
   final CategoryController _categoryController = Get.put(CategoryController());
+  final _unitController = Get.put(UnitController());
   bool _isServiceType = false;
+  bool showAddinitionalField = false;
+  bool showInitialPrice = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _unitController.fetchUnits();
+    if (widget.controller.typeController.selectedOption == "service") {
+      setState(() {
+        _isServiceType = true;
+        showInitialPrice = false;
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _unitController.fetchUnits();
+  }
 
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
 
     return ListView(
+      shrinkWrap: true,
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       children: [
         Row(
@@ -60,72 +83,60 @@ class _ProductFormState extends State<ProductForm> {
         ),
         Container(
           margin: const EdgeInsets.only(top: 20),
-          child: Obx(
-            () => MyTextField(
-              controller: widget.controller.skuInputController,
-              label: 'field_sku'.tr,
-              errorText: widget.controller.productErrorResponse.value.sku ?? '',
-              info: 'field_sku_info'.tr,
-            ),
-          ),
-        ),
-        Container(
-          margin: const EdgeInsets.only(top: 20),
-          child: Obx(
-            () => MyTextField(
-              controller: widget.controller.barcodeInputController,
-              label: 'field_barcode'.tr,
-              errorText:
-                  widget.controller.productErrorResponse.value.barcode ?? '',
-            ),
-          ),
-        ),
-        Container(
-          margin: const EdgeInsets.only(top: 20),
-          child: Obx(
-            () => SelectInputWidget(
-              hintText: 'field_select_category'.tr,
-              mandatory: true,
-              controller: widget.controller.categoryController,
-              label: 'field_category'.tr,
-              errorText:
-                  widget.controller.productErrorResponse.value.category ?? '',
-              options: _categoryController.categories
-                  .map(
-                    (e) => Option(
-                      name: e.name,
-                      value: e.id.toString(),
-                    ),
-                  )
-                  .toList(),
-            ),
-          ),
-        ),
-        Container(
-          margin: const EdgeInsets.only(top: 20),
-          child: Obx(
-            () => SelectInputWidget(
-              controller: widget.controller.typeController,
-              label: 'field_type'.tr,
-              errorText:
-                  widget.controller.productErrorResponse.value.type ?? '',
-              options: [
-                Option(
-                  name: "option_product".tr,
-                  value: "product",
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Flexible(
+                child: Obx(
+                  () => SelectInputWidget(
+                    hintText: 'field_select_category'.tr,
+                    mandatory: true,
+                    controller: widget.controller.categoryController,
+                    label: 'field_category'.tr,
+                    errorText:
+                        widget.controller.productErrorResponse.value.category ??
+                            '',
+                    options: _categoryController.categories
+                        .map(
+                          (e) => Option(
+                            name: e.name,
+                            value: e.id.toString(),
+                          ),
+                        )
+                        .toList(),
+                  ),
                 ),
-                Option(
-                  name: "option_service".tr,
-                  value: "service",
-                )
-              ],
-              onChanged: (value) {
-                widget.controller.initialPriceInputController.updateValue(0);
-                setState(() {
-                  _isServiceType = value == "service";
-                });
-              },
-            ),
+              ),
+              const SizedBox(width: 20),
+              Flexible(
+                child: Obx(
+                  () => SelectInputWidget(
+                    controller: widget.controller.typeController,
+                    label: 'field_type'.tr,
+                    errorText:
+                        widget.controller.productErrorResponse.value.type ?? '',
+                    options: [
+                      Option(
+                        name: "option_product".tr,
+                        value: "product",
+                      ),
+                      Option(
+                        name: "option_service".tr,
+                        value: "service",
+                      )
+                    ],
+                    onChanged: (value) {
+                      widget.controller.initialPriceInputController
+                          .updateValue(0);
+                      setState(() {
+                        _isServiceType = value == "service";
+                        showInitialPrice = value == "product";
+                      });
+                    },
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
         Container(
@@ -167,29 +178,42 @@ class _ProductFormState extends State<ProductForm> {
         ),
         Container(
           margin: const EdgeInsets.only(top: 20),
-          child: Obx(
-            () => MyTextField(
-              readOnly: _isServiceType,
-              controller: widget.controller.initialPriceInputController,
-              label: 'field_initial_price'.tr,
-              keyboardType: TextInputType.number,
-              errorText:
-                  widget.controller.productErrorResponse.value.initialPrice ??
-                      '',
-            ),
-          ),
-        ),
-        Container(
-          margin: const EdgeInsets.only(top: 20),
-          child: Obx(
-            () => MyTextField(
-              controller: widget.controller.sellingPriceInputController,
-              label: 'field_selling_price'.tr,
-              keyboardType: TextInputType.number,
-              errorText:
-                  widget.controller.productErrorResponse.value.sellingPrice ??
-                      '',
-            ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Visibility(
+                visible: showInitialPrice,
+                child: Flexible(
+                  child: Obx(
+                    () => MyTextField(
+                      readOnly: _isServiceType,
+                      controller: widget.controller.initialPriceInputController,
+                      label: 'field_initial_price'.tr,
+                      keyboardType: TextInputType.number,
+                      errorText: widget.controller.productErrorResponse.value
+                              .initialPrice ??
+                          '',
+                    ),
+                  ),
+                ),
+              ),
+              Visibility(
+                visible: showInitialPrice,
+                child: const SizedBox(width: 20),
+              ),
+              Flexible(
+                child: Obx(
+                  () => MyTextField(
+                    controller: widget.controller.sellingPriceInputController,
+                    label: 'field_selling_price'.tr,
+                    keyboardType: TextInputType.number,
+                    errorText: widget.controller.productErrorResponse.value
+                            .sellingPrice ??
+                        '',
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
         Container(
@@ -205,12 +229,120 @@ class _ProductFormState extends State<ProductForm> {
             ),
           ),
         ),
+        Obx(
+          () => Row(
+            children: [
+              for (var unit in _unitController.units)
+                TextButton(
+                  style: TextButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(horizontal: 5),
+                    shape: RoundedRectangleBorder(
+                      side: const BorderSide(
+                        color: primary,
+                      ),
+                      borderRadius: BorderRadius.circular(12), // Border radius
+                    ),
+                  ),
+                  onPressed: () {
+                    widget.controller.unitInputController.text = unit.name!;
+                  },
+                  child: Text(unit.name!),
+                ),
+              if (_unitController.units.isNotEmpty)
+                Expanded(child: Container()),
+              if (_unitController.units.isNotEmpty)
+                TextButton(
+                  style: TextButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(horizontal: 5),
+                    shape: RoundedRectangleBorder(
+                      side: const BorderSide(
+                        color: primary,
+                      ),
+                      borderRadius: BorderRadius.circular(12), // Border radius
+                    ),
+                  ),
+                  onPressed: () {
+                    _unitController.clearUnit();
+                    _unitController.fetchUnits();
+                  },
+                  child: const Icon(
+                    Icons.clear,
+                    color: Colors.red,
+                  ),
+                ),
+            ],
+          ),
+        ),
+        Align(
+          alignment: Alignment.centerRight,
+          child: TextButton(
+            style: TextButton.styleFrom(
+              padding: const EdgeInsets.all(0),
+            ),
+            onPressed: () {
+              setState(() {
+                showAddinitionalField = !showAddinitionalField;
+              });
+            },
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Icon(
+                  Icons.add,
+                  color: Colors.blue[700],
+                ),
+                Text(
+                  'additional_field'.tr,
+                  style: TextStyle(
+                    color: Colors.blue[700],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        Visibility(
+          visible: showAddinitionalField,
+          child: Column(
+            children: [
+              Obx(
+                () => MyTextField(
+                  controller: widget.controller.skuInputController,
+                  label: 'field_sku'.tr,
+                  errorText:
+                      widget.controller.productErrorResponse.value.sku ?? '',
+                  info: 'field_sku_info'.tr,
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.only(top: 20),
+                child: Obx(
+                  () => MyTextField(
+                    controller: widget.controller.barcodeInputController,
+                    label: 'field_barcode'.tr,
+                    errorText:
+                        widget.controller.productErrorResponse.value.barcode ??
+                            '',
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
         Container(
           margin: const EdgeInsets.only(top: 30),
           child: Obx(
             () => MyFilledButton(
               onPressed: () {
-                widget.onSubmit();
+                try {
+                  widget.onSubmit();
+                  _unitController.createOrUpdateUnit(
+                    widget.controller.unitInputController.text,
+                  );
+                } catch (e) {
+                  rethrow;
+                }
               },
               isLoading: widget.controller.isLoading.value,
               child: Text('global_save'.tr),

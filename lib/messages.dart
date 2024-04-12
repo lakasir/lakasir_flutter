@@ -228,6 +228,7 @@ class Messages extends Translations {
           'setting_menu_printer': 'Printer',
           'global_validation_field_exist': '@field already exist',
           'field_footer': 'Footer',
+          'additional_field': 'Additional Field',
         },
         'id_ID': {
           'auth': 'Otentikasi',
@@ -455,6 +456,7 @@ class Messages extends Translations {
           'setting_menu_printer': 'Printer',
           'global_validation_field_exist': '@field sudah ada',
           'field_footer': 'Footer',
+          'additional_field': 'Kolom Tambahan',
         },
       };
 }

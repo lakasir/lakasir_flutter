@@ -12,7 +12,6 @@ class AuthController extends GetxController {
 
   void fetchPermissions() async {
     loading(true);
-    print("fetching permissions");
     await _profileController.getProfile();
     if (_profileController.profile.value.permissions != null) {
       permissions(_profileController.profile.value.permissions!);
