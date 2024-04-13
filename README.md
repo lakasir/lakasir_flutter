@@ -17,9 +17,13 @@
 1. Clone the repository: `git clone https://github.com/lakasir/lakasir_flutter`
 2. Navigate to the project directory: `cd lakasir_flutter`
 3. Install dependencies: `flutter pub get`
-4. Configure Firebase:
+4. Configure env:
+   * APP_ENV=local
+   * BASE_URL=<your local dev domain>
+
+5. Configure Firebase:
    * 
-5. Run the app: `flutter run`
+6. Run the app: `flutter run`
 
 
 ## Screenshots
