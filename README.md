@@ -13,6 +13,15 @@
 * **Dart SDK Version**: 2.17.0 or greater.
 * **Flutter SDK Version**: 3.0.0 or greater.
 
+## Features
+* **Transaction Management**: Handle sales transactions seamlessly.
+* **Product Management**: Manage your inventory and products effectively.
+* **Simple Reporting**: Generate reports for insights into sales and performance.
+* **Simple Accounting**: Basic accounting features for financial tracking.
+* **Unit Price**: The product will have a different price base on the basic unit
+* **Friend Price**: You can sell the product with a lower price or the highest price
+* and more...
+
 ## Installation
 1. Clone the repository: `git clone https://github.com/lakasir/lakasir_flutter`
 2. Navigate to the project directory: `cd lakasir_flutter`
