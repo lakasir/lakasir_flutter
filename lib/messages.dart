@@ -229,6 +229,26 @@ class Messages extends Translations {
           'global_validation_field_exist': '@field already exist',
           'field_footer': 'Footer',
           'additional_field': 'Additional Field',
+          'welcome': 'Welcome to Lakasir',
+          'welcome_description':
+              'Congratulations on choosing Lakasir for your point-of-sale needs. Let\'s get started with a quick tour to help you make the most of our app!',
+          'Manage Your Products Efficiently':
+              'Manage Your Products Efficiently',
+          'Manage Your Products Efficiently_description':
+              'Easily add, edit, and organize your products. Keep track of inventory levels and get notified when it\'s time to restock.',
+          'Streamlined Transactions': 'Streamlined Transactions',
+          'Streamlined Transactions_description':
+              'Process transactions swiftly with our intuitive interface. Accept various payment methods and generate receipts effortlessly.',
+          'Insightful Reporting': 'Insightful Reporting',
+          'Insightful Reporting_description':
+              'Access detailed reports to analyze sales, track expenses, and gain valuable insights into your business performance.',
+          'Customizable Settings': 'Customizable Settings',
+          'Customizable Settings_description':
+              'Tailor Lakasir to suit your business preferences. Set up user roles, customize receipts, and configure taxes with ease.',
+          'Continuous Support': 'Continuous Support',
+          'Continuous Support_description':
+              'Our support team is here to assist you every step of the way. Reach out to us for any questions or assistance you may need.',
+          'get_started': 'Get Started',
         },
         'id_ID': {
           'auth': 'Otentikasi',
@@ -457,6 +477,25 @@ class Messages extends Translations {
           'global_validation_field_exist': '@field sudah ada',
           'field_footer': 'Footer',
           'additional_field': 'Kolom Tambahan',
+          'welcome': 'Selamat Datang di Lakasir',
+          'welcome_description':
+              'Selamat atas pilihan anda memilih Lakasir untuk kebutuhan point-of-sale anda. Mari kita mulai dengan tur singkat untuk membantu anda memaksimalkan aplikasi kami!',
+          'Manage Your Products Efficiently': 'Atur Produk Anda Dengan Mudah',
+          'Manage Your Products Efficiently_description':
+              'Tambahkan, edit, dan atur produk anda dengan mudah. Pantau level persediaan dan dapatkan notifikasi saat waktunya untuk restok.',
+          'Streamlined Transactions': 'Transaksi yang Efisien',
+          'Streamlined Transactions_description':
+              'Proses transaksi dengan cepat menggunakan antarmuka intuitif kami. Terima berbagai metode pembayaran dan hasilkan tanda terima dengan mudah.',
+          'Insightful Reporting': 'Laporan yang Berharga',
+          'Insightful Reporting_description':
+              'Akses laporan terperinci untuk menganalisis penjualan, melacak pengeluaran, dan mendapatkan wawasan berharga tentang kinerja bisnis anda.',
+          'Customizable Settings': 'Sesuaikan Pengaturan Anda',
+          'Customizable Settings_description':
+              'Sesuaikan Lakasir sesuai dengan preferensi bisnis anda. Atur peran pengguna, sesuaikan tanda terima, dan konfigurasikan pajak dengan mudah.',
+          'Continuous Support': 'Dukungan Berkelanjutan',
+          'Continuous Support_description':
+              'Tim dukungan kami siap membantu anda setiap langkahnya. Hubungi kami untuk pertanyaan atau bantuan yang anda butuhkan.',
+          'get_started': 'Mulai',
         },
       };
 }

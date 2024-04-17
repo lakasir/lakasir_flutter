@@ -48,6 +48,7 @@ flutter:
   assets:
     - .env
     - assets/
+    - assets/onboards/
 
 fonts:
   - family: SourceSans

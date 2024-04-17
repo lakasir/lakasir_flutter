@@ -76,6 +76,7 @@ class MyApp extends StatelessWidget {
               Locale locale = snapshot.data!;
 
               return GetMaterialApp(
+                debugShowCheckedModeBanner: false,
                 translations: Messages(),
                 locale: locale,
                 title: 'Lakasir',

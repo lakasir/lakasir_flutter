@@ -19,8 +19,10 @@ final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
 class _SetupScreenState extends State<SetupScreen> {
   final registerDomainController = TextEditingController();
+  int touchedTimes = 0;
   bool isLoading = false;
   String domainError = "";
+  String baseDomain = ".lakasir.com";
 
   @override
   void dispose() {
@@ -44,8 +46,10 @@ class _SetupScreenState extends State<SetupScreen> {
       if (environment == "local") {
         domain = "http://${registerDomainController.text}";
       }
-      await ApiService("$domain.lakasir.com").fetchData('api');
-      await storeSetup("${registerDomainController.text}.lakasir.com");
+      domain = domain + baseDomain;
+
+      await ApiService(domain).fetchData('api');
+      await storeSetup(registerDomainController.text + baseDomain);
       return true;
     } catch (e) {
       setState(() {
@@ -67,25 +71,60 @@ class _SetupScreenState extends State<SetupScreen> {
             Container(
               margin: const EdgeInsets.only(top: 116, bottom: 58),
               child: Center(
-                child: RichText(
-                  text: TextSpan(
-                    style: const TextStyle(
-                      fontSize: 32,
-                      fontWeight: FontWeight.w600,
+                child: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      touchedTimes++;
+                    });
+
+                    if (touchedTimes == 5) {
+                      var snackBar = SnackBar(
+                        backgroundColor: Colors.transparent,
+                        elevation: 0,
+                        dismissDirection: DismissDirection.none,
+                        padding: EdgeInsets.zero,
+                        margin: const EdgeInsets.only(bottom: 15),
+                        behavior: SnackBarBehavior.floating,
+                        duration: const Duration(seconds: 2),
+                        content: Center(
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 14),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50),
+                              color: const Color(0xff656565),
+                            ),
+                            child: const Text('Using your own domain'),
+                          ),
+                        ),
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      setState(() {
+                        baseDomain = "";
+                      });
+                    }
+                  },
+                  child: RichText(
+                    text: TextSpan(
+                      style: const TextStyle(
+                        fontSize: 32,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      children: [
+                        TextSpan(
+                          text: 'setup_title'.tr,
+                          style: const TextStyle(color: Colors.black),
+                        ),
+                        const WidgetSpan(
+                          child:
+                              SizedBox(width: 8.0), // Add space between spans
+                        ),
+                        const TextSpan(
+                          text: "LAKASIR",
+                          style: TextStyle(color: primary),
+                        ),
+                      ],
                     ),
-                    children: [
-                      TextSpan(
-                        text: 'setup_title'.tr,
-                        style: const TextStyle(color: Colors.black),
-                      ),
-                      const WidgetSpan(
-                        child: SizedBox(width: 8.0), // Add space between spans
-                      ),
-                      const TextSpan(
-                        text: "LAKASIR",
-                        style: TextStyle(color: primary),
-                      ),
-                    ],
                   ),
                 ),
               ),
@@ -100,7 +139,7 @@ class _SetupScreenState extends State<SetupScreen> {
                     child: MyTextField(
                       prefixText:
                           environment == "local" ? "http://" : "https://",
-                      suffixText: ".lakasir.com",
+                      suffixText: baseDomain,
                       controller: registerDomainController,
                       label: "setup_your_registered_domain".tr,
                       errorText: domainError,

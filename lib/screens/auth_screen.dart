@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lakasir/screens/domain/setup_screen.dart';
 import 'package:lakasir/screens/login_screen.dart';
 import 'package:lakasir/screens/menu_screen.dart';
+import 'package:lakasir/screens/onboard_screen.dart';
 import 'package:lakasir/utils/auth.dart';
 
 class AuthScreen extends StatefulWidget {
@@ -22,7 +23,7 @@ class _AuthScreenState extends State<AuthScreen> {
         } else if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
         } else if (snapshot.data == "setup") {
-          return const SetupScreen();
+          return const OnboardingScreen();
         } else if (snapshot.data == "login") {
           return const LoginScreen();
         } else {

@@ -58,3 +58,9 @@ Future<void> storeSetup(String domain) async {
 bool can(List<String> permissions, String ability) {
   return permissions.contains(ability);
 }
+
+void destroySetup() async {
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.remove('setup');
+  await prefs.remove('domain');
+}
