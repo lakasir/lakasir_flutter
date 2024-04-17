@@ -23,6 +23,9 @@ jobs:
       - name: Get packages
         run: flutter pub get
 
+      - name: Setup .env
+        run: cp .env.example .env
+
       - name: Build APK
         run: flutter build apk --release
 
