@@ -1,13 +1,17 @@
 import 'dart:convert';
 
+import 'package:blue_thermal_printer/blue_thermal_printer.dart';
 import 'package:get/get.dart';
 import 'package:lakasir/Exceptions/validation.dart';
 import 'package:lakasir/api/requests/pagination_request.dart';
 import 'package:lakasir/api/requests/payment_request.dart';
 import 'package:lakasir/api/responses/error_response.dart';
 import 'package:lakasir/controllers/products/product_controller.dart';
+import 'package:lakasir/controllers/settings/print_controller.dart';
 import 'package:lakasir/controllers/transactions/cart_controller.dart';
 import 'package:lakasir/controllers/transactions/history_controller.dart';
+import 'package:lakasir/models/printer.dart';
+import 'package:lakasir/screens/setting/printers/print_receipt.dart';
 import 'package:lakasir/services/payment_service.dart';
 import 'package:lakasir/utils/colors.dart';
 
@@ -16,12 +20,13 @@ class PaymentController extends GetxController {
   final _paymentService = PaymentSerivce();
   final _cartController = Get.put(CartController());
   final _transactionController = Get.put(HistoryController());
+  final _printerController = Get.put(PrintController());
   final RxBool isLoading = false.obs;
 
   void store() async {
     try {
       isLoading(true);
-      await _paymentService.store(PaymentRequest(
+      var transactionResponse = await _paymentService.store(PaymentRequest(
         payedMoney: _cartController.cartSessions.value.payedMoney,
         friendPrice: false,
         tax: _cartController.cartSessions.value.tax,
@@ -35,6 +40,28 @@ class PaymentController extends GetxController {
             )
             .toList(),
       ));
+      if (_printerController.printers.isNotEmpty) {
+        var printer = _printerController.printers.first;
+        BlueThermalPrinter bluetooth = BlueThermalPrinter.instance;
+        bluetooth.isConnected.then((value) {
+          if (value!) {
+            PrintReceipt(bluetooth: bluetooth).print(
+              transactionResponse,
+              printer,
+            );
+          } else {
+            var device = BluetoothDevice(printer.name, printer.address);
+            bluetooth.connect(device).then((value) {
+              if (value) {
+                PrintReceipt(bluetooth: bluetooth).print(
+                  transactionResponse,
+                  printer,
+                );
+              }
+            });
+          }
+        });
+      }
       _cartController.cartSessions.value = CartSession(
         cartItems: [],
       );
@@ -57,7 +84,8 @@ class PaymentController extends GetxController {
     } catch (e) {
       isLoading(false);
       if (e is ValidationException) {
-        ErrorResponse errorResponse = ErrorResponse.fromJson(jsonDecode(e.toString()), (json) => ());
+        ErrorResponse errorResponse =
+            ErrorResponse.fromJson(jsonDecode(e.toString()), (json) => ());
         Get.rawSnackbar(
           message: errorResponse.message,
           backgroundColor: error,
@@ -65,4 +93,6 @@ class PaymentController extends GetxController {
       }
     }
   }
+
+  void printReceipt(BlueThermalPrinter bluetooth, Printer printer) {}
 }

@@ -249,6 +249,9 @@ class Messages extends Translations {
           'Continuous Support_description':
               'Our support team is here to assist you every step of the way. Reach out to us for any questions or assistance you may need.',
           'get_started': 'Get Started',
+          'global_validation_field_not_connected': 'Printer not connected',
+          'global_connected': 'Printer connected',
+          'global_not_connected': 'Printer not connected',
         },
         'id_ID': {
           'auth': 'Otentikasi',
@@ -496,6 +499,9 @@ class Messages extends Translations {
           'Continuous Support_description':
               'Tim dukungan kami siap membantu anda setiap langkahnya. Hubungi kami untuk pertanyaan atau bantuan yang anda butuhkan.',
           'get_started': 'Mulai',
+          'global_validation_field_not_connected': 'Printer tidak terhubung',
+          'global_connected': 'Printer terhubung',
+          'global_not_connected': 'Printer tidak terhubung',
         },
       };
 }

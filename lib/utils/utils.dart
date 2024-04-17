@@ -8,7 +8,8 @@ import 'package:lakasir/api/responses/payment_methods/payment_method_response.da
 import 'package:lakasir/api/responses/products/product_response.dart';
 import 'package:lakasir/api/responses/transactions/history_response.dart';
 import 'package:lakasir/api/responses/transactions/selling_detail.dart';
-import 'package:lakasir/screens/setting/printers/add_printer_page_screen.dart';
+import 'package:lakasir/models/printer.dart';
+import 'package:lakasir/screens/setting/printers/print_receipt.dart';
 import 'package:lakasir/utils/colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -66,7 +67,7 @@ Future show(
   );
 }
 
-void printExampleReceipt(BlueThermalPrinter bluetooth) {
+void printExampleReceipt(BlueThermalPrinter bluetooth, Printer printer) {
   PrintReceipt(bluetooth: bluetooth).print(
     TransactionHistoryResponse(
       id: 1,
@@ -141,5 +142,6 @@ void printExampleReceipt(BlueThermalPrinter bluetooth) {
         ),
       ],
     ),
+    printer,
   );
 }

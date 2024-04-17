@@ -19,10 +19,16 @@ class MyImagePicker extends StatefulWidget {
     this.maxSize = 1000000,
     this.usingDynamicSource = false,
     this.defaultImage = '',
+    this.usingLocalImage = false,
+    this.maxWidth,
+    this.maxHeight,
   });
+  final bool usingLocalImage;
   final MyCallback onImageSelected;
   final image_picker.ImageSource source;
   final int? maxSize;
+  final int? maxWidth;
+  final int? maxHeight;
   final bool usingDynamicSource;
   final String defaultImage;
 
@@ -81,6 +87,8 @@ class _MyImagePickerState extends State<MyImagePicker> {
 
       CroppedFile? croppedFile = await ImageCropper().cropImage(
         sourcePath: selected.path,
+        maxWidth: widget.maxWidth,
+        maxHeight: widget.maxHeight,
         aspectRatioPresets: [
           CropAspectRatioPreset.square,
         ],
@@ -97,6 +105,10 @@ class _MyImagePickerState extends State<MyImagePicker> {
       setState(() {
         _image = image_picker.XFile(croppedFile!.path);
       });
+      if (widget.usingLocalImage) {
+        widget.onImageSelected(croppedFile!.path);
+        return;
+      }
       String url = await _uploadImage(File(croppedFile!.path));
       widget.onImageSelected(url);
     } catch (e) {

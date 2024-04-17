@@ -7,8 +7,7 @@ class Printer {
   Id id = Isar.autoIncrement;
 
   String? name;
+  String? logopath;
   String? address;
   String? footer;
-  bool? isDefault;
-  bool? isConnected;
 }

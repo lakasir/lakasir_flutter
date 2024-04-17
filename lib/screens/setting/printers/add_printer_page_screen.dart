@@ -1,17 +1,20 @@
+import 'dart:io';
+
 import 'package:blue_thermal_printer/blue_thermal_printer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:lakasir/api/responses/transactions/history_response.dart';
-import 'package:lakasir/controllers/abouts/about_controller.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:lakasir/controllers/settings/print_controller.dart';
 import 'package:lakasir/utils/colors.dart';
 import 'package:lakasir/utils/utils.dart';
-import 'package:lakasir/widgets/checkbox.dart';
 import 'package:lakasir/widgets/filled_button.dart';
+import 'package:lakasir/widgets/image_picker.dart';
 import 'package:lakasir/widgets/layout.dart';
 import 'package:lakasir/widgets/select_input_feld.dart';
 import 'package:lakasir/widgets/text_field.dart';
+import 'package:image/image.dart' as img;
+import 'package:path_provider/path_provider.dart';
 
 class AddPrinterPageScreen extends StatefulWidget {
   const AddPrinterPageScreen({super.key});
@@ -114,10 +117,6 @@ class _AddPrinterPageScreenState extends State<AddPrinterPageScreen> {
     }
   }
 
-  void _printReceipt() {
-    printExampleReceipt(bluetooth);
-  }
-
   List<Option> _getDeviceItems() {
     List<Option> items = [];
     items.add(Option(
@@ -146,7 +145,6 @@ class _AddPrinterPageScreenState extends State<AddPrinterPageScreen> {
     if (_device != null) {
       bluetooth.connect(_device!).then((value) async {
         _printerController.connected.value = true;
-        show('success to connect with printer');
         setState(() {
           _bluetoothConnected = true;
           _isConnecting = false;
@@ -171,195 +169,130 @@ class _AddPrinterPageScreenState extends State<AddPrinterPageScreen> {
     show('success to disconnect with printer');
   }
 
+  Future<String> saveResizedImage(Uint8List resizedImg, String fileName) async {
+    Directory tempDir = await getTemporaryDirectory();
+    String tempPath = tempDir.path;
+
+    File file = File('$tempPath/$fileName');
+
+    await file.writeAsBytes(resizedImg);
+
+    return file.path;
+  }
+
+  Future<String> moveImageToDirectory(
+      String imagePath, String targetDirectory) async {
+    // Get the file object for the image
+    File imageFile = File(imagePath);
+
+    // Check if the image file exists
+    if (!await imageFile.exists()) {
+      throw const FileSystemException('Image file does not exist.');
+    }
+
+    // Get the target directory
+    Directory directory = Directory(targetDirectory);
+
+    // Check if the target directory exists
+    if (!await directory.exists()) {
+      // Create the target directory if it doesn't exist
+      await directory.create(recursive: true);
+    }
+
+    // Generate a new file path in the target directory
+    String newFilePath = '${directory.path}/${imageFile.path.split('/').last}';
+
+    // Move the image file to the target directory
+    await imageFile.rename(newFilePath);
+
+    // Return the new file path
+    return newFilePath;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Layout(
       title: 'Print'.tr,
-      child: Obx(
-        () => Form(
-          key: _printerController.formKey,
-          child: ListView(
-            children: [
-              Container(
-                margin: const EdgeInsets.only(bottom: 10),
-                child: Obx(
-                  () => MyTextField(
-                    mandatory: true,
-                    controller: _printerController.nameController,
-                    label: 'field_name'.tr,
-                    errorText: _printerController.errorRequest.value.name,
-                  ),
+      child: Form(
+        key: _printerController.formKey,
+        child: ListView(
+          children: [
+            Center(
+              child: MyImagePicker(
+                source: ImageSource.gallery,
+                usingLocalImage: true,
+                maxWidth: 150,
+                maxHeight: 150,
+                onImageSelected: (String? path) async {
+                  if (path != null) {
+                    _printerController.logoPath.text = path;
+                  }
+                },
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.only(bottom: 10),
+              child: Obx(
+                () => MyTextField(
+                  mandatory: true,
+                  controller: _printerController.nameController,
+                  label: 'field_name'.tr,
+                  errorText: _printerController.errorRequest.value.name,
                 ),
               ),
-              Container(
-                margin: const EdgeInsets.only(bottom: 10),
-                child: Obx(
-                  () => SelectInputWidget(
-                    mandatory: true,
-                    label: 'field_device'.tr,
-                    options: _getDeviceItems(),
-                    controller: _printerController.deviceController,
-                    errorText: _printerController.errorRequest.value.address,
-                  ),
+            ),
+            Container(
+              margin: const EdgeInsets.only(bottom: 10),
+              child: Obx(
+                () => SelectInputWidget(
+                  mandatory: true,
+                  label: 'field_device'.tr,
+                  options: _getDeviceItems(),
+                  controller: _printerController.deviceController,
+                  errorText: _printerController.errorRequest.value.address,
                 ),
               ),
-              Container(
-                margin: const EdgeInsets.only(bottom: 10),
-                child: MyTextField(
-                  maxLines: 4,
-                  controller: _printerController.footerController,
-                  label: 'field_footer'.tr,
-                ),
+            ),
+            Container(
+              margin: const EdgeInsets.only(bottom: 10),
+              child: MyTextField(
+                maxLines: 4,
+                controller: _printerController.footerController,
+                label: 'field_footer'.tr,
               ),
-              Container(
-                margin: const EdgeInsets.only(
-                  bottom: 10,
-                ),
-                child: MyCheckbox(
-                  label: 'field_default'.tr,
-                  isChecked: _printerController.isDefault.value,
-                  onChange: (bool? value) {
-                    _printerController.isDefault.value = value!;
-                  },
-                ),
+            ),
+            Container(
+              margin: const EdgeInsets.only(bottom: 10),
+              child: MyFilledButton(
+                color: !_bluetoothConnected ? primary : error,
+                onPressed: !_bluetoothConnected ? _connect : _disconnect,
+                isLoading: _isConnecting,
+                child: !_bluetoothConnected
+                    ? Text('field_connect'.tr)
+                    : Text('field_disconnect'.tr),
               ),
-              Container(
-                margin: const EdgeInsets.only(bottom: 10),
-                child: MyFilledButton(
-                  color: !_bluetoothConnected ? primary : error,
-                  onPressed: !_bluetoothConnected ? _connect : _disconnect,
-                  isLoading: _isConnecting,
-                  child: !_bluetoothConnected
-                      ? Text('field_connect'.tr)
-                      : Text('field_disconnect'.tr),
-                ),
+            ),
+            // if (_bluetoothConnected)
+            //   Container(
+            //     margin: const EdgeInsets.only(bottom: 10),
+            //     child: MyFilledButton(
+            //       color: secondary,
+            //       onPressed: _printReceipt,
+            //       child: Text('print_test'.tr),
+            //     ),
+            //   ),
+            Obx(
+              () => MyFilledButton(
+                onPressed: () async {
+                  await _printerController.addPrinter();
+                },
+                isLoading: _printerController.isLoding.value,
+                child: Text('global_save'.tr),
               ),
-              if (_bluetoothConnected)
-                Container(
-                  margin: const EdgeInsets.only(bottom: 10),
-                  child: MyFilledButton(
-                    color: secondary,
-                    onPressed: _printReceipt,
-                    child: Text('print_test'.tr),
-                  ),
-                ),
-              Obx(
-                () => MyFilledButton(
-                  onPressed: () {
-                    _printerController.addPrinter();
-                  },
-                  isLoading: _printerController.isLoding.value,
-                  child: Text('global_save'.tr),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
-  }
-}
-
-class PrintReceipt {
-  final BlueThermalPrinter bluetooth;
-  AboutController aboutController = Get.put(AboutController());
-
-  PrintReceipt({required this.bluetooth});
-
-  void print(TransactionHistoryResponse transactionHistoryResponse) async {
-    if (aboutController.shop.value.photo!.isNotEmpty) {
-      await bluetooth.printImage(aboutController.shop.value.photo!);
-    }
-    await bluetooth.printCustom(aboutController.shop.value.shopeName!, 3, 1);
-    await bluetooth.printCustom(
-      "",
-      1,
-      1,
-    );
-    await bluetooth.printCustom(
-      aboutController.shop.value.location ?? 'Location',
-      1,
-      1,
-    );
-    await bluetooth.printCustom(
-      "-------------------------------",
-      1,
-      1,
-    );
-    await bluetooth.printLeftRight(
-      "field_cashier".tr,
-      transactionHistoryResponse.cashier!.name ??
-          transactionHistoryResponse.cashier!.email!,
-      0,
-    );
-    await bluetooth.printLeftRight(
-      "field_member".tr,
-      transactionHistoryResponse.member!.name,
-      0,
-    );
-    await bluetooth.printLeftRight(
-      "field_payment_method".tr,
-      transactionHistoryResponse.paymentMethod!.name,
-      0,
-    );
-    await bluetooth.printCustom(
-      "-------------------------------",
-      1,
-      1,
-    );
-    for (var history in transactionHistoryResponse.sellingDetails!) {
-      await bluetooth.printLeftRight(
-        history.product!.name,
-        "${formatPrice(history.product!.sellingPrice, isSymbol: false)} x ${history.quantity}",
-        0,
-      );
-      await bluetooth.printCustom(
-        formatPrice(history.price, isSymbol: false),
-        0,
-        2,
-      );
-    }
-    await bluetooth.printCustom(
-      "-------------------------------",
-      1,
-      1,
-    );
-    await bluetooth.printLeftRight(
-      'Subtotal'.tr,
-      formatPrice(transactionHistoryResponse.totalPrice, isSymbol: false),
-      1,
-    );
-    await bluetooth.printLeftRight(
-      'field_tax'.tr,
-      "${transactionHistoryResponse.tax!}%",
-      1,
-    );
-    await bluetooth.printLeftRight(
-      'field_total_price'.tr,
-      formatPrice(
-        ((transactionHistoryResponse.totalPrice ?? 0) *
-                (transactionHistoryResponse.tax ?? 0) /
-                100) +
-            transactionHistoryResponse.totalPrice!,
-        isSymbol: false,
-      ),
-      1,
-    );
-    await bluetooth.printCustom(
-      "-------------------------------",
-      1,
-      1,
-    );
-    await bluetooth.printLeftRight(
-      'field_payed_money'.tr,
-      formatPrice(transactionHistoryResponse.payedMoney!),
-      1,
-    );
-    await bluetooth.printLeftRight(
-      'field_change'.tr,
-      formatPrice(transactionHistoryResponse.moneyChange!),
-      1,
-    );
-    await bluetooth.paperCut();
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:isar/isar.dart';
 import 'package:lakasir/models/printer.dart';
@@ -27,6 +29,9 @@ class LakasirDatabase extends ChangeNotifier {
   }
 
   Future<void> deletePrinters(Printer printer) async {
+    // how to delete the logo path from local path
+
+    if (printer.logopath != null) File(printer.logopath!).delete();
     await isar.writeTxn(() => isar.printers.delete(printer.id));
     fetchPrinters();
   }

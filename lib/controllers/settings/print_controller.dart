@@ -20,6 +20,7 @@ class PrintController extends GetxController {
   RxList<Printer> printers = <Printer>[].obs;
 
   final TextEditingController nameController = TextEditingController();
+  final TextEditingController logoPath = TextEditingController();
   final SelectInputWidgetController deviceController =
       SelectInputWidgetController();
   final TextEditingController footerController = TextEditingController();
@@ -68,9 +69,7 @@ class PrintController extends GetxController {
     }
     if (!connected.value) {
       show(
-        "global_validation_field_not_connected".trParams({
-          'field': 'field_address'.tr,
-        }),
+        "global_validation_field_not_connected".tr,
         color: error,
       );
       isLoding(false);
@@ -80,14 +79,13 @@ class PrintController extends GetxController {
       ..name = nameController.text
       ..address = deviceController.selectedOption
       ..footer = footerController.text
-      ..isDefault = isDefault.value
-      ..isConnected = connected.value;
+      ..logopath = logoPath.text;
     await LakasirDatabase().createPrinters(printer);
 
-    Get.back();
     clear();
     fetchPrinters();
     isLoding(false);
+    Get.back();
     show(
       'global_added_item'.trParams({
         'item': 'setting_menu_printer'.tr,

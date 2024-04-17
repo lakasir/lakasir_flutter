@@ -27,18 +27,13 @@ const PrinterSchema = CollectionSchema(
       name: r'footer',
       type: IsarType.string,
     ),
-    r'isConnected': PropertySchema(
+    r'logopath': PropertySchema(
       id: 2,
-      name: r'isConnected',
-      type: IsarType.bool,
-    ),
-    r'isDefault': PropertySchema(
-      id: 3,
-      name: r'isDefault',
-      type: IsarType.bool,
+      name: r'logopath',
+      type: IsarType.string,
     ),
     r'name': PropertySchema(
-      id: 4,
+      id: 3,
       name: r'name',
       type: IsarType.string,
     )
@@ -76,6 +71,12 @@ int _printerEstimateSize(
     }
   }
   {
+    final value = object.logopath;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  {
     final value = object.name;
     if (value != null) {
       bytesCount += 3 + value.length * 3;
@@ -92,9 +93,8 @@ void _printerSerialize(
 ) {
   writer.writeString(offsets[0], object.address);
   writer.writeString(offsets[1], object.footer);
-  writer.writeBool(offsets[2], object.isConnected);
-  writer.writeBool(offsets[3], object.isDefault);
-  writer.writeString(offsets[4], object.name);
+  writer.writeString(offsets[2], object.logopath);
+  writer.writeString(offsets[3], object.name);
 }
 
 Printer _printerDeserialize(
@@ -107,9 +107,8 @@ Printer _printerDeserialize(
   object.address = reader.readStringOrNull(offsets[0]);
   object.footer = reader.readStringOrNull(offsets[1]);
   object.id = id;
-  object.isConnected = reader.readBoolOrNull(offsets[2]);
-  object.isDefault = reader.readBoolOrNull(offsets[3]);
-  object.name = reader.readStringOrNull(offsets[4]);
+  object.logopath = reader.readStringOrNull(offsets[2]);
+  object.name = reader.readStringOrNull(offsets[3]);
   return object;
 }
 
@@ -125,10 +124,8 @@ P _printerDeserializeProp<P>(
     case 1:
       return (reader.readStringOrNull(offset)) as P;
     case 2:
-      return (reader.readBoolOrNull(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 3:
-      return (reader.readBoolOrNull(offset)) as P;
-    case 4:
       return (reader.readStringOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -568,54 +565,148 @@ extension PrinterQueryFilter
     });
   }
 
-  QueryBuilder<Printer, Printer, QAfterFilterCondition> isConnectedIsNull() {
+  QueryBuilder<Printer, Printer, QAfterFilterCondition> logopathIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'isConnected',
+        property: r'logopath',
       ));
     });
   }
 
-  QueryBuilder<Printer, Printer, QAfterFilterCondition> isConnectedIsNotNull() {
+  QueryBuilder<Printer, Printer, QAfterFilterCondition> logopathIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'isConnected',
+        property: r'logopath',
       ));
     });
   }
 
-  QueryBuilder<Printer, Printer, QAfterFilterCondition> isConnectedEqualTo(
-      bool? value) {
+  QueryBuilder<Printer, Printer, QAfterFilterCondition> logopathEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'isConnected',
+        property: r'logopath',
         value: value,
+        caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<Printer, Printer, QAfterFilterCondition> isDefaultIsNull() {
+  QueryBuilder<Printer, Printer, QAfterFilterCondition> logopathGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'isDefault',
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'logopath',
+        value: value,
+        caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<Printer, Printer, QAfterFilterCondition> isDefaultIsNotNull() {
+  QueryBuilder<Printer, Printer, QAfterFilterCondition> logopathLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'isDefault',
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'logopath',
+        value: value,
+        caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<Printer, Printer, QAfterFilterCondition> isDefaultEqualTo(
-      bool? value) {
+  QueryBuilder<Printer, Printer, QAfterFilterCondition> logopathBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'logopath',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Printer, Printer, QAfterFilterCondition> logopathStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'logopath',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Printer, Printer, QAfterFilterCondition> logopathEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'logopath',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Printer, Printer, QAfterFilterCondition> logopathContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'logopath',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Printer, Printer, QAfterFilterCondition> logopathMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'logopath',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Printer, Printer, QAfterFilterCondition> logopathIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'isDefault',
-        value: value,
+        property: r'logopath',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Printer, Printer, QAfterFilterCondition> logopathIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'logopath',
+        value: '',
       ));
     });
   }
@@ -798,27 +889,15 @@ extension PrinterQuerySortBy on QueryBuilder<Printer, Printer, QSortBy> {
     });
   }
 
-  QueryBuilder<Printer, Printer, QAfterSortBy> sortByIsConnected() {
+  QueryBuilder<Printer, Printer, QAfterSortBy> sortByLogopath() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'isConnected', Sort.asc);
+      return query.addSortBy(r'logopath', Sort.asc);
     });
   }
 
-  QueryBuilder<Printer, Printer, QAfterSortBy> sortByIsConnectedDesc() {
+  QueryBuilder<Printer, Printer, QAfterSortBy> sortByLogopathDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'isConnected', Sort.desc);
-    });
-  }
-
-  QueryBuilder<Printer, Printer, QAfterSortBy> sortByIsDefault() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'isDefault', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Printer, Printer, QAfterSortBy> sortByIsDefaultDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'isDefault', Sort.desc);
+      return query.addSortBy(r'logopath', Sort.desc);
     });
   }
 
@@ -873,27 +952,15 @@ extension PrinterQuerySortThenBy
     });
   }
 
-  QueryBuilder<Printer, Printer, QAfterSortBy> thenByIsConnected() {
+  QueryBuilder<Printer, Printer, QAfterSortBy> thenByLogopath() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'isConnected', Sort.asc);
+      return query.addSortBy(r'logopath', Sort.asc);
     });
   }
 
-  QueryBuilder<Printer, Printer, QAfterSortBy> thenByIsConnectedDesc() {
+  QueryBuilder<Printer, Printer, QAfterSortBy> thenByLogopathDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'isConnected', Sort.desc);
-    });
-  }
-
-  QueryBuilder<Printer, Printer, QAfterSortBy> thenByIsDefault() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'isDefault', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Printer, Printer, QAfterSortBy> thenByIsDefaultDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'isDefault', Sort.desc);
+      return query.addSortBy(r'logopath', Sort.desc);
     });
   }
 
@@ -926,15 +993,10 @@ extension PrinterQueryWhereDistinct
     });
   }
 
-  QueryBuilder<Printer, Printer, QDistinct> distinctByIsConnected() {
+  QueryBuilder<Printer, Printer, QDistinct> distinctByLogopath(
+      {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'isConnected');
-    });
-  }
-
-  QueryBuilder<Printer, Printer, QDistinct> distinctByIsDefault() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'isDefault');
+      return query.addDistinctBy(r'logopath', caseSensitive: caseSensitive);
     });
   }
 
@@ -966,15 +1028,9 @@ extension PrinterQueryProperty
     });
   }
 
-  QueryBuilder<Printer, bool?, QQueryOperations> isConnectedProperty() {
+  QueryBuilder<Printer, String?, QQueryOperations> logopathProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'isConnected');
-    });
-  }
-
-  QueryBuilder<Printer, bool?, QQueryOperations> isDefaultProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'isDefault');
+      return query.addPropertyName(r'logopath');
     });
   }
 
