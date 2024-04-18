@@ -13,7 +13,6 @@ import 'package:lakasir/widgets/image_picker.dart';
 import 'package:lakasir/widgets/layout.dart';
 import 'package:lakasir/widgets/select_input_feld.dart';
 import 'package:lakasir/widgets/text_field.dart';
-import 'package:image/image.dart' as img;
 import 'package:path_provider/path_provider.dart';
 
 class AddPrinterPageScreen extends StatefulWidget {
@@ -178,35 +177,6 @@ class _AddPrinterPageScreenState extends State<AddPrinterPageScreen> {
     await file.writeAsBytes(resizedImg);
 
     return file.path;
-  }
-
-  Future<String> moveImageToDirectory(
-      String imagePath, String targetDirectory) async {
-    // Get the file object for the image
-    File imageFile = File(imagePath);
-
-    // Check if the image file exists
-    if (!await imageFile.exists()) {
-      throw const FileSystemException('Image file does not exist.');
-    }
-
-    // Get the target directory
-    Directory directory = Directory(targetDirectory);
-
-    // Check if the target directory exists
-    if (!await directory.exists()) {
-      // Create the target directory if it doesn't exist
-      await directory.create(recursive: true);
-    }
-
-    // Generate a new file path in the target directory
-    String newFilePath = '${directory.path}/${imageFile.path.split('/').last}';
-
-    // Move the image file to the target directory
-    await imageFile.rename(newFilePath);
-
-    // Return the new file path
-    return newFilePath;
   }
 
   @override
