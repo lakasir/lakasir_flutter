@@ -1,7 +1,7 @@
 name: lakasir
 description: A new Flutter project.
 publish_to: 'none'
-version: 0.0.1-beta
+version: 0.0.1-beta-nightly-0.01
 
 environment:
   sdk: '>=3.1.2 <4.0.0'
