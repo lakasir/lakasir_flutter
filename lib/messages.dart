@@ -57,6 +57,7 @@ class Messages extends Translations {
           'transaction_cashier': 'Cashier',
           'transaction_history': 'Transaction History',
           'transaction_list': 'Transaction List',
+          'transaction_items': 'Items',
           'transaction_analytics': 'Transaction Analytics',
           'transaction_analytics_filter_today': 'Today',
           'transaction_analytics_filter_yesterday': 'Yesterday',
@@ -141,8 +142,13 @@ class Messages extends Translations {
           'field_stock_info':
               'If you enable this, stock will be used as product without stock',
           'field_last_initial_price': 'The last initial price',
+          'field_last_initial_price_info':
+              'Leave it empty to use the last price',
           'field_initial_price': 'Initial Price',
           'field_selling_price': 'Selling Price',
+          'field_last_selling_price': 'The last selling price',
+          'field_last_selling_price_info':
+              'Leave it empty to use the last price',
           'field_category': 'Category',
           'field_select_category': 'Select Category',
           'field_type': 'Type',
@@ -252,6 +258,8 @@ class Messages extends Translations {
           'global_validation_field_not_connected': 'Printer not connected',
           'global_connected': 'Printer connected',
           'global_not_connected': 'Printer not connected',
+          're-print': 'Re-print',
+          'share': 'Share',
         },
         'id_ID': {
           'auth': 'Otentikasi',
@@ -307,6 +315,7 @@ class Messages extends Translations {
           'transaction_cashier': 'Kasir',
           'transaction_history': 'Riwayat Transaksi',
           'transaction_list': 'Dafar Transaksi',
+          'transaction_items': 'Barang',
           'transaction_analytics': 'Analitik Transaksi',
           'transaction_analytics_filter_today': 'Hari Ini',
           'transaction_analytics_filter_yesterday': 'Kemarin',
@@ -392,8 +401,13 @@ class Messages extends Translations {
           'field_stock_info':
               'Jika anda mengaktifkan ini, stok akan digunakan sebagai produk tanpa stok',
           'field_last_initial_price': 'Harga awal terakhir',
+          'field_last_initial_price_info':
+              'Biarkan kosong untuk menggunakan harga terakhir',
           'field_initial_price': 'Harga Awal',
           'field_selling_price': 'Harga Jual',
+          'field_last_selling_price': 'Harga Jual Terakhir',
+          'field_last_selling_price_info':
+              'Biarkan kosong untuk menggunakan harga terakhir',
           'field_category': 'Kategori',
           'field_select_category': 'Pilih Kategori',
           'field_type': 'Tipe',
@@ -502,6 +516,8 @@ class Messages extends Translations {
           'global_validation_field_not_connected': 'Printer tidak terhubung',
           'global_connected': 'Printer terhubung',
           'global_not_connected': 'Printer tidak terhubung',
+          're-print': 'Cetak Ulang',
+          'share': 'Bagikan',
         },
       };
 }

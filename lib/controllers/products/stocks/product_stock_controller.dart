@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:get/get.dart';
 import 'package:lakasir/Exceptions/validation.dart';
 import 'package:lakasir/api/requests/product_stock_request.dart';
@@ -20,11 +21,11 @@ class ProductStockController extends GetxController {
   final _productController = Get.put(ProductController());
   final RxList<StockResponse> stocks = <StockResponse>[].obs;
   TextEditingController dateInputEditingController = TextEditingController();
-  TextEditingController initialPriceInputEditingController =
-      TextEditingController();
   TextEditingController stockInputEditingController = TextEditingController();
-  TextEditingController sellingPriceInputEditingController =
-      TextEditingController();
+  MoneyMaskedTextController sellingPriceInputEditingController =
+      MoneyMaskedTextController(initialValue: 0.0);
+  MoneyMaskedTextController initialPriceInputEditingController =
+      MoneyMaskedTextController(initialValue: 0.0);
   final Rx<String> type = 'in'.obs;
   final Rx<StockErrorResponse> stockErrorResponse = StockErrorResponse().obs;
 
@@ -55,8 +56,8 @@ class ProductStockController extends GetxController {
         ProductStockRequest(
           type: type.value,
           stock: int.parse(stockInputEditingController.text),
-          initialPrice: initialPriceInputEditingController.text,
-          sellingPrice: sellingPriceInputEditingController.text,
+          initialPrice: initialPriceInputEditingController.numberValue,
+          sellingPrice: sellingPriceInputEditingController.numberValue,
           date: dateInputEditingController.text,
         ),
       );
@@ -93,8 +94,8 @@ class ProductStockController extends GetxController {
 
   void clear() {
     dateInputEditingController.clear();
-    initialPriceInputEditingController.clear();
+    initialPriceInputEditingController.updateValue(0.0);
+    sellingPriceInputEditingController.updateValue(0.0);
     stockInputEditingController.clear();
-    sellingPriceInputEditingController.clear();
   }
 }
