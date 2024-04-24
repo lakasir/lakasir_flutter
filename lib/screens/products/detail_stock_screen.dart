@@ -32,12 +32,23 @@ class _DetailStockScreenState extends State<DetailStockScreen> {
     super.initState();
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   void fetchDetail() async {
-    final ProductResponse products = Get.arguments;
-    await _productStockController.get(products.id);
-    setState(() {
-      _productDetailController.product.value = products;
-    });
+    if (Get.arguments is ProductResponse) {
+      final ProductResponse products = Get.arguments;
+      await _productStockController.get(products.id);
+      setState(() {
+        _productDetailController.product.value = products;
+      });
+    } else {
+      final String productId = Get.arguments;
+      await _productStockController.get(int.parse(productId));
+      await _productDetailController.get(int.parse(productId));
+    }
   }
 
   @override
@@ -46,7 +57,8 @@ class _DetailStockScreenState extends State<DetailStockScreen> {
       title: 'field_stock_history'.tr,
       child: Obx(
         () {
-          if (_productStockController.isLoading.value) {
+          if (_productStockController.isLoading.value ||
+              _productDetailController.isLoading.value) {
             return const Center(
               child: CircularProgressIndicator(),
             );
@@ -76,8 +88,7 @@ class _DetailStockScreenState extends State<DetailStockScreen> {
                     maxLines: 4,
                   ),
                   Text(
-                    'field_stock:'.tr +
-                        _productDetailController.product.value.stock.toString(),
+                    '${'field_stock'.tr}: ${_productDetailController.product.value.stock}',
                     style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w200,

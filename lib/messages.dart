@@ -260,6 +260,13 @@ class Messages extends Translations {
           'global_not_connected': 'Printer not connected',
           're-print': 'Re-print',
           'share': 'Share',
+          'menu_notification': 'Notification',
+          'menu_setting_notification': 'Notification Setting',
+          'set_the_min_stock_notification': 'Minimum stock',
+          'stock_notification_title': 'Product @name',
+          'stock_notification_body': 'The current stock @stock',
+          'set_minimum_stock_nofication_success':
+              'Minimum stock notification setting has been successful',
         },
         'id_ID': {
           'auth': 'Otentikasi',
@@ -518,6 +525,13 @@ class Messages extends Translations {
           'global_not_connected': 'Printer tidak terhubung',
           're-print': 'Cetak Ulang',
           'share': 'Bagikan',
+          'menu_notification': 'Pemberitahuan',
+          'menu_setting_notification': 'Pengaturan Pemberitahuan',
+          'set_the_min_stock_notification': 'Stok minimum',
+          'stock_notification_title': 'Produk @name',
+          'stock_notification_body': 'Stock sekarang @stock',
+          'set_minimum_stock_nofication_success':
+              'Setting notifikasi stok minimum telah berhasil',
         },
       };
 }

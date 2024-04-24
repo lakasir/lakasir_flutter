@@ -34,7 +34,9 @@ class _SettingScreenState extends State<SettingScreen> {
               if (can(_authController.permissions, 'read category') ||
                   can(_authController.permissions, 'update currency'))
                 GeneralSetting(authController: _authController),
-              const SystemSetting(),
+              SystemSetting(
+                authController: _authController,
+              ),
               if (can(_authController.permissions, 'enable cash drawer') ||
                   can(_authController.permissions, 'set default tax') ||
                   can(_authController.permissions, 'set selling method'))

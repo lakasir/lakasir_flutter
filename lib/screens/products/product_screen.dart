@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lakasir/controllers/auths/auth_controller.dart';
 import 'package:lakasir/controllers/products/product_controller.dart';
+import 'package:lakasir/controllers/setting_controller.dart';
 import 'package:lakasir/utils/auth.dart';
 import 'package:lakasir/utils/colors.dart';
 import 'package:lakasir/widgets/build_list_image.dart';
@@ -18,6 +19,7 @@ class ProductScreen extends StatefulWidget {
 
 class _ProductScreen extends State<ProductScreen> {
   final ProductController _productController = Get.put(ProductController());
+  final SettingController _settingController = Get.put(SettingController());
   final AuthController _authController = Get.put(AuthController());
 
   @override
@@ -117,13 +119,25 @@ class _ProductScreen extends State<ProductScreen> {
     return MyCardList(
       key: ValueKey(_productController.products[index].id),
       list: [
-        Text(
-          _productController.products[index].name,
-          overflow: TextOverflow.ellipsis,
-          maxLines: 4,
-          style: const TextStyle(
-            fontSize: 20,
-          ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              _productController.products[index].name,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 4,
+              style: const TextStyle(
+                fontSize: 20,
+              ),
+            ),
+            if (!_productController.products[index].isNonStock)
+              if (_productController.products[index].stock! <=
+                  _settingController.setting.value.minimumStock!)
+                const Icon(
+                  Icons.warning,
+                  color: error,
+                ),
+          ],
         ),
         if (_productController.products[index].isNonStock)
           Text(

@@ -3,14 +3,13 @@ import 'package:get/get.dart';
 import 'package:lakasir/controllers/profiles/profile_controller.dart';
 import 'package:lakasir/utils/auth.dart';
 import 'package:lakasir/utils/colors.dart';
-import 'package:lakasir/utils/utils.dart';
 import 'package:lakasir/widgets/layout.dart';
 
 String Function(String) locale = (String locale) {
   switch (locale) {
-    case 'en_US':
+    case 'en':
       return 'English';
-    case 'id_ID':
+    case 'id':
       return 'Indonesia';
     default:
       return 'English';
@@ -26,16 +25,9 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   final ProfileController _profileController = Get.put(ProfileController());
-  String _locale = 'en_US';
-
   @override
   initState() {
     super.initState();
-    getLanguageCode().then((value) {
-      setState(() {
-        _locale = value;
-      });
-    });
   }
 
   @override
@@ -250,7 +242,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ),
                               const SizedBox(height: 5),
                               Text(
-                                locale(_locale),
+                                locale(
+                                    _profileController.profile.value.locale!),
                                 style: const TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
