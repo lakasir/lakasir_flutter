@@ -85,7 +85,6 @@ class _NotificationScreenState extends State<NotificationScreen> {
                             Text(
                               DateFormat(
                                 'EEEE',
-                                Get.deviceLocale!.toString(),
                               ).format(
                                 notification.createdAt ?? DateTime.now(),
                               ),

@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
@@ -52,9 +51,7 @@ import 'firebase_options.dart';
 final _messageStreamController = BehaviorSubject<RemoteMessage>();
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  if (kDebugMode) {
-    print("Listen notificaiton in background");
-  }
+  debug("Listen notificaiton in background");
   await Firebase.initializeApp();
   await LakasirDatabase.initialize();
   if (message.notification != null) {
@@ -95,15 +92,15 @@ Future<void> main() async {
     sound: true,
   );
 
-  if (kDebugMode) {
-    print('Permission granted: ${settings.authorizationStatus}');
-  }
+  debug('Permission granted: ${settings.authorizationStatus}');
 
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    if (kDebugMode) {
-      print("Listen notificaiton in foreground");
-    }
+    debug("Listen notificaiton in foreground");
     _messageStreamController.sink.add(message);
+  });
+  FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+    debug("message clicked");
+    Get.toNamed('/notifications');
   });
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
@@ -113,9 +110,7 @@ Future<void> main() async {
   LoginService loginService = LoginService();
   if (isAuthenticated != null) {
     String? token = await messaging.getToken();
-    if (kDebugMode) {
-      print("Registered Token=$token");
-    }
+    debug("Registered Token=$token");
     loginService.setFcmToken(token!);
   }
   runApp(
