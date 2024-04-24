@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 import 'package:lakasir/Exceptions/unauthenticated.dart';
 import 'package:lakasir/Exceptions/validation.dart';
 import 'package:lakasir/utils/auth.dart';
@@ -19,6 +21,8 @@ class ApiService<T> {
         'Authorization': 'Bearer $token'
       },
     );
+
+    logApi(response);
 
     if (response.statusCode == 401) {
       logout();
@@ -43,6 +47,8 @@ class ApiService<T> {
       },
       body: jsonEncode(request),
     );
+
+    logApi(response);
 
     if (response.statusCode == 401) {
       logout();
@@ -74,6 +80,8 @@ class ApiService<T> {
       body: jsonEncode(request),
     );
 
+    logApi(response);
+
     if (response.statusCode == 401) {
       logout();
       throw UnauthorizedException(jsonDecode(response.body)['message']);
@@ -102,6 +110,8 @@ class ApiService<T> {
         'Authorization': 'Bearer $token'
       },
     );
+
+    logApi(response);
 
     if (response.statusCode == 401) {
       logout();
@@ -132,6 +142,7 @@ class ApiService<T> {
       },
       body: jsonEncode(request),
     );
+    logApi(response);
 
     if (response.statusCode == 401) {
       logout();
@@ -147,5 +158,15 @@ class ApiService<T> {
     } else {
       throw Exception('Failed to load data');
     }
+  }
+}
+
+void logApi(Response response) {
+  if (kDebugMode) {
+    print({
+      "url": response.request?.url,
+      "body": response.body,
+      "status": response.statusCode,
+    });
   }
 }

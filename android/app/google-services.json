@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "98840745074",
+    "project_id": "lakasir-pos",
+    "storage_bucket": "lakasir-pos.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:98840745074:android:16d26e821ce5c512dddeeb",
+        "android_client_info": {
+          "package_name": "com.lakasir.lakasir"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCEeawbXxkbIRYGvnkalmYhn2zybp6mD-Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

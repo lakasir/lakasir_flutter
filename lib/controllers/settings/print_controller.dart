@@ -31,7 +31,7 @@ class PrintController extends GetxController {
   Rx<ErrorRequest> errorRequest = ErrorRequest().obs;
 
   void fetchPrinters() async {
-    var results = await LakasirDatabase().fetchPrinters();
+    var results = await LakasirDatabase().printer.fetch();
 
     printers.assignAll(results);
   }
@@ -80,7 +80,7 @@ class PrintController extends GetxController {
       ..address = deviceController.selectedOption
       ..footer = footerController.text
       ..logopath = logoPath.text;
-    await LakasirDatabase().createPrinters(printer);
+    await LakasirDatabase().printer.create(printer);
 
     clear();
     fetchPrinters();
@@ -95,7 +95,7 @@ class PrintController extends GetxController {
   }
 
   Future<void> deletePrinter(Printer printer) async {
-    await LakasirDatabase().deletePrinters(printer);
+    await LakasirDatabase().printer.delete(printer);
 
     Get.back();
     fetchPrinters();

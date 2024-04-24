@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:lakasir/controllers/auths/auth_controller.dart';
+import 'package:lakasir/controllers/profiles/profile_controller.dart';
 import 'package:lakasir/controllers/setting_controller.dart';
 import 'package:lakasir/utils/auth.dart';
 import 'package:lakasir/utils/colors.dart';
@@ -65,6 +66,7 @@ class _MenuScreenState extends State<MenuScreen> {
 
   SettingController settingController = Get.put(SettingController());
   final AuthController _authController = Get.put(AuthController());
+  final ProfileController _profileController = Get.put(ProfileController());
 
   @override
   void initState() {
@@ -86,7 +88,8 @@ class _MenuScreenState extends State<MenuScreen> {
       title: 'menu'.tr,
       child: Obx(
         () {
-          if (_authController.loading.value) {
+          if (_authController.loading.value &&
+              _profileController.isLoading.value) {
             return const Center(
               child: CircularProgressIndicator(),
             );

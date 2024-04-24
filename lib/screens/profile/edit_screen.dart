@@ -6,6 +6,7 @@ import 'package:lakasir/controllers/profiles/profile_edit_controller.dart';
 import 'package:lakasir/widgets/filled_button.dart';
 import 'package:lakasir/widgets/image_picker.dart';
 import 'package:lakasir/widgets/layout.dart';
+import 'package:lakasir/widgets/select_input_feld.dart';
 import 'package:lakasir/widgets/text_field.dart';
 
 class EditProfileScreen extends StatefulWidget {
@@ -90,6 +91,23 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 maxLines: 4,
                 controller: _profileController.addressInputController,
                 label: 'field_address'.tr,
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.only(top: 20),
+              child: SelectInputWidget(
+                controller: _profileController.languageController,
+                label: "setting_language".tr,
+                options: [
+                  Option(
+                    name: "English",
+                    value: "en",
+                  ),
+                  Option(
+                    name: "Indonesia",
+                    value: "id",
+                  ),
+                ],
               ),
             ),
             Container(

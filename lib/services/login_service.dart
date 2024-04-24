@@ -18,4 +18,10 @@ class LoginService {
 
     storeToken(apiResponse.data!.value.token);
   }
+
+  void setFcmToken(String fcmToken) async {
+    ApiService(await getDomain()).postData('register-fcm-token', {
+      'fcm_token': fcmToken,
+    });
+  }
 }
