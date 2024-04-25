@@ -171,6 +171,7 @@ class CartSession {
   int? totalQty;
   final bool friendPrice;
   final List<CartItem> cartItems;
+  String? note;
 
   CartSession({
     this.totalPrice,
@@ -181,6 +182,7 @@ class CartSession {
     this.tax,
     this.paymentMethod,
     this.customerNumber,
+    this.note,
     required this.cartItems,
   });
 
@@ -227,6 +229,10 @@ class CartSession {
             'item': 'field_customer_number'.tr,
           })
         : customerNumber.toString();
+  }
+
+  String get getNote {
+    return note ?? 'global_no_item'.trParams({'item': 'field_note'.tr});
   }
 }
 

@@ -17,6 +17,7 @@ class DetailTransaction extends StatelessWidget {
     this.date,
     this.sellingCode,
     this.cashierName,
+    this.note,
   });
   final String? cashierName;
   final String? date;
@@ -30,6 +31,7 @@ class DetailTransaction extends StatelessWidget {
   final String total;
   final String payedMoney;
   final String change;
+  final String? note;
   final List<Widget> actions;
 
   TextStyle get _boldStyle => const TextStyle(
@@ -142,6 +144,22 @@ class DetailTransaction extends StatelessWidget {
             Text(change, style: _boldStyle)
           ],
         ),
+        if (note != null)
+          const SizedBox(
+            height: 10,
+          ),
+        if (note != null)
+          SizedBox(
+            width: double.infinity,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text("field_note".tr, style: _normalStyle),
+                Text(note ?? '', style: _boldStyle)
+              ],
+            ),
+          ),
         if (actions.isNotEmpty) const Divider(),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,

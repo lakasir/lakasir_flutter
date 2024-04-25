@@ -31,6 +31,7 @@ class PaymentController extends GetxController {
         friendPrice: false,
         tax: _cartController.cartSessions.value.tax,
         memberId: _cartController.cartSessions.value.member?.id,
+        note: _cartController.cartSessions.value.note,
         products: _cartController.cartSessions.value.cartItems
             .map(
               (e) => PaymentRequestItem(

@@ -226,6 +226,27 @@ class DetailField extends StatelessWidget {
             ],
           ),
         ),
+        MyCard(
+          child: Obx(
+            () => SizedBox(
+              width: double.infinity,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'field_note'.tr,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  Text(
+                    _cartController.cartSessions.value.getNote,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }

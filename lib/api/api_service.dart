@@ -5,6 +5,7 @@ import 'package:http/http.dart';
 import 'package:lakasir/Exceptions/unauthenticated.dart';
 import 'package:lakasir/Exceptions/validation.dart';
 import 'package:lakasir/utils/auth.dart';
+import 'package:lakasir/utils/utils.dart';
 
 class ApiService<T> {
   final String baseUrl;
@@ -162,11 +163,9 @@ class ApiService<T> {
 }
 
 void logApi(Response response) {
-  if (kDebugMode) {
-    print({
-      "url": response.request?.url,
-      "body": response.body,
-      "status": response.statusCode,
-    });
-  }
+  debug({
+    "url": response.request?.url,
+    "body": response.body,
+    "status": response.statusCode,
+  });
 }
