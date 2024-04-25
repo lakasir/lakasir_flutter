@@ -7,10 +7,12 @@ class MyDialog extends StatefulWidget {
     this.title,
     required this.content,
     this.noPadding = false,
+    this.actions,
   });
 
   final String? title;
   final Widget content;
+  final Widget? actions;
   final bool noPadding;
 
   @override
@@ -63,6 +65,12 @@ class _MyDialogState extends State<MyDialog> {
                 child: widget.content,
               ),
             if (widget.noPadding) widget.content,
+            if (widget.noPadding && widget.actions != null) widget.actions!,
+            if (!widget.noPadding && widget.actions != null)
+              Padding(
+                padding: const EdgeInsets.all(20),
+                child: widget.actions,
+              ),
           ],
         ),
       ),
