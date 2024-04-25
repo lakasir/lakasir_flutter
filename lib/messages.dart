@@ -122,6 +122,7 @@ class Messages extends Translations {
           'field_payed_money': 'Payed Money',
           'field_change': 'Change',
           'global_yes': 'Yes',
+          'global_later': 'Later',
           'global_ok': 'Ok',
           'global_no': 'No',
           'global_warning': 'Warning!',
@@ -267,6 +268,8 @@ class Messages extends Translations {
           'stock_notification_body': 'The current stock @stock',
           'set_minimum_stock_nofication_success':
               'Minimum stock notification setting has been successful',
+          'update_app': 'Update App',
+          'please_update_app': 'Please update your app now, for better quality'
         },
         'id_ID': {
           'auth': 'Otentikasi',
@@ -388,6 +391,7 @@ class Messages extends Translations {
           'field_payed_money': 'Uang dibayar',
           'field_change': 'Kembalian',
           'global_yes': 'Ya',
+          'global_later': 'Nanti',
           'global_ok': 'Ok',
           'global_no': 'Tidak',
           'global_warning': 'Peringatan!',
@@ -532,6 +536,9 @@ class Messages extends Translations {
           'stock_notification_body': 'Stock sekarang @stock',
           'set_minimum_stock_nofication_success':
               'Setting notifikasi stok minimum telah berhasil',
+          'update_app': 'Perbarui Aplikasi',
+          'please_update_app':
+              'Update aplikas anda sekarang untuk kualitas yang lebih baik.',
         },
       };
 }
