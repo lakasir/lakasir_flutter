@@ -4,6 +4,7 @@ class PaymentRequest {
   int? memberId;
   double? tax;
   List<PaymentRequestItem>? products;
+  String? note;
 
   PaymentRequest({
     this.payedMoney,
@@ -11,12 +12,14 @@ class PaymentRequest {
     this.products,
     this.memberId,
     this.tax,
+    this.note,
   });
 
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
     data['payed_money'] = payedMoney;
     data['friend_price'] = friendPrice;
+    data['note'] = note;
     if (memberId != null) data['member_id'] = memberId;
     if (tax != null) data['tax'] = tax;
     if (products != null) {

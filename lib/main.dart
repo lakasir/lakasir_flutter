@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
@@ -180,49 +181,51 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       final changes = data['body'];
       final currentVersion = packageInfo.version;
 
-      if ((latestVersion != currentVersion) && _openUpdater) {
-        Get.dialog(
-          MyDialog(
-            title: "update_app".tr,
-            content: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('please_update_app'.tr),
-                const SizedBox(
-                  height: 10,
-                ),
-                ReadMoreText(
-                  text: changes,
-                  maxLength: 250,
-                  readMoreText: 'Read more...',
-                  onTap: () => _launchUrl(latestUrl.toString()),
-                )
-              ],
-            ),
-            actions: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                TextButton(
-                  onPressed: () {
-                    setState(() {
-                      _openUpdater = false;
-                      Get.back();
-                    });
-                  },
-                  child: Text(
-                    "global_later".tr,
+      if (!kDebugMode) {
+        if ((latestVersion != currentVersion) && _openUpdater) {
+          Get.dialog(
+            MyDialog(
+              title: "update_app".tr,
+              content: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('please_update_app'.tr),
+                  const SizedBox(
+                    height: 10,
                   ),
-                ),
-                TextButton(
-                  onPressed: () => _launchUrl(latestUrl.toString()),
-                  child: Text(
-                    "global_yes".tr,
+                  ReadMoreText(
+                    text: changes,
+                    maxLength: 250,
+                    readMoreText: 'Read more...',
+                    onTap: () => _launchUrl(latestUrl.toString()),
+                  )
+                ],
+              ),
+              actions: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      setState(() {
+                        _openUpdater = false;
+                        Get.back();
+                      });
+                    },
+                    child: Text(
+                      "global_later".tr,
+                    ),
                   ),
-                ),
-              ],
+                  TextButton(
+                    onPressed: () => _launchUrl(latestUrl.toString()),
+                    child: Text(
+                      "global_yes".tr,
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        );
+          );
+        }
       }
     }
   }

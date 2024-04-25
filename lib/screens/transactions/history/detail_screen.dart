@@ -146,6 +146,7 @@ class _HistoryDetailScreenState extends State<HistoryDetailScreen> {
       total: formatPrice(history.totalPrice!),
       payedMoney: formatPrice(history.payedMoney!),
       change: formatPrice(history.moneyChange!),
+      note: history.note,
       actions: const [],
     );
   }

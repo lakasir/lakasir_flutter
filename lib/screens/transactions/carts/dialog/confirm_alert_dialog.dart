@@ -45,6 +45,7 @@ class ConfirmAlertDialog extends StatelessWidget {
           _cartController.cartSessions.value.payedMoney! -
               _cartController.cartSessions.value.getTotalPrice,
         ),
+        note: _cartController.cartSessions.value.note,
         actions: [
           Flexible(
             child: MyFilledButton(
