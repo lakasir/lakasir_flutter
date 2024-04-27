@@ -30,7 +30,7 @@ class _AboutScreenState extends State<AboutScreen> {
       case 'pharmacy':
         return 'field_option_pharmacy_business_type'.tr;
       default:
-        return '-';
+        return aboutController.shop.value.otherBusinessType ?? '-';
     }
   }
 

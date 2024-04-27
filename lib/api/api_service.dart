@@ -38,6 +38,7 @@ class ApiService<T> {
   }
 
   Future<T> postData(String endpoint, Object? request) async {
+    debug(request);
     final token = await getToken();
     final response = await http.post(
       Uri.parse('$baseUrl/$endpoint'),
@@ -70,6 +71,7 @@ class ApiService<T> {
   }
 
   Future<T> putData(String endpoint, Object? request) async {
+    debug(request);
     final token = await getToken();
     final response = await http.put(
       Uri.parse('$baseUrl/$endpoint'),
