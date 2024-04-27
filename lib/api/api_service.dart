@@ -1,8 +1,11 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 import 'package:lakasir/Exceptions/unauthenticated.dart';
 import 'package:lakasir/Exceptions/validation.dart';
 import 'package:lakasir/utils/auth.dart';
+import 'package:lakasir/utils/utils.dart';
 
 class ApiService<T> {
   final String baseUrl;
@@ -20,6 +23,8 @@ class ApiService<T> {
       },
     );
 
+    logApi(response);
+
     if (response.statusCode == 401) {
       logout();
       throw UnauthorizedException(jsonDecode(response.body)['message']);
@@ -33,6 +38,7 @@ class ApiService<T> {
   }
 
   Future<T> postData(String endpoint, Object? request) async {
+    debug(request);
     final token = await getToken();
     final response = await http.post(
       Uri.parse('$baseUrl/$endpoint'),
@@ -43,6 +49,8 @@ class ApiService<T> {
       },
       body: jsonEncode(request),
     );
+
+    logApi(response);
 
     if (response.statusCode == 401) {
       logout();
@@ -63,6 +71,7 @@ class ApiService<T> {
   }
 
   Future<T> putData(String endpoint, Object? request) async {
+    debug(request);
     final token = await getToken();
     final response = await http.put(
       Uri.parse('$baseUrl/$endpoint'),
@@ -73,6 +82,8 @@ class ApiService<T> {
       },
       body: jsonEncode(request),
     );
+
+    logApi(response);
 
     if (response.statusCode == 401) {
       logout();
@@ -103,6 +114,8 @@ class ApiService<T> {
       },
     );
 
+    logApi(response);
+
     if (response.statusCode == 401) {
       logout();
       throw UnauthorizedException(jsonDecode(response.body)['message']);
@@ -132,6 +145,7 @@ class ApiService<T> {
       },
       body: jsonEncode(request),
     );
+    logApi(response);
 
     if (response.statusCode == 401) {
       logout();
@@ -148,4 +162,12 @@ class ApiService<T> {
       throw Exception('Failed to load data');
     }
   }
+}
+
+void logApi(Response response) {
+  debug({
+    "url": response.request?.url,
+    "body": response.body,
+    "status": response.statusCode,
+  });
 }

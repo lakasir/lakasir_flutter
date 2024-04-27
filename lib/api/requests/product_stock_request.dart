@@ -2,8 +2,8 @@ class ProductStockRequest {
   final int stock;
   final String? type;
   final String? date;
-  final String? initialPrice;
-  final String? sellingPrice;
+  final double? initialPrice;
+  final double? sellingPrice;
 
   ProductStockRequest({
     required this.stock,

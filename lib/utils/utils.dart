@@ -1,4 +1,5 @@
 import 'package:blue_thermal_printer/blue_thermal_printer.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -29,9 +30,10 @@ Future<Locale> getLocale() async {
 }
 
 Future<void> setLocale(String locale) async {
+  Get.updateLocale(Locale(locale));
   final prefs = await SharedPreferences.getInstance();
 
-  await prefs.setString('locale', locale);
+  prefs.setString('locale', locale);
 }
 
 Future<String> getLanguageCode() async {
@@ -144,4 +146,10 @@ void printExampleReceipt(BlueThermalPrinter bluetooth, Printer printer) {
     ),
     printer,
   );
+}
+
+void debug(Object? object) {
+  if (kDebugMode) {
+    print(object);
+  }
 }

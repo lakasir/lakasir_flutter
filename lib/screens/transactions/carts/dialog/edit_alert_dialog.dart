@@ -26,6 +26,7 @@ class _EditDetailAlertState extends State<EditDetailAlert> {
     precision: 1,
   );
   final customerNumberController = TextEditingController();
+  final noteController = TextEditingController();
   final MemberController _memberController = Get.put(MemberController());
   final _cartController = Get.put(CartController());
 
@@ -43,6 +44,9 @@ class _EditDetailAlertState extends State<EditDetailAlert> {
     if (_cartController.cartSessions.value.customerNumber != null) {
       customerNumberController.text =
           _cartController.cartSessions.value.customerNumber.toString();
+    }
+    if (_cartController.cartSessions.value.note != null) {
+      noteController.text = _cartController.cartSessions.value.note!;
     }
   }
 
@@ -100,6 +104,18 @@ class _EditDetailAlertState extends State<EditDetailAlert> {
             ),
           ),
           Container(
+            margin: const EdgeInsets.only(
+              bottom: 10,
+            ),
+            child: MyTextField(
+              label: "field_note".tr,
+              controller: noteController,
+              maxLines: 5,
+              keyboardType: TextInputType.text,
+              textInputAction: TextInputAction.none,
+            ),
+          ),
+          Container(
             width: double.infinity,
             margin: const EdgeInsets.only(
               bottom: 10,
@@ -123,6 +139,9 @@ class _EditDetailAlertState extends State<EditDetailAlert> {
                 if (customerNumberController.text.isNotEmpty) {
                   val!.customerNumber =
                       int.parse(customerNumberController.text);
+                }
+                if (noteController.text.isNotEmpty) {
+                  val!.note = noteController.text;
                 }
               });
               _cartController.cartSessions.refresh();

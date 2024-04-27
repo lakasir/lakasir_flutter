@@ -13,8 +13,9 @@ class PrintReceipt {
 
   void print(
     TransactionHistoryResponse transactionHistoryResponse,
-    Printer printer,
-  ) async {
+    Printer printer, {
+    copy = false,
+  }) async {
     if (printer.logopath!.isNotEmpty) {
       await bluetooth.printImage(printer.logopath!);
     }
@@ -120,6 +121,13 @@ class PrintReceipt {
       1,
       1,
     );
+    if (copy!) {
+      await bluetooth.printCustom(
+        "Copy",
+        1,
+        0,
+      );
+    }
     await bluetooth.paperCut();
   }
 }

@@ -6,7 +6,7 @@ class UnitController extends GetxController {
   RxList<Unit> units = <Unit>[].obs;
 
   void fetchUnits() async {
-    var results = await LakasirDatabase().fetchUnits();
+    var results = await LakasirDatabase().unit.fetch();
 
     units.assignAll(results);
   }
@@ -15,11 +15,11 @@ class UnitController extends GetxController {
     var unit = Unit()
       ..name = name
       ..updatedAt = DateTime.now();
-    await LakasirDatabase().createOrUpdateUnit(unit);
+    await LakasirDatabase().unit.create(unit);
     fetchUnits();
   }
 
   void clearUnit() async {
-    await LakasirDatabase().clearUnits();
+    await LakasirDatabase().unit.clear();
   }
 }

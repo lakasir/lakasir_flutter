@@ -9,6 +9,7 @@ import 'package:lakasir/api/responses/auths/profile_response.dart';
 import 'package:lakasir/api/responses/error_response.dart';
 import 'package:lakasir/controllers/profiles/profile_controller.dart';
 import 'package:lakasir/services/profile_service.dart';
+import 'package:lakasir/utils/utils.dart';
 import 'package:lakasir/widgets/select_input_feld.dart';
 
 class ProfileEditController extends GetxController {
@@ -51,6 +52,8 @@ class ProfileEditController extends GetxController {
         backgroundColor: Colors.green,
       );
       isLoading(false);
+      setLocale(languageController.selectedOption!);
+      await Get.forceAppUpdate();
     } catch (e) {
       isLoading(false);
       if (e is ValidationException) {
@@ -88,8 +91,11 @@ class ProfileEditController extends GetxController {
     phoneInputController.text = profile.value.phone ?? "";
     emailInputController.text = profile.value.email ?? "";
     addressInputController.text = profile.value.address ?? "";
-    languageController.selectedOption = profile.value.locale ?? "en";
+    languageController.selectedOption =
+        profile.value.locale ?? Get.deviceLocale!.toString();
 
+    print('locale');
+    print(profile.value.locale);
     clearError();
   }
 

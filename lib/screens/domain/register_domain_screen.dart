@@ -26,6 +26,7 @@ class _RegisterDomainScreenState extends State<RegisterDomainScreen> {
   final fullNameController = TextEditingController();
   final domainNameController = TextEditingController();
   final businessTypeController = SelectInputWidgetController();
+  final otherInput = TextEditingController();
   final emailOrPhoneController = TextEditingController();
   final passwordController = TextEditingController();
   final passwordConfirmationController = TextEditingController();
@@ -38,7 +39,9 @@ class _RegisterDomainScreenState extends State<RegisterDomainScreen> {
     emailOrPhone: "",
     password: "",
     businessType: "",
+    otherBusinessType: "",
   );
+  bool showOtherInput = false;
 
   Future<String> register() async {
     try {
@@ -64,6 +67,7 @@ class _RegisterDomainScreenState extends State<RegisterDomainScreen> {
           "password": passwordController.text,
           "password_confirmation": passwordConfirmationController.text,
           "business_type": businessTypeController.selectedOption,
+          "other_business_type": otherInput.text,
         },
       );
 
@@ -151,19 +155,6 @@ class _RegisterDomainScreenState extends State<RegisterDomainScreen> {
                   ),
                   Container(
                     margin: const EdgeInsets.only(bottom: 21.0),
-                    child: MyTextField(
-                      controller: domainNameController,
-                      errorText: registerErrorResponse.domainName,
-                      prefixText:
-                          environment == "local" ? "http://" : "https://",
-                      info: "info_domain".tr,
-                      label: "field_domain_name".tr,
-                      suffixText: ".lakasir.com",
-                      mandatory: true,
-                    ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.only(bottom: 21.0),
                     child: SelectInputWidget(
                       options: [
                         Option(
@@ -181,11 +172,44 @@ class _RegisterDomainScreenState extends State<RegisterDomainScreen> {
                         Option(
                             name: "field_option_pharmacy_business_type".tr,
                             value: "pharmacy"),
+                        Option(
+                            name: "field_option_other_business_type".tr,
+                            value: "other"),
                       ],
                       controller: businessTypeController,
                       label: "field_business_type".tr,
                       mandatory: true,
                       errorText: registerErrorResponse.businessType,
+                      onChanged: (String value) async {
+                        setState(() {
+                          showOtherInput = value == 'other';
+                        });
+                      },
+                    ),
+                  ),
+                  Visibility(
+                    visible: showOtherInput,
+                    child: Container(
+                      margin: const EdgeInsets.only(bottom: 21.0),
+                      child: MyTextField(
+                        controller: otherInput,
+                        errorText: registerErrorResponse.otherBusinessType,
+                        label: "field_option_other_business_type".tr,
+                        mandatory: true,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(bottom: 21.0),
+                    child: MyTextField(
+                      controller: domainNameController,
+                      errorText: registerErrorResponse.domainName,
+                      prefixText:
+                          environment == "local" ? "http://" : "https://",
+                      info: "info_domain".tr,
+                      label: "field_domain_name".tr,
+                      suffixText: ".lakasir.com",
+                      mandatory: true,
                     ),
                   ),
                   Container(

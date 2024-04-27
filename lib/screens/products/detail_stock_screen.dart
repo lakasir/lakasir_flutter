@@ -32,9 +32,23 @@ class _DetailStockScreenState extends State<DetailStockScreen> {
     super.initState();
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   void fetchDetail() async {
-    final ProductResponse products = Get.arguments;
-    await _productStockController.get(products.id);
+    if (Get.arguments is ProductResponse) {
+      final ProductResponse products = Get.arguments;
+      await _productStockController.get(products.id);
+      setState(() {
+        _productDetailController.product.value = products;
+      });
+    } else {
+      final String productId = Get.arguments;
+      await _productStockController.get(int.parse(productId));
+      await _productDetailController.get(int.parse(productId));
+    }
   }
 
   @override
@@ -43,7 +57,8 @@ class _DetailStockScreenState extends State<DetailStockScreen> {
       title: 'field_stock_history'.tr,
       child: Obx(
         () {
-          if (_productStockController.isLoading.value) {
+          if (_productStockController.isLoading.value ||
+              _productDetailController.isLoading.value) {
             return const Center(
               child: CircularProgressIndicator(),
             );
@@ -73,7 +88,7 @@ class _DetailStockScreenState extends State<DetailStockScreen> {
                     maxLines: 4,
                   ),
                   Text(
-                    'field_stock: ${_productDetailController.product.value.stock}',
+                    '${'field_stock'.tr}: ${_productDetailController.product.value.stock}',
                     style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w200,
@@ -86,14 +101,11 @@ class _DetailStockScreenState extends State<DetailStockScreen> {
                     ),
                   ),
                 ],
-                imagebox: Hero(
-                  tag: 'product-${_productDetailController.product.value.id}',
-                  child: SizedBox(
-                    height: 90,
-                    width: 90,
-                    child: MyImage(
-                      images: _productDetailController.product.value.image,
-                    ),
+                imagebox: SizedBox(
+                  height: 90,
+                  width: 90,
+                  child: MyImage(
+                    images: _productDetailController.product.value.image,
                   ),
                 ),
               ),
@@ -417,6 +429,7 @@ class _ActionModalStockState extends State<ActionModalStock> {
                             controller: widget.productStockController
                                 .initialPriceInputEditingController,
                             label: "field_initial_price".tr,
+                            info: "field_last_initial_price_info".tr,
                             keyboardType: TextInputType.number,
                             errorText: widget.productStockController
                                     .stockErrorResponse.value.initialPrice ??
@@ -441,6 +454,7 @@ class _ActionModalStockState extends State<ActionModalStock> {
                             controller: widget.productStockController
                                 .sellingPriceInputEditingController,
                             label: "field_selling_price".tr,
+                            info: "field_last_selling_price_info".tr,
                             keyboardType: TextInputType.number,
                             errorText: widget.productStockController
                                     .stockErrorResponse.value.sellingPrice ??

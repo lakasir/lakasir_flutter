@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:lakasir/controllers/notification_controller.dart';
+import 'package:lakasir/utils/colors.dart';
 
 class Layout extends StatefulWidget {
   const Layout({
@@ -30,13 +33,24 @@ class Layout extends StatefulWidget {
 }
 
 class _LayoutState extends State<Layout> {
+  final NotificationController _controller = Get.put(NotificationController());
+
   @override
   void initState() {
+    _controller.fetch();
     super.initState();
   }
 
   @override
+  void didChangeDependencies() {
+    _controller.fetch();
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    var shouldHide = ['/menu/setting/notification', '/notifications']
+        .contains(Get.currentRoute);
     return Scaffold(
       backgroundColor: Colors.grey[100],
       appBar: widget.noAppBar
@@ -44,9 +58,28 @@ class _LayoutState extends State<Layout> {
           : AppBar(
               backgroundColor: Colors.grey[100],
               automaticallyImplyLeading: widget.backButton,
-              title: Center(
-                child: Text(widget.title),
+              title: Container(
+                margin: EdgeInsets.only(left: !shouldHide ? 50 : 0),
+                child: Center(
+                  child: Text(widget.title),
+                ),
               ),
+              actions: [
+                if (Get.previousRoute != '/notifications')
+                  if (!shouldHide)
+                    IconButton(
+                      icon: Obx(
+                        () => Badge(
+                          isLabelVisible: _controller.notifications.isNotEmpty,
+                          label: Text(
+                            _controller.notifications.length.toString(),
+                          ),
+                          child: const Icon(Icons.notifications),
+                        ),
+                      ),
+                      onPressed: () => Get.toNamed('/notifications'),
+                    )
+              ],
             ),
       body: OrientationBuilder(builder: (context, orientation) {
         return SizedBox(

@@ -24,6 +24,18 @@ class _EditAboutScreenState extends State<EditAboutScreen> {
   }
 
   @override
+  void initState() {
+    _aboutEditController.setData();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _aboutEditController.setData();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
 
@@ -63,25 +75,61 @@ class _EditAboutScreenState extends State<EditAboutScreen> {
                 ),
               ],
             ),
-            // Container(
-            //   margin: const EdgeInsets.only(top: 20),
-            //   child: SelectInputWidget(
-            //     options: [
-            //       Option(name: "field_option_retail_business_type".tr, value: "retail"),
-            //       Option(name: "field_option_wholesale_business_type".tr, value: "wholesale"),
-            //       Option(name: "field_option_fnb_business_type".tr, value: "fnb"),
-            //       Option(name: "field_option_fashion_business_type".tr, value: "fashion"),
-            //       Option(name: "field_option_pharmacy_business_type".tr, value: "pharmacy"),
-            //     ],
-            //     controller: _aboutEditController.businessTypeInputController,
-            //     label: 'field_business_type'.tr,
-            //   ),
-            // ),
+            Container(
+              margin: const EdgeInsets.only(top: 20),
+              child: Obx(
+                () => SelectInputWidget(
+                  errorText: _aboutEditController
+                      .aboutErrorResponse.value.businessType,
+                  options: [
+                    Option(
+                        name: "field_option_retail_business_type".tr,
+                        value: "retail"),
+                    Option(
+                        name: "field_option_wholesale_business_type".tr,
+                        value: "wholesale"),
+                    Option(
+                        name: "field_option_fnb_business_type".tr,
+                        value: "fnb"),
+                    Option(
+                        name: "field_option_fashion_business_type".tr,
+                        value: "fashion"),
+                    Option(
+                        name: "field_option_pharmacy_business_type".tr,
+                        value: "pharmacy"),
+                    Option(
+                        name: "field_option_other_business_type".tr,
+                        value: "other"),
+                  ],
+                  controller: _aboutEditController.businessTypeInput,
+                  label: 'field_business_type'.tr,
+                  onChanged: (String value) async {
+                    await Get.forceAppUpdate();
+                  },
+                ),
+              ),
+            ),
+            Obx(
+              () => Visibility(
+                visible:
+                    _aboutEditController.businessTypeInput.selectedOption ==
+                        'other',
+                child: Container(
+                  margin: const EdgeInsets.only(top: 20),
+                  child: MyTextField(
+                    errorText: _aboutEditController
+                        .aboutErrorResponse.value.otherBusinesType,
+                    controller: _aboutEditController.otherBusinessType,
+                    label: 'field_other_business_type'.tr,
+                  ),
+                ),
+              ),
+            ),
             Container(
               margin: const EdgeInsets.only(top: 20),
               child: MyTextField(
                 controller: _aboutEditController.ownerNameInputController,
-                label: 'field_owner_name'.tr
+                label: 'field_owner_name'.tr,
               ),
             ),
             Container(
@@ -104,7 +152,7 @@ class _EditAboutScreenState extends State<EditAboutScreen> {
               ),
             ),
             Container(
-              margin: const EdgeInsets.only(top: 20),
+              margin: const EdgeInsets.only(top: 20, bottom: 20),
               child: Obx(
                 () => MyFilledButton(
                   onPressed: _aboutEditController.updateAbout,
