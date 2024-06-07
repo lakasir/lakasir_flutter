@@ -11,6 +11,7 @@ import 'package:lakasir/widgets/my_card_list.dart';
 
 class MenuScreen extends StatefulWidget {
   const MenuScreen({super.key});
+
   @override
   State<MenuScreen> createState() => _MenuScreenState();
 }
@@ -82,8 +83,6 @@ class _MenuScreenState extends State<MenuScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var height = MediaQuery.of(context).size.height;
-
     return Layout(
       title: 'menu'.tr,
       child: Obx(
@@ -95,56 +94,162 @@ class _MenuScreenState extends State<MenuScreen> {
             );
           }
 
-          return ListView.separated(
-            itemCount: menus.length,
-            separatorBuilder: (context, index) {
-              return Container();
-            },
-            itemBuilder: (context, index) {
-              var visible = true;
-              if (menus[index]['permission'] != null) {
-                visible = can(
-                  _authController.permissions,
-                  menus[index]['permission'] as String,
-                );
-              }
+          return LayoutBuilder(
+            builder: (context, constraints) {
+              bool isTablet = constraints.maxWidth > 600;
 
-              return Visibility(
-                visible: visible,
-                child: Container(
-                  margin: EdgeInsets.only(bottom: height * 0.02),
-                  child: MyCardList(
-                    route: menus[index]['route'] as String,
-                    list: [
-                      Text(
-                        menus[index]['title'] as String,
-                        style: const TextStyle(
-                          fontSize: 20,
-                        ),
-                      ),
-                      SizedBox(
-                        width: 220,
-                        child: Text(
-                          menus[index]['subtitle'] as String,
-                          style: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w200,
+              if (isTablet) {
+                return GridView.builder(
+                  padding: const EdgeInsets.all(10.0),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 10.0,
+                    mainAxisSpacing: 10.0,
+                    childAspectRatio: 1.5,
+                  ),
+                  itemCount: menus.length,
+                  itemBuilder: (context, index) {
+                    var visible = true;
+                    if (menus[index]['permission'] != null) {
+                      visible = can(
+                        _authController.permissions,
+                        menus[index]['permission'] as String,
+                      );
+                    }
+
+                    return Visibility(
+                      visible: visible,
+                      child: Container(
+                        margin: const EdgeInsets.all(10.0),
+                        child: Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: InkWell(
+                            onTap: () =>
+                                Get.toNamed(menus[index]['route'] as String),
+                            child: Padding(
+                              padding: const EdgeInsets.all(15.0),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    width: 90,
+                                    height: 90,
+                                    decoration: const BoxDecoration(
+                                      color: primary,
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(20)),
+                                    ),
+                                    child: Center(
+                                      child: menus[index]['icon'] as Widget,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 15),
+                                  Text(
+                                    menus[index]['title'] as String,
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 10),
+                                  Text(
+                                    menus[index]['subtitle'] as String,
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w300,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
                         ),
                       ),
-                    ],
-                    imagebox: Container(
-                      width: 90,
-                      height: 90,
-                      decoration: const BoxDecoration(
-                        color: primary,
-                        borderRadius: BorderRadius.all(Radius.circular(20)),
+                    );
+                  },
+                );
+              } else {
+                var height = MediaQuery.of(context).size.height;
+
+                return ListView.separated(
+                  itemCount: menus.length,
+                  separatorBuilder: (context, index) {
+                    return Container();
+                  },
+                  itemBuilder: (context, index) {
+                    var visible = true;
+                    if (menus[index]['permission'] != null) {
+                      visible = can(
+                        _authController.permissions,
+                        menus[index]['permission'] as String,
+                      );
+                    }
+
+                    return Visibility(
+                      visible: visible,
+                      child: Container(
+                        margin: EdgeInsets.only(bottom: height * 0.02),
+                        child: Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: InkWell(
+                            onTap: () =>
+                                Get.toNamed(menus[index]['route'] as String),
+                            child: Padding(
+                              padding: const EdgeInsets.all(15.0),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    width: 90,
+                                    height: 90,
+                                    decoration: const BoxDecoration(
+                                      color: primary,
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(20)),
+                                    ),
+                                    child: Center(
+                                      child: menus[index]['icon'] as Widget,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 15),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          menus[index]['title'] as String,
+                                          style: const TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 10),
+                                        Text(
+                                          menus[index]['subtitle'] as String,
+                                          style: const TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w300,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
-                      child: menus[index]['icon'] as Widget,
-                    ),
-                  ),
-                ),
-              );
+                    );
+                  },
+                );
+              }
             },
           );
         },

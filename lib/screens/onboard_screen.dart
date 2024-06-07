@@ -74,6 +74,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           Center(
             child: Container(
               color: Colors.white,
+              padding: const EdgeInsets.symmetric(vertical: 10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
