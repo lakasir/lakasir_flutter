@@ -7,6 +7,7 @@ import 'package:lakasir/utils/utils.dart';
 import 'package:lakasir/widgets/calculator_payment_button.dart';
 import 'package:lakasir/widgets/layout.dart';
 import 'package:lakasir/widgets/my_bottom_bar.dart';
+import 'package:sunmi_printer_plus/sunmi_printer_plus.dart';
 
 class PaymentScreen extends StatefulWidget {
   const PaymentScreen({super.key});
@@ -34,6 +35,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
             );
             return;
           }
+          openSunmiCashDrawer();
           Get.dialog(ConfirmAlertDialog());
         },
         label: const Text(
@@ -67,5 +69,15 @@ class _PaymentScreenState extends State<PaymentScreen> {
         ],
       ),
     );
+  }
+
+  void openSunmiCashDrawer() async {
+    try {
+      await SunmiPrinter.bindingPrinter();
+      await SunmiPrinter.openDrawer();
+      print('Sunmi cash drawer opened successfully');
+    } catch (e) {
+      print('Error opening Sunmi cash drawer: $e');
+    }
   }
 }
