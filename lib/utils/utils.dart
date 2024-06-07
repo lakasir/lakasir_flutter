@@ -17,7 +17,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 String formatPrice(dynamic price, {bool isSymbol = true}) {
   return NumberFormat.currency(
     locale: 'id_ID',
-    symbol: isSymbol ? 'Rp. ' : '',
+    symbol: isSymbol ? 'OMR. ' : '',
     decimalDigits: 0,
   ).format(price);
 }

@@ -16,6 +16,7 @@ import 'package:lakasir/widgets/layout.dart';
 import 'package:lakasir/widgets/my_bottom_bar.dart';
 import 'package:lakasir/widgets/my_card_list.dart';
 import 'package:lakasir/widgets/text_field.dart';
+import 'package:sunmi_printer_plus/sunmi_printer_plus.dart';
 
 class CashierMenuScreen extends StatefulWidget {
   const CashierMenuScreen({super.key});
@@ -80,6 +81,7 @@ class _CashierMenuScreenState extends State<CashierMenuScreen> {
               ));
               return;
             }
+            openSunmiCashDrawer();
             _cashDrawerController.showCashDrawerDialog();
           },
           label: Obx(
@@ -228,5 +230,15 @@ class _CashierMenuScreenState extends State<CashierMenuScreen> {
         imagebox: BuildListImage(url: product.image),
       ),
     );
+  }
+
+  void openSunmiCashDrawer() async {
+    try {
+      await SunmiPrinter.bindingPrinter();
+      await SunmiPrinter.openDrawer();
+      print('Sunmi cash drawer opened successfully');
+    } catch (e) {
+      print('Error opening Sunmi cash drawer: $e');
+    }
   }
 }

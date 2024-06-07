@@ -66,7 +66,7 @@ class _GeneralSettingState extends State<GeneralSetting> {
             child: MyCardList(
               onTap: () {
                 var currencyController = SelectInputWidgetController();
-                currencyController.selectedOption = "IDR";
+                currencyController.selectedOption = "OMR";
                 Get.dialog(MyDialog(
                   content: Column(
                     children: [
@@ -75,8 +75,8 @@ class _GeneralSettingState extends State<GeneralSetting> {
                         label: "setting_currency".tr,
                         options: [
                           Option(
-                            name: "IDR",
-                            value: "IDR",
+                            name: "OMR",
+                            value: "OMR",
                           ),
                         ],
                       ),

@@ -145,7 +145,7 @@ class _EditAboutScreenState extends State<EditAboutScreen> {
               margin: const EdgeInsets.only(top: 20),
               child: SelectInputWidget(
                 options: [
-                  Option(name: "IDR", value: "IDR"),
+                  Option(name: "OMR", value: "OMR"),
                 ],
                 controller: _aboutEditController.currencyInputController,
                 label: 'field_currency'.tr,
