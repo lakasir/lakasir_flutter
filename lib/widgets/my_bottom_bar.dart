@@ -47,22 +47,6 @@ class _MyBottomBarState extends State<MyBottomBar> {
         if (!widget.hideBlockButton)
           Positioned(
             bottom: 0,
-            left: 0,
-            child: SizedBox(
-              height: 50,
-              width: MediaQuery.of(context).size.width * 8 / 100,
-              child: MyFilledButton(
-                onPressed: () {},
-                child: const Icon(
-                  Icons.block_rounded,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ),
-        if (!widget.hideBlockButton)
-          Positioned(
-            bottom: 0,
             right: MediaQuery.of(context).size.width * 8 / 100,
             child: SizedBox(
               height: 50,
@@ -142,10 +126,10 @@ class _MyBottomBarState extends State<MyBottomBar> {
                   onPressed: toggleActionsVisibility,
                   style: ButtonStyle(
                     alignment: Alignment.centerLeft,
-                    overlayColor: MaterialStateProperty.all(
+                    overlayColor: WidgetStateProperty.all(
                       Colors.transparent,
                     ),
-                    padding: MaterialStateProperty.all(
+                    padding: WidgetStateProperty.all(
                       EdgeInsets.zero,
                     ),
                   ),

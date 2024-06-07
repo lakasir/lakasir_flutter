@@ -42,31 +42,33 @@ class _PaymentScreenState extends State<PaymentScreen> {
           "Pay it",
         ),
       ),
-      child: Column(
-        children: [
-          Obx(
-            () => Text(
-              formatPrice(
-                _cartController.cartSessions.value.payedMoney!,
-                isSymbol: false,
-              ),
-              style: const TextStyle(
-                fontSize: 47,
-                fontWeight: FontWeight.bold,
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            Obx(
+              () => Text(
+                formatPrice(
+                  _cartController.cartSessions.value.payedMoney!,
+                  isSymbol: false,
+                ),
+                style: const TextStyle(
+                  fontSize: 47,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
-          ),
-          const SizedBox(
-            height: 40,
-          ),
-          CalculatorPaymentButton(
-            onUpdated: (String value) {
-              _cartController.cartSessions.update((val) {
-                val!.payedMoney = double.parse(value);
-              });
-            },
-          ),
-        ],
+            const SizedBox(
+              height: 40,
+            ),
+            CalculatorPaymentButton(
+              onUpdated: (String value) {
+                _cartController.cartSessions.update((val) {
+                  val!.payedMoney = double.parse(value);
+                });
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
