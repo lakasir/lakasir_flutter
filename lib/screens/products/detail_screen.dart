@@ -42,7 +42,6 @@ class _DetailScreen extends State<DetailScreen> {
           noAppBar: true,
           noPadding: true,
           bottomNavigationBar: MyBottomBar(
-            label: Text('product_edit'.tr),
             hideBlockButton:
                 !can(_authController.permissions, 'update product'),
             onPressed: () {
@@ -72,6 +71,7 @@ class _DetailScreen extends State<DetailScreen> {
                   icon: const Icon(Icons.delete_rounded, color: Colors.white),
                 ),
             ],
+            child: Text('product_edit'.tr),
           ),
           child: Column(
             children: [

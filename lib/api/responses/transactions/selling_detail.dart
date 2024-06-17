@@ -5,6 +5,7 @@ class SellingDetail {
   int sellingId;
   int productId;
   double price;
+  double discountPrice;
   int quantity;
   ProductResponse? product;
 
@@ -14,6 +15,7 @@ class SellingDetail {
     required this.productId,
     required this.price,
     required this.quantity,
+    required this.discountPrice,
     this.product,
   });
 
@@ -23,6 +25,7 @@ class SellingDetail {
       sellingId: json['selling_id'],
       productId: json['product_id'],
       price: double.parse(json['price'].toString()),
+      discountPrice: double.parse(json['discount_price'].toString()),
       quantity: json['qty'],
       product: json['product'] != null
           ? ProductResponse.fromJson(json['product'])

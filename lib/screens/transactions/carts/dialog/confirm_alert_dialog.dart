@@ -28,6 +28,7 @@ class ConfirmAlertDialog extends StatelessWidget {
                 productName: e.product.name,
                 quantity: e.buildRowPrice(),
                 subTotal: e.buildSubTotalPrice(),
+                discountPrice: e.buildDiscountPerItem(),
               ),
             )
             .toList(),
@@ -46,6 +47,8 @@ class ConfirmAlertDialog extends StatelessWidget {
               _cartController.cartSessions.value.getTotalPrice,
         ),
         note: _cartController.cartSessions.value.note,
+        discount:
+            formatPrice(_cartController.cartSessions.value.getDiscountPrice),
         actions: [
           Flexible(
             child: MyFilledButton(

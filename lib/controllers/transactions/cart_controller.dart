@@ -65,6 +65,12 @@ class CartController extends GetxController {
     Get.back();
   }
 
+  void calculateDiscountPrice(CartItem cartItem, double discountPrice) {
+    cartSessions.value.cartItems[cartSessions.value.cartItems.indexOf(cartItem)]
+        .discountPrice = discountPrice;
+    cartSessions.refresh();
+  }
+
   void removeQty(CartItem cartItem) {
     if (cartItem.qty == 1) {
       cartSessions.value.cartItems.remove(cartItem);
@@ -160,6 +166,7 @@ class CartController extends GetxController {
 
 class CartSession {
   double? totalPrice;
+  double discountPrice;
   double? payedMoney;
   MemberResponse? member;
   int? customerNumber;
@@ -183,6 +190,7 @@ class CartSession {
     this.paymentMethod,
     this.customerNumber,
     this.note,
+    this.discountPrice = 0,
     required this.cartItems,
   });
 
@@ -199,13 +207,15 @@ class CartSession {
 
   double get getTotalPrice {
     var tax = this.tax ?? 0;
-    return cartItems.fold(
-      0,
-      (previousValue, element) =>
-          previousValue +
-          (element.qty * element.product.sellingPrice!.toInt()) *
-              (1 + (tax / 100)),
-    );
+    double totalPrice = cartItems.fold(
+        0,
+        (previousValue, element) =>
+            previousValue +
+            (element.qty * element.product.sellingPrice!.toInt()) *
+                (1 + (tax / 100)));
+    totalPrice = totalPrice - getDiscountPrice;
+
+    return totalPrice;
   }
 
   double get getSubTotalPrice {
@@ -214,6 +224,13 @@ class CartSession {
       (previousValue, element) =>
           previousValue + (element.qty * element.product.sellingPrice!.toInt()),
     );
+  }
+
+  double get getDiscountPrice {
+    return discountPrice +
+        cartItems.fold(0, (previousValue, element) {
+          return previousValue + element.discountPrice;
+        });
   }
 
   int get getTotalQty {
@@ -239,10 +256,12 @@ class CartSession {
 class CartItem {
   ProductResponse product;
   int qty;
+  double discountPrice;
 
   CartItem({
     required this.product,
     required this.qty,
+    this.discountPrice = 0,
   });
 
   @override
@@ -265,5 +284,9 @@ class CartItem {
     return formatPrice(
       (product.sellingPrice! * qty).toDouble(),
     );
+  }
+
+  String buildDiscountPerItem() {
+    return formatPrice(discountPrice);
   }
 }

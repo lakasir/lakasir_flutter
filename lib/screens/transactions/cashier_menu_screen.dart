@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lakasir/api/requests/product_request.dart';
 import 'package:lakasir/api/responses/products/product_response.dart';
 import 'package:lakasir/controllers/auths/auth_controller.dart';
 import 'package:lakasir/controllers/products/product_controller.dart';
@@ -56,42 +57,14 @@ class _CashierMenuScreenState extends State<CashierMenuScreen> {
       child: Layout(
         title: 'transaction_cashier'.tr,
         bottomNavigationBar: MyBottomBar(
-          singleAction: can(_authController.permissions, 'open cash drawer'),
-          singleActionIcon: Icons.edit_note,
-          singleActionOnPressed: () {
-            if (!_settingController.setting.value.cashDrawerEnabled) {
-              Get.dialog(AlertDialog(
-                title: Text('cashier_set_cash_drawer'.tr),
-                content: Text('cashier_set_cash_drawer_enabled_info'.tr),
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      Get.back();
-                    },
-                    child: Text('global_no'.tr),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      Get.back();
-                      Get.toNamed('/menu/setting');
-                    },
-                    child: Text('global_yes'.tr),
-                  ),
-                ],
-              ));
-              return;
-            }
-            openSunmiCashDrawer();
-            _cashDrawerController.showCashDrawerDialog();
-          },
-          label: Obx(
+          child: Obx(
             () => Row(
               children: [
                 if (_cartController.cartSessions.value.cartItems.isEmpty)
                   const Icon(Icons.shopping_cart_rounded, color: Colors.white),
                 if (_cartController.cartSessions.value.cartItems.isNotEmpty)
                   Text(
-                    '${_cartController.cartSessions.value.cartItems.length} Items'
+                    '${_cartController.cartSessions.value.cartItems.length}'
                     ' - ${formatPrice(_cartController.cartSessions.value.getSubTotalPrice)}',
                     style: const TextStyle(
                       color: Colors.white,
@@ -230,15 +203,5 @@ class _CashierMenuScreenState extends State<CashierMenuScreen> {
         imagebox: BuildListImage(url: product.image),
       ),
     );
-  }
-
-  void openSunmiCashDrawer() async {
-    try {
-      await SunmiPrinter.bindingPrinter();
-      await SunmiPrinter.openDrawer();
-      print('Sunmi cash drawer opened successfully');
-    } catch (e) {
-      print('Error opening Sunmi cash drawer: $e');
-    }
   }
 }

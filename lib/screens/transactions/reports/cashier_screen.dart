@@ -185,10 +185,8 @@ class _PdfPreviewScreenState extends State<PdfPreviewScreen> {
         return Visibility(
           visible: !isOpen,
           child: Layout(
-            bottomNavigationBar: MyBottomBar(
-              singleAction: true,
-              singleActionOnPressed: _downloadPdf,
-              singleActionIcon: Icons.download,
+            bottomNavigationBar: const MyBottomBar(
+              child: Icon(Icons.download),
             ),
             title: 'transaction_cashier_report'.tr,
             child: PDFView(

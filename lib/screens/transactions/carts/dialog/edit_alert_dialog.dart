@@ -25,6 +25,12 @@ class _EditDetailAlertState extends State<EditDetailAlert> {
     rightSymbol: ' %',
     precision: 1,
   );
+  final MoneyMaskedTextController manualDiscountController =
+      MoneyMaskedTextController(
+    thousandSeparator: '.',
+    decimalSeparator: ',',
+    precision: 2,
+  );
   final customerNumberController = TextEditingController();
   final noteController = TextEditingController();
   final MemberController _memberController = Get.put(MemberController());
@@ -36,7 +42,6 @@ class _EditDetailAlertState extends State<EditDetailAlert> {
     if (_cartController.cartSessions.value.tax != null) {
       taxController.updateValue(_cartController.cartSessions.value.tax!);
     }
-
     if (_cartController.cartSessions.value.member != null) {
       selectInputWidgetController.selectedOption =
           _cartController.cartSessions.value.member!.id.toString();
@@ -48,6 +53,8 @@ class _EditDetailAlertState extends State<EditDetailAlert> {
     if (_cartController.cartSessions.value.note != null) {
       noteController.text = _cartController.cartSessions.value.note!;
     }
+    manualDiscountController
+        .updateValue(_cartController.cartSessions.value.discountPrice);
   }
 
   @override
@@ -87,8 +94,9 @@ class _EditDetailAlertState extends State<EditDetailAlert> {
               bottom: 10,
             ),
             child: MyTextField(
-              label: "field_customer_number".tr,
-              controller: customerNumberController,
+              label: "field_tax".tr,
+              hintText: "%",
+              controller: taxController,
               keyboardType: TextInputType.number,
             ),
           ),
@@ -97,9 +105,8 @@ class _EditDetailAlertState extends State<EditDetailAlert> {
               bottom: 10,
             ),
             child: MyTextField(
-              label: "field_tax".tr,
-              hintText: "%",
-              controller: taxController,
+              label: "field_discount".tr,
+              controller: manualDiscountController,
               keyboardType: TextInputType.number,
             ),
           ),
@@ -143,6 +150,7 @@ class _EditDetailAlertState extends State<EditDetailAlert> {
                 if (noteController.text.isNotEmpty) {
                   val!.note = noteController.text;
                 }
+                val!.discountPrice = manualDiscountController.numberValue;
               });
               _cartController.cartSessions.refresh();
               Get.back();
