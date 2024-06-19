@@ -1,60 +1,35 @@
-import 'dart:convert';
-
 import 'package:get/get.dart';
-import 'package:lakasir/models/lakasir_database.dart';
-import 'package:lakasir/models/notification.dart';
+import 'package:lakasir/api/responses/notifications/notification_response.dart';
+import 'package:lakasir/services/notification_service.dart';
 import 'package:lakasir/utils/utils.dart';
 
 class NotificationController extends GetxController {
-  RxList<NotificationModel> notifications = <NotificationModel>[].obs;
+  RxList<NotificationResponse> notifications = <NotificationResponse>[].obs;
+  final NotificationService _notificationService = NotificationService();
 
   void fetch() async {
-    var results = await LakasirDatabase().notification.fetch();
+    var response = await _notificationService.get();
 
-    notifications.assignAll(results);
+    notifications.value = response;
   }
 
   void create(NotificationRequest request) async {
-    NotificationModel notification = fillModel(request);
-
-    LakasirDatabase().notification.create(notification);
-
     fetch();
   }
 
   void clear() async {
-    await LakasirDatabase().notification.clear();
-    await show('Notification cleared');
+    await _notificationService.clear();
     fetch();
+    show('notification_cleared'.tr);
   }
 
-  void delete(NotificationModel notification) async {
-    LakasirDatabase().notification.delete(notification);
+  void delete(NotificationResponse notification, int id) async {
+    await _notificationService.delete(notification, id);
     fetch();
   }
 
   void createMany(List<NotificationRequest> request) {
-    for (var req in request) {
-      NotificationModel notification = fillModel(req);
-
-      LakasirDatabase().notification.create(notification);
-    }
     fetch();
-  }
-
-  NotificationModel fillModel(NotificationRequest req) {
-    var notification = NotificationModel()
-      ..title = req.title
-      ..body = req.body
-      ..data = req.data
-      ..isReaded = false
-      ..route = jsonEncode({
-        'route': '/menu/product/stock',
-        'arguments': req.data,
-      })
-      ..createdAt = DateTime.now();
-
-    return notification;
   }
 }
 

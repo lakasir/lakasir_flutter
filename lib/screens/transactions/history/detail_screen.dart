@@ -135,6 +135,7 @@ class _HistoryDetailScreenState extends State<HistoryDetailScreen> {
       cartItems: history.sellingDetails!
           .map(
             (e) => DetailTransactionItem(
+              discountPrice: formatPrice(e.discountPrice),
               productName: e.product!.name,
               quantity: "${e.quantity} x ${formatPrice(e.price / e.quantity)}",
               subTotal: formatPrice(e.price),

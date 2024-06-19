@@ -13,11 +13,12 @@ import 'package:lakasir/models/printer.dart';
 import 'package:lakasir/screens/setting/printers/print_receipt.dart';
 import 'package:lakasir/utils/colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sunmi_printer_plus/sunmi_printer_plus.dart';
 
 String formatPrice(dynamic price, {bool isSymbol = true}) {
   return NumberFormat.currency(
     locale: 'id_ID',
-    symbol: isSymbol ? 'Rp. ' : '',
+    symbol: isSymbol ? 'IDR. ' : '',
     decimalDigits: 0,
   ).format(price);
 }
@@ -88,6 +89,7 @@ void printExampleReceipt(BlueThermalPrinter bluetooth, Printer printer) {
       moneyChange: 25000,
       sellingDetails: [
         SellingDetail(
+          discountPrice: 0,
           quantity: 3,
           price: 75000,
           productId: 1,
@@ -99,6 +101,7 @@ void printExampleReceipt(BlueThermalPrinter bluetooth, Printer printer) {
           ),
         ),
         SellingDetail(
+          discountPrice: 0,
           quantity: 3,
           price: 75000,
           productId: 1,
@@ -110,28 +113,7 @@ void printExampleReceipt(BlueThermalPrinter bluetooth, Printer printer) {
           ),
         ),
         SellingDetail(
-          quantity: 3,
-          price: 75000,
-          productId: 1,
-          sellingId: 1,
-          id: 0,
-          product: ProductResponse(
-            name: 'product_name'.tr,
-            sellingPrice: 25000,
-          ),
-        ),
-        SellingDetail(
-          quantity: 3,
-          price: 75000,
-          productId: 1,
-          sellingId: 1,
-          id: 0,
-          product: ProductResponse(
-            name: 'product_name'.tr,
-            sellingPrice: 25000,
-          ),
-        ),
-        SellingDetail(
+          discountPrice: 0,
           quantity: 3,
           price: 75000,
           productId: 1,
@@ -146,6 +128,16 @@ void printExampleReceipt(BlueThermalPrinter bluetooth, Printer printer) {
     ),
     printer,
   );
+}
+
+void openSunmiCashDrawer() async {
+  try {
+    await SunmiPrinter.bindingPrinter();
+    await SunmiPrinter.openDrawer();
+    print('Sunmi cash drawer opened successfully');
+  } catch (e) {
+    print('Error opening Sunmi cash drawer: $e');
+  }
 }
 
 void debug(Object? object) {

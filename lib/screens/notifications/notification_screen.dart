@@ -20,18 +20,6 @@ class _NotificationScreenState extends State<NotificationScreen> {
       Get.put(NotificationController());
 
   @override
-  void initState() {
-    _notificationController.fetch();
-    super.initState();
-  }
-
-  @override
-  void didChangeDependencies() {
-    _notificationController.fetch();
-    super.didChangeDependencies();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Layout(
       title: 'menu_notification'.tr,
@@ -55,60 +43,59 @@ class _NotificationScreenState extends State<NotificationScreen> {
           }
           return ListView(
             children: [
-              for (var notification in _notificationController.notifications)
-                Column(
-                  children: [
-                    MyCardList(
-                      onTap: () {
-                        if (notification.route != null) {
-                          var route = jsonDecode(notification.route!);
-                          Get.toNamed(
-                            route['route'],
-                            arguments: route['arguments'],
-                          );
-                          _notificationController.delete(notification);
-                        }
-                      },
-                      list: [
-                        Text(
-                          notification.title!,
-                        ),
-                        Text(
-                          notification.body!,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
+              for (var nf in _notificationController.notifications)
+                for (var notification in nf.data!)
+                  Column(
+                    children: [
+                      MyCardList(
+                        onTap: () {
+                          if (notification.route != null) {
+                            Get.toNamed(
+                              notification.route.toString(),
+                              arguments: notification.id.toString(),
+                            );
+                          }
+                        },
+                        list: [
+                          Text(
+                            notification.name!,
                           ),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              DateFormat(
-                                'EEEE',
-                              ).format(
-                                notification.createdAt ?? DateTime.now(),
-                              ),
-                              style: const TextStyle(
-                                color: Colors.grey,
-                                fontSize: 12,
-                              ),
+                          Text(
+                            notification.stock!,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
                             ),
-                            Text(
-                              DateFormat('HH:mm').format(
-                                notification.createdAt ?? DateTime.now(),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                DateFormat('EEEE')
+                                    .format(
+                                        DateTime.parse(nf.createdAt!).toLocal())
+                                    .toString(),
+                                style: const TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 12,
+                                ),
                               ),
-                              style: const TextStyle(
-                                color: Colors.grey,
-                                fontSize: 12,
+                              Text(
+                                DateFormat('HH:mm')
+                                    .format(
+                                        DateTime.parse(nf.createdAt!).toLocal())
+                                    .toString(),
+                                style: const TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 12,
+                                ),
                               ),
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
-                    const Divider(),
-                  ],
-                ),
+                            ],
+                          )
+                        ],
+                      ),
+                      const Divider(),
+                    ],
+                  ),
               if (_notificationController.notifications.isNotEmpty)
                 Align(
                   alignment: Alignment.center,

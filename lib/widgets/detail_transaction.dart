@@ -18,6 +18,7 @@ class DetailTransaction extends StatelessWidget {
     this.sellingCode,
     this.cashierName,
     this.note,
+    this.discount = "0",
   });
   final String? cashierName;
   final String? date;
@@ -32,6 +33,7 @@ class DetailTransaction extends StatelessWidget {
   final String payedMoney;
   final String change;
   final String? note;
+  final String discount;
   final List<Widget> actions;
 
   TextStyle get _boldStyle => const TextStyle(
@@ -126,10 +128,18 @@ class DetailTransaction extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+            Text("discount".tr, style: _normalStyle),
+            Text(discount, style: _boldStyle)
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
             Text("global_total".tr, style: _normalStyle),
             Text(total, style: _boldStyle),
           ],
         ),
+        const Divider(),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -177,9 +187,11 @@ class DetailTransactionItem {
     required this.productName,
     required this.quantity,
     required this.subTotal,
+    required this.discountPrice,
   });
 
   final String productName;
   final String quantity;
   final String subTotal;
+  final String discountPrice;
 }

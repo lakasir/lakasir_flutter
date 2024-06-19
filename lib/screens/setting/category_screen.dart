@@ -40,6 +40,7 @@ class _CategoryScreen extends State<CategoryScreen> {
         label: Text("global_add_item".trParams({
           "item": "setting_category".tr,
         })),
+        icon: Icons.add,
         onPressed: () {
           showDialog(
             context: context,

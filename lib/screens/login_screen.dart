@@ -20,6 +20,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Layout(
+      resizeToAvoidBottomInset: true,
       noAppBar: true,
       child: SafeArea(
         child: ListView(

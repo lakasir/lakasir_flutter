@@ -221,26 +221,6 @@ class _AboutScreenState extends State<AboutScreen> {
                             ],
                           ),
                         ),
-                        Container(
-                          margin: const EdgeInsets.only(bottom: 20),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "field_currency".tr,
-                                style: const TextStyle(fontSize: 16),
-                              ),
-                              const SizedBox(height: 5),
-                              Text(
-                                aboutController.shop.value.currency ?? '-',
-                                style: const TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
                       ],
                     ),
                   ),

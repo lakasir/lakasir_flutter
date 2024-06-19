@@ -78,6 +78,10 @@ class _GeneralSettingState extends State<GeneralSetting> {
                             name: "IDR",
                             value: "IDR",
                           ),
+                          Option(
+                            name: "OMR",
+                            value: "OMR",
+                          ),
                         ],
                       ),
                       const SizedBox(height: 20),

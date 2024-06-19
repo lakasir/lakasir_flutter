@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lakasir/screens/domain/setup_screen.dart';
 import 'package:lakasir/utils/colors.dart';
 import 'package:lakasir/widgets/layout.dart';
 import 'package:lakasir/widgets/onboarding_page.dart';
@@ -74,33 +75,70 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           Center(
             child: Container(
               color: Colors.white,
+              padding: const EdgeInsets.symmetric(vertical: 10),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  for (int i = 0; i < onboardingPages.length; i++)
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          currentPageIndex = i;
-                        });
+                  Visibility(
+                    maintainSize: true,
+                    maintainAnimation: true,
+                    maintainState: true,
+                    visible: currentPageIndex != (onboardingPages.length - 1),
+                    child: TextButton(
+                      onPressed: () {
                         pageController.animateToPage(
-                          i,
+                          onboardingPages.length,
                           duration: const Duration(milliseconds: 300),
                           curve: Curves.easeInOut,
                         );
                       },
-                      child: Container(
-                        margin: const EdgeInsets.all(5),
-                        width: 10,
-                        height: 10,
-                        decoration: BoxDecoration(
-                          color: i == currentPageIndex
-                              ? primary
-                              : Colors.grey.withOpacity(0.5),
-                          shape: BoxShape.circle,
-                        ),
-                      ),
+                      child: Text("skip".tr),
                     ),
+                  ),
+                  Row(
+                    children: [
+                      for (int i = 0; i < onboardingPages.length; i++)
+                        GestureDetector(
+                          onTap: () {
+                            pageController.animateToPage(
+                              i,
+                              duration: const Duration(milliseconds: 300),
+                              curve: Curves.easeInOut,
+                            );
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.all(5),
+                            width: 10,
+                            height: 10,
+                            decoration: BoxDecoration(
+                              color: i == currentPageIndex
+                                  ? primary
+                                  : Colors.grey.withOpacity(0.5),
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      if (currentPageIndex == (onboardingPages.length - 1)) {
+                        Get.to(const SetupScreen());
+                        return;
+                      }
+                      double nextPage = pageController.page! + 1;
+                      pageController.animateToPage(
+                        nextPage.toInt(),
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
+                      );
+                    },
+                    icon: Icon(
+                      currentPageIndex == (onboardingPages.length - 1)
+                          ? Icons.check
+                          : Icons.skip_next,
+                    ),
+                  )
                 ],
               ),
             ),

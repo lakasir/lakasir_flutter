@@ -25,16 +25,12 @@ class _MemberScreen extends State<MemberScreen> {
       title: 'menu_member'.tr,
       bottomNavigationBar: MyBottomBar(
         hideBlockButton: !can(_authController.permissions, 'create member'),
+        icon: Icons.add,
         label: Text('global_add_item'.trParams({
           'item': 'menu_member'.tr,
         })),
         onPressed: () {
           Get.toNamed('/menu/member/add');
-        },
-        singleAction: true,
-        singleActionIcon: Icons.search_rounded,
-        singleActionOnPressed: () {
-          _memberController.showDialogSearch();
         },
       ),
       child: Obx(
