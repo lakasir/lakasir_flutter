@@ -6,8 +6,6 @@ import 'package:lakasir/api/responses/members/member_response.dart';
 import 'package:lakasir/utils/auth.dart';
 
 class MemberService {
-  MemberService();
-
   Future<RxList<MemberResponse>> get(MemberRequest? memberRequest) async {
     final query = memberRequest?.toQuery();
     final response =
@@ -21,7 +19,8 @@ class MemberService {
   }
 
   Future<void> add(MemberRequest request) async {
-    await ApiService(await getDomain()).postData('master/member', request.toJson());
+    await ApiService(await getDomain())
+        .postData('master/member', request.toJson());
   }
 
   Future<void> delete(int id) async {
@@ -29,6 +28,7 @@ class MemberService {
   }
 
   Future<void> update(int id, MemberRequest request) async {
-    await ApiService(await getDomain()).putData('master/member/$id', request.toJson());
+    await ApiService(await getDomain())
+        .putData('master/member/$id', request.toJson());
   }
 }

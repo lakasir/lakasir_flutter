@@ -315,18 +315,18 @@ class _ProductFormState extends State<ProductForm> {
                   info: 'field_sku_info'.tr,
                 ),
               ),
-              Container(
-                margin: const EdgeInsets.only(top: 20),
-                child: Obx(
-                  () => MyTextField(
-                    controller: widget.controller.barcodeInputController,
-                    label: 'field_barcode'.tr,
-                    errorText:
-                        widget.controller.productErrorResponse.value.barcode ??
-                            '',
-                  ),
-                ),
-              ),
+              // Container(
+              //   margin: const EdgeInsets.only(top: 20),
+              //   child: Obx(
+              //     () => MyTextField(
+              //       controller: widget.controller.barcodeInputController,
+              //       label: 'field_barcode'.tr,
+              //       errorText:
+              //           widget.controller.productErrorResponse.value.barcode ??
+              //               '',
+              //     ),
+              //   ),
+              // ),
             ],
           ),
         ),

@@ -21,12 +21,14 @@ class MyTextField extends StatefulWidget {
   final TextCapitalization? textCapitalization;
   final Widget? rightIcon;
   final Function(String)? onSubmitted;
+  final Function()? onEditingComplete;
   final Function(String)? onChanged;
   final Function(PointerDownEvent)? onTapOutside;
   final ValidatorCallback? validator;
   final bool autofocus;
   final bool readOnly;
   final Function()? onTap;
+  final String? initialValue;
 
   const MyTextField({
     super.key,
@@ -47,10 +49,12 @@ class MyTextField extends StatefulWidget {
     this.onSubmitted,
     this.onChanged,
     this.onTapOutside,
+    this.onEditingComplete,
     this.autofocus = false,
     this.validator,
     this.readOnly = false,
     this.onTap,
+    this.initialValue,
   });
 
   @override
@@ -122,10 +126,12 @@ class _MyTextFieldState extends State<MyTextField> {
           focusNode: _focusNode,
           onTap: widget.onTap,
           readOnly: widget.readOnly,
+          initialValue: widget.initialValue,
           textInputAction: widget.textInputAction,
           keyboardType: widget.keyboardType,
           // inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}'))]
           textCapitalization: widget.textCapitalization!,
+          onEditingComplete: widget.onEditingComplete,
           onTapOutside: (value) {
             widget.onTapOutside != null ? widget.onTapOutside!(value) : null;
             _focusNode.unfocus();

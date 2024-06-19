@@ -6,6 +6,7 @@ import 'package:lakasir/Exceptions/validation.dart';
 import 'package:lakasir/api/requests/pagination_request.dart';
 import 'package:lakasir/api/requests/payment_request.dart';
 import 'package:lakasir/api/responses/error_response.dart';
+import 'package:lakasir/api/responses/transactions/history_response.dart';
 import 'package:lakasir/controllers/products/product_controller.dart';
 import 'package:lakasir/controllers/settings/print_controller.dart';
 import 'package:lakasir/controllers/transactions/cart_controller.dart';
@@ -26,47 +27,7 @@ class PaymentController extends GetxController {
   void store() async {
     try {
       isLoading(true);
-      var transactionResponse = await _paymentService.store(PaymentRequest(
-        payedMoney: _cartController.cartSessions.value.payedMoney,
-        friendPrice: false,
-        tax: _cartController.cartSessions.value.tax,
-        memberId: _cartController.cartSessions.value.member?.id,
-        note: _cartController.cartSessions.value.note,
-        products: _cartController.cartSessions.value.cartItems
-            .map(
-              (e) => PaymentRequestItem(
-                productId: e.product.id,
-                qty: e.qty,
-              ),
-            )
-            .toList(),
-      ));
-      if (_printerController.printers.isNotEmpty) {
-        var printer = _printerController.printers.first;
-        BlueThermalPrinter bluetooth = BlueThermalPrinter.instance;
-        bluetooth.isConnected.then((value) {
-          if (value!) {
-            PrintReceipt(bluetooth: bluetooth).print(
-              transactionResponse,
-              printer,
-            );
-          } else {
-            var device = BluetoothDevice(printer.name, printer.address);
-            bluetooth.connect(device).then((value) {
-              if (value) {
-                PrintReceipt(bluetooth: bluetooth).print(
-                  transactionResponse,
-                  printer,
-                );
-              }
-            });
-          }
-        });
-      }
-      _cartController.cartSessions.value = CartSession(
-        cartItems: [],
-      );
-      _cartController.cartSessions.refresh();
+      procceedThePayment();
       _productController.getProducts();
       _transactionController.fetchTransaction(
         PaginationRequest(
@@ -74,6 +35,10 @@ class PaymentController extends GetxController {
           perPage: _transactionController.perPage,
         ),
       );
+      _cartController.cartSessions.value = CartSession(
+        cartItems: [],
+      );
+      _cartController.cartSessions.refresh();
       Get.offAllNamed("/auth");
       Get.toNamed("/menu/transaction/cashier");
       Get.rawSnackbar(
@@ -92,6 +57,50 @@ class PaymentController extends GetxController {
           backgroundColor: error,
         );
       }
+    }
+  }
+
+  void procceedThePayment() async {
+    TransactionHistoryResponse transactionResponse =
+        await _paymentService.store(PaymentRequest(
+      discountPrice: _cartController.cartSessions.value.discountPrice,
+      payedMoney: _cartController.cartSessions.value.payedMoney,
+      friendPrice: false,
+      tax: _cartController.cartSessions.value.tax,
+      memberId: _cartController.cartSessions.value.member?.id,
+      note: _cartController.cartSessions.value.note,
+      products: _cartController.cartSessions.value.cartItems
+          .map(
+            (e) => PaymentRequestItem(
+              productId: e.product.id,
+              qty: e.qty,
+              discountPrice: e.discountPrice,
+            ),
+          )
+          .toList(),
+    ));
+
+    if (_printerController.printers.isNotEmpty) {
+      var printer = _printerController.printers.first;
+      BlueThermalPrinter bluetooth = BlueThermalPrinter.instance;
+      bluetooth.isConnected.then((value) {
+        if (value!) {
+          PrintReceipt(bluetooth: bluetooth).print(
+            transactionResponse,
+            printer,
+          );
+        } else {
+          var device = BluetoothDevice(printer.name, printer.address);
+          bluetooth.connect(device).then((value) {
+            if (value) {
+              PrintReceipt(bluetooth: bluetooth).print(
+                transactionResponse,
+                printer,
+              );
+            }
+          });
+        }
+      });
     }
   }
 

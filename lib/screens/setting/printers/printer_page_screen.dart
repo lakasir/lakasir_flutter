@@ -39,6 +39,7 @@ class _PrinterPageScreenState extends State<PrinterPageScreen> {
                 label: Text('global_add_item'.trParams({
                   'item': 'setting_menu_printer'.tr,
                 })),
+                icon: Icons.add,
                 onPressed: () {
                   Get.toNamed('/menu/setting/print/add');
                 },

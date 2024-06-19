@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lakasir/controllers/transactions/cart_controller.dart';
+import 'package:lakasir/screens/transactions/carts/cart_menu_scren/payment_calculator.dart';
 import 'package:lakasir/screens/transactions/carts/dialog/confirm_alert_dialog.dart';
 import 'package:lakasir/utils/colors.dart';
 import 'package:lakasir/utils/utils.dart';
-import 'package:lakasir/widgets/calculator_payment_button.dart';
 import 'package:lakasir/widgets/layout.dart';
 import 'package:lakasir/widgets/my_bottom_bar.dart';
-import 'package:sunmi_printer_plus/sunmi_printer_plus.dart';
 
 class PaymentScreen extends StatefulWidget {
   const PaymentScreen({super.key});
@@ -38,48 +37,12 @@ class _PaymentScreenState extends State<PaymentScreen> {
           openSunmiCashDrawer();
           Get.dialog(ConfirmAlertDialog());
         },
-        label: const Text(
-          "Pay it",
+        label: Text(
+          "Pay it".tr,
         ),
+        icon: Icons.check,
       ),
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            Obx(
-              () => Text(
-                formatPrice(
-                  _cartController.cartSessions.value.payedMoney!,
-                  isSymbol: false,
-                ),
-                style: const TextStyle(
-                  fontSize: 47,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            const SizedBox(
-              height: 40,
-            ),
-            CalculatorPaymentButton(
-              onUpdated: (String value) {
-                _cartController.cartSessions.update((val) {
-                  val!.payedMoney = double.parse(value);
-                });
-              },
-            ),
-          ],
-        ),
-      ),
+      child: const PaymentCalculator(),
     );
-  }
-
-  void openSunmiCashDrawer() async {
-    try {
-      await SunmiPrinter.bindingPrinter();
-      await SunmiPrinter.openDrawer();
-      print('Sunmi cash drawer opened successfully');
-    } catch (e) {
-      print('Error opening Sunmi cash drawer: $e');
-    }
   }
 }

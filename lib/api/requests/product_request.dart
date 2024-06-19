@@ -1,3 +1,5 @@
+import 'package:lakasir/utils/utils.dart';
+
 class ProductRequest {
   String? name;
   String? categoryId;
@@ -10,7 +12,6 @@ class ProductRequest {
   bool isNonStock;
   String? sku;
   String? barcode;
-
 
   ProductRequest({
     this.name,
@@ -60,7 +61,9 @@ class ProductRequest {
     if (unit != null) {
       query.add('filter[unit]=$unit');
     }
+    if (stock != null) {
+      query.add('filter[stock-gt]=$stock');
+    }
     return query.join('&');
   }
 }
-

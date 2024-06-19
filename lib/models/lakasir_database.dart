@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:isar/isar.dart';
 import 'package:lakasir/models/printer.dart';
 import 'package:lakasir/models/unit.dart';
-import 'package:lakasir/models/notification.dart';
 import 'package:path_provider/path_provider.dart';
 
 class LakasirDatabase extends ChangeNotifier {
@@ -14,7 +13,7 @@ class LakasirDatabase extends ChangeNotifier {
 
     if (instance == null) {
       isar = await Isar.open(
-        [PrinterSchema, UnitSchema, NotificationModelSchema],
+        [PrinterSchema, UnitSchema],
         directory: dir.path,
         name: 'isar',
       );
@@ -27,9 +26,5 @@ class LakasirDatabase extends ChangeNotifier {
 
   Printer get printer {
     return Printer(isar: isar);
-  }
-
-  NotificationModel get notification {
-    return NotificationModel(isar: isar);
   }
 }

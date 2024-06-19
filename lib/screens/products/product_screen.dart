@@ -29,6 +29,7 @@ class _ProductScreen extends State<ProductScreen> {
       title: 'menu_product'.tr,
       bottomNavigationBar: MyBottomBar(
         label: Text('product_add'.tr),
+        icon: Icons.add,
         hideBlockButton: !can(_authController.permissions, 'create product'),
         onPressed: () {
           Get.toNamed('/menu/product/add');

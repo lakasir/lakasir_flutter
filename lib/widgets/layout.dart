@@ -16,6 +16,7 @@ class Layout extends StatefulWidget {
     this.padding = 20,
     this.baseHeight = 0,
     this.resizeToAvoidBottomInset = false,
+    this.floatingActionButtonLocation = FloatingActionButtonLocation.endFloat,
   });
   final Widget child;
   final Widget? bottomNavigationBar;
@@ -27,6 +28,7 @@ class Layout extends StatefulWidget {
   final double padding;
   final double baseHeight;
   final bool resizeToAvoidBottomInset;
+  final FloatingActionButtonLocation floatingActionButtonLocation;
 
   @override
   State<Layout> createState() => _LayoutState();
@@ -34,18 +36,6 @@ class Layout extends StatefulWidget {
 
 class _LayoutState extends State<Layout> {
   final NotificationController _controller = Get.put(NotificationController());
-
-  @override
-  void initState() {
-    _controller.fetch();
-    super.initState();
-  }
-
-  @override
-  void didChangeDependencies() {
-    _controller.fetch();
-    super.didChangeDependencies();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,9 +61,6 @@ class _LayoutState extends State<Layout> {
                       icon: Obx(
                         () => Badge(
                           isLabelVisible: _controller.notifications.isNotEmpty,
-                          label: Text(
-                            _controller.notifications.length.toString(),
-                          ),
                           child: const Icon(Icons.notifications),
                         ),
                       ),
@@ -94,7 +81,7 @@ class _LayoutState extends State<Layout> {
                 ),
         );
       }),
-      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
+      floatingActionButtonLocation: widget.floatingActionButtonLocation,
       floatingActionButton: widget.bottomNavigationBar,
       bottomSheet: widget.bottomSheet,
       resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,

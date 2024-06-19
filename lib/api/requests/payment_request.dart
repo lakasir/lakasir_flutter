@@ -1,5 +1,6 @@
 class PaymentRequest {
   double? payedMoney;
+  double discountPrice;
   bool? friendPrice;
   int? memberId;
   double? tax;
@@ -13,6 +14,7 @@ class PaymentRequest {
     this.memberId,
     this.tax,
     this.note,
+    this.discountPrice = 0,
   });
 
   Map<String, dynamic> toJson() {
@@ -20,6 +22,7 @@ class PaymentRequest {
     data['payed_money'] = payedMoney;
     data['friend_price'] = friendPrice;
     data['note'] = note;
+    data['discount_price'] = discountPrice;
     if (memberId != null) data['member_id'] = memberId;
     if (tax != null) data['tax'] = tax;
     if (products != null) {
@@ -32,12 +35,18 @@ class PaymentRequest {
 class PaymentRequestItem {
   int? productId;
   int? qty;
+  double discountPrice;
 
-  PaymentRequestItem({this.productId, this.qty});
+  PaymentRequestItem({
+    this.productId,
+    this.qty,
+    this.discountPrice = 0,
+  });
 
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
     data['product_id'] = productId;
+    data['discount_price'] = discountPrice;
     data['qty'] = qty;
     return data;
   }

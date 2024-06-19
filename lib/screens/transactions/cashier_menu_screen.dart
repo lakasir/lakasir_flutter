@@ -8,15 +8,16 @@ import 'package:lakasir/controllers/products/product_controller.dart';
 import 'package:lakasir/controllers/setting_controller.dart';
 import 'package:lakasir/controllers/transactions/cart_controller.dart';
 import 'package:lakasir/controllers/transactions/cash_drawer_controller.dart';
-import 'package:lakasir/utils/auth.dart';
+import 'package:lakasir/screens/transactions/carts/cart_menu_scren/cart_control_widget.dart';
+import 'package:lakasir/screens/transactions/carts/dialog/edit_alert_dialog.dart';
 import 'package:lakasir/utils/colors.dart';
 import 'package:lakasir/utils/utils.dart';
 import 'package:lakasir/widgets/build_list_image.dart';
 import 'package:lakasir/widgets/layout.dart';
 import 'package:lakasir/widgets/my_bottom_bar.dart';
+import 'package:lakasir/widgets/my_bottom_bar_actions.dart';
 import 'package:lakasir/widgets/my_card_list.dart';
 import 'package:lakasir/widgets/text_field.dart';
-import 'package:sunmi_printer_plus/sunmi_printer_plus.dart';
 
 class CashierMenuScreen extends StatefulWidget {
   const CashierMenuScreen({super.key});
@@ -53,138 +54,143 @@ class _CashierMenuScreenState extends State<CashierMenuScreen> {
         _productController.searchByNameController.clear();
         _productController.getProducts();
       },
-      child: Layout(
-        title: 'transaction_cashier'.tr,
-        bottomNavigationBar: MyBottomBar(
-          singleAction: can(_authController.permissions, 'open cash drawer'),
-          singleActionIcon: Icons.edit_note,
-          singleActionOnPressed: () {
-            if (!_settingController.setting.value.cashDrawerEnabled) {
-              Get.dialog(AlertDialog(
-                title: Text('cashier_set_cash_drawer'.tr),
-                content: Text('cashier_set_cash_drawer_enabled_info'.tr),
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      Get.back();
-                    },
-                    child: Text('global_no'.tr),
+      child: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+          return Layout(
+            title: 'transaction_cashier'.tr,
+            bottomNavigationBar: MyBottomBar(
+              icon:
+                  !context.isTablet ? Icons.shopping_basket : Icons.credit_card,
+              label: Obx(
+                () => Text(
+                  '${_cartController.cartSessions.value.cartItems.length}'
+                  ' - ${formatPrice(_cartController.cartSessions.value.getSubTotalPrice, isSymbol: false)}',
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
                   ),
-                  TextButton(
-                    onPressed: () {
-                      Get.back();
-                      Get.toNamed('/menu/setting');
-                    },
-                    child: Text('global_yes'.tr),
-                  ),
-                ],
-              ));
-              return;
-            }
-            openSunmiCashDrawer();
-            _cashDrawerController.showCashDrawerDialog();
-          },
-          label: Obx(
-            () => Row(
-              children: [
-                if (_cartController.cartSessions.value.cartItems.isEmpty)
-                  const Icon(Icons.shopping_cart_rounded, color: Colors.white),
-                if (_cartController.cartSessions.value.cartItems.isNotEmpty)
-                  Text(
-                    '${_cartController.cartSessions.value.cartItems.length} Items'
-                    ' - ${formatPrice(_cartController.cartSessions.value.getSubTotalPrice)}',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-              ],
-            ),
-          ),
-          onPressed: () {
-            if (_settingController.setting.value.cashDrawerEnabled) {
-              if (_cashDrawerController.isOpened.value) {
-                _cashDrawerController.showCashDrawerDialog();
-                return;
-              }
-            }
-            if (_cartController.cartSessions.value.cartItems.isEmpty) {
-              Get.rawSnackbar(
-                message: 'Cart is empty',
-                backgroundColor: error,
-                duration: const Duration(seconds: 2),
-              );
-              return;
-            }
-            _cartController.addCartSession(
-              CartSession(
-                cartItems: _cartController.cartSessions.value.cartItems,
-                totalQty: _cartController.cartSessions.value.getTotalQty,
-                totalPrice: _cartController.cartSessions.value.getTotalPrice,
-                payedMoney: _cartController.cartSessions.value.getTotalPrice,
-              ),
-            );
-          },
-        ),
-        child: Column(
-          children: [
-            Container(
-              margin: const EdgeInsets.only(bottom: 10, top: 10),
-              child: MyTextField(
-                key: const ValueKey('search'),
-                controller: _productController.searchByNameController,
-                hintText: 'cashier_search_trigger'.tr,
-                onChanged: (value) {
-                  if (value.length >= 3) {
-                    _productController.searchProduct();
-                  }
-
-                  if (value.isEmpty) {
-                    _productController.getProducts();
-                  }
-                },
-                textInputAction: TextInputAction.search,
-                rightIcon: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    IconButton(
-                      color: primary,
-                      onPressed: () {
-                        _productController.searchProduct();
-                      },
-                      icon: const Icon(Icons.search),
-                    ),
-                  ],
                 ),
               ),
-            ),
-            Expanded(
-              child: Obx(
-                () {
-                  if (_productController.isLoading.value) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
+              actions: [
+                MyBottomBarActions(
+                  label: 'global_edit_item'.trParams(
+                    {"item": "cart_list".tr},
+                  ),
+                  onPressed: () {
+                    Get.dialog(const EditDetailAlert());
+                  },
+                  icon: const Icon(Icons.edit, color: Colors.white),
+                ),
+                MyBottomBarActions(
+                  label: 'global_delete'.tr,
+                  onPressed: _cartController.showDeleteCartDialog,
+                  icon: const Icon(Icons.delete, color: Colors.white),
+                ),
+              ],
+              onPressed: () {
+                if (_settingController.setting.value.cashDrawerEnabled) {
+                  if (_cashDrawerController.isOpened.value) {
+                    _cashDrawerController.showCashDrawerDialog();
+                    return;
                   }
-                  if (_productController.products.isEmpty) {
-                    return Center(
-                      child: Text('global_no_item'.trParams(
-                        {'item': 'menu_product'.tr},
-                      )),
-                    );
-                  }
-                  return ListView(
-                    children: [
-                      for (var product in _productController.products)
-                        buildMyCardList(product, _cartController),
-                      const SizedBox(height: 80),
-                    ],
+                }
+                if (_cartController.cartSessions.value.cartItems.isEmpty) {
+                  Get.rawSnackbar(
+                    message: 'Cart is empty',
+                    backgroundColor: error,
+                    duration: const Duration(seconds: 2),
                   );
-                },
-              ),
+                  return;
+                }
+                _cartController.addCartSession(
+                  CartSession(
+                    cartItems: _cartController.cartSessions.value.cartItems,
+                    totalQty: _cartController.cartSessions.value.getTotalQty,
+                    totalPrice:
+                        _cartController.cartSessions.value.getTotalPrice,
+                    payedMoney:
+                        _cartController.cartSessions.value.getTotalPrice,
+                  ),
+                  context,
+                );
+              },
             ),
-          ],
-        ),
+            child: Row(
+              children: [
+                Expanded(
+                  flex: 2,
+                  child: Column(
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.only(bottom: 10, top: 10),
+                        child: MyTextField(
+                          key: const ValueKey('search'),
+                          controller: _productController.searchByNameController,
+                          hintText: 'cashier_search_trigger'.tr,
+                          onChanged: (value) {
+                            if (value.length >= 3) {
+                              _productController.searchProduct();
+                            }
+
+                            if (value.isEmpty) {
+                              _productController.getProducts();
+                            }
+                          },
+                          textInputAction: TextInputAction.search,
+                          rightIcon: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                color: primary,
+                                onPressed: () {
+                                  _productController.searchProduct();
+                                },
+                                icon: const Icon(Icons.search),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: Obx(
+                          () {
+                            if (_productController.isLoading.value) {
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            }
+                            if (_productController.products.isEmpty) {
+                              return Center(
+                                child: Text('global_no_item'.trParams(
+                                  {'item': 'menu_product'.tr},
+                                )),
+                              );
+                            }
+                            return ListView(
+                              children: [
+                                for (var product in _productController.products)
+                                  buildMyCardList(product, _cartController),
+                                const SizedBox(height: 80),
+                              ],
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                if (context.isTablet)
+                  Expanded(
+                    child: Container(
+                      margin: const EdgeInsets.only(top: 10),
+                      padding: const EdgeInsets.only(left: 20),
+                      child: const CartControlWidget(),
+                    ),
+                  )
+              ],
+            ),
+          );
+        },
       ),
     );
   }
@@ -230,15 +236,5 @@ class _CashierMenuScreenState extends State<CashierMenuScreen> {
         imagebox: BuildListImage(url: product.image),
       ),
     );
-  }
-
-  void openSunmiCashDrawer() async {
-    try {
-      await SunmiPrinter.bindingPrinter();
-      await SunmiPrinter.openDrawer();
-      print('Sunmi cash drawer opened successfully');
-    } catch (e) {
-      print('Error opening Sunmi cash drawer: $e');
-    }
   }
 }

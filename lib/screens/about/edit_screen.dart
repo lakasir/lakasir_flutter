@@ -142,16 +142,6 @@ class _EditAboutScreenState extends State<EditAboutScreen> {
               ),
             ),
             Container(
-              margin: const EdgeInsets.only(top: 20),
-              child: SelectInputWidget(
-                options: [
-                  Option(name: "OMR", value: "OMR"),
-                ],
-                controller: _aboutEditController.currencyInputController,
-                label: 'field_currency'.tr,
-              ),
-            ),
-            Container(
               margin: const EdgeInsets.only(top: 20, bottom: 20),
               child: Obx(
                 () => MyFilledButton(
