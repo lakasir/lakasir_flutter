@@ -74,7 +74,7 @@ class DetailField extends StatelessWidget {
                         double width = Get.width;
                         return Obx(
                           () => Container(
-                            width: width * 25 / 100,
+                            width: width * (context.isTablet ? 10 : 25) / 100,
                             height: 55,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),

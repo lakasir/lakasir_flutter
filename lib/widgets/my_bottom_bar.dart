@@ -6,14 +6,16 @@ import 'package:lakasir/widgets/my_bottom_bar_actions.dart';
 class MyBottomBar extends StatefulWidget {
   const MyBottomBar({
     super.key,
-    required this.child,
+    required this.icon,
+    required this.label,
     this.onPressed,
     this.actions,
     this.hideBlockButton = false,
   });
 
   final List<MyBottomBarActions>? actions;
-  final Widget child;
+  final IconData icon;
+  final Widget label;
   final bool hideBlockButton;
   final void Function()? onPressed;
 
@@ -34,49 +36,65 @@ class _MyBottomBarState extends State<MyBottomBar> {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
-        // bool iTablet = constraints.maxWidth > 600;
-
         return Stack(
           alignment: Alignment.bottomRight,
           children: [
             if (widget.actions != null)
-              Padding(
-                padding: const EdgeInsets.only(right: 8.0),
-                child: SpeedDial(
-                  icon: Icons.list_rounded,
-                  activeIcon: Icons.close,
-                  backgroundColor: primary,
-                  foregroundColor: whiteGrey,
-                  overlayColor: Colors.black,
-                  overlayOpacity: 0.5,
-                  children: [
-                    if (widget.actions != null)
-                      for (var action in widget.actions!)
-                        SpeedDialChild(
-                          child: action.icon,
-                          backgroundColor: error,
-                          label: action.label,
-                          onTap: action.onPressed,
-                        ),
-                  ],
-                ),
-              ),
-            Padding(
-              padding: const EdgeInsets.only(right: 8.0, bottom: 70),
-              child: FloatingActionButton(
+              SpeedDial(
+                icon: Icons.list_rounded,
+                activeIcon: Icons.close,
                 backgroundColor: primary,
-                onPressed: widget.onPressed,
-                child: widget.child,
+                foregroundColor: whiteGrey,
+                overlayColor: Colors.black,
+                overlayOpacity: 0.5,
+                children: [
+                  if (widget.actions != null)
+                    for (var action in widget.actions!)
+                      SpeedDialChild(
+                        child: action.icon,
+                        backgroundColor: error,
+                        label: action.label,
+                        onTap: action.onPressed,
+                      ),
+                ],
               ),
-            ),
+            if (widget.actions == null) _withOutAction(),
+            if (widget.actions != null) _withAction(),
           ],
         );
       },
     );
   }
 
-  IconData getIcon() {
-    return showActions ? Icons.close_rounded : Icons.add;
+  FloatingActionButton _withOutAction() {
+    return FloatingActionButton.extended(
+      backgroundColor: primary,
+      foregroundColor: whiteGrey,
+      onPressed: widget.onPressed,
+      label: widget.label,
+      icon: Icon(widget.icon),
+    );
+  }
+
+  Padding _withAction() {
+    return Padding(
+      padding: const EdgeInsets.only(
+        right: 7.5,
+        bottom: 70,
+      ),
+      child: SizedBox(
+        height: 40,
+        width: 40,
+        child: Center(
+          child: FloatingActionButton(
+            backgroundColor: whiteGrey,
+            foregroundColor: primary,
+            onPressed: widget.onPressed,
+            child: Icon(widget.icon),
+          ),
+        ),
+      ),
+    );
   }
 }
 

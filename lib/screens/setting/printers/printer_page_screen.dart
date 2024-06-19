@@ -36,9 +36,10 @@ class _PrinterPageScreenState extends State<PrinterPageScreen> {
         title: 'setting_menu_printer'.tr,
         bottomNavigationBar: _printerController.printers.isEmpty
             ? MyBottomBar(
-                child: Text('global_add_item'.trParams({
+                label: Text('global_add_item'.trParams({
                   'item': 'setting_menu_printer'.tr,
                 })),
+                icon: Icons.add,
                 onPressed: () {
                   Get.toNamed('/menu/setting/print/add');
                 },

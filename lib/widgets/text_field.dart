@@ -28,6 +28,7 @@ class MyTextField extends StatefulWidget {
   final bool autofocus;
   final bool readOnly;
   final Function()? onTap;
+  final String? initialValue;
 
   const MyTextField({
     super.key,
@@ -53,6 +54,7 @@ class MyTextField extends StatefulWidget {
     this.validator,
     this.readOnly = false,
     this.onTap,
+    this.initialValue,
   });
 
   @override
@@ -124,6 +126,7 @@ class _MyTextFieldState extends State<MyTextField> {
           focusNode: _focusNode,
           onTap: widget.onTap,
           readOnly: widget.readOnly,
+          initialValue: widget.initialValue,
           textInputAction: widget.textInputAction,
           keyboardType: widget.keyboardType,
           // inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}'))]

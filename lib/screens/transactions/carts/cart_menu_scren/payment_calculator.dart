@@ -36,12 +36,17 @@ class _PaymentCalculatorState extends State<PaymentCalculator> {
           const SizedBox(
             height: 40,
           ),
-          CalculatorPaymentButton(
-            onUpdated: (String value) {
-              _cartController.cartSessions.update((val) {
-                val!.payedMoney = double.parse(value);
-              });
-            },
+          Center(
+            child: SizedBox(
+              width: Get.width * (!context.isPhone ? 30 : 100) / 100,
+              child: CalculatorPaymentButton(
+                onUpdated: (String value) {
+                  _cartController.cartSessions.update((val) {
+                    val!.payedMoney = double.parse(value);
+                  });
+                },
+              ),
+            ),
           ),
         ],
       ),

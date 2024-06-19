@@ -1,24 +1,65 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:get/get.dart';
 import 'package:lakasir/utils/colors.dart';
-import 'package:lakasir/utils/utils.dart';
 import 'package:lakasir/widgets/card.dart';
 import 'package:lakasir/widgets/my_card_list.dart';
 import 'package:lakasir/controllers/transactions/cart_controller.dart';
 import 'package:lakasir/widgets/text_field.dart';
 
-class CartList extends StatelessWidget {
-  CartList({
+class CartList extends StatefulWidget {
+  const CartList({
     super.key,
     required this.cartItem,
-    required CartController cartController,
-  }) : _cartController = cartController;
+  });
 
   final CartItem cartItem;
-  final CartController _cartController;
+
+  @override
+  State<CartList> createState() => _CartListState();
+}
+
+class _CartListState extends State<CartList> {
   final MoneyMaskedTextController _discountController =
       MoneyMaskedTextController(precision: 0, decimalSeparator: "");
+  final _cartController = Get.put(CartController());
+  Timer? _debounce;
+
+  _CartListState() {
+    _discountController.addListener(_onDiscountUpdate);
+  }
+
+  _onDiscountUpdate() {
+    if (_debounce?.isActive ?? false) _debounce!.cancel();
+    _debounce = Timer(const Duration(milliseconds: 1000), () {
+      if (_discountController.text.isNotEmpty) {
+        _cartController.calculateDiscountPrice(
+          widget.cartItem,
+          _discountController.numberValue,
+        );
+      } else {
+        _cartController.calculateDiscountPrice(
+          widget.cartItem,
+          0,
+        );
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _discountController.updateValue(
+      _cartController
+          .cartSessions
+          .value
+          .cartItems[_cartController.cartSessions.value.cartItems
+              .indexOf(widget.cartItem)]
+          .discountPrice,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,14 +75,14 @@ class CartList extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      cartItem.product.name,
+                      widget.cartItem.product.name,
                       style: const TextStyle(
                         fontWeight: FontWeight.w600,
                       ),
                     ),
                     SizedBox(
                       child: Text(
-                        cartItem.buildRowPrice(),
+                        widget.cartItem.buildRowPrice(),
                         style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w400,
@@ -52,17 +93,10 @@ class CartList extends StatelessWidget {
                       width: 200, // Adjust the width as needed
                       height: 50, // Adjust the height as needed
                       child: MyTextField(
+                        suffixText: "discount".tr,
                         keyboardType: TextInputType.number,
                         controller: _discountController,
-                        onTapOutside: (po) {
-                          _cartController.calculateDiscountPrice(
-                            cartItem,
-                            _discountController.numberValue,
-                          );
-                          debug(_discountController.numberValue);
-                          _discountController
-                              .updateValue(_discountController.numberValue);
-                        },
+                        onChanged: (String po) => _onDiscountUpdate,
                       ),
                     )
                   ],
@@ -89,7 +123,10 @@ class CartList extends StatelessWidget {
                             ),
                             padding: const EdgeInsets.all(0),
                             onPressed: () {
-                              _cartController.removeQty(cartItem);
+                              _cartController.removeQty(
+                                widget.cartItem,
+                                context,
+                              );
                             },
                             child: const Icon(
                               Icons.remove_rounded,
@@ -99,7 +136,7 @@ class CartList extends StatelessWidget {
                           Flexible(
                             child: Center(
                               child: Text(
-                                cartItem.qty.toString(),
+                                widget.cartItem.qty.toString(),
                                 style: const TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w400,
@@ -117,7 +154,7 @@ class CartList extends StatelessWidget {
                             ),
                             padding: const EdgeInsets.all(0),
                             onPressed: () {
-                              _cartController.addQty(cartItem);
+                              _cartController.addQty(widget.cartItem);
                             },
                             child: const Icon(
                               Icons.add_rounded,

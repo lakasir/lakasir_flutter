@@ -1,4 +1,5 @@
 import 'package:lakasir/api/responses/products/product_response.dart';
+import 'package:lakasir/utils/utils.dart';
 
 class SellingDetail {
   int id;

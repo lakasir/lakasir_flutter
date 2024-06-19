@@ -25,7 +25,8 @@ class _MemberScreen extends State<MemberScreen> {
       title: 'menu_member'.tr,
       bottomNavigationBar: MyBottomBar(
         hideBlockButton: !can(_authController.permissions, 'create member'),
-        child: Text('global_add_item'.trParams({
+        icon: Icons.add,
+        label: Text('global_add_item'.trParams({
           'item': 'menu_member'.tr,
         })),
         onPressed: () {

@@ -37,9 +37,13 @@ class CartController extends GetxController {
     return false;
   }
 
-  void addCartSession(CartSession cartSession) {
+  void addCartSession(CartSession cartSession, BuildContext context) {
     cartSessions.value = cartSession;
-    Get.toNamed('/menu/transaction/cashier/cart');
+    if (!context.isPhone) {
+      Get.toNamed('/menu/transaction/cashier/payment');
+    } else {
+      Get.toNamed('/menu/transaction/cashier/cart');
+    }
   }
 
   void addToCart(CartItem cartItem) async {
@@ -71,11 +75,12 @@ class CartController extends GetxController {
     cartSessions.refresh();
   }
 
-  void removeQty(CartItem cartItem) {
+  void removeQty(CartItem cartItem, BuildContext context) {
     if (cartItem.qty == 1) {
       cartSessions.value.cartItems.remove(cartItem);
       cartSessions.refresh();
-      if (cartSessions.value.cartItems.isEmpty) {
+      debug(context.isPhone);
+      if (cartSessions.value.cartItems.isEmpty && context.isPhone) {
         Get.back();
       }
       return;

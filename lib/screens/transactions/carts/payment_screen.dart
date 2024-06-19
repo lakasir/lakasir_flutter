@@ -5,10 +5,8 @@ import 'package:lakasir/screens/transactions/carts/cart_menu_scren/payment_calcu
 import 'package:lakasir/screens/transactions/carts/dialog/confirm_alert_dialog.dart';
 import 'package:lakasir/utils/colors.dart';
 import 'package:lakasir/utils/utils.dart';
-import 'package:lakasir/widgets/calculator_payment_button.dart';
 import 'package:lakasir/widgets/layout.dart';
 import 'package:lakasir/widgets/my_bottom_bar.dart';
-import 'package:sunmi_printer_plus/sunmi_printer_plus.dart';
 
 class PaymentScreen extends StatefulWidget {
   const PaymentScreen({super.key});
@@ -39,9 +37,10 @@ class _PaymentScreenState extends State<PaymentScreen> {
           openSunmiCashDrawer();
           Get.dialog(ConfirmAlertDialog());
         },
-        child: Text(
+        label: Text(
           "Pay it".tr,
         ),
+        icon: Icons.check,
       ),
       child: const PaymentCalculator(),
     );

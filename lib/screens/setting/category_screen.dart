@@ -37,9 +37,10 @@ class _CategoryScreen extends State<CategoryScreen> {
       resizeToAvoidBottomInset: true,
       bottomNavigationBar: MyBottomBar(
         hideBlockButton: !can(_authController.permissions, 'create category'),
-        child: Text("global_add_item".trParams({
+        label: Text("global_add_item".trParams({
           "item": "setting_category".tr,
         })),
+        icon: Icons.add,
         onPressed: () {
           showDialog(
             context: context,

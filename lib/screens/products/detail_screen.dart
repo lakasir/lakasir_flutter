@@ -71,7 +71,8 @@ class _DetailScreen extends State<DetailScreen> {
                   icon: const Icon(Icons.delete_rounded, color: Colors.white),
                 ),
             ],
-            child: Text('product_edit'.tr),
+            label: Text('product_edit'.tr),
+            icon: Icons.edit,
           ),
           child: Column(
             children: [
