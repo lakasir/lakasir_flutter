@@ -36,7 +36,10 @@ class _CategoryScreen extends State<CategoryScreen> {
       title: 'setting_category'.tr,
       resizeToAvoidBottomInset: true,
       bottomNavigationBar: MyBottomBar(
-        hideBlockButton: !can(_authController.permissions, 'create category'),
+        hideBlockButton: !can(
+          _authController.permissions,
+          ability: 'create category',
+        ),
         label: Text("global_add_item".trParams({
           "item": "setting_category".tr,
         })),
@@ -78,7 +81,10 @@ class _CategoryScreen extends State<CategoryScreen> {
             for (final category in categoryController.categories)
               GestureDetector(
                 onTap: () {
-                  if (can(_authController.permissions, 'update category')) {
+                  if (can(
+                    _authController.permissions,
+                    ability: 'update category',
+                  )) {
                     showDialog(
                       context: context,
                       builder: (context) {
@@ -122,7 +128,10 @@ class _CategoryScreen extends State<CategoryScreen> {
                         fontSize: 20,
                       ),
                     ),
-                    if (can(_authController.permissions, 'delete category'))
+                    if (can(
+                      _authController.permissions,
+                      ability: 'delete category',
+                    ))
                       IconButton(
                         onPressed: () {
                           showDialog(

@@ -42,14 +42,19 @@ class _DetailScreen extends State<DetailScreen> {
           noAppBar: true,
           noPadding: true,
           bottomNavigationBar: MyBottomBar(
-            hideBlockButton:
-                !can(_authController.permissions, 'update product'),
+            hideBlockButton: !can(
+              _authController.permissions,
+              ability: 'update product',
+            ),
             onPressed: () {
               Get.toNamed('/menu/product/edit', arguments: products);
             },
             actions: [
               if (!products.isNonStock &&
-                  can(_authController.permissions, 'read product stock'))
+                  can(
+                    _authController.permissions,
+                    ability: 'read product stock',
+                  ))
                 MyBottomBarActions(
                   label: 'field_stock'.tr,
                   onPressed: () {
@@ -60,7 +65,10 @@ class _DetailScreen extends State<DetailScreen> {
                   },
                   icon: const Icon(Icons.inventory, color: Colors.white),
                 ),
-              if (can(_authController.permissions, 'delete product'))
+              if (can(
+                _authController.permissions,
+                ability: 'delete product',
+              ))
                 MyBottomBarActions(
                   label: 'global_delete'.tr,
                   onPressed: () {

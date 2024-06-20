@@ -80,7 +80,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                 if (_settingController.setting.value.hideInitialPrice! &&
                     can(
                       _authController.permissions,
-                      'verify secure initial price',
+                      ability: 'verify secure initial price',
                     ))
                   IconButton(
                     onPressed: () {

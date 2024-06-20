@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lakasir/controllers/auths/auth_controller.dart';
 import 'package:lakasir/controllers/category_controller.dart';
 import 'package:lakasir/controllers/products/product_add_controller.dart';
 import 'package:lakasir/controllers/products/unit_controller.dart';
@@ -25,6 +26,7 @@ class ProductForm extends StatefulWidget {
 class _ProductFormState extends State<ProductForm> {
   final CategoryController _categoryController = Get.put(CategoryController());
   final _unitController = Get.put(UnitController());
+  final AuthController _authController = Get.put(AuthController());
   bool _isServiceType = false;
   bool showAddinitionalField = false;
   bool showInitialPrice = true;
@@ -36,7 +38,7 @@ class _ProductFormState extends State<ProductForm> {
     if (widget.controller.typeController.selectedOption == "service") {
       setState(() {
         _isServiceType = true;
-        showInitialPrice = false;
+        showInitialPrice = true;
       });
     }
   }
@@ -107,82 +109,94 @@ class _ProductFormState extends State<ProductForm> {
                   ),
                 ),
               ),
-              const SizedBox(width: 20),
-              Flexible(
-                child: Obx(
-                  () => SelectInputWidget(
-                    controller: widget.controller.typeController,
-                    label: 'field_type'.tr,
-                    errorText:
-                        widget.controller.productErrorResponse.value.type ?? '',
-                    options: [
-                      Option(
-                        name: "option_product".tr,
-                        value: "product",
-                      ),
-                      Option(
-                        name: "option_service".tr,
-                        value: "service",
-                      )
-                    ],
+              if (_authController.feature(
+                feature: 'product-type',
+              ))
+                const SizedBox(width: 20),
+              if (_authController.feature(
+                feature: 'product-type',
+              ))
+                Flexible(
+                  child: Obx(
+                    () => SelectInputWidget(
+                      controller: widget.controller.typeController,
+                      label: 'field_type'.tr,
+                      errorText:
+                          widget.controller.productErrorResponse.value.type ??
+                              '',
+                      options: [
+                        Option(
+                          name: "option_product".tr,
+                          value: "product",
+                        ),
+                        Option(
+                          name: "option_service".tr,
+                          value: "service",
+                        )
+                      ],
+                      onChanged: (value) {
+                        widget.controller.initialPriceInputController
+                            .updateValue(0);
+                        setState(() {
+                          _isServiceType = value == "service";
+                          showInitialPrice = value == "product";
+                        });
+                      },
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ),
+        if (_authController.feature(feature: 'product-stock'))
+          Container(
+            margin: const EdgeInsets.only(top: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'field_is_non_stock'.tr,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: secondary,
+                  ),
+                ),
+                Obx(
+                  () => Switch(
+                    value: widget.controller.enabledStock.value,
                     onChanged: (value) {
-                      widget.controller.initialPriceInputController
-                          .updateValue(0);
-                      setState(() {
-                        _isServiceType = value == "service";
-                        showInitialPrice = value == "product";
-                      });
+                      widget.controller.enabledStock.value = value;
                     },
                   ),
                 ),
-              ),
-            ],
-          ),
-        ),
-        Container(
-          margin: const EdgeInsets.only(top: 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'field_is_non_stock'.tr,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: secondary,
-                ),
-              ),
-              Obx(
-                () => Switch(
-                  value: widget.controller.enabledStock.value,
-                  onChanged: (value) {
-                    widget.controller.enabledStock.value = value;
-                  },
-                ),
-              ),
-            ],
-          ),
-        ),
-        Container(
-          margin: const EdgeInsets.only(top: 10),
-          child: Obx(
-            () => MyTextField(
-              readOnly: widget.controller.enabledStock.value,
-              controller: widget.controller.stockInputController,
-              label: 'field_stock'.tr,
-              keyboardType: TextInputType.number,
-              errorText:
-                  widget.controller.productErrorResponse.value.stock ?? '',
+              ],
             ),
           ),
-        ),
+        if (_authController.feature(feature: 'product-stock'))
+          Container(
+            margin: const EdgeInsets.only(top: 10),
+            child: Obx(
+              () => MyTextField(
+                readOnly: widget.controller.enabledStock.value,
+                controller: widget.controller.stockInputController,
+                label: 'field_stock'.tr,
+                keyboardType: TextInputType.number,
+                errorText:
+                    widget.controller.productErrorResponse.value.stock ?? '',
+              ),
+            ),
+          ),
         Container(
           margin: const EdgeInsets.only(top: 20),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Visibility(
-                visible: showInitialPrice,
+                visible: showInitialPrice &&
+                    _authController.feature(
+                      feature: 'product-initial-price',
+                    ),
                 child: Flexible(
                   child: Obx(
                     () => MyTextField(
@@ -198,7 +212,10 @@ class _ProductFormState extends State<ProductForm> {
                 ),
               ),
               Visibility(
-                visible: showInitialPrice,
+                visible: showInitialPrice &&
+                    _authController.feature(
+                      feature: 'product-initial-price',
+                    ),
                 child: const SizedBox(width: 20),
               ),
               Flexible(
@@ -273,60 +290,65 @@ class _ProductFormState extends State<ProductForm> {
             ],
           ),
         ),
-        Align(
-          alignment: Alignment.centerRight,
-          child: TextButton(
-            style: TextButton.styleFrom(
-              padding: const EdgeInsets.all(0),
-            ),
-            onPressed: () {
-              setState(() {
-                showAddinitionalField = !showAddinitionalField;
-              });
-            },
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Icon(
-                  Icons.add,
-                  color: Colors.blue[700],
-                ),
-                Text(
-                  'additional_field'.tr,
-                  style: TextStyle(
+        if (_authController.feature(feature: 'product-sku') ||
+            _authController.feature(feature: 'product-barcode'))
+          Align(
+            alignment: Alignment.centerRight,
+            child: TextButton(
+              style: TextButton.styleFrom(
+                padding: const EdgeInsets.all(0),
+              ),
+              onPressed: () {
+                setState(() {
+                  showAddinitionalField = !showAddinitionalField;
+                });
+              },
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Icon(
+                    Icons.add,
                     color: Colors.blue[700],
                   ),
-                ),
-              ],
+                  Text(
+                    'additional_field'.tr,
+                    style: TextStyle(
+                      color: Colors.blue[700],
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
         Visibility(
           visible: showAddinitionalField,
           child: Column(
             children: [
-              Obx(
-                () => MyTextField(
-                  controller: widget.controller.skuInputController,
-                  label: 'field_sku'.tr,
-                  errorText:
-                      widget.controller.productErrorResponse.value.sku ?? '',
-                  info: 'field_sku_info'.tr,
+              if (_authController.feature(feature: 'product-sku'))
+                Obx(
+                  () => MyTextField(
+                    controller: widget.controller.skuInputController,
+                    label: 'field_sku'.tr,
+                    errorText:
+                        widget.controller.productErrorResponse.value.sku ?? '',
+                    info: 'field_sku_info'.tr,
+                  ),
                 ),
-              ),
-              // Container(
-              //   margin: const EdgeInsets.only(top: 20),
-              //   child: Obx(
-              //     () => MyTextField(
-              //       controller: widget.controller.barcodeInputController,
-              //       label: 'field_barcode'.tr,
-              //       errorText:
-              //           widget.controller.productErrorResponse.value.barcode ??
-              //               '',
-              //     ),
-              //   ),
-              // ),
+              if (_authController.feature(feature: 'product-barcode'))
+                Container(
+                  margin: const EdgeInsets.only(top: 20),
+                  child: Obx(
+                    () => MyTextField(
+                      controller: widget.controller.barcodeInputController,
+                      label: 'field_barcode'.tr,
+                      errorText: widget
+                              .controller.productErrorResponse.value.barcode ??
+                          '',
+                      info: 'field_sku_info'.tr,
+                    ),
+                  ),
+                ),
             ],
           ),
         ),

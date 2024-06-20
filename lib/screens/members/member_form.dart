@@ -83,7 +83,7 @@ class _MemberFormState extends State<MemberForm> {
           if (widget.isUpdate == true &&
               can(
                 _authController.permissions,
-                'delete member',
+                ability: 'delete member',
               ))
             Container(
               margin: const EdgeInsets.only(top: 20),

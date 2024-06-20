@@ -55,7 +55,7 @@ Future<void> storeSetup(String domain) async {
   await prefs.setString('domain', domain);
 }
 
-bool can(List<String> permissions, String ability) {
+bool can(List<String> permissions, {String? ability, String? feature}) {
   return permissions.contains(ability);
 }
 

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lakasir/controllers/auths/auth_controller.dart';
 
-class DetailTransaction extends StatelessWidget {
+class DetailTransaction extends StatefulWidget {
   const DetailTransaction({
     super.key,
     required this.memberName,
@@ -36,6 +37,13 @@ class DetailTransaction extends StatelessWidget {
   final String discount;
   final List<Widget> actions;
 
+  @override
+  State<DetailTransaction> createState() => _DetailTransactionState();
+}
+
+class _DetailTransactionState extends State<DetailTransaction> {
+  final _authController = Get.put(AuthController());
+
   TextStyle get _boldStyle => const TextStyle(
         fontWeight: FontWeight.bold,
         color: Colors.black,
@@ -50,64 +58,59 @@ class DetailTransaction extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        if (cashierName != null)
+        if (widget.cashierName != null)
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text("field_cashier".tr, style: _normalStyle),
-              Text(cashierName!, style: _boldStyle),
+              Text(widget.cashierName!, style: _boldStyle),
             ],
           ),
-        if (sellingCode != null)
+        if (widget.sellingCode != null)
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text("field_code".tr, style: _normalStyle),
-              Text(sellingCode!, style: _boldStyle),
+              Text(widget.sellingCode!, style: _boldStyle),
             ],
           ),
-        if (date != null)
+        if (widget.date != null)
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text("field_date".tr, style: _normalStyle),
-              Text(date!, style: _boldStyle),
+              Text(widget.date!, style: _boldStyle),
             ],
           ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text("field_member".tr, style: _normalStyle),
-            Text(memberName, style: _boldStyle),
-          ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text("field_payment_method".tr, style: _normalStyle),
-            Text(paymentMethod, style: _boldStyle),
-          ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text("field_customer_number".tr, style: _normalStyle),
-            Text(customerNumber, style: _boldStyle),
-          ],
-        ),
+        if (_authController.feature(feature: 'member'))
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text("field_member".tr, style: _normalStyle),
+              Text(widget.memberName, style: _boldStyle),
+            ],
+          ),
+        if (_authController.feature(feature: 'payment-method'))
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text("field_payment_method".tr, style: _normalStyle),
+              Text(widget.paymentMethod, style: _boldStyle),
+            ],
+          ),
         const Divider(),
-        for (var i = 0; i < cartItems.length; i++)
+        for (var i = 0; i < widget.cartItems.length; i++)
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(cartItems[i].productName, style: _boldStyle),
-                  Text(cartItems[i].quantity, style: _normalStyle)
+                  Text(widget.cartItems[i].productName, style: _boldStyle),
+                  Text(widget.cartItems[i].quantity, style: _normalStyle)
                 ],
               ),
-              Text(cartItems[i].subTotal, style: _boldStyle)
+              Text(widget.cartItems[i].subTotal, style: _boldStyle)
             ],
           ),
         const Divider(),
@@ -115,28 +118,28 @@ class DetailTransaction extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text("field_tax".tr, style: _normalStyle),
-            Text(tax, style: _boldStyle)
+            Text(widget.tax, style: _boldStyle)
           ],
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text("Subtotal".tr, style: _normalStyle),
-            Text(subTotal, style: _boldStyle)
+            Text(widget.subTotal, style: _boldStyle)
           ],
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text("discount".tr, style: _normalStyle),
-            Text(discount, style: _boldStyle)
+            Text(widget.discount, style: _boldStyle)
           ],
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text("global_total".tr, style: _normalStyle),
-            Text(total, style: _boldStyle),
+            Text(widget.total, style: _boldStyle),
           ],
         ),
         const Divider(),
@@ -144,21 +147,21 @@ class DetailTransaction extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text("field_payed_money".tr, style: _normalStyle),
-            Text(payedMoney, style: _boldStyle),
+            Text(widget.payedMoney, style: _boldStyle),
           ],
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text("field_change".tr, style: _normalStyle),
-            Text(change, style: _boldStyle)
+            Text(widget.change, style: _boldStyle)
           ],
         ),
-        if (note != null)
+        if (widget.note != null)
           const SizedBox(
             height: 10,
           ),
-        if (note != null)
+        if (widget.note != null)
           SizedBox(
             width: double.infinity,
             child: Column(
@@ -166,15 +169,15 @@ class DetailTransaction extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text("field_note".tr, style: _normalStyle),
-                Text(note ?? '', style: _boldStyle)
+                Text(widget.note ?? '', style: _boldStyle)
               ],
             ),
           ),
-        if (actions.isNotEmpty) const Divider(),
+        if (widget.actions.isNotEmpty) const Divider(),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            for (var action in actions) action,
+            for (var action in widget.actions) action,
           ],
         ),
       ],

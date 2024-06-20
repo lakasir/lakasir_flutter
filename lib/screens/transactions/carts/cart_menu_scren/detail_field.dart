@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lakasir/controllers/auths/auth_controller.dart';
 import 'package:lakasir/controllers/payment_method_controller.dart';
 import 'package:get/get.dart';
 import 'package:lakasir/controllers/transactions/cart_controller.dart';
@@ -8,40 +9,41 @@ import 'package:lakasir/widgets/card.dart';
 class DetailField extends StatelessWidget {
   DetailField({
     super.key,
-    required CartController cartController,
-  }) : _cartController = cartController;
+  });
 
   final _paymentMethodController = Get.put(PaymentMethodController());
-  final CartController _cartController;
+  final _authController = Get.put(AuthController());
+  final CartController _cartController = Get.put(CartController());
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        MyCard(
-          child: Obx(
-            () => Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'field_member'.tr,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w600,
+        if (_authController.feature(feature: 'member'))
+          MyCard(
+            child: Obx(
+              () => Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'field_member'.tr,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
-                ),
-                Text(
-                  _cartController.cartSessions.value.member?.name ??
-                      'global_no_item'.trParams(
-                        {"item": "field_member".tr},
-                      ),
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w600,
+                  Text(
+                    _cartController.cartSessions.value.member?.name ??
+                        'global_no_item'.trParams(
+                          {"item": "field_member".tr},
+                        ),
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
-        ),
         MyCard(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

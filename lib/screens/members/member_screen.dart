@@ -24,7 +24,10 @@ class _MemberScreen extends State<MemberScreen> {
     return Layout(
       title: 'menu_member'.tr,
       bottomNavigationBar: MyBottomBar(
-        hideBlockButton: !can(_authController.permissions, 'create member'),
+        hideBlockButton: !can(
+          _authController.permissions,
+          ability: 'create member',
+        ),
         icon: Icons.add,
         label: Text('global_add_item'.trParams({
           'item': 'menu_member'.tr,
@@ -101,7 +104,10 @@ class _MemberScreen extends State<MemberScreen> {
     return MyCardList(
       key: ValueKey(_memberController.members[index].id),
       onTap: () {
-        if (can(_authController.permissions, 'update member')) {
+        if (can(
+          _authController.permissions,
+          ability: 'update member',
+        )) {
           Get.toNamed(
             '/menu/member/edit',
             arguments: _memberController.members[index],

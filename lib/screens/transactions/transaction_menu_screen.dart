@@ -58,7 +58,7 @@ class _TransactionMenuScreenState extends State<TransactionMenuScreen> {
               (menus[index]['permission'] != null &&
                   can(
                     _authController.permissions,
-                    menus[index]['permission'] as String,
+                    ability: menus[index]['permission'] as String,
                   ));
 
           return Visibility(

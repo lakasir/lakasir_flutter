@@ -143,7 +143,9 @@ class _HistoryDetailScreenState extends State<HistoryDetailScreen> {
           )
           .toList(),
       tax: "${history.tax!}%",
-      subTotal: "sub",
+      subTotal: formatPrice(
+        history.totalPrice! - (history.totalPrice! * history.tax! / 100),
+      ),
       total: formatPrice(history.totalPrice!),
       payedMoney: formatPrice(history.payedMoney!),
       change: formatPrice(history.moneyChange!),

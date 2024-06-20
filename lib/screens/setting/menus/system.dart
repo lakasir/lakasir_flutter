@@ -11,12 +11,17 @@ import 'package:lakasir/widgets/filled_button.dart';
 import 'package:lakasir/widgets/my_card_list.dart';
 import 'package:lakasir/widgets/select_input_feld.dart';
 
-class SystemSetting extends StatelessWidget {
-  final AuthController authController;
+class SystemSetting extends StatefulWidget {
   const SystemSetting({
     super.key,
-    required this.authController,
   });
+
+  @override
+  State<SystemSetting> createState() => _SystemSettingState();
+}
+
+class _SystemSettingState extends State<SystemSetting> {
+  final AuthController _authController = Get.put(AuthController());
 
   @override
   Widget build(BuildContext context) {
@@ -30,41 +35,42 @@ class SystemSetting extends StatelessWidget {
             style: const TextStyle(fontSize: 20),
           ),
         ),
-        Container(
-          margin: const EdgeInsets.only(top: 15),
-          child: MyCardList(
-            route: '/menu/setting/notification',
-            imagebox: Container(
-              width: 52,
-              height: 52,
-              decoration: const BoxDecoration(
-                color: primary,
-                borderRadius: BorderRadius.all(
-                  Radius.circular(10),
+        if (_authController.feature(feature: 'product-stock'))
+          Container(
+            margin: const EdgeInsets.only(top: 15),
+            child: MyCardList(
+              route: '/menu/setting/notification',
+              imagebox: Container(
+                width: 52,
+                height: 52,
+                decoration: const BoxDecoration(
+                  color: primary,
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(10),
+                  ),
+                ),
+                child: const Icon(
+                  Icons.notifications_outlined,
+                  color: Colors.white,
+                  size: 32,
                 ),
               ),
-              child: const Icon(
-                Icons.notifications_outlined,
-                color: Colors.white,
-                size: 32,
-              ),
+              list: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "menu_notification".tr,
+                      style: const TextStyle(fontSize: 20),
+                    ),
+                    const Icon(
+                      Icons.arrow_forward_ios_rounded,
+                    ),
+                  ],
+                ),
+              ],
             ),
-            list: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "menu_notification".tr,
-                    style: const TextStyle(fontSize: 20),
-                  ),
-                  const Icon(
-                    Icons.arrow_forward_ios_rounded,
-                  ),
-                ],
-              ),
-            ],
           ),
-        ),
         Container(
           margin: const EdgeInsets.only(top: 15),
           child: MyCardList(

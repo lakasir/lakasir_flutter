@@ -31,21 +31,22 @@ class _SettingScreenState extends State<SettingScreen> {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (can(_authController.permissions, 'read category') ||
-                  can(_authController.permissions, 'update currency'))
+              if (can(_authController.permissions, ability: 'read category') ||
+                  can(_authController.permissions, ability: 'update currency'))
                 GeneralSetting(authController: _authController),
-              SystemSetting(
-                authController: _authController,
-              ),
-              if (can(_authController.permissions, 'enable cash drawer') ||
-                  can(_authController.permissions, 'set default tax') ||
-                  can(_authController.permissions, 'set selling method'))
-                TransactionSetting(
-                  settingController: settingController,
-                  authController: _authController,
-                ),
-              if (can(
-                  _authController.permissions, 'enable secure initial price'))
+              const SystemSetting(),
+              if (can(_authController.permissions,
+                      ability: 'enable cash drawer') ||
+                  can(_authController.permissions,
+                      ability: 'set default tax') ||
+                  can(_authController.permissions,
+                      ability: 'set selling method'))
+                if (_authController.feature(feature: 'product-initial-price'))
+                  const TransactionSetting(),
+              if (_authController.can(
+                ability: 'enable secure initial price',
+                feature: 'product-initial-price',
+              ))
                 const ProductSetting(),
               const AuthSetting(),
             ],

@@ -34,8 +34,10 @@ class _SettingNotificationScreenState extends State<SettingNotificationScreen> {
       title: 'menu_setting_notification'.tr,
       child: ListView(
         children: [
-          if (can(_authController.permissions,
-              'set the minimum stock notification'))
+          if (can(
+            _authController.permissions,
+            ability: 'set the minimum stock notification',
+          ))
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [

@@ -12,14 +12,18 @@ import 'package:lakasir/widgets/filled_button.dart';
 import 'package:lakasir/widgets/my_card_list.dart';
 import 'package:lakasir/widgets/text_field.dart';
 
-class TransactionSetting extends StatelessWidget {
+class TransactionSetting extends StatefulWidget {
   const TransactionSetting({
     super.key,
-    required this.settingController,
-    required this.authController,
   });
-  final SettingController settingController;
-  final AuthController authController;
+
+  @override
+  State<TransactionSetting> createState() => _TransactionSettingState();
+}
+
+class _TransactionSettingState extends State<TransactionSetting> {
+  final AuthController _authController = Get.put(AuthController());
+  final SettingController _settingController = Get.put(SettingController());
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +37,10 @@ class TransactionSetting extends StatelessWidget {
             style: const TextStyle(fontSize: 20),
           ),
         ),
-        if (can(authController.permissions, 'set default tax'))
+        if (can(
+          _authController.permissions,
+          ability: 'set default tax',
+        ))
           Container(
             margin: const EdgeInsets.only(top: 10),
             child: MyCardList(
@@ -45,9 +52,9 @@ class TransactionSetting extends StatelessWidget {
                   rightSymbol: ' %',
                   precision: 1,
                 );
-                settingController.setting.value.defaultTax != null
+                _settingController.setting.value.defaultTax != null
                     ? taxController.updateValue(
-                        settingController.setting.value.defaultTax!)
+                        _settingController.setting.value.defaultTax!)
                     : taxController.updateValue(0);
                 Get.dialog(MyDialog(
                   content: Column(
@@ -60,7 +67,7 @@ class TransactionSetting extends StatelessWidget {
                       const SizedBox(height: 20),
                       MyFilledButton(
                         onPressed: () {
-                          settingController.updateSetting(
+                          _settingController.updateSetting(
                             "default_tax",
                             taxController.numberValue,
                           );
@@ -97,7 +104,10 @@ class TransactionSetting extends StatelessWidget {
               ],
             ),
           ),
-        if (can(authController.permissions, 'enable cash drawer'))
+        if (can(
+          _authController.permissions,
+          ability: 'enable cash drawer',
+        ))
           Container(
             margin: const EdgeInsets.only(top: 15),
             child: MyCardList(
@@ -125,7 +135,7 @@ class TransactionSetting extends StatelessWidget {
                     Obx(
                       () {
                         var cashDrawerEnabled =
-                            settingController.setting.value.cashDrawerEnabled;
+                            _settingController.setting.value.cashDrawerEnabled;
                         return Switch(
                           focusColor: primary,
                           value: cashDrawerEnabled,
@@ -136,7 +146,7 @@ class TransactionSetting extends StatelessWidget {
                                   ? "cashier_cash_drawer_question_deactivate".tr
                                   : "cashier_cash_drawer_question_activate".tr),
                               onConfirm: () {
-                                settingController.updateSetting(
+                                _settingController.updateSetting(
                                   "cash_drawer_enabled",
                                   value,
                                 );
@@ -153,7 +163,10 @@ class TransactionSetting extends StatelessWidget {
               ],
             ),
           ),
-        if (can(authController.permissions, 'set selling method'))
+        if (can(
+          _authController.permissions,
+          ability: 'set selling method',
+        ))
           Container(
             margin: const EdgeInsets.only(top: 15),
             child: MyCardList(

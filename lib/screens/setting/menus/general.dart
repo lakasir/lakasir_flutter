@@ -26,7 +26,10 @@ class _GeneralSettingState extends State<GeneralSetting> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text("setting_general".tr, style: const TextStyle(fontSize: 20)),
-        if (can(widget.authController.permissions, 'read category'))
+        if (can(
+          widget.authController.permissions,
+          ability: 'read category',
+        ))
           Container(
             margin: const EdgeInsets.only(top: 10),
             child: MyCardList(
@@ -60,7 +63,10 @@ class _GeneralSettingState extends State<GeneralSetting> {
               ],
             ),
           ),
-        if (can(widget.authController.permissions, 'update currency'))
+        if (can(
+          widget.authController.permissions,
+          ability: 'update currency',
+        ))
           Container(
             margin: const EdgeInsets.only(top: 15),
             child: MyCardList(

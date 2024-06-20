@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:get/get.dart';
+import 'package:lakasir/controllers/auths/auth_controller.dart';
 import 'package:lakasir/controllers/members/member_controller.dart';
 import 'package:lakasir/controllers/transactions/cart_controller.dart';
 import 'package:lakasir/widgets/dialog.dart';
@@ -35,6 +36,7 @@ class _EditDetailAlertState extends State<EditDetailAlert> {
   final noteController = TextEditingController();
   final MemberController _memberController = Get.put(MemberController());
   final _cartController = Get.put(CartController());
+  final _authController = Get.put(AuthController());
 
   @override
   void initState() {
@@ -63,32 +65,33 @@ class _EditDetailAlertState extends State<EditDetailAlert> {
       title: "cart_edit_detail".tr,
       content: Column(
         children: [
-          Obx(
-            () => Container(
-              margin: const EdgeInsets.only(
-                bottom: 10,
-              ),
-              child: SelectInputWidget(
-                label: "field_member".tr,
-                hintText: _memberController.members.isEmpty
-                    ? "global_no_item".trParams(
-                        {"item": "menu_member".tr},
+          if (_authController.feature(feature: 'member'))
+            Obx(
+              () => Container(
+                margin: const EdgeInsets.only(
+                  bottom: 10,
+                ),
+                child: SelectInputWidget(
+                  label: "field_member".tr,
+                  hintText: _memberController.members.isEmpty
+                      ? "global_no_item".trParams(
+                          {"item": "menu_member".tr},
+                        )
+                      : "field_select_item".trParams(
+                          {"item": "menu_member".tr},
+                        ),
+                  options: _memberController.members
+                      .map(
+                        (e) => Option(
+                          value: e.id.toString(),
+                          name: e.name,
+                        ),
                       )
-                    : "field_select_item".trParams(
-                        {"item": "menu_member".tr},
-                      ),
-                options: _memberController.members
-                    .map(
-                      (e) => Option(
-                        value: e.id.toString(),
-                        name: e.name,
-                      ),
-                    )
-                    .toList(),
-                controller: selectInputWidgetController,
+                      .toList(),
+                  controller: selectInputWidgetController,
+                ),
               ),
             ),
-          ),
           Container(
             margin: const EdgeInsets.only(
               bottom: 10,

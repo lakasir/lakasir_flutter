@@ -30,7 +30,10 @@ class _ProductScreen extends State<ProductScreen> {
       bottomNavigationBar: MyBottomBar(
         label: Text('product_add'.tr),
         icon: Icons.add,
-        hideBlockButton: !can(_authController.permissions, 'create product'),
+        hideBlockButton: !can(
+          _authController.permissions,
+          ability: 'create product',
+        ),
         onPressed: () {
           Get.toNamed('/menu/product/add');
         },
@@ -49,7 +52,10 @@ class _ProductScreen extends State<ProductScreen> {
             },
             icon: const Icon(Icons.search, color: Colors.white),
           ),
-          if (can(_authController.permissions, 'read category'))
+          if (can(
+            _authController.permissions,
+            ability: 'read category',
+          ))
             MyBottomBarActions(
               label: 'setting_category'.tr,
               onPressed: () => {Get.toNamed('/menu/setting/category')},
@@ -140,23 +146,25 @@ class _ProductScreen extends State<ProductScreen> {
                 ),
           ],
         ),
-        if (_productController.products[index].isNonStock)
-          Text(
-            "field_is_non_stock".tr,
-            style: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w200,
-              color: error,
+        if (_authController.feature(feature: 'product-stock'))
+          if (_productController.products[index].isNonStock)
+            Text(
+              "field_is_non_stock".tr,
+              style: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w200,
+                color: error,
+              ),
             ),
-          ),
-        if (!_productController.products[index].isNonStock)
-          Text(
-            "stock: ${_productController.products[index].stock}",
-            style: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w200,
+        if (_authController.feature(feature: 'product-stock'))
+          if (!_productController.products[index].isNonStock)
+            Text(
+              "stock: ${_productController.products[index].stock}",
+              style: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w200,
+              ),
             ),
-          ),
         Text(
           _productController.buildPrice(index),
           style: const TextStyle(

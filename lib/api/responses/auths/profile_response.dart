@@ -9,6 +9,7 @@ class ProfileResponse {
   final String? createdAt;
   final String? updatedAt;
   final List<String>? permissions;
+  final Map<String, dynamic>? features;
 
   ProfileResponse({
     this.name,
@@ -21,6 +22,7 @@ class ProfileResponse {
     this.locale,
     this.createdAt,
     this.updatedAt,
+    this.features,
   });
 
   factory ProfileResponse.fromJson(Map<String, dynamic> json) {
@@ -34,6 +36,7 @@ class ProfileResponse {
       permissions: json['permissions'] != null
           ? List<String>.from(json['permissions'])
           : [],
+      features: json['features'],
       locale: json['locale'] ?? 'en',
       createdAt: json['created_at'],
       updatedAt: json['updated_at'],

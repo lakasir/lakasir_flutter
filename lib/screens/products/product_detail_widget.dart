@@ -99,49 +99,54 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
             ),
           ),
         ),
-        Container(
-          margin: const EdgeInsets.only(bottom: 12),
-          child: Row(
-            children: [
-              Expanded(
-                child: Text(
-                  "field_sku".tr,
-                  style: const TextStyle(fontSize: 18),
-                ),
-              ),
-              Expanded(
-                child: Text(
-                  widget.products.sku,
-                  style: const TextStyle(
-                    fontSize: 18,
+        if (_authController.feature(feature: 'product-sku'))
+          Container(
+            margin: const EdgeInsets.only(bottom: 12),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    "field_sku".tr,
+                    style: const TextStyle(fontSize: 18),
                   ),
                 ),
-              ),
-            ],
-          ),
-        ),
-        Container(
-          margin: const EdgeInsets.only(bottom: 12),
-          child: Row(
-            children: [
-              Expanded(
-                child: Text(
-                  "field_barcode".tr,
-                  style: const TextStyle(fontSize: 18),
-                ),
-              ),
-              Expanded(
-                child: Text(
-                  widget.products.barcode ?? '',
-                  style: const TextStyle(
-                    fontSize: 18,
+                Expanded(
+                  child: Text(
+                    widget.products.sku,
+                    style: const TextStyle(
+                      fontSize: 18,
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-        if (can(_authController.permissions, 'read detail initial price'))
+        if (_authController.feature(feature: 'product-barcode'))
+          Container(
+            margin: const EdgeInsets.only(bottom: 12),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    "field_barcode".tr,
+                    style: const TextStyle(fontSize: 18),
+                  ),
+                ),
+                Expanded(
+                  child: Text(
+                    widget.products.barcode ?? '',
+                    style: const TextStyle(
+                      fontSize: 18,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        if (_authController.can(
+          ability: 'read detail initial price',
+          feature: 'product-initial-price',
+        ))
           fieldInitialPrice(),
         Container(
           margin: const EdgeInsets.only(bottom: 12),

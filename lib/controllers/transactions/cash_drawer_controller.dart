@@ -83,7 +83,10 @@ class CashDrawerController extends GetxController {
             Row(
               children: [
                 if (isCanBeClosed.value &&
-                    can(_authController.permissions, 'close cash drawer'))
+                    can(
+                      _authController.permissions,
+                      ability: 'close cash drawer',
+                    ))
                   Expanded(
                     child: Container(
                       margin: const EdgeInsets.only(top: 10),

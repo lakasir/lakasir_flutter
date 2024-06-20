@@ -118,7 +118,7 @@ class _AboutScreenState extends State<AboutScreen> {
                                   ),
                                   if (can(
                                     _authController.permissions,
-                                    'update about',
+                                    ability: 'update about',
                                   ))
                                     IconButton(
                                       onPressed: () {

@@ -43,6 +43,7 @@ class _MenuScreenState extends State<MenuScreen> {
       'icon': const Icon(Icons.people, size: 50, color: Colors.white),
       'route': '/menu/member',
       'permission': 'read member',
+      'feature': 'member'
     },
     {
       'title': 'menu_profile'.tr,
@@ -104,9 +105,11 @@ class _MenuScreenState extends State<MenuScreen> {
             itemBuilder: (context, index) {
               var visible = true;
               if (menus[index]['permission'] != null) {
-                visible = can(
-                  _authController.permissions,
-                  menus[index]['permission'] as String,
+                visible = _authController.can(
+                  ability: menus[index]['permission'] as String,
+                  feature: menus[index]['feature'] != null
+                      ? menus[index]['feature'] as String
+                      : '',
                 );
               }
 

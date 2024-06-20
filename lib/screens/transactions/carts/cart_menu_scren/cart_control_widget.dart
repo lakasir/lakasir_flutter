@@ -30,7 +30,7 @@ class _CartControlWidgetState extends State<CartControlWidget> {
                 cartItem: cartItems[i],
               ),
             SubTotalField(cartController: _cartController),
-            DetailField(cartController: _cartController),
+            DetailField(),
             const SizedBox(
               height: 70,
             ),

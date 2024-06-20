@@ -136,7 +136,7 @@ class _DetailStockScreenState extends State<DetailStockScreen> {
                     ),
                     if (can(
                       _authController.permissions,
-                      'create product stock',
+                      ability: 'create product stock',
                     ))
                       SizedBox(
                         height: 33,
@@ -220,7 +220,7 @@ class _DetailStockScreenState extends State<DetailStockScreen> {
                           ),
                           trailing: can(
                             _authController.permissions,
-                            'delete product stock',
+                            ability: 'delete product stock',
                           )
                               ? IconButton(
                                   onPressed: () {
