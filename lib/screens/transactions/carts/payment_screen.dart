@@ -20,13 +20,14 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var cartSession = _cartController.cartSessions.value;
+    var subTotalPrice = cartSession.getTotalPrice;
+
     return Layout(
-      title:
-          "Total: ${formatPrice(_cartController.cartSessions.value.getTotalPrice)}",
+      title: "Total: ${formatPrice(subTotalPrice)}",
       bottomNavigationBar: MyBottomBar(
         onPressed: () {
-          if (_cartController.cartSessions.value.payedMoney! <
-              _cartController.cartSessions.value.getTotalPrice) {
+          if (cartSession.payedMoney! < subTotalPrice) {
             Get.rawSnackbar(
               message: 'Payed money is not enough',
               backgroundColor: error,

@@ -273,7 +273,9 @@ class Messages extends Translations {
           'set_minimum_stock_nofication_success':
               'Minimum stock notification setting has been successful',
           'update_app': 'Update App',
-          'please_update_app': 'Please update your app now, for better quality'
+          'please_update_app': 'Please update your app now, for better quality',
+          'field_discount': 'Discount',
+          'discount': 'Discount'
         },
         'id_ID': {
           'auth': 'Otentikasi',
@@ -547,6 +549,8 @@ class Messages extends Translations {
           'update_app': 'Perbarui Aplikasi',
           'please_update_app':
               'Update aplikas anda sekarang untuk kualitas yang lebih baik.',
+          'field_discount': 'Diskon',
+          'discount': 'Diskon'
         },
       };
 }

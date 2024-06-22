@@ -6,12 +6,12 @@ class MyBottomBarActions {
   const MyBottomBarActions({
     required this.onPressed,
     this.icon,
-    this.label,
+    this.badge,
   });
 
   final void Function() onPressed;
   final Icon? icon;
-  final String? label;
+  final String? badge;
 }
 
 //   @override

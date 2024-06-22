@@ -56,7 +56,7 @@ class _DetailScreen extends State<DetailScreen> {
                     ability: 'read product stock',
                   ))
                 MyBottomBarActions(
-                  label: 'field_stock'.tr,
+                  badge: 'field_stock'.tr,
                   onPressed: () {
                     Get.toNamed(
                       '/menu/product/stock',
@@ -70,7 +70,7 @@ class _DetailScreen extends State<DetailScreen> {
                 ability: 'delete product',
               ))
                 MyBottomBarActions(
-                  label: 'global_delete'.tr,
+                  badge: 'global_delete'.tr,
                   onPressed: () {
                     _productDetailController.showDeleteDialog(
                       products.id,

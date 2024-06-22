@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:get/get.dart';
@@ -25,27 +23,19 @@ class _CartListState extends State<CartList> {
   final MoneyMaskedTextController _discountController =
       MoneyMaskedTextController(precision: 0, decimalSeparator: "");
   final _cartController = Get.put(CartController());
-  Timer? _debounce;
 
-  _CartListState() {
-    _discountController.addListener(_onDiscountUpdate);
-  }
-
-  _onDiscountUpdate() {
-    if (_debounce?.isActive ?? false) _debounce!.cancel();
-    _debounce = Timer(const Duration(milliseconds: 1000), () {
-      if (_discountController.text.isNotEmpty) {
-        _cartController.calculateDiscountPrice(
-          widget.cartItem,
-          _discountController.numberValue,
-        );
-      } else {
-        _cartController.calculateDiscountPrice(
-          widget.cartItem,
-          0,
-        );
-      }
-    });
+  _onDiscountUpdate(String? value) {
+    if (value!.isNotEmpty) {
+      _cartController.calculateDiscountPrice(
+        widget.cartItem,
+        _discountController.numberValue,
+      );
+    } else {
+      _cartController.calculateDiscountPrice(
+        widget.cartItem,
+        0,
+      );
+    }
   }
 
   @override
@@ -81,6 +71,17 @@ class _CartListState extends State<CartList> {
                       ),
                     ),
                     SizedBox(
+                      width: 170, // Adjust the width as needed
+                      height: 50, // Adjust the height as needed
+                      child: MyTextField(
+                        suffixText: "discount".tr,
+                        keyboardType: TextInputType.number,
+                        controller: _discountController,
+                        debounce: 1000,
+                        onChanged: _onDiscountUpdate,
+                      ),
+                    ),
+                    SizedBox(
                       child: Text(
                         widget.cartItem.buildRowPrice(),
                         style: const TextStyle(
@@ -89,16 +90,6 @@ class _CartListState extends State<CartList> {
                         ),
                       ),
                     ),
-                    SizedBox(
-                      width: 200, // Adjust the width as needed
-                      height: 50, // Adjust the height as needed
-                      child: MyTextField(
-                        suffixText: "discount".tr,
-                        keyboardType: TextInputType.number,
-                        controller: _discountController,
-                        onChanged: (String po) => _onDiscountUpdate,
-                      ),
-                    )
                   ],
                 ),
                 Row(

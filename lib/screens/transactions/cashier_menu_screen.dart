@@ -57,44 +57,59 @@ class _CashierMenuScreenState extends State<CashierMenuScreen> {
       child: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
           return Layout(
+            resizeToAvoidBottomInset: true,
             title: 'transaction_cashier'.tr,
             bottomNavigationBar: MyBottomBar(
               icon:
                   !context.isTablet ? Icons.shopping_basket : Icons.credit_card,
               label: Obx(
-                () => Text(
-                  '${_cartController.cartSessions.value.cartItems.length}'
-                  ' - ${formatPrice(_cartController.cartSessions.value.getSubTotalPrice, isSymbol: false)}',
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+                () {
+                  var subTotalPrice = formatPrice(
+                    _cartController.cartSessions.value.getSubTotalPrice -
+                        _cartController.cartSessions.value.getDiscountPrice,
+                    isSymbol: false,
+                  );
+                  return Text(
+                    '${_cartController.cartSessions.value.cartItems.length}'
+                    ' - $subTotalPrice',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  );
+                },
               ),
-              actions: [
-                MyBottomBarActions(
-                  label: 'global_edit_item'.trParams(
-                    {"item": "cart_list".tr},
-                  ),
-                  onPressed: () {
-                    Get.dialog(const EditDetailAlert());
-                  },
-                  icon: const Icon(Icons.edit, color: Colors.white),
-                ),
-                MyBottomBarActions(
-                  label: 'global_delete'.tr,
-                  onPressed: _cartController.showDeleteCartDialog,
-                  icon: const Icon(Icons.delete, color: Colors.white),
-                ),
-              ],
+              actions: context.isTablet
+                  ? [
+                      MyBottomBarActions(
+                        badge: 'global_edit_item'.trParams(
+                          {"item": "cart_list".tr},
+                        ),
+                        onPressed: () {
+                          Get.dialog(const EditDetailAlert());
+                        },
+                        icon: const Icon(Icons.edit, color: Colors.white),
+                      ),
+                      MyBottomBarActions(
+                        badge: 'global_delete'.tr,
+                        onPressed: () => _cartController.showDeleteCartDialog(
+                          context.isTablet,
+                        ),
+                        icon: const Icon(Icons.delete, color: Colors.white),
+                      ),
+                    ]
+                  : null,
               onPressed: () {
+                var cartSession = _cartController.cartSessions.value;
+
                 if (_settingController.setting.value.cashDrawerEnabled) {
                   if (_cashDrawerController.isOpened.value) {
                     _cashDrawerController.showCashDrawerDialog();
                     return;
                   }
                 }
-                if (_cartController.cartSessions.value.cartItems.isEmpty) {
+
+                if (cartSession.cartItems.isEmpty) {
                   Get.rawSnackbar(
                     message: 'Cart is empty',
                     backgroundColor: error,
@@ -102,14 +117,18 @@ class _CashierMenuScreenState extends State<CashierMenuScreen> {
                   );
                   return;
                 }
+
                 _cartController.addCartSession(
                   CartSession(
-                    cartItems: _cartController.cartSessions.value.cartItems,
-                    totalQty: _cartController.cartSessions.value.getTotalQty,
-                    totalPrice:
-                        _cartController.cartSessions.value.getTotalPrice,
-                    payedMoney:
-                        _cartController.cartSessions.value.getTotalPrice,
+                    tax: cartSession.tax,
+                    member: cartSession.member,
+                    paymentMethod: cartSession.paymentMethod,
+                    discountPrice: cartSession.discountPrice,
+                    note: cartSession.note,
+                    cartItems: cartSession.cartItems,
+                    totalQty: cartSession.getTotalQty,
+                    totalPrice: cartSession.getTotalPrice,
+                    payedMoney: cartSession.getTotalPrice,
                   ),
                   context,
                 );

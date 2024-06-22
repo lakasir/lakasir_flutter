@@ -9,6 +9,8 @@ class ProductResponse {
   final String? image;
   final double? initialPrice;
   final double? sellingPrice;
+  final double? discount;
+  final double? discountPrice;
   final int? stock;
   final int? categoryId;
   final String? createdAt;
@@ -30,6 +32,8 @@ class ProductResponse {
     this.image,
     this.initialPrice,
     this.sellingPrice,
+    this.discount,
+    this.discountPrice,
     this.stock,
     this.categoryId,
     this.createdAt,
@@ -52,6 +56,8 @@ class ProductResponse {
       image: heroImages.firstOrNull,
       initialPrice: json['initial_price'].toDouble(),
       sellingPrice: json['selling_price'].toDouble(),
+      // initialPrice: json['initial_price'].toDouble(),
+      // sellingPrice: json['selling_price'].toDouble(),
       stock: json['stock'],
       categoryId: json['category_id'],
       category: json['category'] != null

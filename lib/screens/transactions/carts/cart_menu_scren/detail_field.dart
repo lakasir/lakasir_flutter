@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:lakasir/controllers/transactions/cart_controller.dart';
 import 'package:lakasir/utils/colors.dart';
 import 'package:lakasir/widgets/card.dart';
+import 'package:lakasir/widgets/text_field.dart';
 
 class DetailField extends StatelessWidget {
   DetailField({
@@ -132,8 +133,15 @@ class DetailField extends StatelessWidget {
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-                  Text(
-                    _cartController.cartSessions.value.getNote,
+                  const SizedBox(height: 10),
+                  MyTextField(
+                    debounce: 1000,
+                    maxLines: 2,
+                    keyboardType: TextInputType.multiline,
+                    textInputAction: TextInputAction.newline,
+                    initialValue: _cartController.cartSessions.value.note,
+                    onChanged: (String? value) =>
+                        _cartController.cartSessions.value.note = value,
                   ),
                 ],
               ),

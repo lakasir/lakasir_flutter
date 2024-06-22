@@ -140,7 +140,7 @@ class CartController extends GetxController {
     ));
   }
 
-  void showDeleteCartDialog() {
+  void showDeleteCartDialog([bool isTablet = false]) {
     Get.dialog(AlertDialog(
       title: Text('cart_delete_all'.tr),
       content: Text('cart_delete_all_content'.tr),
@@ -159,8 +159,11 @@ class CartController extends GetxController {
               val.totalQty = 0;
               val.payedMoney = 0;
             });
+            debug(isTablet);
             Get.back();
-            Get.back();
+            if (!isTablet) {
+              Get.back();
+            }
           },
           child: Text('global_delete'.tr),
         ),
@@ -212,12 +215,14 @@ class CartSession {
 
   double get getTotalPrice {
     var tax = this.tax ?? 0;
+
     double totalPrice = cartItems.fold(
         0,
         (previousValue, element) =>
             previousValue +
             (element.qty * element.product.sellingPrice!.toInt()) *
                 (1 + (tax / 100)));
+
     totalPrice = totalPrice - getDiscountPrice;
 
     return totalPrice;
@@ -280,14 +285,22 @@ class CartItem {
   int get hashCode => product.id.hashCode;
 
   String buildRowPrice() {
-    return '${formatPrice(product.sellingPrice!, isSymbol: false)} x $qty = ${formatPrice(
-      (product.sellingPrice! * qty).toDouble(),
-    )}';
+    // var total = formatPrice(
+    //   ((product.sellingPrice! - discountPrice) * qty).toDouble(),
+    // );
+    var priceText =
+        "${formatPrice(product.sellingPrice!, isSymbol: false)} x $qty";
+
+    if (discountPrice != 0) {
+      priceText = "${formatPrice(discountPrice, isSymbol: false)} - $priceText";
+    }
+
+    return priceText;
   }
 
   String buildSubTotalPrice() {
     return formatPrice(
-      (product.sellingPrice! * qty).toDouble(),
+      ((product.sellingPrice! - discountPrice) * qty).toDouble(),
     );
   }
 

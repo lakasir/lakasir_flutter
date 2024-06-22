@@ -53,7 +53,7 @@ class _CashierCartMenuScreenState extends State<CashierCartMenuScreen> {
             },
             actions: [
               MyBottomBarActions(
-                label: 'global_edit_item'.trParams(
+                badge: 'global_edit_item'.trParams(
                   {"item": "cart_list".tr},
                 ),
                 onPressed: () {
@@ -62,13 +62,15 @@ class _CashierCartMenuScreenState extends State<CashierCartMenuScreen> {
                 icon: const Icon(Icons.edit, color: Colors.white),
               ),
               MyBottomBarActions(
-                label: 'global_delete'.tr,
-                onPressed: _cartController.showDeleteCartDialog,
+                badge: 'global_delete'.tr,
+                onPressed: () => _cartController.showDeleteCartDialog(
+                  context.isTablet,
+                ),
                 icon: const Icon(Icons.delete, color: Colors.white),
               ),
             ],
             label: Text('cart_list_proceed'.tr),
-            icon: Icons.shopping_basket,
+            icon: Icons.payments,
           ),
           child: const CartControlWidget(),
         );

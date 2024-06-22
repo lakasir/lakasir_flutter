@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lakasir/utils/colors.dart';
@@ -6,7 +8,7 @@ typedef MyCallback = void Function(String);
 typedef ValidatorCallback = String? Function(String?);
 
 class MyTextField extends StatefulWidget {
-  final TextEditingController controller;
+  final TextEditingController? controller;
   final String? label;
   final String? info;
   final String? hintText;
@@ -30,12 +32,14 @@ class MyTextField extends StatefulWidget {
   final Function()? onTap;
   final String? initialValue;
 
+  final int debounce;
+
   const MyTextField({
     super.key,
     this.label,
     this.info,
     this.mandatory = false,
-    required this.controller,
+    this.controller,
     this.hintText,
     this.obscureText = false,
     this.prefixText,
@@ -55,6 +59,7 @@ class MyTextField extends StatefulWidget {
     this.readOnly = false,
     this.onTap,
     this.initialValue,
+    this.debounce = 0,
   });
 
   @override
@@ -72,6 +77,17 @@ class _MyTextFieldState extends State<MyTextField> {
     if (widget.autofocus) {
       _focusNode.requestFocus();
     }
+  }
+
+  Timer? _debounce;
+
+  _onDebounceUpdate(String? value) {
+    if (_debounce?.isActive ?? false) _debounce!.cancel();
+    _debounce = Timer(Duration(milliseconds: widget.debounce), () {
+      if (widget.onChanged != null) {
+        widget.onChanged!(value!);
+      }
+    });
   }
 
   @override
@@ -109,16 +125,6 @@ class _MyTextFieldState extends State<MyTextField> {
                     child: Text(widget.info!,
                         style: const TextStyle(fontSize: 12)),
                   ),
-                // Tooltip(
-                //   triggerMode: TooltipTriggerMode.tap,
-                //   showDuration: const Duration(seconds: 5),
-                //   message: widget.info!,
-                //   child: const Icon(
-                //     Icons.info_outline,
-                //     color: grey,
-                //     size: 16,
-                //   ),
-                // ),
               ],
             ),
           ),
@@ -151,7 +157,8 @@ class _MyTextFieldState extends State<MyTextField> {
             return null;
           },
           onFieldSubmitted: widget.onSubmitted,
-          onChanged: widget.onChanged,
+          onChanged:
+              widget.debounce == 0 ? widget.onChanged : _onDebounceUpdate,
           // onSubmitted: widget.onSubmitted,
           decoration: InputDecoration(
             prefixText: widget.prefixText,

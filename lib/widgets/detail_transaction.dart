@@ -107,10 +107,11 @@ class _DetailTransactionState extends State<DetailTransaction> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(widget.cartItems[i].productName, style: _boldStyle),
+                  // Text(widget.cartItems[i].discountPrice, style: _normalStyle),
                   Text(widget.cartItems[i].quantity, style: _normalStyle)
                 ],
               ),
-              Text(widget.cartItems[i].subTotal, style: _boldStyle)
+              Text(widget.cartItems[i].subTotal, style: _boldStyle),
             ],
           ),
         const Divider(),

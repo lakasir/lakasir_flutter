@@ -39,14 +39,14 @@ class _ProductScreen extends State<ProductScreen> {
         },
         actions: [
           MyBottomBarActions(
-            label: 'global_filter'.tr,
+            badge: 'global_filter'.tr,
             onPressed: () {
               _productController.showFilterDialog();
             },
             icon: const Icon(Icons.filter_list, color: Colors.white),
           ),
           MyBottomBarActions(
-            label: 'global_search'.tr,
+            badge: 'global_search'.tr,
             onPressed: () {
               _productController.showSearchDialog();
             },
@@ -57,7 +57,7 @@ class _ProductScreen extends State<ProductScreen> {
             ability: 'read category',
           ))
             MyBottomBarActions(
-              label: 'setting_category'.tr,
+              badge: 'setting_category'.tr,
               onPressed: () => {Get.toNamed('/menu/setting/category')},
               icon: const Icon(Icons.category, color: Colors.white),
             ),

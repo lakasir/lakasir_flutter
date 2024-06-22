@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:lakasir/controllers/transactions/cart_controller.dart';
 import 'package:lakasir/utils/colors.dart';
 import 'package:lakasir/utils/utils.dart';
 
@@ -11,12 +13,21 @@ class CalculatorPaymentButton extends StatefulWidget {
 }
 
 class _CalculatorPaymentButtonState extends State<CalculatorPaymentButton> {
-  bool isShowNormal = true;
   List<CalculatorButton> buttons = [];
   List<CalculatorButton> shortcutButtons = [];
   ValueNotifier<String> values = ValueNotifier<String>("");
+  final CartController _cartController = Get.put(CartController());
+  bool isShorcutBefore = false;
+  bool showTheShorcutButton = true;
 
-  void _onPressed(String value) {
+  double totalPrice = 0;
+
+  void _onPressed(String value, {bool shortcut = false}) {
+    if (value == 'clear') {
+      values.value = '0';
+      widget.onUpdated('0');
+      return;
+    }
     if (value == 'backspace') {
       if (values.value.length == 1) {
         widget.onUpdated('0');
@@ -33,19 +44,82 @@ class _CalculatorPaymentButtonState extends State<CalculatorPaymentButton> {
       }
       return;
     }
-    if (!isShowNormal) {
+    if (shortcut) {
       values.value = value;
       widget.onUpdated(values.value);
-      return;
+    } else {
+      if (isShorcutBefore) {
+        values.value = value;
+      } else {
+        values.value += value;
+      }
+
+      debug(values.value);
+
+      widget.onUpdated(values.value);
     }
-    values.value += value;
-    widget.onUpdated(values.value);
+    setState(() {
+      isShorcutBefore = shortcut;
+    });
+  }
+
+  List<double> generateSuggestedPayments(double totalPrice) {
+    List<double> denominations = [
+      1000,
+      2000,
+      5000,
+      10000,
+      20000,
+      50000,
+      100000
+    ];
+    List<double> suggestions = [];
+
+    for (double denom in denominations) {
+      double suggestion = ((totalPrice / denom).ceil()) * denom;
+      if (!suggestions.contains(suggestion)) {
+        suggestions.add(suggestion);
+      }
+    }
+
+    suggestions.sort();
+
+    if (!suggestions.contains(totalPrice) && totalPrice <= denominations.last) {
+      suggestions.add(totalPrice);
+    }
+
+    // if (suggestions.length > 3) {
+    //   suggestions = suggestions.sublist(0, 3);
+    // }
+
+    return suggestions;
+  }
+
+  void generateButton() {
+    List<double> shortcutSuggestion = generateSuggestedPayments(totalPrice);
+    for (var i = 0; i < shortcutSuggestion.length; i++) {
+      var e = shortcutSuggestion[i];
+      shortcutButtons.add(CalculatorButton(
+        text: Text(formatPrice(e, isSymbol: false)),
+        onPressed: () {
+          _onPressed(e.toString(), shortcut: true);
+        },
+        color: whiteGrey,
+      ));
+    }
   }
 
   @override
   void initState() {
     super.initState();
-    buttons = [
+
+    setState(() {
+      totalPrice = _cartController.cartSessions.value.getTotalPrice;
+    });
+
+    generateButton();
+
+    var b = [
       CalculatorButton(
           text: const Text('7'),
           onPressed: () {
@@ -114,82 +188,26 @@ class _CalculatorPaymentButtonState extends State<CalculatorPaymentButton> {
           },
           color: whiteGrey),
       CalculatorButton(
-        text: const Icon(Icons.keyboard_hide, size: 30),
-        onPressed: () {
-          setState(() {
-            isShowNormal = false;
-          });
-        },
+        text: const Icon(Icons.delete_forever, size: 30),
+        onPressed: () => _onPressed('clear'),
         color: whiteGrey,
       ),
     ];
-    shortcutButtons = [
-      CalculatorButton(
-          text: Text(formatPrice(100000, isSymbol: false)),
-          onPressed: () {
-            _onPressed('100000');
-          },
-          color: whiteGrey),
-      CalculatorButton(
-          text: Text(formatPrice(60000, isSymbol: false)),
-          onPressed: () {
-            _onPressed('60000');
-          },
-          color: whiteGrey),
-      CalculatorButton(
-          text: Text(formatPrice(50000, isSymbol: false)),
-          onPressed: () {
-            _onPressed('50000');
-          },
-          color: whiteGrey),
-      CalculatorButton(
-          text: Text(formatPrice(40000, isSymbol: false)),
-          onPressed: () {
-            _onPressed('40000');
-          },
-          color: whiteGrey),
-      CalculatorButton(
-          text: Text(formatPrice(30000, isSymbol: false)),
-          onPressed: () {
-            _onPressed('30000');
-          },
-          color: whiteGrey),
-      CalculatorButton(
-          text: Text(formatPrice(10000, isSymbol: false)),
-          onPressed: () {
-            _onPressed('10000');
-          },
-          color: whiteGrey),
-      CalculatorButton(
-        text: const Icon(Icons.backspace, size: 30),
-        onPressed: () {
-          _onPressed('backspace');
-        },
-        color: whiteGrey,
-      ),
-      CalculatorButton(
-          text: Text(formatPrice(5000, isSymbol: false)),
-          onPressed: () {
-            _onPressed('5000');
-          },
-          color: whiteGrey),
-      CalculatorButton(
-        text: const Icon(Icons.keyboard, size: 30),
-        onPressed: () {
-          setState(() {
-            isShowNormal = true;
-          });
-        },
-        color: whiteGrey,
-      ),
-    ];
+
+    for (var i = 0; i < b.length; i++) {
+      var e = b[i];
+      buttons.add(e);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return isShowNormal
-        ? NormalGridButton(buttons: buttons)
-        : ShortcutGridButton(buttons: shortcutButtons);
+    return Column(
+      children: [
+        ShortcutGridButton(buttons: shortcutButtons),
+        NormalGridButton(buttons: buttons),
+      ],
+    );
   }
 }
 
@@ -213,27 +231,18 @@ class CalculatorButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 105,
-      height: 105,
-      decoration: BoxDecoration(
-        color: color,
-        shape: BoxShape.rectangle,
-        borderRadius: BorderRadius.circular(20),
+    return MaterialButton(
+      padding: const EdgeInsets.all(8),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(20)),
       ),
-      child: MaterialButton(
-        padding: const EdgeInsets.all(8),
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(20)),
-        ),
-        onPressed: onPressed,
-        child: text is Text
-            ? Text(
-                (text as Text).data.toString(),
-                style: textStyle,
-              )
-            : text,
-      ),
+      onPressed: onPressed,
+      child: text is Text
+          ? Text(
+              (text as Text).data.toString(),
+              style: textStyle,
+            )
+          : text,
     );
   }
 }
@@ -253,6 +262,7 @@ class NormalGridButton extends StatelessWidget {
       itemCount: buttons.length,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3,
+        mainAxisExtent: 100,
       ),
       itemBuilder: (BuildContext context, int index) {
         return Container(
@@ -278,7 +288,8 @@ class ShortcutGridButton extends StatelessWidget {
       shrinkWrap: true,
       itemCount: buttons.length,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
+        crossAxisCount: 4,
+        mainAxisExtent: 50,
       ),
       itemBuilder: (BuildContext context, int index) {
         return Container(
