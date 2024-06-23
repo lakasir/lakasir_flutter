@@ -16,6 +16,7 @@ class ConfirmAlertDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cartItems = _cartController.cartSessions.value.cartItems;
+
     return MyDialog(
       title: "global_sure?".tr,
       content: DetailTransaction(
@@ -33,6 +34,7 @@ class ConfirmAlertDialog extends StatelessWidget {
             )
             .toList(),
         tax: "${_cartController.cartSessions.value.tax ?? 0}%",
+        taxPrice: formatPrice(_cartController.cartSessions.value.getTaxPrice),
         subTotal: formatPrice(
           _cartController.cartSessions.value.getSubTotalPrice,
         ),
@@ -53,10 +55,11 @@ class ConfirmAlertDialog extends StatelessWidget {
           Flexible(
             child: MyFilledButton(
               color: grey,
-              onPressed: () {
-                Get.back();
-              },
-              child: Text("global_cancel".tr),
+              onPressed: () => Get.back(),
+              child: Text(
+                "global_cancel".tr,
+                style: const TextStyle(color: Colors.black),
+              ),
             ),
           ),
           const SizedBox(width: 10),
@@ -64,9 +67,7 @@ class ConfirmAlertDialog extends StatelessWidget {
             child: Obx(
               () => MyFilledButton(
                 isLoading: _paymentController.isLoading.value,
-                onPressed: () {
-                  _paymentController.store();
-                },
+                onPressed: () => _paymentController.store(),
                 child: Text("global_yes".tr),
               ),
             ),

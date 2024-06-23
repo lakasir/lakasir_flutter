@@ -2,6 +2,7 @@ import 'package:lakasir/api/responses/auths/profile_response.dart';
 import 'package:lakasir/api/responses/members/member_response.dart';
 import 'package:lakasir/api/responses/payment_methods/payment_method_response.dart';
 import 'package:lakasir/api/responses/transactions/selling_detail.dart';
+import 'package:lakasir/utils/utils.dart';
 
 class TransactionHistoryResponse {
   int id;
@@ -13,9 +14,15 @@ class TransactionHistoryResponse {
   double? payedMoney;
   double? moneyChange;
   double? totalPrice;
+  double discount;
+  double? discountPrice;
+  double? totalDiscountPerItem;
+  double? totalDiscount;
+  double? grandTotalPrice;
   bool friendPrice;
   int paymentMethodId;
   double? tax;
+  double? taxPrice;
   int? totalQuantity;
   MemberResponse? member;
   PaymentMethodRespone? paymentMethod;
@@ -35,9 +42,15 @@ class TransactionHistoryResponse {
     this.payedMoney,
     this.moneyChange,
     this.totalPrice,
+    this.discount = 0,
+    this.discountPrice = 0,
+    this.totalDiscount = 0,
+    this.totalDiscountPerItem = 0,
+    this.grandTotalPrice = 0,
     required this.friendPrice,
     required this.paymentMethodId,
-    this.tax,
+    this.tax = 0,
+    this.taxPrice = 0,
     this.totalQuantity,
     this.member,
     this.paymentMethod,
@@ -61,9 +74,16 @@ class TransactionHistoryResponse {
       payedMoney: double.parse(json['payed_money'].toString()),
       moneyChange: double.parse(json['money_changes'].toString()),
       totalPrice: double.parse(json['total_price'].toString()),
+      discount: double.parse(json['discount'].toString()),
+      discountPrice: double.parse(json['discount_price'].toString()),
+      totalDiscountPerItem:
+          double.parse(json['total_discount_per_item'].toString()),
+      totalDiscount: double.parse(json['total_discount'].toString()),
+      grandTotalPrice: double.parse(json['grand_total_price'].toString()),
       friendPrice: bool.fromEnvironment(json['friend_price'].toString()),
       paymentMethodId: json['payment_method_id'],
       tax: double.parse(json['tax'].toString()),
+      taxPrice: double.parse(json['tax_price'].toString()),
       totalQuantity: json['total_qty'],
       member: json['member'] != null
           ? MemberResponse.fromJson(json['member'])

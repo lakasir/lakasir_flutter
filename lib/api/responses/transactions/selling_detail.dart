@@ -7,6 +7,7 @@ class SellingDetail {
   int productId;
   double price;
   double discountPrice;
+  double discount;
   int quantity;
   ProductResponse? product;
 
@@ -16,8 +17,9 @@ class SellingDetail {
     required this.productId,
     required this.price,
     required this.quantity,
-    required this.discountPrice,
+    this.discountPrice = 0,
     this.product,
+    this.discount = 0,
   });
 
   factory SellingDetail.fromJson(Map<String, dynamic> json) {
@@ -26,6 +28,7 @@ class SellingDetail {
       sellingId: json['selling_id'],
       productId: json['product_id'],
       price: double.parse(json['price'].toString()),
+      discount: double.parse(json['discount'].toString()),
       discountPrice: double.parse(json['discount_price'].toString()),
       quantity: json['qty'],
       product: json['product'] != null

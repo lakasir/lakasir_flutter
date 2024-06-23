@@ -36,6 +36,7 @@ import 'package:lakasir/screens/setting/selling_method_screen.dart';
 import 'package:lakasir/screens/setting/setting_screen.dart';
 import 'package:lakasir/screens/transactions/carts/cashier_cart_menu_screen.dart';
 import 'package:lakasir/screens/transactions/carts/payment_screen.dart';
+import 'package:lakasir/screens/transactions/carts/payment_success_screen.dart';
 import 'package:lakasir/screens/transactions/cashier_menu_screen.dart';
 import 'package:lakasir/screens/transactions/history/detail_screen.dart';
 import 'package:lakasir/screens/transactions/history/history_screen.dart';
@@ -259,6 +260,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         '/menu/transaction/cashier/cart': (context) =>
             const CashierCartMenuScreen(),
         '/menu/transaction/cashier/payment': (context) => const PaymentScreen(),
+        '/menu/transaction/cashier/payment/success': (context) =>
+            const PaymentSuccessScreen(),
         '/menu/transaction/cashier/receipt': (context) => const InvoiceScreen(),
         '/menu/product': (context) => const ProductScreen(),
         '/menu/product/add': (context) => const AddProductScreen(),

@@ -42,6 +42,7 @@ class _CashierCartMenuScreenState extends State<CashierCartMenuScreen> {
       builder: (BuildContext context, BoxConstraints constraints) {
         return Layout(
           title: 'cart_list'.tr,
+          resizeToAvoidBottomInset: true,
           bottomNavigationBar: MyBottomBar(
             onPressed: () {
               _cartController.cartSessions.update((val) {

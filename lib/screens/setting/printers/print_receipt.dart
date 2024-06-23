@@ -59,13 +59,21 @@ class PrintReceipt {
       1,
     );
     for (var history in transactionHistoryResponse.sellingDetails!) {
+      var buildRowPrice =
+          "${formatPrice(history.product!.sellingPrice, isSymbol: false)} x ${history.quantity}";
+
+      if (history.discount != 0) {
+        buildRowPrice =
+            "${formatPrice(history.discount, isSymbol: false)} - $buildRowPrice";
+      }
+
       await bluetooth.printLeftRight(
         history.product!.name,
-        "${formatPrice(history.product!.sellingPrice, isSymbol: false)} x ${history.quantity}",
+        buildRowPrice,
         0,
       );
       await bluetooth.printCustom(
-        formatPrice(history.price, isSymbol: false),
+        formatPrice(history.discountPrice, isSymbol: false),
         0,
         2,
       );
@@ -76,22 +84,29 @@ class PrintReceipt {
       1,
     );
     await bluetooth.printLeftRight(
-      'Subtotal'.tr,
-      formatPrice(transactionHistoryResponse.totalPrice, isSymbol: false),
-      1,
-    );
-    await bluetooth.printLeftRight(
       'field_tax'.tr,
       "${transactionHistoryResponse.tax!}%",
-      1,
+      0,
+    );
+    await bluetooth.printLeftRight(
+      'field_tax_price'.tr,
+      formatPrice(transactionHistoryResponse.taxPrice!, isSymbol: false),
+      0,
+    );
+    await bluetooth.printLeftRight(
+      'field_discount'.tr,
+      "(${formatPrice(transactionHistoryResponse.totalDiscountPerItem)})",
+      0,
+    );
+    await bluetooth.printLeftRight(
+      'Subtotal'.tr,
+      formatPrice(transactionHistoryResponse.totalPrice, isSymbol: false),
+      0,
     );
     await bluetooth.printLeftRight(
       'field_total_price'.tr,
       formatPrice(
-        ((transactionHistoryResponse.totalPrice ?? 0) *
-                (transactionHistoryResponse.tax ?? 0) /
-                100) +
-            transactionHistoryResponse.totalPrice!,
+        transactionHistoryResponse.grandTotalPrice,
         isSymbol: false,
       ),
       1,

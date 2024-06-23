@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:get/get.dart';
 import 'package:lakasir/utils/colors.dart';
+import 'package:lakasir/utils/utils.dart';
 import 'package:lakasir/widgets/card.dart';
 import 'package:lakasir/widgets/my_card_list.dart';
 import 'package:lakasir/controllers/transactions/cart_controller.dart';
@@ -83,7 +84,7 @@ class _CartListState extends State<CartList> {
                     ),
                     SizedBox(
                       child: Text(
-                        widget.cartItem.buildRowPrice(),
+                        "${widget.cartItem.buildRowPrice()} = ${formatPrice(((widget.cartItem.product.sellingPrice! * widget.cartItem.qty) - widget.cartItem.discountPrice).toDouble())}",
                         style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w400,

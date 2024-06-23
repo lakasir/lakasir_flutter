@@ -23,18 +23,20 @@ class _CartControlWidgetState extends State<CartControlWidget> {
       () {
         final cartItems = _cartController.cartSessions.value.cartItems;
 
-        return ListView(
-          children: [
-            for (var i = 0; i < cartItems.length; i++)
-              CartList(
-                cartItem: cartItems[i],
+        return SingleChildScrollView(
+          child: Column(
+            children: [
+              for (var i = 0; i < cartItems.length; i++)
+                CartList(
+                  cartItem: cartItems[i],
+                ),
+              SubTotalField(cartController: _cartController),
+              DetailField(),
+              const SizedBox(
+                height: 70,
               ),
-            SubTotalField(cartController: _cartController),
-            DetailField(),
-            const SizedBox(
-              height: 70,
-            ),
-          ],
+            ],
+          ),
         );
       },
     );

@@ -13,13 +13,76 @@ class SubTotalField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var totalPrice = cartController.cartSessions.value.getTotalPrice;
-    var subTotalPrice = cartController.cartSessions.value.getSubTotalPrice;
-    var discountPrice = cartController.cartSessions.value.getDiscountPrice;
+    var cartSession = cartController.cartSessions.value;
+    var totalPrice = cartSession.getTotalPrice;
+    var subTotalPrice = cartSession.getSubTotalPrice;
+    var discountPrice = cartSession.getDiscountPrice;
+    var taxPrice = cartSession.getTaxPrice;
 
     return MyCard(
       child: Column(
         children: [
+          Container(
+            margin: const EdgeInsets.only(bottom: 5),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "discount".tr,
+                  style: const TextStyle(
+                    color: Colors.grey,
+                  ),
+                ),
+                Text(
+                  "(${formatPrice(discountPrice.toDouble())})",
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            margin: const EdgeInsets.only(bottom: 5),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "field_tax_price".tr,
+                  style: const TextStyle(
+                    color: Colors.grey,
+                  ),
+                ),
+                Text(
+                  formatPrice(taxPrice),
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            margin: const EdgeInsets.only(bottom: 5),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "field_tax".tr,
+                  style: const TextStyle(
+                    color: Colors.grey,
+                  ),
+                ),
+                Text(
+                  "${cartController.cartSessions.value.tax ?? 0}%",
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                    color: Colors.grey,
+                  ),
+                ),
+              ],
+            ),
+          ),
           Container(
             margin: const EdgeInsets.only(bottom: 5),
             child: Row(
@@ -39,42 +102,6 @@ class SubTotalField extends StatelessWidget {
                 ),
               ],
             ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                "discount".tr,
-                style: const TextStyle(
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              Text(
-                "(${formatPrice(discountPrice.toDouble())})",
-                style: const TextStyle(
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                "field_tax".tr,
-                style: const TextStyle(
-                  fontWeight: FontWeight.w600,
-                  color: Colors.grey,
-                ),
-              ),
-              Text(
-                "${cartController.cartSessions.value.tax ?? 0}%",
-                style: const TextStyle(
-                  fontWeight: FontWeight.w600,
-                  color: Colors.grey,
-                ),
-              ),
-            ],
           ),
           const Divider(),
           Row(

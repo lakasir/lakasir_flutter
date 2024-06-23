@@ -20,6 +20,8 @@ class DetailTransaction extends StatefulWidget {
     this.cashierName,
     this.note,
     this.discount = "0",
+    this.discountPrice = "0",
+    this.taxPrice = "0",
   });
   final String? cashierName;
   final String? date;
@@ -35,6 +37,8 @@ class DetailTransaction extends StatefulWidget {
   final String change;
   final String? note;
   final String discount;
+  final String discountPrice;
+  final String taxPrice;
   final List<Widget> actions;
 
   @override
@@ -120,6 +124,13 @@ class _DetailTransactionState extends State<DetailTransaction> {
           children: [
             Text("field_tax".tr, style: _normalStyle),
             Text(widget.tax, style: _boldStyle)
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text("field_tax_price".tr, style: _normalStyle),
+            Text(widget.taxPrice, style: _boldStyle)
           ],
         ),
         Row(

@@ -214,16 +214,13 @@ class CartSession {
   }
 
   double get getTotalPrice {
-    var tax = this.tax ?? 0;
-
     double totalPrice = cartItems.fold(
         0,
         (previousValue, element) =>
             previousValue +
-            (element.qty * element.product.sellingPrice!.toInt()) *
-                (1 + (tax / 100)));
+            (element.qty * element.product.sellingPrice!.toInt()));
 
-    totalPrice = totalPrice - getDiscountPrice;
+    totalPrice = (totalPrice + getTaxPrice) - getDiscountPrice;
 
     return totalPrice;
   }
@@ -261,6 +258,8 @@ class CartSession {
   String get getNote {
     return note ?? 'global_no_item'.trParams({'item': 'field_note'.tr});
   }
+
+  double get getTaxPrice => (totalPrice ?? 0) * (tax ?? 0) / 100;
 }
 
 class CartItem {
@@ -292,7 +291,8 @@ class CartItem {
         "${formatPrice(product.sellingPrice!, isSymbol: false)} x $qty";
 
     if (discountPrice != 0) {
-      priceText = "${formatPrice(discountPrice, isSymbol: false)} - $priceText";
+      priceText =
+          "($priceText) -\n${formatPrice(discountPrice, isSymbol: false)} ";
     }
 
     return priceText;
@@ -300,7 +300,7 @@ class CartItem {
 
   String buildSubTotalPrice() {
     return formatPrice(
-      ((product.sellingPrice! - discountPrice) * qty).toDouble(),
+      ((product.sellingPrice! * qty) - discountPrice).toDouble(),
     );
   }
 

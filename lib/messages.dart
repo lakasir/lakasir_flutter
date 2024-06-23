@@ -46,6 +46,7 @@ class Messages extends Translations {
               'If you already set password, you must enter your old password to change it',
           'global_generate': 'Generate',
           'global_cancel': 'Cancel',
+          'global_back': 'Back',
           'global_delete': 'Delete',
           'global_failed_delete_item': 'Failed to delete @item',
           'has_an_item': 'because has @item',
@@ -107,7 +108,8 @@ class Messages extends Translations {
           'cart_edit_detail': 'Edit Detail',
           'set_detault_tax': 'Set Default Tax',
           'set_detault_tax_success': 'Default Tax has been set',
-          'field_tax': 'Tax',
+          'field_tax': 'Pajak',
+          'field_tax_price': 'Potongan pajak',
           'field_cashier': 'Cashier',
           'field_member': 'Member',
           'field_customer_number': 'Customer Number',
@@ -235,6 +237,7 @@ class Messages extends Translations {
           'field_connect': 'Connect',
           'field_disconnect': 'Disconnect',
           'print_test': 'Print Test',
+          'print_invoice': 'Print invoice',
           'setting_menu_printer': 'Printer',
           'global_validation_field_exist': '@field already exist',
           'field_footer': 'Footer',
@@ -275,7 +278,11 @@ class Messages extends Translations {
           'update_app': 'Update App',
           'please_update_app': 'Please update your app now, for better quality',
           'field_discount': 'Discount',
-          'discount': 'Discount'
+          'discount': 'Discount',
+          'payment_success': 'Payment Success',
+          'setup_the_printer': 'Setup the printer first!',
+          'printer_error':
+              'The printer is busy or you can set it first in the printer settings menu'
         },
         'id_ID': {
           'auth': 'Otentikasi',
@@ -320,6 +327,7 @@ class Messages extends Translations {
               'Jika anda sudah mengatur password, anda harus memasukkan password lama anda untuk mengubahnya',
           'global_generate': 'Generate',
           'global_cancel': 'Batal',
+          'global_back': 'Kembali',
           'global_delete': 'Hapus',
           'global_failed_delete_item': 'Gagal menghapus @item',
           'has_an_item': 'karena memiliki @item',
@@ -383,6 +391,7 @@ class Messages extends Translations {
           'set_detault_tax': 'Atur Pajak Default',
           'set_detault_tax_success': 'Pajak Default telah diatur',
           'field_tax': 'Tax',
+          'field_tax_price': 'Tax price',
           'field_cashier': 'Kasir',
           'field_member': 'Member',
           'field_customer_number': 'Nomor Pelanggan',
@@ -510,6 +519,7 @@ class Messages extends Translations {
           'field_connect': 'Sambungkan',
           'field_disconnect': 'Putus koneksi',
           'print_test': 'Cetak testing',
+          'print_invoice': 'Cetak nota',
           'setting_menu_printer': 'Printer',
           'global_validation_field_exist': '@field sudah ada',
           'field_footer': 'Footer',
@@ -550,7 +560,11 @@ class Messages extends Translations {
           'please_update_app':
               'Update aplikas anda sekarang untuk kualitas yang lebih baik.',
           'field_discount': 'Diskon',
-          'discount': 'Diskon'
+          'discount': 'Diskon',
+          'payment_success': 'Pembayaran berhasil',
+          'setup_the_printer': 'Atur printer terlebih dahulu',
+          'printer_error':
+              'Printer sedang sibuk atau kamu bisa atur dulu di menu pengaturan printer'
         },
       };
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lakasir/controllers/notification_controller.dart';
-import 'package:lakasir/utils/colors.dart';
+import 'package:lakasir/utils/utils.dart';
 
 class Layout extends StatefulWidget {
   const Layout({
@@ -41,6 +41,9 @@ class _LayoutState extends State<Layout> {
   Widget build(BuildContext context) {
     var shouldHide = ['/menu/setting/notification', '/notifications']
         .contains(Get.currentRoute);
+    bool isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom != 0;
+    debug(isKeyboardVisible);
+
     return Scaffold(
       backgroundColor: Colors.grey[100],
       appBar: widget.noAppBar
@@ -82,7 +85,8 @@ class _LayoutState extends State<Layout> {
         );
       }),
       floatingActionButtonLocation: widget.floatingActionButtonLocation,
-      floatingActionButton: widget.bottomNavigationBar,
+      floatingActionButton:
+          !isKeyboardVisible ? widget.bottomNavigationBar : null,
       bottomSheet: widget.bottomSheet,
       resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
     );

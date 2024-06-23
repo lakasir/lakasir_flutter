@@ -164,9 +164,6 @@ class ApiService<T> {
 }
 
 void logApi(Response response) {
-  debug({
-    "url": response.request?.url,
-    "body": response.body,
-    "status": response.statusCode,
-  });
+  debug(
+      "url ${response.request?.url}\nbody ${response.body}\nstatus ${response.statusCode}\n");
 }

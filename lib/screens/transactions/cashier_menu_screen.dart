@@ -60,8 +60,7 @@ class _CashierMenuScreenState extends State<CashierMenuScreen> {
             resizeToAvoidBottomInset: true,
             title: 'transaction_cashier'.tr,
             bottomNavigationBar: MyBottomBar(
-              icon:
-                  !context.isTablet ? Icons.shopping_basket : Icons.credit_card,
+              icon: !context.isTablet ? Icons.shopping_basket : Icons.payments,
               label: Obx(
                 () {
                   var subTotalPrice = formatPrice(
