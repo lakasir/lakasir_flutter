@@ -36,4 +36,15 @@ class SellingDetail {
           : null,
     );
   }
+
+  String buildRowPrice() {
+    var priceText = "${formatPrice(price, isSymbol: false)} x $quantity";
+
+    if (discountPrice != 0) {
+      priceText =
+          "($priceText) -\n${formatPrice(discountPrice, isSymbol: false)} ";
+    }
+
+    return priceText;
+  }
 }

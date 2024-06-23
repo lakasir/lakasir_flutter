@@ -4,6 +4,7 @@ import 'package:heroicons/heroicons.dart';
 import 'package:lakasir/controllers/auths/auth_controller.dart';
 import 'package:lakasir/controllers/profiles/profile_controller.dart';
 import 'package:lakasir/controllers/setting_controller.dart';
+import 'package:lakasir/controllers/settings/print_controller.dart';
 import 'package:lakasir/utils/colors.dart';
 import 'package:lakasir/widgets/layout.dart';
 import 'package:lakasir/widgets/my_card_list.dart';
@@ -68,17 +69,20 @@ class _MenuScreenState extends State<MenuScreen> {
   SettingController settingController = Get.put(SettingController());
   final AuthController _authController = Get.put(AuthController());
   final ProfileController _profileController = Get.put(ProfileController());
+  final PrintController _printController = Get.put(PrintController());
 
   @override
   void initState() {
     super.initState();
     _authController.fetchPermissions();
+    _printController.fetchPrinters();
   }
 
   @override
   void dispose() {
     super.dispose();
     _authController.fetchPermissions();
+    _printController.fetchPrinters();
   }
 
   @override

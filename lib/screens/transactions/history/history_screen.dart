@@ -286,7 +286,7 @@ class CardList extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             Text(
-              "Total Price: ${formatPrice(history.totalPrice!, isSymbol: false)}",
+              "Total Price: ${formatPrice(history.grandTotalPrice!, isSymbol: false)}",
               style: const TextStyle(
                 fontWeight: FontWeight.w400,
               ),

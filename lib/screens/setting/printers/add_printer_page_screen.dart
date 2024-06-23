@@ -226,7 +226,8 @@ class _AddPrinterPageScreenState extends State<AddPrinterPageScreen> {
             Container(
               margin: const EdgeInsets.only(bottom: 10),
               child: MyTextField(
-                textInputAction: TextInputAction.none,
+                keyboardType: TextInputType.multiline,
+                textInputAction: TextInputAction.newline,
                 maxLines: 4,
                 controller: _printerController.footerController,
                 label: 'field_footer'.tr,

@@ -54,6 +54,8 @@ class _HistoryDetailScreenState extends State<HistoryDetailScreen> {
           });
         }
       });
+    } else {
+      show("printer_error".tr, color: error);
     }
   }
 
@@ -137,16 +139,17 @@ class _HistoryDetailScreenState extends State<HistoryDetailScreen> {
             (e) => DetailTransactionItem(
               discountPrice: formatPrice(e.discountPrice),
               productName: e.product!.name,
-              quantity: "${e.quantity} x ${formatPrice(e.price / e.quantity)}",
-              subTotal: formatPrice(e.price),
+              quantity: e.buildRowPrice(),
+              subTotal: formatPrice(e.discountPrice),
             ),
           )
           .toList(),
       tax: "${history.tax!}%",
+      discount: "(${formatPrice(history.totalDiscount)})",
       subTotal: formatPrice(
         history.totalPrice! - (history.totalPrice! * history.tax! / 100),
       ),
-      total: formatPrice(history.totalPrice!),
+      total: formatPrice(history.grandTotalPrice!),
       payedMoney: formatPrice(history.payedMoney!),
       change: formatPrice(history.moneyChange!),
       note: history.note,
@@ -158,42 +161,44 @@ class _HistoryDetailScreenState extends State<HistoryDetailScreen> {
   Widget build(BuildContext context) {
     return Layout(
       title: "transaction_detail".tr,
-      child: ListView(
-        children: [
-          _detailTransaction(),
-          const SizedBox(height: 20),
-          Row(
-            children: [
-              Flexible(
-                child: MyFilledButton(
-                  color: grey,
-                  isLoading: sharedLoading,
-                  onPressed: captureAndShareWidget,
-                  child: Row(
-                    children: [
-                      Text("share".tr),
-                      const SizedBox(width: 10),
-                      const Icon(Icons.share),
-                    ],
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            _detailTransaction(),
+            const SizedBox(height: 20),
+            Row(
+              children: [
+                Flexible(
+                  child: MyFilledButton(
+                    color: grey,
+                    isLoading: sharedLoading,
+                    onPressed: captureAndShareWidget,
+                    child: Row(
+                      children: [
+                        Text("share".tr),
+                        const SizedBox(width: 10),
+                        const Icon(Icons.share),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(width: 10),
-              Flexible(
-                child: MyFilledButton(
-                  onPressed: rePrint,
-                  child: Row(
-                    children: [
-                      Text("re-print".tr),
-                      const SizedBox(width: 10),
-                      const Icon(Icons.print),
-                    ],
+                const SizedBox(width: 10),
+                Flexible(
+                  child: MyFilledButton(
+                    onPressed: rePrint,
+                    child: Row(
+                      children: [
+                        Text("re-print".tr),
+                        const SizedBox(width: 10),
+                        const Icon(Icons.print),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
-        ],
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
