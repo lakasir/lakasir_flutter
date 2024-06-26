@@ -31,6 +31,7 @@ class ProductAddEditController extends GetxController {
     initialValue: 0.0,
   );
   final TextEditingController unitInputController = TextEditingController();
+  final TextEditingController expiredController = TextEditingController();
   final TextEditingController skuInputController = TextEditingController();
   final TextEditingController barcodeInputController = TextEditingController();
   String? photoUrl = '';
@@ -62,6 +63,7 @@ class ProductAddEditController extends GetxController {
         type: typeController.selectedOption,
         unit: unitInputController.text,
         photoUrl: photoUrl,
+        expired: expiredController.text,
       ));
       isLoading(false);
       _productController.getProducts();

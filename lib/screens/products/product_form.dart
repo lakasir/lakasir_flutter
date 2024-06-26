@@ -5,6 +5,8 @@ import 'package:lakasir/controllers/category_controller.dart';
 import 'package:lakasir/controllers/products/product_add_controller.dart';
 import 'package:lakasir/controllers/products/unit_controller.dart';
 import 'package:lakasir/utils/colors.dart';
+import 'package:lakasir/utils/utils.dart';
+import 'package:lakasir/widgets/date_picker.dart';
 import 'package:lakasir/widgets/filled_button.dart';
 import 'package:lakasir/widgets/image_picker.dart';
 import 'package:lakasir/widgets/select_input_feld.dart';
@@ -52,6 +54,7 @@ class _ProductFormState extends State<ProductForm> {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
+    var errorResponse = widget.controller.productErrorResponse;
 
     return ListView(
       shrinkWrap: true,
@@ -76,8 +79,7 @@ class _ProductFormState extends State<ProductForm> {
                   controller: widget.controller.nameInputController,
                   label: 'field_product_name'.tr,
                   mandatory: true,
-                  errorText:
-                      widget.controller.productErrorResponse.value.name ?? '',
+                  errorText: errorResponse.value.name ?? '',
                 ),
               ),
             ),
@@ -95,9 +97,7 @@ class _ProductFormState extends State<ProductForm> {
                     mandatory: true,
                     controller: widget.controller.categoryController,
                     label: 'field_category'.tr,
-                    errorText:
-                        widget.controller.productErrorResponse.value.category ??
-                            '',
+                    errorText: errorResponse.value.category ?? '',
                     options: _categoryController.categories
                         .map(
                           (e) => Option(
@@ -121,9 +121,7 @@ class _ProductFormState extends State<ProductForm> {
                     () => SelectInputWidget(
                       controller: widget.controller.typeController,
                       label: 'field_type'.tr,
-                      errorText:
-                          widget.controller.productErrorResponse.value.type ??
-                              '',
+                      errorText: errorResponse.value.type ?? '',
                       options: [
                         Option(
                           name: "option_product".tr,
@@ -182,8 +180,7 @@ class _ProductFormState extends State<ProductForm> {
                 controller: widget.controller.stockInputController,
                 label: 'field_stock'.tr,
                 keyboardType: TextInputType.number,
-                errorText:
-                    widget.controller.productErrorResponse.value.stock ?? '',
+                errorText: errorResponse.value.stock ?? '',
               ),
             ),
           ),
@@ -204,9 +201,7 @@ class _ProductFormState extends State<ProductForm> {
                       controller: widget.controller.initialPriceInputController,
                       label: 'field_initial_price'.tr,
                       keyboardType: TextInputType.number,
-                      errorText: widget.controller.productErrorResponse.value
-                              .initialPrice ??
-                          '',
+                      errorText: errorResponse.value.initialPrice ?? '',
                     ),
                   ),
                 ),
@@ -224,15 +219,35 @@ class _ProductFormState extends State<ProductForm> {
                     controller: widget.controller.sellingPriceInputController,
                     label: 'field_selling_price'.tr,
                     keyboardType: TextInputType.number,
-                    errorText: widget.controller.productErrorResponse.value
-                            .sellingPrice ??
-                        '',
+                    errorText: errorResponse.value.sellingPrice ?? '',
                   ),
                 ),
               ),
             ],
           ),
         ),
+        if (_authController.feature(feature: 'product-expired'))
+          Visibility(
+            visible: Get.currentRoute != '/menu/product/edit',
+            child: Container(
+              margin: const EdgeInsets.only(top: 20),
+              child: Obx(
+                () {
+                  DateTime now = DateTime.now();
+
+                  return MyDatePicker(
+                    mandatory: true,
+                    initialDate: now,
+                    firstDate: now,
+                    lastDate: DateTime(now.year + 3, now.month, now.day),
+                    controller: widget.controller.expiredController,
+                    label: 'field_expired'.tr,
+                    errorText: errorResponse.value.expired,
+                  );
+                },
+              ),
+            ),
+          ),
         Container(
           margin: const EdgeInsets.only(top: 20),
           child: Obx(
@@ -241,8 +256,7 @@ class _ProductFormState extends State<ProductForm> {
               label: 'field_unit'.tr,
               textCapitalization: TextCapitalization.words,
               mandatory: true,
-              errorText:
-                  widget.controller.productErrorResponse.value.unit ?? '',
+              errorText: errorResponse.value.unit ?? '',
             ),
           ),
         ),
@@ -330,8 +344,7 @@ class _ProductFormState extends State<ProductForm> {
                   () => MyTextField(
                     controller: widget.controller.skuInputController,
                     label: 'field_sku'.tr,
-                    errorText:
-                        widget.controller.productErrorResponse.value.sku ?? '',
+                    errorText: errorResponse.value.sku ?? '',
                     info: 'field_sku_info'.tr,
                   ),
                 ),
@@ -342,9 +355,7 @@ class _ProductFormState extends State<ProductForm> {
                     () => MyTextField(
                       controller: widget.controller.barcodeInputController,
                       label: 'field_barcode'.tr,
-                      errorText: widget
-                              .controller.productErrorResponse.value.barcode ??
-                          '',
+                      errorText: errorResponse.value.barcode ?? '',
                       info: 'field_sku_info'.tr,
                     ),
                   ),

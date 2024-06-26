@@ -97,7 +97,6 @@ class _CashierReportScreenState extends State<CashierReportScreen> {
           Container(
             margin: const EdgeInsets.only(bottom: 10),
             child: MyDatePicker(
-              usingTimePicker: true,
               // get yesterday
               initialDate: DateTime.now().subtract(const Duration(days: 5)),
               firstDate: DateTime(2020),

@@ -12,6 +12,7 @@ class ProductRequest {
   bool isNonStock;
   String? sku;
   String? barcode;
+  String? expired;
 
   ProductRequest({
     this.name,
@@ -25,6 +26,7 @@ class ProductRequest {
     this.isNonStock = false,
     this.sku,
     this.barcode,
+    this.expired,
   });
 
   Map<String, dynamic> toJson() {
@@ -39,6 +41,7 @@ class ProductRequest {
       'is_non_stock': isNonStock,
       'sku': sku,
       'barcode': barcode ?? '',
+      'expired': expired ?? ''
     };
     if (photoUrl != '') {
       data['hero_images_url'] = photoUrl;

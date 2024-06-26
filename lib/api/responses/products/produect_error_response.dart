@@ -10,6 +10,7 @@ class ProductErrorResponse {
   String? isNotStock;
   String? sku;
   String? barcode;
+  String? expired;
 
   ProductErrorResponse({
     this.name,
@@ -23,19 +24,26 @@ class ProductErrorResponse {
     this.isNotStock,
     this.sku,
     this.barcode,
+    this.expired,
   });
 
-  ProductErrorResponse.fromJson(Map<String, dynamic> json) {
-    name = json['name'] == null ? '' : json['name'][0];
-    category = json['category'] == null ? '' : json['category'][0];
-    stock = json['stock'] == null ? '' : json['stock'][0];
-    initialPrice = json['initial_price'] == null ? '' : json['initial_price'][0];
-    sellingPrice = json['selling_price'] == null ? '' : json['selling_price'][0];
-    type = json['type'] == null ? '' : json['type'][0];
-    unit = json['unit'] == null ? '' : json['unit'][0];
-    photoUrl = json['hero_images_url'] == null ? '' : json['hero_images_url'][0];
-    isNotStock = json['is_not_stock'] == null ? '' : json['is_not_stock'][0];
-    sku = json['sku'] == null ? '' : json['sku'][0];
-    barcode = json['barcode'] == null ? '' : json['barcode'][0];
+  factory ProductErrorResponse.fromJson(Map<String, dynamic> json) {
+    return ProductErrorResponse(
+      name: json['name'] == null ? '' : json['name'][0],
+      category: json['category'] == null ? '' : json['category'][0],
+      stock: json['stock'] == null ? '' : json['stock'][0],
+      initialPrice:
+          json['initial_price'] == null ? '' : json['initial_price'][0],
+      sellingPrice:
+          json['selling_price'] == null ? '' : json['selling_price'][0],
+      type: json['type'] == null ? '' : json['type'][0],
+      unit: json['unit'] == null ? '' : json['unit'][0],
+      photoUrl:
+          json['hero_images_url'] == null ? '' : json['hero_images_url'][0],
+      isNotStock: json['is_not_stock'] == null ? '' : json['is_not_stock'][0],
+      sku: json['sku'] == null ? '' : json['sku'][0],
+      barcode: json['barcode'] == null ? '' : json['barcode'][0],
+      expired: json['expired'] == null ? '' : json['expired'][0],
+    );
   }
 }

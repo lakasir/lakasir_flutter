@@ -41,8 +41,6 @@ class _LayoutState extends State<Layout> {
   Widget build(BuildContext context) {
     var shouldHide = ['/menu/setting/notification', '/notifications']
         .contains(Get.currentRoute);
-    bool isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom != 0;
-    debug(isKeyboardVisible);
 
     return Scaffold(
       backgroundColor: Colors.grey[100],
@@ -85,8 +83,7 @@ class _LayoutState extends State<Layout> {
         );
       }),
       floatingActionButtonLocation: widget.floatingActionButtonLocation,
-      floatingActionButton:
-          !isKeyboardVisible ? widget.bottomNavigationBar : null,
+      floatingActionButton: widget.bottomNavigationBar,
       bottomSheet: widget.bottomSheet,
       resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
     );

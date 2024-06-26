@@ -12,13 +12,14 @@ class MyDatePicker extends StatefulWidget {
   final String? hintText;
   final String? errorText;
   final bool usingTimePicker;
-
+  final bool mandatory;
   const MyDatePicker({
     super.key,
     required this.initialDate,
     required this.firstDate,
     required this.lastDate,
     required this.controller,
+    this.mandatory = false,
     this.usingTimePicker = false,
     this.label,
     this.hintText,
@@ -49,6 +50,8 @@ class _MyDatePickerState extends State<MyDatePicker> {
   Widget build(BuildContext context) {
     return MyTextField(
       controller: widget.controller,
+      mandatory: widget.mandatory,
+      // readOnly: true,
       label: widget.label,
       hintText: widget.hintText,
       onTap: () => widget.usingTimePicker ? _selectDateTime() : _selectDate(),

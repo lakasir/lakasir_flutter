@@ -54,94 +54,98 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Layout(
-      noAppBar: true,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const HeroIcon(
-            HeroIcons.checkCircle,
-            size: 150,
-            color: success,
-          ),
-          const SizedBox(height: 10),
-          Text("payment_success".tr),
-          Text(
-            "${"field_change".tr} = ${formatPrice(changes, isSymbol: false)}",
-            style: const TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.w700,
+    return PopScope(
+      canPop: true,
+      onPopInvoked: (bool didPop) async {},
+      child: Layout(
+        noAppBar: true,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const HeroIcon(
+              HeroIcons.checkCircle,
+              size: 150,
+              color: success,
             ),
-          ),
-          Container(
-            width: 200,
-            margin: const EdgeInsets.only(bottom: 10, top: 10),
-            child: MyFilledButton(
-              isLoading: isLoading,
-              onPressed: () {
-                refreshCashier();
-                if (_printerController.printers.isNotEmpty) {
-                  var printer = _printerController.printers.first;
-                  BlueThermalPrinter bluetooth = BlueThermalPrinter.instance;
-                  bluetooth.isConnected.then((value) {
-                    if (value!) {
-                      PrintReceipt(bluetooth: bluetooth).print(
-                        _transactionController.transaction.value,
-                        printer,
-                        copy: copy,
-                      );
-                    } else {
-                      var device =
-                          BluetoothDevice(printer.name, printer.address);
-                      bluetooth.connect(device).then((value) {
-                        if (value) {
-                          PrintReceipt(bluetooth: bluetooth).print(
-                            _transactionController.transaction.value,
-                            printer,
-                            copy: copy,
-                          );
-                        }
+            const SizedBox(height: 10),
+            Text("payment_success".tr),
+            Text(
+              "${"field_change".tr} = ${formatPrice(changes, isSymbol: false)}",
+              style: const TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            Container(
+              width: 200,
+              margin: const EdgeInsets.only(bottom: 10, top: 10),
+              child: MyFilledButton(
+                isLoading: isLoading,
+                onPressed: () {
+                  refreshCashier();
+                  if (_printerController.printers.isNotEmpty) {
+                    var printer = _printerController.printers.first;
+                    BlueThermalPrinter bluetooth = BlueThermalPrinter.instance;
+                    bluetooth.isConnected.then((value) {
+                      if (value!) {
+                        PrintReceipt(bluetooth: bluetooth).print(
+                          _transactionController.transaction.value,
+                          printer,
+                          copy: copy,
+                        );
+                      } else {
+                        var device =
+                            BluetoothDevice(printer.name, printer.address);
+                        bluetooth.connect(device).then((value) {
+                          if (value) {
+                            PrintReceipt(bluetooth: bluetooth).print(
+                              _transactionController.transaction.value,
+                              printer,
+                              copy: copy,
+                            );
+                          }
+                        });
+                      }
+                      setState(() {
+                        copy = true;
                       });
-                    }
-                    setState(() {
-                      copy = true;
+                    }).catchError((value) {
+                      show("printer_error".tr, color: error);
                     });
-                  }).catchError((value) {
-                    show("printer_error".tr, color: error);
-                  });
-                } else {
-                  show("setup_the_printer".tr, color: error);
-                  // Get.toNamed('/menu/setting/print/add');
-                }
-              },
-              child: Row(
-                children: [
-                  const HeroIcon(HeroIcons.printer),
-                  const SizedBox(width: 10),
-                  Text("print_invoice".tr),
-                ],
+                  } else {
+                    show("setup_the_printer".tr, color: error);
+                    // Get.toNamed('/menu/setting/print/add');
+                  }
+                },
+                child: Row(
+                  children: [
+                    const HeroIcon(HeroIcons.printer),
+                    const SizedBox(width: 10),
+                    Text("print_invoice".tr),
+                  ],
+                ),
               ),
             ),
-          ),
-          SizedBox(
-            width: 200,
-            child: MyFilledButton(
-              color: grey,
-              onPressed: () {
-                refreshCashier();
-                Get.back();
-              },
-              child: Row(
-                children: [
-                  Text(
-                    "global_back".tr,
-                    style: const TextStyle(color: Colors.black),
-                  ),
-                ],
+            SizedBox(
+              width: 200,
+              child: MyFilledButton(
+                color: grey,
+                onPressed: () {
+                  refreshCashier();
+                  Get.back();
+                },
+                child: Row(
+                  children: [
+                    Text(
+                      "global_back".tr,
+                      style: const TextStyle(color: Colors.black),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
