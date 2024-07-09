@@ -59,3 +59,8 @@ This project is licensed under the MIT License - see the [LICENSE](https://githu
 
 ## Contact
 For any inquiries or support related to the Lakasir Mobile App, please contact lakasirapp@gmail.com
+
+## Donate for live longer
+
+[<img src="https://trakteer.id/images/v2/trakteer-logo.png" alt="drawing" width="100"/>](https://trakteer.id/sheenazien8/tip?quantity=1)
+<a href="https://www.buymeacoffee.com/sheenazien8" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-green.png" alt="Buy Me A Coffee" style="height: 20px !important;width: 100px !important;" ></a>
