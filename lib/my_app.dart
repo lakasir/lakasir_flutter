@@ -36,7 +36,6 @@ import 'package:lakasir/screens/transactions/invoice_screen.dart';
 import 'package:lakasir/screens/transactions/reports/cashier_screen.dart';
 import 'package:lakasir/screens/transactions/transaction_menu_screen.dart';
 import 'package:lakasir/utils/colors.dart';
-import 'package:lakasir/utils/utils.dart';
 import 'package:rxdart/rxdart.dart';
 
 class MyApp extends StatefulWidget {
@@ -115,8 +114,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
             const CashierReportScreen(),
         '/menu/transaction': (context) => const TransactionMenuScreen(),
         '/menu/transaction/history': (context) => const HistoryScreen(),
-        '/menu/transaction/history/detail': (context) =>
-            const HistoryDetailScreen(),
+        // '/menu/transaction/history/detail': (context) =>
+        //     const HistoryDetailScreen(),
         '/menu/transaction/cashier': (context) => const CashierMenuScreen(),
         '/menu/transaction/cashier/cart': (context) =>
             const CashierCartMenuScreen(),

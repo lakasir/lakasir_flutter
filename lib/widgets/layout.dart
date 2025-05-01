@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lakasir/controllers/notification_controller.dart';
-import 'package:lakasir/utils/utils.dart';
 
 class Layout extends StatefulWidget {
   const Layout({

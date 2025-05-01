@@ -13,6 +13,7 @@ class ApiService<T> {
 
   Future<T> fetchData(String endpoint) async {
     final token = await getToken();
+    debug(baseUrl);
     final response = await http.get(
       Uri.parse('$baseUrl/$endpoint'),
       headers: <String, String>{

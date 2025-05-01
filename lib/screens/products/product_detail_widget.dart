@@ -4,7 +4,6 @@ import 'package:lakasir/api/responses/products/product_response.dart';
 import 'package:lakasir/controllers/auths/auth_controller.dart';
 import 'package:lakasir/controllers/setting_controller.dart';
 import 'package:lakasir/controllers/settings/secure_initial_price_controller.dart';
-import 'package:lakasir/utils/auth.dart';
 import 'package:lakasir/utils/utils.dart';
 
 class ProductDetailWidget extends StatefulWidget {

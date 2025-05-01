@@ -1,0 +1,2 @@
+/Users/sheenazien8/Documents/Code/laksir_project/lakasir_flutter/android/app/.cxx/Debug/r1m2on4s/arm64-v8a/CMakeFiles/edit_cache.dir
+/Users/sheenazien8/Documents/Code/laksir_project/lakasir_flutter/android/app/.cxx/Debug/r1m2on4s/arm64-v8a/CMakeFiles/rebuild_cache.dir

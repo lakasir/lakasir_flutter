@@ -2,7 +2,6 @@ import 'package:lakasir/api/responses/auths/profile_response.dart';
 import 'package:lakasir/api/responses/members/member_response.dart';
 import 'package:lakasir/api/responses/payment_methods/payment_method_response.dart';
 import 'package:lakasir/api/responses/transactions/selling_detail.dart';
-import 'package:lakasir/utils/utils.dart';
 
 class TransactionHistoryResponse {
   int id;

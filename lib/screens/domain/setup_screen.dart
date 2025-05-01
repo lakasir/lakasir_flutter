@@ -60,6 +60,29 @@ class _SetupScreenState extends State<SetupScreen> {
     }
   }
 
+  Future<bool> setOffline() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    try {
+      String domain = "localhost:8000";
+      registerDomainController.text = domain;
+
+      await setDomainOffline(true);
+      await ApiService("http://$domain").fetchData('api');
+      await storeSetup(domain);
+
+      return true;
+    } catch (e) {
+      setState(() {
+        domainError = "Your domain is not registered yet";
+        isLoading = false;
+      });
+      return false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Layout(
@@ -176,7 +199,7 @@ class _SetupScreenState extends State<SetupScreen> {
               ),
             ),
             Container(
-              margin: const EdgeInsets.only(top: 28, bottom: 58),
+              margin: const EdgeInsets.only(top: 28, bottom: 10),
               child: Center(
                 child: GestureDetector(
                   onTap: () {
@@ -199,6 +222,49 @@ class _SetupScreenState extends State<SetupScreen> {
                           const WidgetSpan(child: SizedBox(width: 4.0)),
                           TextSpan(
                             text: "setup_please_create".tr,
+                            style: const TextStyle(
+                              color: primary,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.only(top: 0, bottom: 0),
+              child: Center(
+                child: GestureDetector(
+                  onTap: () {
+                    setOffline().then(
+                      (value) {
+                        if (value) {
+                          Get.offAllNamed('/auth');
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text("Something went wrong"),
+                              backgroundColor: error,
+                            ),
+                          );
+                        }
+                      },
+                    );
+                  },
+                  child: SizedBox(
+                    width: 300,
+                    child: RichText(
+                      textAlign: TextAlign.center,
+                      text: TextSpan(
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
+                        ),
+                        children: [
+                          TextSpan(
+                            text: "using_offline".tr,
                             style: const TextStyle(
                               color: primary,
                             ),

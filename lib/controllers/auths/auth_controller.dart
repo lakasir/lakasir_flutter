@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 import 'package:lakasir/controllers/profiles/profile_controller.dart';
-import 'package:lakasir/utils/utils.dart';
 
 class AuthController extends GetxController {
   RxList<String> permissions = List<String>.empty().obs;

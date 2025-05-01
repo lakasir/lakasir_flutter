@@ -1,10 +1,8 @@
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:lakasir/controllers/notification_controller.dart';
-import 'package:lakasir/utils/utils.dart';
 import 'package:lakasir/widgets/layout.dart';
 import 'package:lakasir/widgets/my_card_list.dart';
 

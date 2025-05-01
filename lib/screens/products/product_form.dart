@@ -5,7 +5,6 @@ import 'package:lakasir/controllers/category_controller.dart';
 import 'package:lakasir/controllers/products/product_add_controller.dart';
 import 'package:lakasir/controllers/products/unit_controller.dart';
 import 'package:lakasir/utils/colors.dart';
-import 'package:lakasir/utils/utils.dart';
 import 'package:lakasir/widgets/date_picker.dart';
 import 'package:lakasir/widgets/filled_button.dart';
 import 'package:lakasir/widgets/image_picker.dart';

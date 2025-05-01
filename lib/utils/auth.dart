@@ -36,16 +36,23 @@ Future<String> getDomain() async {
   if (prefs.getString('domain') == null) {
     return "";
   }
+  bool? isOffline = prefs.getBool("isOffline");
   String certificated = "https://";
-  if (environment == "local") {
+  if (environment == "local" || (isOffline != null && isOffline)) {
     certificated = "http://";
   }
+
   return "$certificated${prefs.getString('domain')!}/api";
 }
 
 Future<bool> isSetup() async {
   final prefs = await SharedPreferences.getInstance();
   return prefs.getBool('setup') ?? false;
+}
+
+Future<void> setDomainOffline(bool offilne) async {
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.setBool('isOffline', offilne);
 }
 
 Future<void> storeSetup(String domain) async {

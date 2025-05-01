@@ -283,7 +283,8 @@ class Messages extends Translations {
           'payment_success': 'Payment Success',
           'setup_the_printer': 'Setup the printer first!',
           'printer_error':
-              'The printer is busy or you can set it first in the printer settings menu'
+              'The printer is busy or you can set it first in the printer settings menu',
+          'using_offline': "Atau gunakan offline?"
         },
         'id_ID': {
           'auth': 'Otentikasi',
@@ -566,7 +567,8 @@ class Messages extends Translations {
           'payment_success': 'Pembayaran berhasil',
           'setup_the_printer': 'Atur printer terlebih dahulu',
           'printer_error':
-              'Printer sedang sibuk atau kamu bisa atur dulu di menu pengaturan printer'
+              'Printer sedang sibuk atau kamu bisa atur dulu di menu pengaturan printer',
+          'using_offline': "Atau gunakan offline?"
         },
       };
 }

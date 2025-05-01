@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 import 'package:lakasir/api/requests/pagination_request.dart';
-import 'package:lakasir/api/responses/payment_methods/payment_method_response.dart';
 import 'package:lakasir/api/responses/transactions/history_response.dart';
 import 'package:lakasir/services/history_service.dart';
 

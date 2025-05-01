@@ -1,4 +1,3 @@
-import 'package:lakasir/utils/utils.dart';
 
 class ProductRequest {
   String? name;

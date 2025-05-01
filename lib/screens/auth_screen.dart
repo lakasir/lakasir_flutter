@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:lakasir/screens/domain/setup_screen.dart';
 import 'package:lakasir/screens/login_screen.dart';
 import 'package:lakasir/screens/menu_screen.dart';
 import 'package:lakasir/screens/onboard_screen.dart';
