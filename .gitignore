@@ -9,6 +9,7 @@
 .history
 .svn/
 migrate_working_dir/
+.vscode
 
 # IntelliJ related
 *.iml
@@ -43,3 +44,52 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# FVM Version Cache
+.fvm/
+.fvmrc
+
+# iOS
+ios/Flutter/Flutter.framework
+ios/Flutter/Flutter.podspec
+ios/ServiceDefinitions.json
+ios/Runner/GeneratedPluginRegistrant.*
+
+# Android
+android/.gradle/
+android/app/build/
+android/local.properties
+android/GeneratedPluginRegistrant.java
+
+# Linux
+linux/flutter/
+linux/CMakeFiles/
+linux/Makefile
+linux/cmake_install.cmake
+linux/ephemeral/
+linux/GeneratedPluginRegistrant.*
+
+# Windows
+windows/flutter/
+windows/CMakeFiles/
+windows/Makefile
+windows/cmake_install.cmake
+windows/ephemeral/
+windows/GeneratedPluginRegistrant.*
+
+# macOS
+macos/Flutter/GeneratedPluginRegistrant.swift
+macos/Flutter/ephemeral/
+macos/Flutter/Flutter-Debug.xcconfig
+macos/Flutter/Flutter-Release.xcconfig
+
+# Web
+web/generated_plugin_registrant.dart
+
+# VSCode / IntelliJ
+.vscode/
+.idea/
+*.iml
+
+# Misc
+*.lock
