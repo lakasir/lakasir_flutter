@@ -120,7 +120,7 @@ class MyApp extends StatefulWidget {
     super.key,
     this.isAuthenticated = "",
     this.setup = false,
-    this.locale = const Locale('en'),
+    this.locale = const Locale('es', 'NI'),
   });
 
   @override
@@ -235,7 +235,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       translations: Messages(),
-      locale: widget.locale,
+      locale: Get.deviceLocale, //widget.locale,
+      fallbackLocale: const Locale("es", "NI"),
       title: 'Lakasir',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
