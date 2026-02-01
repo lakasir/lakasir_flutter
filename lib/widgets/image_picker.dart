@@ -89,9 +89,6 @@ class _MyImagePickerState extends State<MyImagePicker> {
         sourcePath: selected.path,
         maxWidth: widget.maxWidth,
         maxHeight: widget.maxHeight,
-        aspectRatioPresets: [
-          CropAspectRatioPreset.square,
-        ],
         uiSettings: [
           AndroidUiSettings(
             toolbarTitle: 'Cropper',
@@ -99,6 +96,16 @@ class _MyImagePickerState extends State<MyImagePicker> {
             toolbarWidgetColor: Colors.white,
             initAspectRatio: CropAspectRatioPreset.square,
             lockAspectRatio: true,
+            aspectRatioPresets: [
+              CropAspectRatioPreset.square,
+            ],
+          ),
+          IOSUiSettings(
+            title: 'Cropper',
+            aspectRatioPresets: [
+              CropAspectRatioPreset.square,
+            ],
+            aspectRatioLockEnabled: true,
           ),
         ],
       );
