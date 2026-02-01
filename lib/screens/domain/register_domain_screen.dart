@@ -204,8 +204,6 @@ class _RegisterDomainScreenState extends State<RegisterDomainScreen> {
                     child: MyTextField(
                       controller: domainNameController,
                       errorText: registerErrorResponse.domainName,
-                      prefixText:
-                          environment == "local" ? "http://" : "https://",
                       info: "info_domain".tr,
                       label: "field_domain_name".tr,
                       suffixText: ".lakasir.com",
