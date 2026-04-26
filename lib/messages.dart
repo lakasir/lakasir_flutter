@@ -291,6 +291,12 @@ class Messages extends Translations {
           'connect_to_server_description': 'Link to an existing Lakasir server',
           'setup_choose_mode': 'Choose how you want to get started',
           'field_full_name': 'Full Name',
+          'no_connection': 'No connection',
+          'no_connection_cached': 'No connection — using cached data',
+          'no_connection_pending': 'No connection — {count} transactions queued',
+          'syncing_pending': 'Syncing {count} pending transactions...',
+          'sync_now': 'SYNC NOW',
+          'offline_mode_indicator': 'OFFLINE',
         },
         'id_ID': {
           'auth': 'Otentikasi',
@@ -581,6 +587,12 @@ class Messages extends Translations {
           'connect_to_server_description': 'Hubungkan ke server Lakasir yang sudah ada',
           'setup_choose_mode': 'Pilih cara untuk memulai',
           'field_full_name': 'Nama Lengkap',
+          'no_connection': 'Tidak ada koneksi',
+          'no_connection_cached': 'Tidak ada koneksi — menggunakan data cache',
+          'no_connection_pending': 'Tidak ada koneksi — {count} transaksi antrean',
+          'syncing_pending': 'Menyinkronkan {count} transaksi tertunda...',
+          'sync_now': 'SINKRONKAN',
+          'offline_mode_indicator': 'OFFLINE',
         },
       };
 }
