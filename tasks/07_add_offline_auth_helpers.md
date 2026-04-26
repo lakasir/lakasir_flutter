@@ -27,4 +27,18 @@
 - SharedPreferences, auth flow design
 
 ## Implementation
-<!-- Write you've done in here -->
+- Added storeOfflineUserId(int id) — stores to SharedPreferences key 'offline_user_id'
+- Added getOfflineUserId() — retrieves from SharedPreferences key 'offline_user_id'
+- Added storeOfflineAuth(bool value) — stores to SharedPreferences key 'offline_auth'
+- Added isOfflineAuthenticated() — checks SharedPreferences key 'offline_auth' (defaults to false)
+- Added isOfflineMode() — returns !(await isSetup()), true when no domain is configured
+- Added hasDomain() — returns true if setup is done and domain string is non-empty
+- Updated checkAuthentication() with offline-first routing:
+  - setup + token → "menu" (online auth, unchanged)
+  - setup + no token + offline auth → "menu" (offline user can still access menu)
+  - setup + no token + no offline auth → "login" (needs online login)
+  - no setup + offline auth → "menu" (offline user bypasses setup)
+  - no setup + no offline auth → "setup" (new user needs onboarding)
+- Updated logout() to also clear offline_auth and offline_user_id SharedPreferences keys
+- Preserved all existing functions: logout, storeToken, getToken, getDomain, isSetup, storeSetup, can, destroySetup
+- Verified: flutter analyze on auth.dart passes with no issues

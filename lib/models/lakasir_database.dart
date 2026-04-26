@@ -3,7 +3,14 @@ import 'package:isar/isar.dart';
 import 'package:lakasir/models/printer.dart';
 import 'package:lakasir/models/unit.dart';
 import 'package:lakasir/offline/models/offline_user_model.dart';
-import 'package:lakasir/offline/models/offline_models.dart';
+import 'package:lakasir/offline/models/offline_category_model.dart';
+import 'package:lakasir/offline/models/offline_product_model.dart';
+import 'package:lakasir/offline/models/offline_stock_model.dart';
+import 'package:lakasir/offline/models/offline_member_model.dart';
+import 'package:lakasir/offline/models/offline_payment_method_model.dart';
+import 'package:lakasir/offline/models/pending_transaction_model.dart';
+import 'package:lakasir/offline/models/cart_model.dart';
+import 'package:lakasir/offline/models/sync_metadata_model.dart';
 import 'package:path_provider/path_provider.dart';
 
 class LakasirDatabase extends ChangeNotifier {
@@ -15,7 +22,7 @@ class LakasirDatabase extends ChangeNotifier {
 
     if (instance == null) {
       isar = await Isar.open(
-        [PrinterSchema, UnitSchema, OfflineUserSchema, OfflineCategorySchema, OfflineProductSchema, OfflineStockSchema, OfflineMemberSchema, OfflinePaymentMethodSchema],
+        [PrinterSchema, UnitSchema, OfflineUserSchema, OfflineCategorySchema, OfflineProductSchema, OfflineStockSchema, OfflineMemberSchema, OfflinePaymentMethodSchema, OfflinePendingTransactionSchema, OfflineCartSchema, SyncMetadataSchema],
         directory: dir.path,
         name: 'isar',
       );
@@ -54,4 +61,15 @@ class LakasirDatabase extends ChangeNotifier {
     return OfflinePaymentMethod();
   }
 
+  OfflinePendingTransaction get offlinePendingTransaction {
+    return OfflinePendingTransaction();
+  }
+
+  OfflineCart get offlineCart {
+    return OfflineCart();
+  }
+
+  SyncMetadata get syncMetadata {
+    return SyncMetadata();
+  }
 }

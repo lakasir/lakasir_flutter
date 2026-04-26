@@ -21,4 +21,15 @@
 - Dart Isar model creation, JSON encoding for nested data
 
 ## Implementation
-<!-- Write you've done in here -->
+
+Created three Isar collection models and registered them in the database:
+
+1. **`lib/offline/models/pending_transaction_model.dart`** — `OfflinePendingTransaction` with all specified fields: `id` (autoIncrement), `payedMoney`, `discountPrice`, `friendPrice`, `memberId`, `tax`, `note`, `itemsJson` (String, default `'[]'`), `isSynced`, `retryCount`, `createdAt`, `serverTransactionId`, `errorMessage`, `offlineReceiptNumber`.
+
+2. **`lib/offline/models/cart_model.dart`** — `OfflineCart` with `id` (autoIncrement), `productId`, `quantity`, `price`, `discountPrice`, `addedAt`, and `@ignore OfflineProduct? product` transient field. Imports `OfflineProduct` from `offline_models.dart`.
+
+3. **`lib/offline/models/sync_metadata_model.dart`** — `SyncMetadata` with `id` (autoIncrement — Isar requires `Id` type for collection), `entityName`, `lastSyncAt`, `serverCount`, `localCount`, `syncStatus`. Includes a `SyncMetadata.forEntity(String entityName)` factory that sets `id = entityName.hashCode`.
+
+4. **`lib/models/lakasir_database.dart`** — Added imports and registered `OfflinePendingTransactionSchema`, `OfflineCartSchema`, `SyncMetadataSchema` in `Isar.open()`.
+
+5. Ran `dart run build_runner build --delete-conflicting-outputs` — all three `.g.dart` files generated successfully, `flutter analyze` passes with no issues.
