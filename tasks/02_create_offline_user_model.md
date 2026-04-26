@@ -25,4 +25,11 @@
 - Dart Isar model creation, `crypto` package SHA-256
 
 ## Implementation
-<!-- Write you've done in here -->
+- Created `lib/offline/models/offline_user_model.dart` with `OfflineUser` Isar collection containing all specified fields
+- Implemented `static String hashPassword(String password, String salt)` using SHA-256 via `crypto` package (`sha256.convert(utf8.encode('$password$salt'))`)
+- Implemented `static String generateSalt()` using `DateTime.now().microsecondsSinceEpoch` + `Random().nextInt(999999)`
+- Implemented `bool verifyPassword(String password)` instance method that hashes the input and compares to `hashedPassword`
+- Added `part 'offline_user_model.g.dart';` directive
+- Updated `lib/models/lakasir_database.dart`: added import, `OfflineUserSchema` to `Isar.open()` schemas list, and `offlineUser` getter
+- Ran `dart run build_runner build --delete-conflicting-outputs` — generated `offline_user_model.g.dart` successfully (1825 lines of Isar-generated code)
+- `crypto: ^3.0.3` was already present in pubspec.yaml
