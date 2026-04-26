@@ -1,6 +1,7 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:get/get.dart';
 import 'package:lakasir/offline/services/app_mode_service.dart';
+import 'package:lakasir/offline/services/sync_service.dart';
 import 'package:lakasir/offline/services/transaction_queue_service.dart';
 import 'package:lakasir/utils/auth.dart';
 
@@ -34,6 +35,10 @@ class ConnectivityService extends GetxController {
       // Trigger sync of pending transactions when coming back online
       if (Get.isRegistered<TransactionQueueService>()) {
         Get.find<TransactionQueueService>().attemptSync();
+      }
+      // Trigger full sync when coming back online
+      if (Get.isRegistered<SyncService>()) {
+        Get.find<SyncService>().fullSync();
       }
     }
   }

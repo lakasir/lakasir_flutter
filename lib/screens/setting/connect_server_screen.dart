@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lakasir/offline/services/app_mode_service.dart';
+import 'package:lakasir/offline/services/initial_sync_service.dart';
 import 'package:lakasir/utils/colors.dart';
 import 'package:lakasir/widgets/filled_button.dart';
 import 'package:lakasir/widgets/text_field.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class ConnectServerScreen extends StatefulWidget {
   const ConnectServerScreen({super.key});
@@ -37,14 +36,17 @@ class _ConnectServerScreenState extends State<ConnectServerScreen> {
 
     try {
       final domain = _domainController.text.trim();
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('domain', domain);
-      await prefs.setBool('setup', true);
+      final syncService = InitialSyncService();
+      final success = await syncService.performInitialSync(domain);
 
-      final appMode = Get.find<AppModeService>();
-      await appMode.switchToOnline();
-
-      Get.offAllNamed('/auth');
+      if (success) {
+        Get.offAllNamed('/auth');
+      } else {
+        setState(() {
+          errorMessage = 'Failed to connect to server. Please check the domain.';
+          isLoading = false;
+        });
+      }
     } catch (e) {
       setState(() {
         errorMessage = e.toString().replaceAll('Exception: ', '');
