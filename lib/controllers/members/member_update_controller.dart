@@ -3,12 +3,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lakasir/Exceptions/validation.dart';
-import 'package:lakasir/api/requests/member_request.dart';
 import 'package:lakasir/api/responses/error_response.dart';
 import 'package:lakasir/api/responses/members/member_error_response.dart';
-import 'package:lakasir/api/responses/members/member_response.dart';
 import 'package:lakasir/controllers/members/member_controller.dart';
-import 'package:lakasir/services/member_service.dart';
+import 'package:lakasir/offline/models/offline_member_model.dart';
+import 'package:lakasir/offline/repositories/member_repository.dart';
 import 'package:lakasir/utils/colors.dart';
 
 class MemberUpdateController extends GetxController {
@@ -20,16 +19,8 @@ class MemberUpdateController extends GetxController {
   final memberAddressController = TextEditingController();
   final isSubmitting = false.obs;
   final isDeleting = false.obs;
-  final MemberService _memberService = MemberService();
-  final Rx<MemberResponse> member = MemberResponse(
-    id: 0,
-    name: '',
-    code: '',
-    email: '',
-    address: '',
-    updatedAt: '',
-    createdAt: '',
-  ).obs;
+  final MemberRepository _memberRepository = MemberRepository();
+  final Rx<OfflineMember> member = OfflineMember().obs;
   Rx<MemberErrorResponse> memberErrorResponse = MemberErrorResponse(
     name: "",
   ).obs;
@@ -41,14 +32,15 @@ class MemberUpdateController extends GetxController {
         isSubmitting(false);
         return;
       }
-      await _memberService.update(
-        member.value.id,
-        MemberRequest(
-          name: memberNameController.text,
-          code: memberCodeController.text,
-          email: memberEmailOrPhoneController.text,
-          address: memberAddressController.text,
-        ),
+      await _memberRepository.updateMember(
+        OfflineMember()
+          ..id = member.value.id
+          ..remoteId = member.value.remoteId
+          ..name = memberNameController.text
+          ..code = memberCodeController.text.isEmpty ? null : memberCodeController.text
+          ..email = memberEmailOrPhoneController.text.isEmpty ? null : memberEmailOrPhoneController.text
+          ..address = memberAddressController.text.isEmpty ? null : memberAddressController.text
+          ..isLocal = member.value.isLocal,
       );
       Get.back();
       Get.rawSnackbar(
@@ -95,7 +87,7 @@ class MemberUpdateController extends GetxController {
                 Get.back();
                 try {
                   isDeleting(true);
-                  await _memberService.delete(member.value.id);
+                  await _memberRepository.deleteMember(member.value.id);
                   Get.back();
                   Get.rawSnackbar(
                     message: "global_deleted_item".trParams({
@@ -128,13 +120,11 @@ class MemberUpdateController extends GetxController {
   }
 
   void setData() {
-    member.value = Get.arguments as MemberResponse;
+    member.value = Get.arguments as OfflineMember;
     memberNameController.text = member.value.name;
-    memberCodeController.text = member.value.code!;
-    memberEmailOrPhoneController.text =
-        member.value.email == null ? '' : member.value.email!;
-    memberAddressController.text =
-        member.value.address == null ? '' : member.value.address!;
+    memberCodeController.text = member.value.code ?? '';
+    memberEmailOrPhoneController.text = member.value.email ?? '';
+    memberAddressController.text = member.value.address ?? '';
 
     memberErrorResponse(
       MemberErrorResponse(

@@ -3,17 +3,17 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lakasir/Exceptions/validation.dart';
-import 'package:lakasir/api/requests/member_request.dart';
 import 'package:lakasir/api/responses/error_response.dart';
 import 'package:lakasir/api/responses/members/member_error_response.dart';
 import 'package:lakasir/controllers/members/member_controller.dart';
-import 'package:lakasir/services/member_service.dart';
+import 'package:lakasir/offline/models/offline_member_model.dart';
+import 'package:lakasir/offline/repositories/member_repository.dart';
 import 'package:lakasir/utils/colors.dart';
 
 class MemberAddController extends GetxController {
   final MemberController _memberController = Get.find();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  final MemberService _memberService = MemberService();
+  final MemberRepository _memberRepository = MemberRepository();
   final memberNameController = TextEditingController();
   final memberCodeController = TextEditingController();
   final memberEmailOrPhoneController = TextEditingController();
@@ -30,13 +30,13 @@ class MemberAddController extends GetxController {
         isSubmitting(false);
         return;
       }
-      await _memberService.add(
-        MemberRequest(
-          name: memberNameController.text,
-          code: memberCodeController.text,
-          email: memberEmailOrPhoneController.text,
-          address: memberAddressController.text,
-        ),
+      await _memberRepository.createMember(
+        OfflineMember()
+          ..name = memberNameController.text
+          ..code = memberCodeController.text.isEmpty ? null : memberCodeController.text
+          ..email = memberEmailOrPhoneController.text.isEmpty ? null : memberEmailOrPhoneController.text
+          ..address = memberAddressController.text.isEmpty ? null : memberAddressController.text
+          ..isLocal = true,
       );
       Get.back();
       Get.rawSnackbar(

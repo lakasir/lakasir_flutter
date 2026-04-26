@@ -3,17 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lakasir/Exceptions/validation.dart';
 import 'package:lakasir/api/responses/categories/category_error_response.dart';
-import 'package:lakasir/api/responses/categories/category_response.dart';
 import 'package:lakasir/api/responses/error_response.dart';
-import 'package:lakasir/services/category_service.dart';
+import 'package:lakasir/offline/models/offline_category_model.dart';
+import 'package:lakasir/offline/repositories/category_repository.dart';
 import 'package:lakasir/utils/colors.dart';
 
 class CategoryController extends GetxController {
   final formKey = GlobalKey<FormState>();
-  CategoryService categoryService = CategoryService();
+  final CategoryRepository _categoryRepository = CategoryRepository();
   Rx<bool> showAddCategory = false.obs;
   TextEditingController categoryNameController = TextEditingController();
-  RxList<CategoryResponse> categories = <CategoryResponse>[].obs;
+  RxList<OfflineCategory> categories = <OfflineCategory>[].obs;
   final isFetching = false.obs;
   Rx<CategoryErrorResponse> errors = CategoryErrorResponse(
     name: "",
@@ -21,8 +21,7 @@ class CategoryController extends GetxController {
 
   Future<void> fetchCategories() async {
     isFetching(true);
-    final response = await categoryService.getCategories();
-    categories.assignAll(response);
+    categories.assignAll(await _categoryRepository.getCategories());
     isFetching(false);
   }
 
@@ -31,8 +30,8 @@ class CategoryController extends GetxController {
       if (!formKey.currentState!.validate()) {
         return;
       }
-      await categoryService.addCategory(
-        categoryNameController.text,
+      await _categoryRepository.createCategory(
+        OfflineCategory()..name = categoryNameController.text ..isLocal = true,
       );
       showAddCategory(false);
       categoryNameController.clear();
@@ -60,7 +59,7 @@ class CategoryController extends GetxController {
 
   Future<void> deleteCategory(int id) async {
     try {
-      await categoryService.deleteCategory(id);
+      await _categoryRepository.deleteCategory(id);
       fetchCategories();
     } catch (e) {
       if (e is ValidationException) {
@@ -76,9 +75,8 @@ class CategoryController extends GetxController {
       if (!formKey.currentState!.validate()) {
         return;
       }
-      await categoryService.updateCategory(
-        id,
-        categoryNameController.text,
+      await _categoryRepository.updateCategory(
+        OfflineCategory()..id = id ..name = categoryNameController.text ..isLocal = true,
       );
       showAddCategory(false);
       categoryNameController.clear();

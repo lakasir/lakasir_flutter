@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lakasir/api/responses/members/member_response.dart';
-import 'package:lakasir/api/responses/payment_methods/payment_method_response.dart';
+import 'package:lakasir/offline/models/offline_member_model.dart';
+import 'package:lakasir/offline/models/offline_payment_method_model.dart';
 import 'package:lakasir/offline/models/offline_product_model.dart';
 import 'package:lakasir/controllers/products/product_detail_controller.dart';
 import 'package:lakasir/utils/colors.dart';
@@ -178,13 +178,10 @@ class CartSession {
   double? totalPrice;
   double discountPrice;
   double? payedMoney;
-  MemberResponse? member;
+  OfflineMember? member;
   int? customerNumber;
   double? tax;
-  PaymentMethodRespone? paymentMethod = PaymentMethodRespone(
-    id: 1,
-    name: 'Cash',
-  );
+  OfflinePaymentMethod? paymentMethod;
   int? totalQty;
   final bool friendPrice;
   final List<CartItem> cartItems;

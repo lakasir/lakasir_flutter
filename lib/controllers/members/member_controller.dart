@@ -1,32 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lakasir/api/requests/member_request.dart';
-import 'package:lakasir/api/responses/members/member_response.dart';
-import 'package:lakasir/services/member_service.dart';
+import 'package:lakasir/offline/models/offline_member_model.dart';
+import 'package:lakasir/offline/repositories/member_repository.dart';
 import 'package:lakasir/widgets/dialog.dart';
 import 'package:lakasir/widgets/text_field.dart';
 
 class MemberController extends GetxController {
-  final MemberService _memberService = MemberService();
-  RxList<MemberResponse> members = <MemberResponse>[].obs;
+  final MemberRepository _memberRepository = MemberRepository();
+  RxList<OfflineMember> members = <OfflineMember>[].obs;
   final isFetching = false.obs;
   final searchByNameController = TextEditingController();
 
   Future<void> fetchMembers() async {
     isFetching(true);
-    final response = await _memberService.get(MemberRequest());
-    members.assignAll(response);
+    members.assignAll(await _memberRepository.getMembers());
     isFetching(false);
   }
 
   Future<void> searchMember() async {
     isFetching(true);
-    final response = await _memberService.get(
-      MemberRequest(
-        name: searchByNameController.text,
-      ),
-    );
-    members.assignAll(response);
+    members.assignAll(await _memberRepository.getMembers(
+      request: MemberRequest(name: searchByNameController.text),
+    ));
     isFetching(false);
   }
 
