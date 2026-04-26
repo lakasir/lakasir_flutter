@@ -18,4 +18,10 @@
 - Dart Isar model creation
 
 ## Implementation
-<!-- Write you've done in here -->
+- Added `OfflineMember` and `OfflinePaymentMethod` collections to `lib/offline/models/offline_models.dart` (same file as existing offline models)
+- Both use `Id id = Isar.autoIncrement` plus `int? remoteId` to map to API-side IDs (same pattern as `OfflineCategory`/`OfflineProduct` using Isar autoIncrement for local PK)
+- `OfflineMember` fields: `name`, `code` (nullable, for member lookup), `address`, `email`, `createdAt`, `updatedAt`, `cachedAt`, `isLocal`
+- `OfflinePaymentMethod` fields: `name`, `icon` (nullable), `isCash`, `isDebit`, `isCredit`, `isWallet`, `cachedAt`, `isLocal`
+- Registered `OfflineMemberSchema` and `OfflinePaymentMethodSchema` in `LakasirDatabase.initialize()` and added getter methods
+- Ran `dart run build_runner build --delete-conflicting-outputs` — generated schemas in `offline_models.g.dart` successfully
+- `flutter analyze` passes (no new errors introduced; all existing warnings are pre-existing)

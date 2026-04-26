@@ -15,7 +15,7 @@ class LakasirDatabase extends ChangeNotifier {
 
     if (instance == null) {
       isar = await Isar.open(
-        [PrinterSchema, UnitSchema, OfflineUserSchema, OfflineCategorySchema, OfflineProductSchema, OfflineStockSchema],
+        [PrinterSchema, UnitSchema, OfflineUserSchema, OfflineCategorySchema, OfflineProductSchema, OfflineStockSchema, OfflineMemberSchema, OfflinePaymentMethodSchema],
         directory: dir.path,
         name: 'isar',
       );
@@ -44,6 +44,14 @@ class LakasirDatabase extends ChangeNotifier {
 
   OfflineStock get offlineStock {
     return OfflineStock();
+  }
+
+  OfflineMember get offlineMember {
+    return OfflineMember();
+  }
+
+  OfflinePaymentMethod get offlinePaymentMethod {
+    return OfflinePaymentMethod();
   }
 
 }
