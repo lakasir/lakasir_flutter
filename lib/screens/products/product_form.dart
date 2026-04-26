@@ -5,7 +5,6 @@ import 'package:lakasir/controllers/category_controller.dart';
 import 'package:lakasir/controllers/products/product_add_controller.dart';
 import 'package:lakasir/controllers/products/unit_controller.dart';
 import 'package:lakasir/utils/colors.dart';
-import 'package:lakasir/utils/utils.dart';
 import 'package:lakasir/widgets/date_picker.dart';
 import 'package:lakasir/widgets/filled_button.dart';
 import 'package:lakasir/widgets/image_picker.dart';
@@ -67,6 +66,7 @@ class _ProductFormState extends State<ProductForm> {
               width: width * 25 / 100,
               child: MyImagePicker(
                 usingDynamicSource: true,
+                usingLocalImage: true,
                 onImageSelected: (file) {
                   widget.controller.photoUrl = file;
                 },
@@ -80,6 +80,7 @@ class _ProductFormState extends State<ProductForm> {
                   label: 'field_product_name'.tr,
                   mandatory: true,
                   errorText: errorResponse.value.name ?? '',
+                  validator: widget.controller.validateName,
                 ),
               ),
             ),
@@ -198,10 +199,13 @@ class _ProductFormState extends State<ProductForm> {
                   child: Obx(
                     () => MyTextField(
                       readOnly: _isServiceType,
-                      controller: widget.controller.initialPriceInputController,
+                      controller:
+                          widget.controller.initialPriceInputController,
                       label: 'field_initial_price'.tr,
+                      mandatory: true,
                       keyboardType: TextInputType.number,
                       errorText: errorResponse.value.initialPrice ?? '',
+                      validator: widget.controller.validateInitialPrice,
                     ),
                   ),
                 ),
@@ -218,8 +222,10 @@ class _ProductFormState extends State<ProductForm> {
                   () => MyTextField(
                     controller: widget.controller.sellingPriceInputController,
                     label: 'field_selling_price'.tr,
+                    mandatory: true,
                     keyboardType: TextInputType.number,
                     errorText: errorResponse.value.sellingPrice ?? '',
+                    validator: widget.controller.validateSellingPrice,
                   ),
                 ),
               ),
@@ -257,6 +263,7 @@ class _ProductFormState extends State<ProductForm> {
               textCapitalization: TextCapitalization.words,
               mandatory: true,
               errorText: errorResponse.value.unit ?? '',
+              validator: widget.controller.validateUnit,
             ),
           ),
         ),
@@ -271,7 +278,7 @@ class _ProductFormState extends State<ProductForm> {
                       side: const BorderSide(
                         color: primary,
                       ),
-                      borderRadius: BorderRadius.circular(12), // Border radius
+                      borderRadius: BorderRadius.circular(12),
                     ),
                   ),
                   onPressed: () {
@@ -289,7 +296,7 @@ class _ProductFormState extends State<ProductForm> {
                       side: const BorderSide(
                         color: primary,
                       ),
-                      borderRadius: BorderRadius.circular(12), // Border radius
+                      borderRadius: BorderRadius.circular(12),
                     ),
                   ),
                   onPressed: () {

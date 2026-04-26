@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lakasir/offline/models/offline_product_model.dart';
@@ -22,6 +24,52 @@ class _DetailScreen extends State<DetailScreen> {
   final _settingController = Get.put(SettingController());
   final AuthController _authController = Get.put(AuthController());
   OfflineProduct products = OfflineProduct();
+
+  Widget _buildProductImage(String? imageUrl) {
+    if (imageUrl == null || imageUrl.isEmpty) {
+      return const Image(
+        image: AssetImage('assets/no-image-100.png'),
+        fit: BoxFit.cover,
+        height: 300,
+        width: double.infinity,
+      );
+    }
+
+    // Check if it's a local file path
+    if (imageUrl.startsWith('/') || imageUrl.startsWith('file://')) {
+      final String filePath = imageUrl.replaceAll('file://', '');
+      return Image.file(
+        File(filePath),
+        fit: BoxFit.cover,
+        height: 300,
+        width: double.infinity,
+        errorBuilder: (context, error, stackTrace) {
+          return const Image(
+            image: AssetImage('assets/no-image-100.png'),
+            fit: BoxFit.cover,
+            height: 300,
+            width: double.infinity,
+          );
+        },
+      );
+    }
+
+    // Network image
+    return Image.network(
+      imageUrl,
+      fit: BoxFit.cover,
+      height: 300,
+      width: double.infinity,
+      errorBuilder: (context, error, stackTrace) {
+        return const Image(
+          image: AssetImage('assets/no-image-100.png'),
+          fit: BoxFit.cover,
+          height: 300,
+          width: double.infinity,
+        );
+      },
+    );
+  }
 
   @override
   void initState() {
@@ -87,20 +135,7 @@ class _DetailScreen extends State<DetailScreen> {
               Hero(
                 tag: 'product-${products.id}',
                 child: ClipRRect(
-                  child: Image.network(
-                    products.image ?? '',
-                    fit: BoxFit.cover,
-                    height: 300,
-                    width: double.infinity,
-                    errorBuilder: (context, error, stackTrace) {
-                      return const Image(
-                        image: AssetImage('assets/no-image-100.png'),
-                        fit: BoxFit.cover,
-                        height: 300,
-                        width: double.infinity,
-                      );
-                    },
-                  ),
+                  child: _buildProductImage(products.image),
                 ),
               ),
               Padding(

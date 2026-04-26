@@ -3,10 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart' as image_picker;
-import 'dart:convert';
-import 'package:lakasir/utils/auth.dart';
-import 'package:http/http.dart' as http;
-import 'package:http_parser/http_parser.dart';
+import 'package:image/image.dart' as img;
+import 'package:path_provider/path_provider.dart';
 import 'package:lakasir/utils/colors.dart';
 
 typedef MyCallback = void Function(String?);
@@ -41,36 +39,35 @@ class _MyImagePickerState extends State<MyImagePicker> {
   final image_picker.ImagePicker imagePicker = image_picker.ImagePicker();
   image_picker.ImageSource? dynamicSource;
 
-  Future<String> _uploadImage(File? selectedImage) async {
-    if (selectedImage == null) {
-      throw Exception('No image selected');
-    }
+  Future<String> _saveAndCompressImageLocally(String filePath) async {
+    try {
+      final File imageFile = File(filePath);
+      final bytes = await imageFile.readAsBytes();
+      final img.Image? image = img.decodeImage(bytes);
+      if (image == null) return filePath; // fallback to original path
 
-    if (selectedImage.lengthSync() > widget.maxSize!) {
-      throw Exception('Image size is too large');
-    }
+      // Resize if width > 512 pixels for better offline performance
+      img.Image processedImage = image;
+      if (image.width > 512) {
+        final int newHeight = (image.height * 512 / image.width).round();
+        processedImage = img.copyResize(image, width: 512, height: newHeight);
+      }
 
-    final url = Uri.parse('${await getDomain()}/temp/upload');
-    final request = http.MultipartRequest('POST', url);
-    request.headers.addAll({
-      'Authorization': 'Bearer ${await getToken()}',
-    });
+      // Encode as JPEG with quality 70 for compression
+      final compressedBytes = img.encodeJpg(processedImage, quality: 70);
 
-    request.files.add(await http.MultipartFile.fromPath(
-      'file',
-      selectedImage.path,
-      contentType: MediaType('png', 'jpeg'),
-    ));
+      // Save to app documents directory
+      final dir = await getApplicationDocumentsDirectory();
+      final String fileName =
+          'img_${DateTime.now().millisecondsSinceEpoch}.jpg';
+      final String savedPath = '${dir.path}/$fileName';
+      final File savedFile = File(savedPath);
+      await savedFile.writeAsBytes(compressedBytes);
 
-    final response = await request.send();
-
-    if (response.statusCode == 200) {
-      final responseBody = await response.stream.bytesToString();
-
-      return jsonDecode(responseBody)['data']['url'];
-    } else {
-      throw Exception(
-          'Failed to upload image. Status code: ${response.statusCode}');
+      return savedPath;
+    } catch (e) {
+      debugPrint('Error saving image locally: $e');
+      return filePath; // fallback to original path
     }
   }
 
@@ -109,15 +106,18 @@ class _MyImagePickerState extends State<MyImagePicker> {
           ),
         ],
       );
-      setState(() {
-        _image = image_picker.XFile(croppedFile!.path);
-      });
-      if (widget.usingLocalImage) {
-        widget.onImageSelected(croppedFile!.path);
+
+      if (croppedFile == null) {
         return;
       }
-      String url = await _uploadImage(File(croppedFile!.path));
-      widget.onImageSelected(url);
+
+      setState(() {
+        _image = image_picker.XFile(croppedFile.path);
+      });
+
+      // Save and compress image locally for offline use
+      String localPath = await _saveAndCompressImageLocally(croppedFile.path);
+      widget.onImageSelected(localPath);
     } catch (e) {
       Get.rawSnackbar(
         title: 'Error',
@@ -195,12 +195,7 @@ class _MyImagePickerState extends State<MyImagePicker> {
               : widget.defaultImage != ''
                   ? ClipRRect(
                       borderRadius: BorderRadius.circular(20),
-                      child: Image.network(
-                        widget.defaultImage,
-                        width: 50.0,
-                        height: 50.0,
-                        fit: BoxFit.fitHeight,
-                      ),
+                      child: _buildImage(widget.defaultImage),
                     )
                   : SizedBox(
                       width: 50,
@@ -212,6 +207,37 @@ class _MyImagePickerState extends State<MyImagePicker> {
                     ),
         ),
       ),
+    );
+  }
+
+  Widget _buildImage(String imageUrl) {
+    // Check if it's a local file path
+    if (imageUrl.startsWith('/') || imageUrl.startsWith('file://')) {
+      return Image.file(
+        File(imageUrl.replaceAll('file://', '')),
+        width: 50.0,
+        height: 50.0,
+        fit: BoxFit.fitHeight,
+        errorBuilder: (context, error, stackTrace) {
+          return Image.asset(
+            'assets/no-image-100.png',
+            fit: BoxFit.cover,
+          );
+        },
+      );
+    }
+    // Network image
+    return Image.network(
+      imageUrl,
+      width: 50.0,
+      height: 50.0,
+      fit: BoxFit.fitHeight,
+      errorBuilder: (context, error, stackTrace) {
+        return Image.asset(
+          'assets/no-image-100.png',
+          fit: BoxFit.cover,
+        );
+      },
     );
   }
 }
