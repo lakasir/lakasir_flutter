@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lakasir/controllers/notification_controller.dart';
 import 'package:lakasir/utils/utils.dart';
+import 'package:lakasir/widgets/offline_status_bar.dart';
 
 class Layout extends StatefulWidget {
   const Layout({
@@ -69,19 +70,26 @@ class _LayoutState extends State<Layout> {
                     )
               ],
             ),
-      body: OrientationBuilder(builder: (context, orientation) {
-        return SizedBox(
-          // margin: const EdgeInsets.only(top: 20),
-          width: double.infinity,
-          // height: baseHeight,
-          child: widget.noPadding
-              ? widget.child
-              : Padding(
-                  padding: EdgeInsets.symmetric(horizontal: widget.padding),
-                  child: widget.child,
-                ),
-        );
-      }),
+      body: Column(
+        children: [
+          const ModeStatusBar(),
+          Expanded(
+            child: OrientationBuilder(builder: (context, orientation) {
+              return SizedBox(
+                // margin: const EdgeInsets.only(top: 20),
+                width: double.infinity,
+                // height: baseHeight,
+                child: widget.noPadding
+                    ? widget.child
+                    : Padding(
+                        padding: EdgeInsets.symmetric(horizontal: widget.padding),
+                        child: widget.child,
+                      ),
+              );
+            }),
+          ),
+        ],
+      ),
       floatingActionButtonLocation: widget.floatingActionButtonLocation,
       floatingActionButton: widget.bottomNavigationBar,
       bottomSheet: widget.bottomSheet,
