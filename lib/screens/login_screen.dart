@@ -41,7 +41,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         style: const TextStyle(color: Colors.black),
                       ),
                       const WidgetSpan(
-                        child: SizedBox(width: 8.0), // Add space between spans
+                        child: SizedBox(width: 8.0),
                       ),
                       const TextSpan(
                         text: "LAKASIR",
@@ -52,12 +52,37 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
             ),
+            Obx(
+              () => _loginController.isOfflineLogin.value
+                  ? Container(
+                      margin: const EdgeInsets.only(bottom: 16),
+                      child: Center(
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 6),
+                          decoration: BoxDecoration(
+                            color: Colors.orange.shade100,
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(color: primary, width: 1),
+                          ),
+                          child: Text(
+                            'offline_mode'.tr,
+                            style: TextStyle(
+                              color: primary,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
+                  : const SizedBox.shrink(),
+            ),
             Form(
               key: _loginController.formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Email Input
                   Container(
                     margin: const EdgeInsets.only(bottom: 21.0),
                     child: Obx(
@@ -70,7 +95,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                   ),
-                  // Password Input
                   Container(
                     margin: const EdgeInsets.only(bottom: 21.0),
                     child: Obx(
@@ -85,14 +109,21 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
 
-                  // Remember Box
                   Container(
                     margin: const EdgeInsets.only(bottom: 21.0),
-                    child: MyCheckbox(
-                      label: "field_remember_me".tr,
-                      onChange: (bool value) {
-                        _loginController.remember.value = value;
-                      },
+                    child: Obx(
+                      () => Visibility(
+                        visible: !_loginController.isOfflineLogin.value,
+                        maintainState: false,
+                        maintainSize: false,
+                        maintainAnimation: false,
+                        child: MyCheckbox(
+                          label: "field_remember_me".tr,
+                          onChange: (bool value) {
+                            _loginController.remember.value = value;
+                          },
+                        ),
+                      ),
                     ),
                   ),
 
@@ -102,25 +133,37 @@ class _LoginScreenState extends State<LoginScreen> {
                       onPressed: () async {
                         await _loginController.login();
                       },
-                      child: Text("sign_in".tr),
+                      child: Text(
+                        _loginController.isOfflineLogin.value
+                            ? "${"sign_in".tr} (${"offline_mode".tr})"
+                            : "sign_in".tr,
+                      ),
                     ),
                   ),
                 ],
               ),
             ),
-            Container(
-              margin: const EdgeInsets.only(top: 40),
-              child: Center(
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.pushNamed(context, '/forgot');
-                  },
-                  child: Text(
-                    "forgot_password".tr,
-                    style: const TextStyle(
-                      color: primary,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
+            Obx(
+              () => Visibility(
+                visible: !_loginController.isOfflineLogin.value,
+                maintainState: false,
+                maintainSize: false,
+                maintainAnimation: false,
+                child: Container(
+                  margin: const EdgeInsets.only(top: 40),
+                  child: Center(
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.pushNamed(context, '/forgot');
+                      },
+                      child: Text(
+                        "forgot_password".tr,
+                        style: const TextStyle(
+                          color: primary,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                     ),
                   ),
                 ),
