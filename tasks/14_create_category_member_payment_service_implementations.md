@@ -25,4 +25,40 @@
 - Isar CRUD, API wrapping, Repository pattern
 
 ## Implementation
-<!-- Write you've done in here -->
+- Created `lib/offline/services/category_service_interface.dart`
+  - Abstract class with: `getCategories()`, `getCategoryById(int id)`, `createCategory(OfflineCategory)`, `updateCategory(OfflineCategory)`, `deleteCategory(int id)`
+  - All return types use `OfflineCategory` model
+- Created `lib/offline/services/offline_category_service.dart`
+  - `getCategories()`: `_isar.offlineCategorys.where().findAll()` (note: Isar generates `offlineCategorys` not `offlineCategories`)
+  - `createCategory`: assigns negative ID, `isLocal=true`, `cachedAt=DateTime.now()`
+  - `updateCategory`: `isLocal=true`, `cachedAt=DateTime.now()`
+- Created `lib/offline/services/online_category_service.dart`
+  - Wraps existing `CategoryService` imported `as api`
+  - `getCategories()`: tries API fetch, caches via `_cacheCategories()`, falls back to Isar cache
+  - `_cacheCategories()`: maps `CategoryResponse` → `OfflineCategory` (skips createdAt/updatedAt type mismatch: String vs DateTime?)
+  - `createCategory`/`updateCategory`: try API call, `isLocal=false` on success, `isLocal=true` on failure
+- Created `lib/offline/repositories/category_repository.dart`
+  - Delegates based on `Get.find<AppModeService>().isOnline`
+
+- Created `lib/offline/services/member_service_interface.dart`
+  - Abstract class with: `getMembers({MemberRequest? request})`, `getMemberById(int id)`, `createMember(OfflineMember)`, `updateMember(OfflineMember)`, `deleteMember(int id)`
+- Created `lib/offline/services/offline_member_service.dart`
+  - `getMembers()`: supports name and code filtering via `.filter()`
+  - `createMember`: negative ID, `isLocal=true`, `cachedAt=DateTime.now()`
+- Created `lib/offline/services/online_member_service.dart`
+  - Wraps existing `MemberService` imported `as api`
+  - `_cacheMembers()`: maps `MemberResponse.id` → `OfflineMember.remoteId` (not the Isar autoIncrement ID)
+  - Uses `List<MemberResponse>` instead of `RxList` in _cacheMembers to avoid unnecessary GetX dependency
+- Created `lib/offline/repositories/member_repository.dart`
+  - Delegates based on `Get.find<AppModeService>().isOnline`
+
+- Created `lib/offline/services/payment_method_service_interface.dart`
+  - Abstract class with: `getPaymentMethods()`, `getPaymentMethodById(int id)`, `createPaymentMethod(OfflinePaymentMethod)`, `updatePaymentMethod(OfflinePaymentMethod)`, `deletePaymentMethod(int id)`
+- Created `lib/offline/services/offline_payment_method_service.dart`
+  - Simple CRUD on Isar, same negative ID pattern
+- Created `lib/offline/services/online_payment_method_service.dart`
+  - Wraps existing `PaymentMethodService` imported `as api`
+  - `createPaymentMethod`/`updatePaymentMethod`/`deletePaymentMethod`: no API endpoints exist — just saves to Isar with `isLocal=true`
+  - `_cachePaymentMethods()`: maps `PaymentMethodRespone.id` → `OfflinePaymentMethod.remoteId` (preserving the class name typo from codebase)
+- Created `lib/offline/repositories/payment_method_repository.dart`
+  - Delegates based on `Get.find<AppModeService>().isOnline`
