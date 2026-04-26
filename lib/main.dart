@@ -13,6 +13,7 @@ import 'package:lakasir/models/lakasir_database.dart';
 import 'package:lakasir/screens/about/about_screen.dart';
 import 'package:lakasir/screens/about/edit_screen.dart';
 import 'package:lakasir/screens/auth_screen.dart';
+import 'package:lakasir/screens/setting/connect_server_screen.dart';
 import 'package:lakasir/screens/domain/register_domain_screen.dart';
 import 'package:lakasir/screens/domain/register_offline_user_screen.dart';
 import 'package:lakasir/screens/forgot_screen.dart';
@@ -255,6 +256,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       initialRoute: '/auth',
       routes: {
         '/domain/register': (context) => const RegisterDomainScreen(),
+        '/settings/connect-server': (context) => const ConnectServerScreen(),
         '/auth/offline-register': (context) => const RegisterOfflineUserScreen(),
         '/auth/mode-chooser': (context) => const ModeChooserScreen(),
         '/auth': (context) => const AuthScreen(),
