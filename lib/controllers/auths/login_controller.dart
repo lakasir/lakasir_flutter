@@ -1,10 +1,7 @@
-import 'dart:convert';
-
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lakasir/Exceptions/validation.dart';
 import 'package:lakasir/api/requests/login_request.dart';
 import 'package:lakasir/api/responses/auths/login_error_response.dart';
-import 'package:lakasir/api/responses/error_response.dart';
 import 'package:lakasir/offline/services/app_mode_service.dart';
 import 'package:lakasir/offline/services/connectivity_service.dart';
 import 'package:lakasir/offline/services/offline_user_service.dart';
@@ -105,7 +102,7 @@ class LoginController extends GetxController {
 
   Future<void> _loginOffline() async {
     final userService = OfflineUserService();
-    final user = await userService.login(
+    await userService.login(
       email: emailController.text,
       password: passwordController.text,
     );
@@ -118,25 +115,17 @@ class LoginController extends GetxController {
   }
 
   Future<void> _loginOfflineFallback() async {
-    try {
-      final userService = OfflineUserService();
-      await userService.login(
-        email: emailController.text,
-        password: passwordController.text,
-      );
-      isLoading(false);
-      clearError();
-      clearInput();
-      final appMode = Get.find<AppModeService>();
-      appMode.switchToOffline();
-      Get.offAllNamed('/auth');
-    } catch (e) {
-      isLoading(false);
-      if (e is Exception) {
-        throw Exception('login_offline_failed');
-      }
-      rethrow;
-    }
+    final userService = OfflineUserService();
+    await userService.login(
+      email: emailController.text,
+      password: passwordController.text,
+    );
+    isLoading(false);
+    clearError();
+    clearInput();
+    final appMode = Get.find<AppModeService>();
+    appMode.switchToOffline();
+    Get.offAllNamed('/auth');
   }
 
   void clearError() {

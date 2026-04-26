@@ -13,10 +13,12 @@ class OfflineUserService {
   }) async {
     final isar = LakasirDatabase.isar;
 
-    final existing = await isar.offlineUsers
-        .where()
-        .equalTo('email', email)
-        .findFirst();
+    final existing = (await isar.offlineUsers
+            .where()
+            .filter()
+            .emailEqualTo(email)
+            .findAll())
+        .firstOrNull;
     if (existing != null) {
       throw Exception('Email already exists');
     }
@@ -50,10 +52,12 @@ class OfflineUserService {
   }) async {
     final isar = LakasirDatabase.isar;
 
-    final user = await isar.offlineUsers
-        .where()
-        .equalTo('email', email)
-        .findFirst();
+    final user = (await isar.offlineUsers
+            .where()
+            .filter()
+            .emailEqualTo(email)
+            .findAll())
+        .firstOrNull;
 
     if (user == null) {
       throw Exception('User not found');
