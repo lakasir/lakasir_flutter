@@ -33,4 +33,23 @@
 - Isar CRUD, API service wrapping, Repository pattern, GetX AppModeService
 
 ## Implementation
-<!-- Write you've done in here -->
+- Created `lib/offline/services/product_service_interface.dart`
+  - Abstract class with 5 methods: `getProducts({ProductRequest? request})`, `getProductById(int id)`, `createProduct(OfflineProduct product)`, `updateProduct(OfflineProduct product)`, `deleteProduct(int id)`
+  - All return types use `OfflineProduct` model, not `ProductResponse`
+- Created `lib/offline/services/offline_product_service.dart`
+  - Uses `LakasirDatabase.isar` for all Isar CRUD
+  - `getProducts`: filters by name (`.filter().nameContains()`) or categoryId (`.filter().categoryIdEqualTo()`), returns all if no filters
+  - `createProduct`: assigns negative ID `-(count+1)`, sets `isLocal=true`, `cachedAt=DateTime.now()`
+  - `updateProduct`: sets `isLocal=true`, `cachedAt=DateTime.now()`
+  - Requires `import 'package:isar/isar.dart'` for `.filter()` extension methods
+- Created `lib/offline/services/online_product_service.dart`
+  - Wraps existing `ProductService` imported `as api` to avoid name collision
+  - `getProducts`: tries API fetch, caches via `_cacheProducts()`, falls back to Isar cache on API failure
+  - `_cacheProducts()`: maps `ProductResponse` → `OfflineProduct` using cascade operators, `putAll` in writeTxn
+  - `_getCachedProducts()`: same Isar filter logic as offline service
+  - `createProduct`/`updateProduct`: try API call first, `isLocal=false` on success, `isLocal=true` on failure. Always persist to Isar.
+  - `deleteProduct`: tries API delete (ignores failure), always deletes from Isar
+  - Note: `ProductService.create()` returns `void` (no server ID), so local negative ID is kept even on success. ID remapping happens during sync (Phase 4).
+- Created `lib/offline/repositories/product_repository.dart`
+  - Uses `Get.find<AppModeService>().isOnline` to delegate to `_onlineService` or `_offlineService`
+  - Simple pass-through, no business logic
