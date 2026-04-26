@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lakasir/offline/models/offline_member_model.dart';
+import 'package:lakasir/offline/services/cart_persistence_service.dart';
 import 'package:lakasir/offline/models/offline_payment_method_model.dart';
 import 'package:lakasir/offline/models/offline_product_model.dart';
 import 'package:lakasir/controllers/products/product_detail_controller.dart';
@@ -16,10 +17,32 @@ class CartController extends GetxController {
   ).obs;
   // RxList<CartItem> cartItems = <CartItem>[].obs;
   final globalKey = GlobalKey<FormState>();
+  final _cartPersistence = CartPersistenceService();
   final _productDetailController = Get.put(ProductDetailController());
   final RxBool isAddToCartLoading = false.obs;
 
   final qtyController = TextEditingController();
+
+  @override
+  void onInit() {
+    super.onInit();
+    _loadCart();
+  }
+
+  Future<void> _loadCart() async {
+    final session = await _cartPersistence.loadCart();
+    if (session != null) {
+      cartSessions.value = session;
+    }
+  }
+
+  Future<void> _saveCart() async {
+    await _cartPersistence.saveCart(cartSessions.value);
+  }
+
+  Future<void> clearPersistedCart() async {
+    await _cartPersistence.clearCart();
+  }
 
   bool isNotEnoughStock() {
     final product = _productDetailController.product.value;
@@ -41,6 +64,7 @@ class CartController extends GetxController {
 
   void addCartSession(CartSession cartSession, BuildContext context) {
     cartSessions.value = cartSession;
+    _saveCart();
     if (!context.isPhone) {
       Get.toNamed('/menu/transaction/cashier/payment');
     } else {
@@ -69,18 +93,21 @@ class CartController extends GetxController {
     cartSessions.refresh();
     isAddToCartLoading(false);
     Get.back();
+    _saveCart();
   }
 
   void calculateDiscountPrice(CartItem cartItem, double discountPrice) {
     cartSessions.value.cartItems[cartSessions.value.cartItems.indexOf(cartItem)]
         .discountPrice = discountPrice;
     cartSessions.refresh();
+    _saveCart();
   }
 
   void removeQty(CartItem cartItem, BuildContext context) {
     if (cartItem.qty == 1) {
       cartSessions.value.cartItems.remove(cartItem);
       cartSessions.refresh();
+      _saveCart();
       debug(context.isPhone);
       if (cartSessions.value.cartItems.isEmpty && context.isPhone) {
         Get.back();
@@ -90,6 +117,7 @@ class CartController extends GetxController {
     cartSessions
         .value.cartItems[cartSessions.value.cartItems.indexOf(cartItem)].qty--;
     cartSessions.refresh();
+    _saveCart();
   }
 
   void addQty(CartItem cartItem) {
@@ -99,6 +127,7 @@ class CartController extends GetxController {
     cartSessions
         .value.cartItems[cartSessions.value.cartItems.indexOf(cartItem)].qty++;
     cartSessions.refresh();
+    _saveCart();
   }
 
   void showAddToCartDialog(OfflineProduct product) {
@@ -161,6 +190,7 @@ class CartController extends GetxController {
               val.totalQty = 0;
               val.payedMoney = 0;
             });
+            _saveCart();
             debug(isTablet);
             Get.back();
             if (!isTablet) {
