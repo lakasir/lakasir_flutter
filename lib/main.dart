@@ -47,6 +47,7 @@ import 'package:lakasir/screens/transactions/invoice_screen.dart';
 import 'package:lakasir/screens/transactions/reports/cashier_screen.dart';
 import 'package:lakasir/screens/transactions/transaction_menu_screen.dart';
 import 'package:lakasir/offline/services/app_mode_service.dart';
+import 'package:lakasir/offline/services/background_sync_service.dart';
 import 'package:lakasir/offline/services/connectivity_service.dart';
 import 'package:lakasir/offline/services/sync_service.dart';
 import 'package:lakasir/offline/services/transaction_queue_service.dart';
@@ -108,6 +109,13 @@ Future<void> main() async {
   Get.put(ConnectivityService(), permanent: true);
   Get.put(TransactionQueueService(), permanent: true);
   Get.put(SyncService(), permanent: true);
+
+  await BackgroundSyncService.initialize();
+  final appMode = Get.find<AppModeService>();
+  if (appMode.isOnline) {
+    await BackgroundSyncService.schedulePeriodicSync();
+  }
+
   LoginService loginService = LoginService();
   if (isAuthenticated != null) {
     String? token = await messaging.getToken();
