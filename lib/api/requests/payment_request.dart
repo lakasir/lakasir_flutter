@@ -43,6 +43,14 @@ class PaymentRequestItem {
     this.discountPrice = 0,
   });
 
+  factory PaymentRequestItem.fromJson(Map<String, dynamic> json) {
+    return PaymentRequestItem(
+      productId: json['product_id'],
+      qty: json['qty'],
+      discountPrice: (json['discount_price'] as num?)?.toDouble() ?? 0,
+    );
+  }
+
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
     data['product_id'] = productId;

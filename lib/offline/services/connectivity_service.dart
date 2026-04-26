@@ -1,6 +1,7 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:get/get.dart';
 import 'package:lakasir/offline/services/app_mode_service.dart';
+import 'package:lakasir/offline/services/transaction_queue_service.dart';
 import 'package:lakasir/utils/auth.dart';
 
 class ConnectivityService extends GetxController {
@@ -29,6 +30,10 @@ class ConnectivityService extends GetxController {
     } else if (isOnline.value && !wasOnline) {
       if (appMode.isOffline && await hasDomain()) {
         await appMode.switchToOnline();
+      }
+      // Trigger sync of pending transactions when coming back online
+      if (Get.isRegistered<TransactionQueueService>()) {
+        Get.find<TransactionQueueService>().attemptSync();
       }
     }
   }

@@ -48,6 +48,7 @@ import 'package:lakasir/screens/transactions/reports/cashier_screen.dart';
 import 'package:lakasir/screens/transactions/transaction_menu_screen.dart';
 import 'package:lakasir/offline/services/app_mode_service.dart';
 import 'package:lakasir/offline/services/connectivity_service.dart';
+import 'package:lakasir/offline/services/transaction_queue_service.dart';
 import 'package:lakasir/services/login_service.dart';
 import 'package:lakasir/utils/auth.dart';
 import 'package:lakasir/utils/colors.dart';
@@ -104,6 +105,7 @@ Future<void> main() async {
 
   Get.put(AppModeService(), permanent: true);
   Get.put(ConnectivityService(), permanent: true);
+  Get.put(TransactionQueueService(), permanent: true);
   LoginService loginService = LoginService();
   if (isAuthenticated != null) {
     String? token = await messaging.getToken();
