@@ -3,6 +3,7 @@ import 'package:isar/isar.dart';
 import 'package:lakasir/models/printer.dart';
 import 'package:lakasir/models/unit.dart';
 import 'package:lakasir/offline/models/offline_user_model.dart';
+import 'package:lakasir/offline/models/offline_models.dart';
 import 'package:path_provider/path_provider.dart';
 
 class LakasirDatabase extends ChangeNotifier {
@@ -14,7 +15,7 @@ class LakasirDatabase extends ChangeNotifier {
 
     if (instance == null) {
       isar = await Isar.open(
-        [PrinterSchema, UnitSchema, OfflineUserSchema],
+        [PrinterSchema, UnitSchema, OfflineUserSchema, OfflineCategorySchema, OfflineProductSchema, OfflineStockSchema],
         directory: dir.path,
         name: 'isar',
       );
@@ -32,4 +33,17 @@ class LakasirDatabase extends ChangeNotifier {
   OfflineUser get offlineUser {
     return OfflineUser();
   }
+
+  OfflineCategory get offlineCategory {
+    return OfflineCategory();
+  }
+
+  OfflineProduct get offlineProduct {
+    return OfflineProduct();
+  }
+
+  OfflineStock get offlineStock {
+    return OfflineStock();
+  }
+
 }

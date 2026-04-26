@@ -22,4 +22,13 @@
 - Dart Isar model creation, IsarLinks/IsarLink relationships
 
 ## Implementation
-<!-- Write you've done in here -->
+
+- Created `lib/offline/models/offline_models.dart` containing all three Isar collections in a single file (required due to isar_generator 3.1.0 crash on cross-file IsarLink/IsarLinks references).
+- `OfflineCategory`: `id` (Id/autoIncrement), `name`, `createdAt`, `updatedAt`, `cachedAt` (all DateTime?), `isLocal` (bool).
+- `OfflineProduct`: `id` (Id/autoIncrement), `name`, `type`, `unit`, `image` (String?), `initialPrice`, `sellingPrice`, `discount`, `discountPrice` (all double?), `stock` (int?), `categoryId` (int?), `sku` (String), `barcode` (String?), `isNonStock` (bool), `createdAt`, `updatedAt`, `cachedAt` (DateTime?), `isLocal` (bool), `stocks` (IsarLinks<OfflineStock> with @Backlink).
+- `OfflineStock`: `id` (Id/autoIncrement), `stock` (int?), `initStock` (int?), `type` (String, default 'in'), `initialPrice`, `sellingPrice` (double?), `date` (String), `isLocal` (bool), `product` (IsarLink<OfflineProduct>).
+- Registered `OfflineCategorySchema`, `OfflineProductSchema`, `OfflineStockSchema` in `lib/models/lakasir_database.dart` Isar.open() call.
+- Ran `dart run build_runner build --delete-conflicting-outputs` — generated `offline_models.g.dart` successfully.
+- `flutter analyze` passes with no issues.
+
+Note: Separate files (category_model.dart, product_model.dart, stock_model.dart) caused isar_generator null-check crash due to analyzer version incompatibility with Dart SDK 3.11.0. Combined into single file as workaround.
