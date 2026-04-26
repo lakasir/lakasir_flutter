@@ -27,4 +27,19 @@
 - Isar CRUD, JSON serialization, receipt number generation
 
 ## Implementation
-<!-- Write you've done in here -->
+- Created `lib/offline/services/transaction_service_interface.dart`
+  - Abstract class with: `store(PaymentRequest request)`, `getHistory()`, `getById(int id)`
+  - `store` returns `Future<OfflinePendingTransaction>`, `getHistory` returns `Future<List<OfflinePendingTransaction>>`
+- Created `lib/offline/services/offline_receipt_service.dart`
+  - Static `generateReceiptNumber()` method: counts today's pending transactions, generates `OFF-YYYYMMDD-XXXX` pattern
+  - Uses `.where().filter().createdAtGreaterThan(startOfDay).count()` to count today's transactions
+- Created `lib/offline/services/offline_transaction_service.dart`
+  - `store()`: generates receipt number, serializes PaymentRequest.products to `itemsJson` via `jsonEncode`, creates `OfflinePendingTransaction` with `isSynced=false`
+  - `getHistory()`: returns all pending transactions from Isar
+  - `getById()`: returns single transaction from Isar
+- Created `lib/offline/services/online_transaction_service.dart`
+  - Wraps existing `PaymentSerivce` imported `as api` (preserving class name typo)
+  - `store()`: tries API call via `_apiService.store(request)`. On success: `isSynced=true`, `serverTransactionId=response.id.toString()`. On failure: `isSynced=false`, generates receipt number.
+  - Always persists to Isar regardless of API outcome
+- Created `lib/offline/repositories/transaction_repository.dart`
+  - Delegates based on `Get.find<AppModeService>().isOnline`

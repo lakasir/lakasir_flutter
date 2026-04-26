@@ -22,4 +22,19 @@
 - Isar CRUD, IsarLink relationships
 
 ## Implementation
-<!-- Write you've done in here -->
+- Created `lib/offline/services/stock_service_interface.dart`
+  - Abstract class with: `getStocksByProduct(int productId)`, `createStock(OfflineStock stock, int productId)`, `updateStock(OfflineStock stock)`
+  - `createStock` takes extra `productId` parameter for IsarLink setup
+- Created `lib/offline/services/offline_stock_service.dart`
+  - `getStocksByProduct()`: loads product, then `product.stocks.load()`, returns `product.stocks.toList()`
+  - `createStock()`: saves stock to get Isar ID, then sets `stock.product.value = product` and `stock.product.save()` within writeTxn
+  - `updateStock()`: `stock.isLocal = true`, writeTxn put
+  - IsarLink pattern: must save stock first to get ID, then set and save link
+- Created `lib/offline/services/online_stock_service.dart`
+  - Wraps existing `ProductStockService` imported `as api`
+  - `getStocksByProduct()`: tries API fetch, caches via `_cacheStocks()`, falls back to Isar cache
+  - `_cacheStocks()`: iterates stocks one-by-one in writeTxn (required for IsarLink handling), maps `StockResponse` → `OfflineStock` with product link
+  - `createStock()`: constructs `ProductStockRequest`, tries API. On success: `isLocal=false`. On failure: `isLocal=true`. Always persists with IsarLink.
+  - `updateStock()`: no API update endpoint exists — just saves to Isar with `isLocal=true`
+- Created `lib/offline/repositories/stock_repository.dart`
+  - Delegates based on `Get.find<AppModeService>().isOnline`
