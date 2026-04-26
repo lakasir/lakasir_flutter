@@ -35,4 +35,16 @@
 - GetX state management, `connectivity_plus` package
 
 ## Implementation
-<!-- Write you've done in here -->
+- Created `lib/offline/services/app_mode_service.dart`
+  - `AppMode` enum with `offline`, `online` values
+  - `Rx<AppMode> mode` observable, `isOffline`/`isOnline` getters
+  - `determineMode()` — checks `hasDomain()` to set initial mode
+  - `switchToOnline([String? domain])` — optional domain param calls `storeSetup(domain)`, sets mode to online, left TODO for sync
+  - `switchToOffline()` — sets mode to offline
+  - Registered in `main.dart` with `Get.put(AppModeService(), permanent: true)`
+- Created `lib/offline/services/connectivity_service.dart`
+  - `RxBool isOnline` observable
+  - Subscribes to `connectivity_plus` stream in `onInit()`, runs initial `checkConnection()`
+  - `_updateConnectionStatus(List<ConnectivityResult>)` — auto-switches `AppModeService` mode on connectivity change
+  - `checkConnection()` — one-shot check returning bool
+  - Registered in `main.dart` with `Get.put(ConnectivityService(), permanent: true)`

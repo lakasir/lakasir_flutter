@@ -27,4 +27,38 @@
 - GetX controllers, OfflineUserService, ConnectivityService, auth helpers
 
 ## Implementation
-<!-- Write you've done in here -->
+- Updated `lib/controllers/auths/login_controller.dart`
+  - Added `isOfflineLogin` RxBool observable
+  - `_detectMode()` called in `onInit()`: checks `isOfflineMode()` then `hasDomain()` then `ConnectivityService.checkConnection()` to set `isOfflineLogin`
+  - `login()` routes based on mode:
+    1. `isOfflineMode()` → `_loginOffline()`
+    2. No domain → `_loginOffline()`
+    3. Has domain + connected → `_loginOnline()` with try/catch fallback to `_loginOfflineFallback()`
+    4. Has domain + not connected → `_loginOfflineFallback()`
+  - `_loginOnline()` — existing `LoginService.login()` flow + `AppModeService.switchToOnline()`
+  - `_loginOffline()` — `OfflineUserService.login()` + `AppModeService.switchToOffline()`
+  - `_loginOfflineFallback()` — same as offline but used as fallback when online fails
+- Updated `lib/screens/login_screen.dart`
+  - Shows "Offline Mode" badge when `isOfflineLogin` is true
+  - Sign-in button text changes to `Sign In (Offline Mode)` when offline
+  - Hides "Remember Me" checkbox and "Forgot Password" link when in offline mode
+
+### Bug fix: AuthController infinite loading in offline mode
+`MenuScreen` calls `AuthController.fetchPermissions()` which calls `ProfileService.get()` (API call). With domain `'offline'`, the request fails/throws, leaving `loading = true` forever (CircularProgressIndicator never resolves). Fixed in `AuthController`:
+```dart
+void fetchPermissions() async {
+    loading(true);
+    final offline = await isOfflineMode();
+    if (offline) {
+      loading(false);
+      return;
+    }
+    try {
+      await _profileController.getProfile();
+      // ... existing permissions/features logic
+    } catch (_) {
+      // In offline mode or network failure, skip permissions fetching
+    }
+    loading(false);
+}
+```

@@ -24,4 +24,23 @@
 - Flutter UI, GetX navigation, Isar writes, OfflineUserService
 
 ## Implementation
-<!-- Write you've done in here -->
+- Created `lib/screens/domain/register_offline_user_screen.dart`
+  - Form with: shop name, full name, email, password, password confirmation
+  - "Offline Mode" badge shown at top using orange container with primary border
+  - On submit: calls `OfflineUserService.register()`, seeds default payment methods, then stores setup flags directly via SharedPreferences (NOT `storeSetup()` — see bug fix below)
+  - Seeds 4 default `OfflinePaymentMethod` entries (Cash, Debit, Credit, E-Wallet) with `isLocal=true`
+  - Navigates to `/auth` via `Get.offAllNamed('/auth')`
+- Created `ModeChooserScreen` inside `lib/screens/onboard_screen.dart`
+  - Two buttons: "Use Offline" (filled, routes to `/auth/offline-register`) and "Connect to Server" (outlined, routes to `SetupScreen`)
+  - OnboardingScreen last page and OnboardingPage "Get Started" button now navigate to `/auth/mode-chooser` route
+- Added routes in `main.dart`: `/auth/offline-register`, `/auth/mode-chooser`
+- Added translation keys in `messages.dart` (en_US + id_ID): `offline_mode`, `use_offline`, `use_offline_description`, `connect_to_server`, `connect_to_server_description`, `setup_choose_mode`, `field_full_name`
+
+### Bug fix: storeSetup('offline') cleared offline auth
+`storeSetup()` calls `logout()` which clears `offline_auth` and `offline_user_id`. After registration, `checkAuthentication()` saw `isOfflineAuthenticated() == false` and routed to login screen instead of menu. Fixed by storing setup flags directly:
+```dart
+final prefs = await SharedPreferences.getInstance();
+await prefs.setBool('setup', true);
+await prefs.setString('domain', 'offline');
+```
+This preserves the offline auth state set by `OfflineUserService.register()`.

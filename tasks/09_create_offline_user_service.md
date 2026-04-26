@@ -25,4 +25,11 @@
 - Isar CRUD, SharedPreferences for auth state
 
 ## Implementation
-<!-- Write you've done in here -->
+- Created `lib/offline/services/offline_user_service.dart`
+  - `register()` — checks duplicate emails via Isar `.where().filter().emailEqualTo(email).findAll().firstOrNull`, generates salt, hashes password, stores `OfflineUser` in Isar, calls `storeOfflineAuth(true)` and `storeOfflineUserId(user.id)`
+  - `login()` — finds user by email in Isar, verifies password with `user.verifyPassword()`, calls `storeOfflineAuth(true)` and `storeOfflineUserId(user.id)`
+  - `getCurrentUser()` — retrieves offline user from Isar using stored `offline_user_id`
+  - `logout()` — calls `storeOfflineAuth(false)` (doesn't delete the user)
+  - `updateDomain(String domain)` — sets `domain` field on current offline user for future server linking
+- Required `import 'package:isar/isar.dart'` for `.where().filter()` query API (Isar 3.x pattern)
+- Used `.findAll().firstOrNull` instead of `.findFirst()` (not available in Isar 3.x)
