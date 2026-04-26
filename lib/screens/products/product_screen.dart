@@ -138,8 +138,10 @@ class _ProductScreen extends State<ProductScreen> {
               ),
             ),
             if (!_productController.products[index].isNonStock)
-              if (_productController.products[index].stock! <=
-                  _settingController.setting.value.minimumStock!)
+              if (_productController.products[index].stock != null &&
+                  _settingController.setting.value.minimumStock != null &&
+                  _productController.products[index].stock! <=
+                      _settingController.setting.value.minimumStock!)
                 const Icon(
                   Icons.warning,
                   color: error,
