@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:lakasir/controllers/profiles/profile_controller.dart';
-import 'package:lakasir/utils/utils.dart';
+import 'package:lakasir/utils/auth.dart';
 
 class AuthController extends GetxController {
   RxList<String> permissions = List<String>.empty().obs;
@@ -22,18 +22,28 @@ class AuthController extends GetxController {
 
   void fetchPermissions() async {
     loading(true);
-    await _profileController.getProfile();
-    if (_profileController.profile.value.permissions != null) {
-      permissions(_profileController.profile.value.permissions!);
-    }
-    if (_profileController.profile.value.features!.isNotEmpty) {
-      Map<String, bool> validFeatures = _profileController
-          .profile.value.features!
-          .map((key, value) => MapEntry(key, value as bool));
-      features.assignAll(validFeatures);
 
-      // features(_profileController.profile.value.features);
+    final offline = await isOfflineMode();
+    if (offline) {
+      loading(false);
+      return;
     }
+
+    try {
+      await _profileController.getProfile();
+      if (_profileController.profile.value.permissions != null) {
+        permissions(_profileController.profile.value.permissions!);
+      }
+      if (_profileController.profile.value.features!.isNotEmpty) {
+        Map<String, bool> validFeatures = _profileController
+            .profile.value.features!
+            .map((key, value) => MapEntry(key, value as bool));
+        features.assignAll(validFeatures);
+      }
+    } catch (_) {
+      // In offline mode or network failure, skip permissions fetching
+    }
+
     loading(false);
   }
 }

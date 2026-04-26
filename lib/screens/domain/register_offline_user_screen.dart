@@ -3,11 +3,11 @@ import 'package:get/get.dart';
 import 'package:lakasir/models/lakasir_database.dart';
 import 'package:lakasir/offline/models/offline_payment_method_model.dart';
 import 'package:lakasir/offline/services/offline_user_service.dart';
-import 'package:lakasir/utils/auth.dart';
 import 'package:lakasir/utils/colors.dart';
 import 'package:lakasir/widgets/filled_button.dart';
 import 'package:lakasir/widgets/layout.dart';
 import 'package:lakasir/widgets/text_field.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RegisterOfflineUserScreen extends StatefulWidget {
   const RegisterOfflineUserScreen({super.key});
@@ -52,7 +52,10 @@ class _RegisterOfflineUserScreenState extends State<RegisterOfflineUserScreen> {
       );
 
       await _seedDefaultPaymentMethods();
-      await storeSetup('offline');
+      // Store setup directly without clearing offline auth
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('setup', true);
+      await prefs.setString('domain', 'offline');
 
       if (mounted) {
         Get.offAllNamed('/auth');
