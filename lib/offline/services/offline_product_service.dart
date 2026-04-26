@@ -1,6 +1,7 @@
 import 'package:isar/isar.dart';
 import 'package:lakasir/api/requests/product_request.dart';
 import 'package:lakasir/models/lakasir_database.dart';
+import 'package:lakasir/offline/models/offline_category_model.dart';
 import 'package:lakasir/offline/models/offline_product_model.dart';
 import 'package:lakasir/offline/services/product_service_interface.dart';
 
@@ -9,28 +10,53 @@ class OfflineProductService implements ProductServiceInterface {
 
   @override
   Future<List<OfflineProduct>> getProducts({ProductRequest? request}) async {
+    List<OfflineProduct> products;
     if (request?.name != null && request!.name!.isNotEmpty) {
-      return await _isar.offlineProducts
+      products = await _isar.offlineProducts
           .where()
           .filter()
           .nameContains(request.name!, caseSensitive: false)
           .findAll();
-    }
-
-    if (request?.categoryId != null && request!.categoryId!.isNotEmpty) {
-      return await _isar.offlineProducts
+    } else if (request?.categoryId != null && request!.categoryId!.isNotEmpty) {
+      products = await _isar.offlineProducts
           .where()
           .filter()
           .categoryIdEqualTo(int.parse(request.categoryId!))
           .findAll();
+    } else {
+      products = await _isar.offlineProducts.where().findAll();
     }
 
-    return await _isar.offlineProducts.where().findAll();
+    await _populateCategoryNames(products);
+    return products;
   }
 
   @override
   Future<OfflineProduct?> getProductById(int id) async {
-    return await _isar.offlineProducts.get(id);
+    final product = await _isar.offlineProducts.get(id);
+    if (product != null) {
+      await _populateCategoryNames([product]);
+    }
+    return product;
+  }
+
+  Future<void> _populateCategoryNames(List<OfflineProduct> products) async {
+    final categoryIds = products
+        .map((p) => p.categoryId)
+        .whereType<int>()
+        .toSet()
+        .toList();
+    if (categoryIds.isEmpty) return;
+    final categories = await _isar.offlineCategorys.getAll(categoryIds);
+    final categoryMap = <int, String>{};
+    for (final cat in categories.whereType<OfflineCategory>()) {
+      categoryMap[cat.id] = cat.name;
+    }
+    for (final product in products) {
+      if (product.categoryId != null && categoryMap.containsKey(product.categoryId)) {
+        product.categoryName = categoryMap[product.categoryId]!;
+      }
+    }
   }
 
   @override

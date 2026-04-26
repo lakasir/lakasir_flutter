@@ -86,7 +86,8 @@ class ProductStockController extends GetxController {
   }
 
   void refetch() {
-    var id = _productDetailController.product.value.id;
+    var id = _productDetailController.product.value?.id;
+    if (id == null) return;
     get(id);
     _productDetailController.get(id);
     _productController.getProducts();

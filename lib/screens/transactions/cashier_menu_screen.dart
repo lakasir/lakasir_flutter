@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lakasir/api/responses/products/product_response.dart';
+import 'package:lakasir/offline/models/offline_product_model.dart';
 import 'package:lakasir/controllers/auths/auth_controller.dart';
 import 'package:lakasir/controllers/products/product_controller.dart';
 import 'package:lakasir/controllers/setting_controller.dart';
@@ -214,7 +214,7 @@ class _CashierMenuScreenState extends State<CashierMenuScreen> {
   }
 
   Widget buildMyCardList(
-    ProductResponse product,
+    OfflineProduct product,
     CartController cartController,
   ) {
     return Container(

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lakasir/api/requests/product_request.dart';
-import 'package:lakasir/api/responses/products/product_response.dart';
 import 'package:lakasir/controllers/category_controller.dart';
-import 'package:lakasir/services/product_service.dart';
+import 'package:lakasir/offline/models/offline_product_model.dart';
+import 'package:lakasir/offline/repositories/product_repository.dart';
 import 'package:lakasir/utils/utils.dart';
 import 'package:lakasir/widgets/dialog.dart';
 import 'package:lakasir/widgets/filled_button.dart';
@@ -13,8 +13,8 @@ import 'package:lakasir/widgets/text_field.dart';
 class ProductController extends GetxController {
   final CategoryController _categoryController = Get.put(CategoryController());
   RxBool isLoading = false.obs;
-  RxList<ProductResponse> products = <ProductResponse>[].obs;
-  final ProductService _productService = ProductService();
+  RxList<OfflineProduct> products = <OfflineProduct>[].obs;
+  final ProductRepository _productRepository = ProductRepository();
   final searchByNameController = TextEditingController();
   final searchByCategoryController = SelectInputWidgetController();
   final searchByTypeController = SelectInputWidgetController();
@@ -23,20 +23,18 @@ class ProductController extends GetxController {
 
   void getProducts() async {
     isLoading(true);
-    final response = await _productService.get(ProductRequest());
-    products.value = response.data!;
+    products.value = await _productRepository.getProducts();
     isLoading(false);
   }
 
   void searchProduct() async {
     isLoading(true);
-    final response = await _productService.get(ProductRequest(
+    products.value = await _productRepository.getProducts(request: ProductRequest(
       name: searchByNameController.text,
       categoryId: searchByCategoryController.selectedOption,
       type: searchByTypeController.selectedOption,
       unit: searchByUnitController.text,
     ));
-    products.value = response.data!;
     isLoading(false);
   }
 

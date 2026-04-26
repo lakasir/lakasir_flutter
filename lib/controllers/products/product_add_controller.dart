@@ -4,18 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:get/get.dart';
 import 'package:lakasir/Exceptions/validation.dart';
-import 'package:lakasir/api/requests/product_request.dart';
 import 'package:lakasir/api/responses/error_response.dart';
-import 'package:lakasir/api/responses/products/product_response.dart';
 import 'package:lakasir/api/responses/products/produect_error_response.dart';
 import 'package:lakasir/controllers/products/product_controller.dart';
-import 'package:lakasir/services/product_service.dart';
+import 'package:lakasir/offline/models/offline_product_model.dart';
+import 'package:lakasir/offline/repositories/product_repository.dart';
 import 'package:lakasir/utils/colors.dart';
 import 'package:lakasir/widgets/select_input_feld.dart';
 
 class ProductAddEditController extends GetxController {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  final ProductService _productService = ProductService();
+  final ProductRepository _productRepository = ProductRepository();
   final SelectInputWidgetController categoryController =
       SelectInputWidgetController();
   final SelectInputWidgetController typeController =
@@ -49,22 +48,23 @@ class ProductAddEditController extends GetxController {
         isLoading(false);
         return;
       }
-      await _productService.create(ProductRequest(
-        isNonStock: enabledStock.value,
-        sku: skuInputController.text,
-        barcode: barcodeInputController.text,
-        name: nameInputController.text,
-        categoryId: categoryController.selectedOption,
-        stock: stockInputController.text != ''
-            ? double.parse(stockInputController.text)
-            : 0,
-        initialPrice: initialPriceInputController.numberValue,
-        sellingPrice: sellingPriceInputController.numberValue,
-        type: typeController.selectedOption,
-        unit: unitInputController.text,
-        photoUrl: photoUrl,
-        expired: expiredController.text,
-      ));
+      final product = OfflineProduct()
+        ..name = nameInputController.text
+        ..categoryId = categoryController.selectedOption != null
+            ? int.parse(categoryController.selectedOption!)
+            : null
+        ..stock = stockInputController.text.isNotEmpty
+            ? double.parse(stockInputController.text).toInt()
+            : 0
+        ..initialPrice = initialPriceInputController.numberValue
+        ..sellingPrice = sellingPriceInputController.numberValue
+        ..type = typeController.selectedOption ?? 'product'
+        ..unit = unitInputController.text
+        ..image = photoUrl
+        ..isNonStock = enabledStock.value
+        ..sku = skuInputController.text
+        ..barcode = barcodeInputController.text;
+      await _productRepository.createProduct(product);
       isLoading(false);
       _productController.getProducts();
       clearInput();
@@ -100,24 +100,25 @@ class ProductAddEditController extends GetxController {
         isLoading(false);
         return;
       }
-      await _productService.update(
-        (Get.arguments as ProductResponse).id,
-        ProductRequest(
-          isNonStock: enabledStock.value,
-          sku: skuInputController.text,
-          barcode: barcodeInputController.text,
-          name: nameInputController.text,
-          categoryId: categoryController.selectedOption,
-          stock: stockInputController.text != ''
-              ? double.parse(stockInputController.text)
-              : 0,
-          initialPrice: initialPriceInputController.numberValue,
-          sellingPrice: sellingPriceInputController.numberValue,
-          type: typeController.selectedOption,
-          unit: unitInputController.text,
-          photoUrl: photoUrl ?? '',
-        ),
-      );
+      final args = Get.arguments as OfflineProduct;
+      final product = OfflineProduct()
+        ..id = args.id
+        ..name = nameInputController.text
+        ..categoryId = categoryController.selectedOption != null
+            ? int.parse(categoryController.selectedOption!)
+            : null
+        ..stock = stockInputController.text.isNotEmpty
+            ? double.parse(stockInputController.text).toInt()
+            : 0
+        ..initialPrice = initialPriceInputController.numberValue
+        ..sellingPrice = sellingPriceInputController.numberValue
+        ..type = typeController.selectedOption ?? 'product'
+        ..unit = unitInputController.text
+        ..image = photoUrl ?? ''
+        ..isNonStock = enabledStock.value
+        ..sku = skuInputController.text
+        ..barcode = barcodeInputController.text;
+      await _productRepository.updateProduct(product);
       isLoading(false);
       _productController.getProducts();
       clearInput();
@@ -168,7 +169,7 @@ class ProductAddEditController extends GetxController {
 
   void setData() {
     if (Get.arguments != null) {
-      final products = Get.arguments as ProductResponse;
+      final products = Get.arguments as OfflineProduct;
       nameInputController.text = products.name;
       categoryController.selectedOption = products.categoryId.toString();
       stockInputController.text = products.stock.toString();

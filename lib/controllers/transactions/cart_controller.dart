@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lakasir/api/responses/members/member_response.dart';
 import 'package:lakasir/api/responses/payment_methods/payment_method_response.dart';
-import 'package:lakasir/api/responses/products/product_response.dart';
+import 'package:lakasir/offline/models/offline_product_model.dart';
 import 'package:lakasir/controllers/products/product_detail_controller.dart';
 import 'package:lakasir/utils/colors.dart';
 import 'package:lakasir/utils/utils.dart';
@@ -22,9 +22,11 @@ class CartController extends GetxController {
   final qtyController = TextEditingController();
 
   bool isNotEnoughStock() {
-    bool isNotEnoughStock = _productDetailController.product.value.stock! <
+    final product = _productDetailController.product.value;
+    if (product == null) return false;
+    bool isNotEnoughStock = product.stock! <
         int.parse(qtyController.text);
-    if (!_productDetailController.product.value.isNonStock &&
+    if (!product.isNonStock &&
         isNotEnoughStock) {
       Get.rawSnackbar(
         message: 'Stock is not enough',
@@ -99,7 +101,7 @@ class CartController extends GetxController {
     cartSessions.refresh();
   }
 
-  void showAddToCartDialog(ProductResponse product) {
+  void showAddToCartDialog(OfflineProduct product) {
     qtyController.clear();
     qtyController.text = cartSessions.value.cartItems
         .firstWhere((element) => element.product.id == product.id,
@@ -263,7 +265,7 @@ class CartSession {
 }
 
 class CartItem {
-  ProductResponse product;
+  OfflineProduct product;
   int qty;
   double discountPrice;
 

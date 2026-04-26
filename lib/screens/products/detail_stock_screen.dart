@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lakasir/api/responses/products/product_response.dart';
+import 'package:lakasir/offline/models/offline_product_model.dart';
 import 'package:lakasir/controllers/auths/auth_controller.dart';
 import 'package:lakasir/controllers/products/product_detail_controller.dart';
 import 'package:lakasir/controllers/products/stocks/product_stock_controller.dart';
@@ -38,8 +38,8 @@ class _DetailStockScreenState extends State<DetailStockScreen> {
   }
 
   void fetchDetail() async {
-    if (Get.arguments is ProductResponse) {
-      final ProductResponse products = Get.arguments;
+    if (Get.arguments is OfflineProduct) {
+      final OfflineProduct products = Get.arguments;
       await _productStockController.get(products.id);
       setState(() {
         _productDetailController.product.value = products;
@@ -63,17 +63,18 @@ class _DetailStockScreenState extends State<DetailStockScreen> {
               child: CircularProgressIndicator(),
             );
           }
-          if (_productDetailController.product.value.id == 0) {
+          if (_productDetailController.product.value?.name.isEmpty ?? true) {
             return Center(
               child:
                   Text('global_not_found'.trParams({'item': 'menu_product'})),
             );
           }
+          final product = _productDetailController.product.value!;
           String initialFormattedPrice = formatPrice(
-            _productDetailController.product.value.initialPrice,
+            product.initialPrice,
           );
           String sellingFormattedPrice = formatPrice(
-            _productDetailController.product.value.sellingPrice,
+            product.sellingPrice,
           );
 
           return Column(
@@ -82,13 +83,13 @@ class _DetailStockScreenState extends State<DetailStockScreen> {
               MyCardList(
                 list: [
                   Text(
-                    _productDetailController.product.value.name,
+                    product.name,
                     style: const TextStyle(fontSize: 20),
                     overflow: TextOverflow.ellipsis,
                     maxLines: 4,
                   ),
                   Text(
-                    '${'field_stock'.tr}: ${_productDetailController.product.value.stock}',
+                    '${'field_stock'.tr}: ${product.stock}',
                     style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w200,
@@ -105,7 +106,7 @@ class _DetailStockScreenState extends State<DetailStockScreen> {
                   height: 90,
                   width: 90,
                   child: MyImage(
-                    images: _productDetailController.product.value.image,
+                    images: product.image,
                   ),
                 ),
               ),
@@ -156,7 +157,7 @@ class _DetailStockScreenState extends State<DetailStockScreen> {
                               builder: (context) {
                                 return ActionModalStock(
                                   products:
-                                      _productDetailController.product.value,
+                                      product,
                                   initialFormattedPrice: initialFormattedPrice,
                                   productStockController:
                                       _productStockController,
@@ -245,8 +246,7 @@ class _DetailStockScreenState extends State<DetailStockScreen> {
                                             TextButton(
                                               onPressed: () {
                                                 _productStockController.delete(
-                                                    _productDetailController
-                                                        .product.value.id,
+                                                    product.id,
                                                     stockHistory.id);
                                                 Get.back();
                                               },
@@ -319,7 +319,7 @@ class ActionModalStock extends StatefulWidget {
     required this.productStockController,
   });
 
-  final ProductResponse products;
+  final OfflineProduct products;
   final String initialFormattedPrice;
   final ProductStockController productStockController;
 

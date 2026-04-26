@@ -1,24 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lakasir/api/responses/products/product_response.dart';
 import 'package:lakasir/controllers/products/product_controller.dart';
-import 'package:lakasir/services/product_service.dart';
+import 'package:lakasir/offline/models/offline_product_model.dart';
+import 'package:lakasir/offline/repositories/product_repository.dart';
 import 'package:lakasir/utils/colors.dart';
 
 class ProductDetailController extends GetxController {
-  final _productService = ProductService();
+  final _productRepository = ProductRepository();
   final ProductController _productController = Get.put(ProductController());
   final RxBool isLoading = false.obs;
-  final Rx<ProductResponse> product = ProductResponse().obs;
+  final Rx<OfflineProduct?> product = Rx<OfflineProduct?>(null);
 
   Future<void> delete(int id) async {
-    await _productService.delete(id);
+    await _productRepository.deleteProduct(id);
   }
 
   Future<void> get(int id) async {
     isLoading(true);
-    final response = await _productService.getById(id);
-    product.value = response;
+    product.value = await _productRepository.getProductById(id);
     isLoading(false);
   }
 

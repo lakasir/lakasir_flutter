@@ -17,6 +17,7 @@ class OfflineProduct {
   double? discountPrice;
   int? stock;
   int? categoryId;
+  String categoryName = '';
   String sku = '';
   String? barcode;
   bool isNonStock = false;

@@ -32,73 +32,78 @@ const OfflineProductSchema = CollectionSchema(
       name: r'categoryId',
       type: IsarType.long,
     ),
-    r'createdAt': PropertySchema(
+    r'categoryName': PropertySchema(
       id: 3,
+      name: r'categoryName',
+      type: IsarType.string,
+    ),
+    r'createdAt': PropertySchema(
+      id: 4,
       name: r'createdAt',
       type: IsarType.dateTime,
     ),
     r'discount': PropertySchema(
-      id: 4,
+      id: 5,
       name: r'discount',
       type: IsarType.double,
     ),
     r'discountPrice': PropertySchema(
-      id: 5,
+      id: 6,
       name: r'discountPrice',
       type: IsarType.double,
     ),
     r'image': PropertySchema(
-      id: 6,
+      id: 7,
       name: r'image',
       type: IsarType.string,
     ),
     r'initialPrice': PropertySchema(
-      id: 7,
+      id: 8,
       name: r'initialPrice',
       type: IsarType.double,
     ),
     r'isLocal': PropertySchema(
-      id: 8,
+      id: 9,
       name: r'isLocal',
       type: IsarType.bool,
     ),
     r'isNonStock': PropertySchema(
-      id: 9,
+      id: 10,
       name: r'isNonStock',
       type: IsarType.bool,
     ),
     r'name': PropertySchema(
-      id: 10,
+      id: 11,
       name: r'name',
       type: IsarType.string,
     ),
     r'sellingPrice': PropertySchema(
-      id: 11,
+      id: 12,
       name: r'sellingPrice',
       type: IsarType.double,
     ),
     r'sku': PropertySchema(
-      id: 12,
+      id: 13,
       name: r'sku',
       type: IsarType.string,
     ),
     r'stock': PropertySchema(
-      id: 13,
+      id: 14,
       name: r'stock',
       type: IsarType.long,
     ),
     r'type': PropertySchema(
-      id: 14,
+      id: 15,
       name: r'type',
       type: IsarType.string,
     ),
     r'unit': PropertySchema(
-      id: 15,
+      id: 16,
       name: r'unit',
       type: IsarType.string,
     ),
     r'updatedAt': PropertySchema(
-      id: 16,
+      id: 17,
       name: r'updatedAt',
       type: IsarType.dateTime,
     )
@@ -137,6 +142,7 @@ int _offlineProductEstimateSize(
       bytesCount += 3 + value.length * 3;
     }
   }
+  bytesCount += 3 + object.categoryName.length * 3;
   {
     final value = object.image;
     if (value != null) {
@@ -159,20 +165,21 @@ void _offlineProductSerialize(
   writer.writeString(offsets[0], object.barcode);
   writer.writeDateTime(offsets[1], object.cachedAt);
   writer.writeLong(offsets[2], object.categoryId);
-  writer.writeDateTime(offsets[3], object.createdAt);
-  writer.writeDouble(offsets[4], object.discount);
-  writer.writeDouble(offsets[5], object.discountPrice);
-  writer.writeString(offsets[6], object.image);
-  writer.writeDouble(offsets[7], object.initialPrice);
-  writer.writeBool(offsets[8], object.isLocal);
-  writer.writeBool(offsets[9], object.isNonStock);
-  writer.writeString(offsets[10], object.name);
-  writer.writeDouble(offsets[11], object.sellingPrice);
-  writer.writeString(offsets[12], object.sku);
-  writer.writeLong(offsets[13], object.stock);
-  writer.writeString(offsets[14], object.type);
-  writer.writeString(offsets[15], object.unit);
-  writer.writeDateTime(offsets[16], object.updatedAt);
+  writer.writeString(offsets[3], object.categoryName);
+  writer.writeDateTime(offsets[4], object.createdAt);
+  writer.writeDouble(offsets[5], object.discount);
+  writer.writeDouble(offsets[6], object.discountPrice);
+  writer.writeString(offsets[7], object.image);
+  writer.writeDouble(offsets[8], object.initialPrice);
+  writer.writeBool(offsets[9], object.isLocal);
+  writer.writeBool(offsets[10], object.isNonStock);
+  writer.writeString(offsets[11], object.name);
+  writer.writeDouble(offsets[12], object.sellingPrice);
+  writer.writeString(offsets[13], object.sku);
+  writer.writeLong(offsets[14], object.stock);
+  writer.writeString(offsets[15], object.type);
+  writer.writeString(offsets[16], object.unit);
+  writer.writeDateTime(offsets[17], object.updatedAt);
 }
 
 OfflineProduct _offlineProductDeserialize(
@@ -185,21 +192,22 @@ OfflineProduct _offlineProductDeserialize(
   object.barcode = reader.readStringOrNull(offsets[0]);
   object.cachedAt = reader.readDateTimeOrNull(offsets[1]);
   object.categoryId = reader.readLongOrNull(offsets[2]);
-  object.createdAt = reader.readDateTimeOrNull(offsets[3]);
-  object.discount = reader.readDoubleOrNull(offsets[4]);
-  object.discountPrice = reader.readDoubleOrNull(offsets[5]);
+  object.categoryName = reader.readString(offsets[3]);
+  object.createdAt = reader.readDateTimeOrNull(offsets[4]);
+  object.discount = reader.readDoubleOrNull(offsets[5]);
+  object.discountPrice = reader.readDoubleOrNull(offsets[6]);
   object.id = id;
-  object.image = reader.readStringOrNull(offsets[6]);
-  object.initialPrice = reader.readDoubleOrNull(offsets[7]);
-  object.isLocal = reader.readBool(offsets[8]);
-  object.isNonStock = reader.readBool(offsets[9]);
-  object.name = reader.readString(offsets[10]);
-  object.sellingPrice = reader.readDoubleOrNull(offsets[11]);
-  object.sku = reader.readString(offsets[12]);
-  object.stock = reader.readLongOrNull(offsets[13]);
-  object.type = reader.readString(offsets[14]);
-  object.unit = reader.readString(offsets[15]);
-  object.updatedAt = reader.readDateTimeOrNull(offsets[16]);
+  object.image = reader.readStringOrNull(offsets[7]);
+  object.initialPrice = reader.readDoubleOrNull(offsets[8]);
+  object.isLocal = reader.readBool(offsets[9]);
+  object.isNonStock = reader.readBool(offsets[10]);
+  object.name = reader.readString(offsets[11]);
+  object.sellingPrice = reader.readDoubleOrNull(offsets[12]);
+  object.sku = reader.readString(offsets[13]);
+  object.stock = reader.readLongOrNull(offsets[14]);
+  object.type = reader.readString(offsets[15]);
+  object.unit = reader.readString(offsets[16]);
+  object.updatedAt = reader.readDateTimeOrNull(offsets[17]);
   return object;
 }
 
@@ -217,32 +225,34 @@ P _offlineProductDeserializeProp<P>(
     case 2:
       return (reader.readLongOrNull(offset)) as P;
     case 3:
-      return (reader.readDateTimeOrNull(offset)) as P;
+      return (reader.readString(offset)) as P;
     case 4:
-      return (reader.readDoubleOrNull(offset)) as P;
+      return (reader.readDateTimeOrNull(offset)) as P;
     case 5:
       return (reader.readDoubleOrNull(offset)) as P;
     case 6:
-      return (reader.readStringOrNull(offset)) as P;
-    case 7:
       return (reader.readDoubleOrNull(offset)) as P;
+    case 7:
+      return (reader.readStringOrNull(offset)) as P;
     case 8:
-      return (reader.readBool(offset)) as P;
+      return (reader.readDoubleOrNull(offset)) as P;
     case 9:
       return (reader.readBool(offset)) as P;
     case 10:
-      return (reader.readString(offset)) as P;
+      return (reader.readBool(offset)) as P;
     case 11:
-      return (reader.readDoubleOrNull(offset)) as P;
+      return (reader.readString(offset)) as P;
     case 12:
-      return (reader.readString(offset)) as P;
+      return (reader.readDoubleOrNull(offset)) as P;
     case 13:
-      return (reader.readLongOrNull(offset)) as P;
-    case 14:
       return (reader.readString(offset)) as P;
+    case 14:
+      return (reader.readLongOrNull(offset)) as P;
     case 15:
       return (reader.readString(offset)) as P;
     case 16:
+      return (reader.readString(offset)) as P;
+    case 17:
       return (reader.readDateTimeOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -644,6 +654,142 @@ extension OfflineProductQueryFilter
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<OfflineProduct, OfflineProduct, QAfterFilterCondition>
+      categoryNameEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'categoryName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<OfflineProduct, OfflineProduct, QAfterFilterCondition>
+      categoryNameGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'categoryName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<OfflineProduct, OfflineProduct, QAfterFilterCondition>
+      categoryNameLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'categoryName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<OfflineProduct, OfflineProduct, QAfterFilterCondition>
+      categoryNameBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'categoryName',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<OfflineProduct, OfflineProduct, QAfterFilterCondition>
+      categoryNameStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'categoryName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<OfflineProduct, OfflineProduct, QAfterFilterCondition>
+      categoryNameEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'categoryName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<OfflineProduct, OfflineProduct, QAfterFilterCondition>
+      categoryNameContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'categoryName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<OfflineProduct, OfflineProduct, QAfterFilterCondition>
+      categoryNameMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'categoryName',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<OfflineProduct, OfflineProduct, QAfterFilterCondition>
+      categoryNameIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'categoryName',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<OfflineProduct, OfflineProduct, QAfterFilterCondition>
+      categoryNameIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'categoryName',
+        value: '',
       ));
     });
   }
@@ -2089,6 +2235,20 @@ extension OfflineProductQuerySortBy
     });
   }
 
+  QueryBuilder<OfflineProduct, OfflineProduct, QAfterSortBy>
+      sortByCategoryName() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'categoryName', Sort.asc);
+    });
+  }
+
+  QueryBuilder<OfflineProduct, OfflineProduct, QAfterSortBy>
+      sortByCategoryNameDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'categoryName', Sort.desc);
+    });
+  }
+
   QueryBuilder<OfflineProduct, OfflineProduct, QAfterSortBy> sortByCreatedAt() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'createdAt', Sort.asc);
@@ -2312,6 +2472,20 @@ extension OfflineProductQuerySortThenBy
     });
   }
 
+  QueryBuilder<OfflineProduct, OfflineProduct, QAfterSortBy>
+      thenByCategoryName() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'categoryName', Sort.asc);
+    });
+  }
+
+  QueryBuilder<OfflineProduct, OfflineProduct, QAfterSortBy>
+      thenByCategoryNameDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'categoryName', Sort.desc);
+    });
+  }
+
   QueryBuilder<OfflineProduct, OfflineProduct, QAfterSortBy> thenByCreatedAt() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'createdAt', Sort.asc);
@@ -2528,6 +2702,13 @@ extension OfflineProductQueryWhereDistinct
   }
 
   QueryBuilder<OfflineProduct, OfflineProduct, QDistinct>
+      distinctByCategoryName({bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'categoryName', caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<OfflineProduct, OfflineProduct, QDistinct>
       distinctByCreatedAt() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'createdAt');
@@ -2646,6 +2827,13 @@ extension OfflineProductQueryProperty
   QueryBuilder<OfflineProduct, int?, QQueryOperations> categoryIdProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'categoryId');
+    });
+  }
+
+  QueryBuilder<OfflineProduct, String, QQueryOperations>
+      categoryNameProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'categoryName');
     });
   }
 

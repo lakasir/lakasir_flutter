@@ -120,6 +120,7 @@ class OnlineProductService implements ProductServiceInterface {
         ..discountPrice = p.discountPrice
         ..stock = p.stock
         ..categoryId = p.categoryId
+        ..categoryName = p.category?.name ?? ''
         ..sku = p.sku
         ..barcode = p.barcode
         ..isNonStock = p.isNonStock

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lakasir/api/responses/products/product_response.dart';
+import 'package:lakasir/offline/models/offline_product_model.dart';
 import 'package:lakasir/controllers/auths/auth_controller.dart';
 import 'package:lakasir/controllers/products/product_detail_controller.dart';
 import 'package:lakasir/controllers/setting_controller.dart';
@@ -21,12 +21,12 @@ class _DetailScreen extends State<DetailScreen> {
   final _productDetailController = Get.put(ProductDetailController());
   final _settingController = Get.put(SettingController());
   final AuthController _authController = Get.put(AuthController());
-  ProductResponse products = ProductResponse();
+  OfflineProduct products = OfflineProduct();
 
   @override
   void initState() {
     setState(() {
-      products = Get.arguments as ProductResponse;
+      products = Get.arguments as OfflineProduct;
     });
     super.initState();
   }

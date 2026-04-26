@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lakasir/api/responses/products/product_response.dart';
+import 'package:lakasir/offline/models/offline_product_model.dart';
 import 'package:lakasir/controllers/auths/auth_controller.dart';
 import 'package:lakasir/controllers/setting_controller.dart';
 import 'package:lakasir/controllers/settings/secure_initial_price_controller.dart';
-import 'package:lakasir/utils/auth.dart';
+
 import 'package:lakasir/utils/utils.dart';
 
 class ProductDetailWidget extends StatefulWidget {
@@ -17,7 +17,7 @@ class ProductDetailWidget extends StatefulWidget {
   }) : _settingController = settingController;
 
   final double width;
-  final ProductResponse products;
+  final OfflineProduct products;
   final SettingController _settingController;
   final bool isLoading;
 
@@ -202,7 +202,7 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
               ),
               Expanded(
                 child: Text(
-                  widget.products.category!.name,
+                  widget.products.categoryName,
                   style: const TextStyle(
                     fontSize: 18,
                   ),
