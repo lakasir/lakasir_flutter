@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:lakasir/controllers/profiles/profile_controller.dart';
+import 'package:lakasir/offline/services/offline_permission_service.dart';
 import 'package:lakasir/utils/auth.dart';
 
 class AuthController extends GetxController {
@@ -25,6 +26,9 @@ class AuthController extends GetxController {
 
     final offline = await isOfflineMode();
     if (offline) {
+      final permissionService = OfflinePermissionService();
+      permissions(await permissionService.getPermissions());
+      features.assignAll(await permissionService.getFeatures());
       loading(false);
       return;
     }
@@ -41,7 +45,10 @@ class AuthController extends GetxController {
         features.assignAll(validFeatures);
       }
     } catch (_) {
-      // In offline mode or network failure, skip permissions fetching
+      // In offline mode or network failure, try local permissions as fallback
+      final permissionService = OfflinePermissionService();
+      permissions(await permissionService.getPermissions());
+      features.assignAll(await permissionService.getFeatures());
     }
 
     loading(false);

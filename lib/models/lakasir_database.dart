@@ -8,6 +8,8 @@ import 'package:lakasir/offline/models/offline_product_model.dart';
 import 'package:lakasir/offline/models/offline_stock_model.dart';
 import 'package:lakasir/offline/models/offline_member_model.dart';
 import 'package:lakasir/offline/models/offline_payment_method_model.dart';
+import 'package:lakasir/offline/models/offline_permission_model.dart';
+import 'package:lakasir/offline/models/offline_feature_model.dart';
 import 'package:lakasir/offline/models/pending_transaction_model.dart';
 import 'package:lakasir/offline/models/cart_model.dart';
 import 'package:lakasir/offline/models/sync_metadata_model.dart';
@@ -22,7 +24,7 @@ class LakasirDatabase extends ChangeNotifier {
 
     if (instance == null) {
       isar = await Isar.open(
-        [PrinterSchema, UnitSchema, OfflineUserSchema, OfflineCategorySchema, OfflineProductSchema, OfflineStockSchema, OfflineMemberSchema, OfflinePaymentMethodSchema, OfflinePendingTransactionSchema, OfflineCartSchema, SyncMetadataSchema],
+        [PrinterSchema, UnitSchema, OfflineUserSchema, OfflineCategorySchema, OfflineProductSchema, OfflineStockSchema, OfflineMemberSchema, OfflinePaymentMethodSchema, OfflinePermissionSchema, OfflineFeatureSchema, OfflinePendingTransactionSchema, OfflineCartSchema, SyncMetadataSchema],
         directory: dir.path,
         name: 'isar',
       );

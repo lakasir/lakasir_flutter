@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lakasir/models/lakasir_database.dart';
 import 'package:lakasir/offline/models/offline_payment_method_model.dart';
+import 'package:lakasir/offline/services/offline_permission_service.dart';
 import 'package:lakasir/offline/services/offline_user_service.dart';
 import 'package:lakasir/utils/colors.dart';
 import 'package:lakasir/widgets/filled_button.dart';
@@ -52,6 +53,7 @@ class _RegisterOfflineUserScreenState extends State<RegisterOfflineUserScreen> {
       );
 
       await _seedDefaultPaymentMethods();
+      await _seedDefaultPermissions();
       // Store setup directly without clearing offline auth
       final prefs = await SharedPreferences.getInstance();
       await prefs.setBool('setup', true);
@@ -94,6 +96,11 @@ class _RegisterOfflineUserScreenState extends State<RegisterOfflineUserScreen> {
         await isar.offlinePaymentMethods.put(pm);
       }
     });
+  }
+
+  Future<void> _seedDefaultPermissions() async {
+    final permissionService = OfflinePermissionService();
+    await permissionService.seedDefaultPermissions();
   }
 
   @override
