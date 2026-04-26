@@ -13,11 +13,11 @@ class AuthController extends GetxController {
       return permissions.contains(ability);
     }
 
-    return features[feature]! && permissions.contains(ability);
+    return (features[feature] ?? false) && permissions.contains(ability);
   }
 
   bool feature({String? feature}) {
-    return features[feature]!;
+    return features[feature] ?? false;
   }
 
   void fetchPermissions() async {
