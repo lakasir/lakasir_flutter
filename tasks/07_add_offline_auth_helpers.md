@@ -31,7 +31,7 @@
 - Added getOfflineUserId() — retrieves from SharedPreferences key 'offline_user_id'
 - Added storeOfflineAuth(bool value) — stores to SharedPreferences key 'offline_auth'
 - Added isOfflineAuthenticated() — checks SharedPreferences key 'offline_auth' (defaults to false)
-- Added isOfflineMode() — returns !(await isSetup()), true when no domain is configured
+- Added isOfflineMode() — returns true when domain is null, empty, or 'offline'
 - Added hasDomain() — returns true if setup is done and domain string is non-empty
 - Updated checkAuthentication() with offline-first routing:
   - setup + token → "menu" (online auth, unchanged)
@@ -41,4 +41,14 @@
   - no setup + no offline auth → "setup" (new user needs onboarding)
 - Updated logout() to also clear offline_auth and offline_user_id SharedPreferences keys
 - Preserved all existing functions: logout, storeToken, getToken, getDomain, isSetup, storeSetup, can, destroySetup
-- Verified: flutter analyze on auth.dart passes with no issues
+
+### Bug fix: isOfflineMode() logic was wrong
+Original implementation `!(await isSetup())` returned `false` after offline registration (setup=true, domain='offline'), making the app think it was in online mode. Fixed to check the domain value:
+```dart
+Future<bool> isOfflineMode() async {
+  final prefs = await SharedPreferences.getInstance();
+  final domain = prefs.getString('domain');
+  return domain == null || domain.isEmpty || domain == 'offline';
+}
+```
+This correctly returns `true` when the app is configured for offline use (domain='offline') or not yet set up (no domain).

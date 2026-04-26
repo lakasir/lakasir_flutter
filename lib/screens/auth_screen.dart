@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:lakasir/screens/domain/setup_screen.dart';
 import 'package:lakasir/screens/login_screen.dart';
 import 'package:lakasir/screens/menu_screen.dart';
 import 'package:lakasir/screens/onboard_screen.dart';
@@ -13,10 +12,18 @@ class AuthScreen extends StatefulWidget {
 }
 
 class _AuthScreenState extends State<AuthScreen> {
+  late Future<String> _authFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _authFuture = checkAuthentication();
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<String>(
-      future: checkAuthentication(),
+      future: _authFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const CircularProgressIndicator();

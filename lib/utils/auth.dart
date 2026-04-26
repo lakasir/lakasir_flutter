@@ -98,7 +98,9 @@ Future<bool> isOfflineAuthenticated() async {
 }
 
 Future<bool> isOfflineMode() async {
-  return !(await isSetup());
+  final prefs = await SharedPreferences.getInstance();
+  final domain = prefs.getString('domain');
+  return domain == null || domain.isEmpty || domain == 'offline';
 }
 
 Future<bool> hasDomain() async {
