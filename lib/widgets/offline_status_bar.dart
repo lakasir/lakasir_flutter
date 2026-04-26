@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lakasir/offline/services/app_mode_service.dart';
 import 'package:lakasir/offline/services/connectivity_service.dart';
+import 'package:lakasir/offline/services/transaction_queue_service.dart';
 import 'package:lakasir/utils/colors.dart';
 
 class ModeStatusBar extends StatelessWidget {
@@ -49,6 +50,15 @@ class ModeStatusBar extends StatelessWidget {
 
       // Online mode but network dropped (or offline with domain — cached data)
       if (!isConnected) {
+        String message = 'no_connection_cached'.tr;
+        int? pendingCount;
+        if (Get.isRegistered<TransactionQueueService>()) {
+          pendingCount = Get.find<TransactionQueueService>().pendingCount.value;
+        }
+        if (pendingCount != null && pendingCount > 0) {
+          message = 'no_connection_pending'.tr.replaceAll('{count}', pendingCount.toString());
+        }
+
         return Container(
           width: double.infinity,
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -56,7 +66,7 @@ class ModeStatusBar extends StatelessWidget {
           child: SafeArea(
             bottom: false,
             child: Text(
-              'no_connection_cached'.tr,
+              message,
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 12,
