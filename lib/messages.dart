@@ -283,7 +283,14 @@ class Messages extends Translations {
           'payment_success': 'Payment Success',
           'setup_the_printer': 'Setup the printer first!',
           'printer_error':
-              'The printer is busy or you can set it first in the printer settings menu'
+              'The printer is busy or you can set it first in the printer settings menu',
+          'offline_mode': 'Offline Mode',
+          'use_offline': 'Use Offline',
+          'use_offline_description': 'No server needed, all data stored locally',
+          'connect_to_server': 'Connect to Server',
+          'connect_to_server_description': 'Link to an existing Lakasir server',
+          'setup_choose_mode': 'Choose how you want to get started',
+          'field_full_name': 'Full Name',
         },
         'id_ID': {
           'auth': 'Otentikasi',
@@ -566,7 +573,14 @@ class Messages extends Translations {
           'payment_success': 'Pembayaran berhasil',
           'setup_the_printer': 'Atur printer terlebih dahulu',
           'printer_error':
-              'Printer sedang sibuk atau kamu bisa atur dulu di menu pengaturan printer'
+              'Printer sedang sibuk atau kamu bisa atur dulu di menu pengaturan printer',
+          'offline_mode': 'Mode Offline',
+          'use_offline': 'Gunakan Offline',
+          'use_offline_description': 'Tanpa server, semua data disimpan secara lokal',
+          'connect_to_server': 'Hubungkan ke Server',
+          'connect_to_server_description': 'Hubungkan ke server Lakasir yang sudah ada',
+          'setup_choose_mode': 'Pilih cara untuk memulai',
+          'field_full_name': 'Nama Lengkap',
         },
       };
 }

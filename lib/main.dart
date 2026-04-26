@@ -14,7 +14,9 @@ import 'package:lakasir/screens/about/about_screen.dart';
 import 'package:lakasir/screens/about/edit_screen.dart';
 import 'package:lakasir/screens/auth_screen.dart';
 import 'package:lakasir/screens/domain/register_domain_screen.dart';
+import 'package:lakasir/screens/domain/register_offline_user_screen.dart';
 import 'package:lakasir/screens/forgot_screen.dart';
+import 'package:lakasir/screens/onboard_screen.dart';
 import 'package:lakasir/screens/members/add_screen.dart';
 import 'package:lakasir/screens/members/edit_screen.dart';
 import 'package:lakasir/screens/members/member_screen.dart';
@@ -253,6 +255,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       initialRoute: '/auth',
       routes: {
         '/domain/register': (context) => const RegisterDomainScreen(),
+        '/auth/offline-register': (context) => const RegisterOfflineUserScreen(),
+        '/auth/mode-chooser': (context) => const ModeChooserScreen(),
         '/auth': (context) => const AuthScreen(),
         '/forgot': (context) => const ForgotScreen(),
         '/menu/transaction/reports/cashier': (context) =>

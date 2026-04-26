@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lakasir/screens/domain/setup_screen.dart';
 import 'package:lakasir/widgets/filled_button.dart';
 
 class OnboardingPage extends StatelessWidget {
@@ -59,7 +58,7 @@ class OnboardingPage extends StatelessWidget {
                       padding: const EdgeInsets.all(20),
                       child: MyFilledButton(
                         onPressed: () {
-                          Get.to(const SetupScreen());
+                          Get.toNamed('/auth/mode-chooser');
                         },
                         child: Text(
                           'get_started'.tr,
