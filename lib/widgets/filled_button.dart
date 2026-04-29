@@ -3,14 +3,14 @@ import 'package:lakasir/utils/colors.dart';
 
 class MyFilledButton extends StatefulWidget {
   final bool? isLoading;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
   final Widget child;
   final Color? color;
 
   const MyFilledButton({
     super.key,
     this.isLoading = false,
-    required this.onPressed,
+    this.onPressed,
     required this.child,
     this.color = primary,
   });

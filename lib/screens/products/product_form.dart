@@ -185,51 +185,37 @@ class _ProductFormState extends State<ProductForm> {
               ),
             ),
           ),
+        Visibility(
+          visible: showInitialPrice &&
+              _authController.feature(
+                feature: 'product-initial-price',
+              ),
+          child: Container(
+            margin: const EdgeInsets.only(top: 20),
+            child: Obx(
+              () => MyTextField(
+                readOnly: _isServiceType,
+                controller: widget.controller.initialPriceInputController,
+                label: 'field_initial_price'.tr,
+                mandatory: true,
+                keyboardType: TextInputType.number,
+                errorText: errorResponse.value.initialPrice ?? '',
+                validator: widget.controller.validateInitialPrice,
+              ),
+            ),
+          ),
+        ),
         Container(
           margin: const EdgeInsets.only(top: 20),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Visibility(
-                visible: showInitialPrice &&
-                    _authController.feature(
-                      feature: 'product-initial-price',
-                    ),
-                child: Flexible(
-                  child: Obx(
-                    () => MyTextField(
-                      readOnly: _isServiceType,
-                      controller:
-                          widget.controller.initialPriceInputController,
-                      label: 'field_initial_price'.tr,
-                      mandatory: true,
-                      keyboardType: TextInputType.number,
-                      errorText: errorResponse.value.initialPrice ?? '',
-                      validator: widget.controller.validateInitialPrice,
-                    ),
-                  ),
-                ),
-              ),
-              Visibility(
-                visible: showInitialPrice &&
-                    _authController.feature(
-                      feature: 'product-initial-price',
-                    ),
-                child: const SizedBox(width: 20),
-              ),
-              Flexible(
-                child: Obx(
-                  () => MyTextField(
-                    controller: widget.controller.sellingPriceInputController,
-                    label: 'field_selling_price'.tr,
-                    mandatory: true,
-                    keyboardType: TextInputType.number,
-                    errorText: errorResponse.value.sellingPrice ?? '',
-                    validator: widget.controller.validateSellingPrice,
-                  ),
-                ),
-              ),
-            ],
+          child: Obx(
+            () => MyTextField(
+              controller: widget.controller.sellingPriceInputController,
+              label: 'field_selling_price'.tr,
+              mandatory: true,
+              keyboardType: TextInputType.number,
+              errorText: errorResponse.value.sellingPrice ?? '',
+              validator: widget.controller.validateSellingPrice,
+            ),
           ),
         ),
         if (_authController.feature(feature: 'product-expired'))
@@ -374,16 +360,18 @@ class _ProductFormState extends State<ProductForm> {
           margin: const EdgeInsets.only(top: 30),
           child: Obx(
             () => MyFilledButton(
-              onPressed: () {
-                try {
-                  widget.onSubmit();
-                  _unitController.createOrUpdateUnit(
-                    widget.controller.unitInputController.text,
-                  );
-                } catch (e) {
-                  rethrow;
-                }
-              },
+              onPressed: widget.controller.isLoading.value
+                  ? null
+                  : () {
+                      try {
+                        widget.onSubmit();
+                        _unitController.createOrUpdateUnit(
+                          widget.controller.unitInputController.text,
+                        );
+                      } catch (e) {
+                        rethrow;
+                      }
+                    },
               isLoading: widget.controller.isLoading.value,
               child: Text('global_save'.tr),
             ),
@@ -396,3 +384,4 @@ class _ProductFormState extends State<ProductForm> {
     );
   }
 }
+

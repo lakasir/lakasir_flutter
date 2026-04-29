@@ -17,12 +17,10 @@ class ModeStatusBar extends StatelessWidget {
       final isOnline = appMode.isOnline;
       final isConnected = connectivity.isOnline.value;
 
-      // Online and connected — no banner needed
       if (isOnline && isConnected) {
         return const SizedBox.shrink();
       }
 
-      // Offline-only mode (no domain configured)
       if (!isOnline && !appMode.hasDomainFlag.value) {
         return Container(
           width: double.infinity,
@@ -48,7 +46,6 @@ class ModeStatusBar extends StatelessWidget {
         );
       }
 
-      // Online mode but network dropped (or offline with domain — cached data)
       if (!isConnected) {
         String message = 'no_connection_cached'.tr;
         int? pendingCount;

@@ -162,18 +162,19 @@ class ProductAddEditController extends GetxController {
   }
 
   void create() async {
+    if (isLoading.value) return;
+
     try {
       clearError();
       isLoading(true);
+
       if (!formKey.currentState!.validate()) {
         isLoading(false);
         return;
       }
 
-      // Save and compress image if it's a newly picked local file
       String? savedImagePath;
       if (photoUrl != null && photoUrl!.isNotEmpty) {
-        // If it's a newly picked file (not already saved to app dir), compress and save it
         if (!photoUrl!.startsWith('http') && !photoUrl!.contains('product_')) {
           savedImagePath = await _saveAndCompressImage(photoUrl!);
         } else {
@@ -200,7 +201,6 @@ class ProductAddEditController extends GetxController {
 
       await _productRepository.createProduct(product);
 
-      // Auto-generate SKU and barcode if empty
       final categoryName = _getCategoryName() ?? '';
       final productId = product.id;
       if (skuInputController.text.isEmpty) {
@@ -239,23 +239,30 @@ class ProductAddEditController extends GetxController {
           message: errorResponse.message,
           backgroundColor: error,
         );
+      } else {
+        debugPrint('Unexpected error during product creation: $e');
+        Get.rawSnackbar(
+          message: 'global_error_occurred'.tr,
+          backgroundColor: error,
+        );
       }
     }
   }
 
   void edit() async {
+    if (isLoading.value) return;
+
     try {
       clearError();
       isLoading(true);
+
       if (!formKey.currentState!.validate()) {
         isLoading(false);
         return;
       }
 
-      // Save and compress image if it's a newly picked local file
       String? savedImagePath;
       if (photoUrl != null && photoUrl!.isNotEmpty) {
-        // If it's a newly picked file (not already saved to app dir), compress and save it
         if (!photoUrl!.startsWith('http') && !photoUrl!.contains('product_')) {
           savedImagePath = await _saveAndCompressImage(photoUrl!);
         } else {
@@ -303,14 +310,12 @@ class ProductAddEditController extends GetxController {
       _productController.getProducts();
       clearInput();
       isLoading(false);
-      // Navigate back to product list (from Edit → Detail → List)
-      Get.until((route) => Get.currentRoute == '/menu/product');
+      Get.until((route) => route.settings.name == '/menu/product');
       Get.rawSnackbar(
         message: 'global_updated_item'.trParams({'item': 'menu_product'.tr}),
         backgroundColor: success,
       );
     } catch (e) {
-      debugPrint(e.toString());
       isLoading(false);
       if (e is ValidationException) {
         ErrorResponse<ProductErrorResponse> errorResponse =
@@ -323,6 +328,12 @@ class ProductAddEditController extends GetxController {
         productErrorResponse(errorResponse.errors);
         Get.rawSnackbar(
           message: errorResponse.message,
+          backgroundColor: error,
+        );
+      } else {
+        debugPrint('Unexpected error during product update: $e');
+        Get.rawSnackbar(
+          message: 'global_error_occurred'.tr,
           backgroundColor: error,
         );
       }
