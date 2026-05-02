@@ -9,6 +9,7 @@ import 'package:lakasir/controllers/members/member_controller.dart';
 import 'package:lakasir/offline/models/offline_member_model.dart';
 import 'package:lakasir/offline/repositories/member_repository.dart';
 import 'package:lakasir/utils/colors.dart';
+import 'package:lakasir/utils/utils.dart';
 
 class MemberUpdateController extends GetxController {
   final MemberController _memberController = Get.find();
@@ -26,6 +27,8 @@ class MemberUpdateController extends GetxController {
   ).obs;
 
   Future<void> updateMember() async {
+    if (isSubmitting.value) return;
+
     try {
       isSubmitting(true);
       if (!formKey.currentState!.validate()) {
@@ -42,15 +45,12 @@ class MemberUpdateController extends GetxController {
           ..address = memberAddressController.text.isEmpty ? null : memberAddressController.text
           ..isLocal = member.value.isLocal,
       );
-      Get.back();
-      Get.rawSnackbar(
-        message: "global_updated_item".trParams({
-          'item': 'menu_member'.tr,
-        }),
-        backgroundColor: success,
-      );
-      isSubmitting(false);
       _memberController.fetchMembers();
+      isSubmitting(false);
+      show("global_updated_item".trParams({
+        'item': 'menu_member'.tr,
+      }));
+      Get.until((route) => route.settings.name == '/menu/member');
     } catch (e) {
       isSubmitting(false);
       if (e is ValidationException) {
@@ -62,11 +62,17 @@ class MemberUpdateController extends GetxController {
           (json) => MemberErrorResponse.fromJson(json),
         );
         memberErrorResponse(errorResponse.errors);
+        show(errorResponse.message, color: error);
+      } else {
+        debugPrint('Unexpected error during member update: $e');
+        show('global_error_occurred'.tr, color: error);
       }
     }
   }
 
   Future<void> deleteMember() async {
+    if (isDeleting.value) return;
+
     showDialog(
       context: Get.context!,
       builder: (context) {
@@ -88,27 +94,22 @@ class MemberUpdateController extends GetxController {
                 try {
                   isDeleting(true);
                   await _memberRepository.deleteMember(member.value.id);
-                  Get.back();
-                  Get.rawSnackbar(
-                    message: "global_deleted_item".trParams({
-                      'item': 'menu_member'.tr,
-                    }),
-                    backgroundColor: success,
-                  );
-                  isDeleting(false);
                   _memberController.fetchMembers();
+                  isDeleting(false);
+                  show("global_deleted_item".trParams({
+                    'item': 'menu_member'.tr,
+                  }));
+                  Get.until((route) => route.settings.name == '/menu/member');
                 } catch (e) {
                   isDeleting(false);
-                  Get.rawSnackbar(
-                    title: 'global_failed_delete_item'.trParams({
-                      'item': 'menu_member'.tr.toLowerCase(),
-                    }),
-                    message: 'has_an_item'.trParams({
-                      'item': 'menu_transaction'.tr.toLowerCase(),
-                    }),
-                    duration: const Duration(seconds: 2),
-                    backgroundColor: error,
-                  );
+                  if (e is ValidationException) {
+                    show('global_error_occurred'.tr, color: error);
+                  } else {
+                    show(
+                      "${'global_failed_delete_item'.trParams({'item': 'menu_member'.tr.toLowerCase()})}: ${'has_an_item'.trParams({'item': 'menu_transaction'.tr.toLowerCase()})}",
+                      color: error,
+                    );
+                  }
                 }
               },
               child: Text('global_yes'.tr),

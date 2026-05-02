@@ -45,12 +45,9 @@ class ProfileEditController extends GetxController {
       clearError();
       await _profileController.getProfile();
       Get.back();
-      Get.rawSnackbar(
-        message: 'global_updated_item'.trParams({
-          'item': 'menu_profile'.tr,
-        }),
-        backgroundColor: Colors.green,
-      );
+      show('global_updated_item'.trParams({
+        'item': 'menu_profile'.tr,
+      }));
       isLoading(false);
       setLocale(languageController.selectedOption!);
       await Get.forceAppUpdate();

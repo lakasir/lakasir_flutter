@@ -36,7 +36,6 @@ import 'package:lakasir/screens/transactions/invoice_screen.dart';
 import 'package:lakasir/screens/transactions/reports/cashier_screen.dart';
 import 'package:lakasir/screens/transactions/transaction_menu_screen.dart';
 import 'package:lakasir/utils/colors.dart';
-import 'package:lakasir/utils/utils.dart';
 import 'package:rxdart/rxdart.dart';
 
 class MyApp extends StatefulWidget {

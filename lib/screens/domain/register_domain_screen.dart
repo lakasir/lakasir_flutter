@@ -8,6 +8,7 @@ import 'package:lakasir/api/responses/domain/register_error_response.dart';
 import 'package:lakasir/api/responses/error_response.dart';
 import 'package:lakasir/config/app.dart';
 import 'package:lakasir/utils/colors.dart';
+import 'package:lakasir/utils/utils.dart';
 import 'package:lakasir/widgets/checkbox.dart';
 import 'package:lakasir/widgets/filled_button.dart';
 import 'package:lakasir/widgets/layout.dart';
@@ -257,22 +258,10 @@ class _RegisterDomainScreenState extends State<RegisterDomainScreen> {
                       onPressed: () {
                         register().then((value) {
                           if (value.isEmpty) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                duration: const Duration(seconds: 3),
-                                content: Text("register_success".tr),
-                                backgroundColor: success,
-                              ),
-                            );
+                            show("register_success".tr, duration: const Duration(seconds: 3));
                             Get.back();
                           } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                duration: const Duration(seconds: 1),
-                                content: Text(value),
-                                backgroundColor: error,
-                              ),
-                            );
+                            show(value, duration: const Duration(seconds: 1), color: error);
                           }
                         });
                       },

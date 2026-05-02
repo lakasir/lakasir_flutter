@@ -4,6 +4,7 @@ import 'package:lakasir/controllers/products/product_controller.dart';
 import 'package:lakasir/offline/models/offline_product_model.dart';
 import 'package:lakasir/offline/repositories/product_repository.dart';
 import 'package:lakasir/utils/colors.dart';
+import 'package:lakasir/utils/utils.dart';
 
 class ProductDetailController extends GetxController {
   final _productRepository = ProductRepository();
@@ -41,24 +42,14 @@ class ProductDetailController extends GetxController {
                 _productController.getProducts();
                 Get.back();
                 Get.back();
-                Get.rawSnackbar(
-                  message: 'global_deleted_item'
-                      .trParams({"item": "menu_product".tr}),
-                  duration: const Duration(seconds: 2),
-                  backgroundColor: success,
-                );
+                show('global_deleted_item'
+                    .trParams({"item": "menu_product".tr}));
               } catch (e) {
                 Get.back();
 
-                Get.rawSnackbar(
-                  title: 'global_failed_delete_item'.trParams({
-                    'item': 'menu_product'.tr.toLowerCase(),
-                  }),
-                  message: 'has_an_item'.trParams({
-                    'item': 'menu_transaction'.tr.toLowerCase(),
-                  }),
-                  duration: const Duration(seconds: 2),
-                  backgroundColor: error,
+                show(
+                  "${'global_failed_delete_item'.trParams({'item': 'menu_product'.tr.toLowerCase()})}: ${'has_an_item'.trParams({'item': 'menu_transaction'.tr.toLowerCase()})}",
+                  color: error,
                 );
               }
             },

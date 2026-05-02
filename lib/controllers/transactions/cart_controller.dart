@@ -51,11 +51,7 @@ class CartController extends GetxController {
         int.parse(qtyController.text);
     if (!product.isNonStock &&
         isNotEnoughStock) {
-      Get.rawSnackbar(
-        message: 'Stock is not enough',
-        backgroundColor: error,
-        duration: const Duration(seconds: 2),
-      );
+      show('Stock is not enough', color: error);
       isAddToCartLoading(false);
       return true;
     }

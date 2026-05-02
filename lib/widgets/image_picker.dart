@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart' as image_picker;
 import 'package:image/image.dart' as img;
 import 'package:path_provider/path_provider.dart';
 import 'package:lakasir/utils/colors.dart';
+import 'package:lakasir/utils/utils.dart';
 
 typedef MyCallback = void Function(String?);
 
@@ -119,11 +120,7 @@ class _MyImagePickerState extends State<MyImagePicker> {
       String localPath = await _saveAndCompressImageLocally(croppedFile.path);
       widget.onImageSelected(localPath);
     } catch (e) {
-      Get.rawSnackbar(
-        title: 'Error',
-        message: e.toString(),
-        backgroundColor: error,
-      );
+      show(e.toString(), color: error);
       debugPrint(e.toString());
     }
   }

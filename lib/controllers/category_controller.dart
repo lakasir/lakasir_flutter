@@ -7,6 +7,7 @@ import 'package:lakasir/api/responses/error_response.dart';
 import 'package:lakasir/offline/models/offline_category_model.dart';
 import 'package:lakasir/offline/repositories/category_repository.dart';
 import 'package:lakasir/utils/colors.dart';
+import 'package:lakasir/utils/utils.dart';
 
 class CategoryController extends GetxController {
   final formKey = GlobalKey<FormState>();
@@ -37,12 +38,7 @@ class CategoryController extends GetxController {
       categoryNameController.clear();
       fetchCategories();
       Get.back();
-      Get.rawSnackbar(
-        message: 'global_added_item'.trParams({
-          'item': 'setting_category'.tr,
-        }),
-        backgroundColor: success,
-      );
+      show('global_added_item'.trParams({'item': 'setting_category'.tr}));
     } catch (e) {
       if (e is ValidationException) {
         ErrorResponse<CategoryErrorResponse> errorResponses =
@@ -65,7 +61,7 @@ class CategoryController extends GetxController {
       if (e is ValidationException) {
         ErrorResponse errorResponses =
             ErrorResponse.fromJson(jsonDecode(e.toString()), null);
-        Get.rawSnackbar(message: errorResponses.message, backgroundColor: error);
+        show(errorResponses.message, color: error);
       }
     }
   }
@@ -82,12 +78,7 @@ class CategoryController extends GetxController {
       categoryNameController.clear();
       fetchCategories();
       Get.back();
-      Get.rawSnackbar(
-        message: 'global_updated_item'.trParams({
-          'item': 'setting_category'.tr,
-        }),
-        backgroundColor: success,
-      );
+      show('global_updated_item'.trParams({'item': 'setting_category'.tr}));
     } catch (e) {
       if (e is ValidationException) {
         ErrorResponse<CategoryErrorResponse> errorResponses =

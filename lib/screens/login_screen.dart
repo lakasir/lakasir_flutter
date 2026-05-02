@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lakasir/controllers/auths/login_controller.dart';
 import 'package:lakasir/utils/colors.dart';
+import 'package:lakasir/utils/utils.dart';
 import 'package:lakasir/widgets/checkbox.dart';
 import 'package:lakasir/widgets/filled_button.dart';
 import 'package:lakasir/widgets/layout.dart';
@@ -66,7 +67,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           child: Text(
                             'offline_mode'.tr,
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: primary,
                               fontWeight: FontWeight.w600,
                               fontSize: 14,
@@ -107,7 +108,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                   ),
-
                   Container(
                     margin: const EdgeInsets.only(bottom: 21.0),
                     child: Obx(
@@ -125,12 +125,15 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                   ),
-
                   Obx(
                     () => MyFilledButton(
                       isLoading: _loginController.isLoading.value,
                       onPressed: () async {
-                        await _loginController.login();
+                        try {
+                          await _loginController.login();
+                        } catch (e) {
+                          show(e.toString(), color: error);
+                        }
                       },
                       child: Text(
                         _loginController.isOfflineLogin.value

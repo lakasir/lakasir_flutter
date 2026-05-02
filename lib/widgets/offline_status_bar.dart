@@ -4,6 +4,7 @@ import 'package:lakasir/offline/services/app_mode_service.dart';
 import 'package:lakasir/offline/services/connectivity_service.dart';
 import 'package:lakasir/offline/services/transaction_queue_service.dart';
 import 'package:lakasir/utils/colors.dart';
+import 'package:lakasir/utils/utils.dart';
 
 class ModeStatusBar extends StatelessWidget {
   const ModeStatusBar({super.key});
@@ -16,6 +17,11 @@ class ModeStatusBar extends StatelessWidget {
     return Obx(() {
       final isOnline = appMode.isOnline;
       final isConnected = connectivity.isOnline.value;
+      final intendsOnline = appMode.intendsOnline.value;
+
+      if (intendsOnline) {
+        return const SizedBox.shrink();
+      }
 
       if (isOnline && isConnected) {
         return const SizedBox.shrink();

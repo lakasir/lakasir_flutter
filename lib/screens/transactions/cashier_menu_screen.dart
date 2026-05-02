@@ -109,11 +109,7 @@ class _CashierMenuScreenState extends State<CashierMenuScreen> {
                 }
 
                 if (cartSession.cartItems.isEmpty) {
-                  Get.rawSnackbar(
-                    message: 'Cart is empty',
-                    backgroundColor: error,
-                    duration: const Duration(seconds: 2),
-                  );
+                  show('Cart is empty', color: error);
                   return;
                 }
 

@@ -3,6 +3,7 @@ import 'package:lakasir/api/requests/login_request.dart';
 import 'package:lakasir/api/responses/api_response.dart';
 import 'package:lakasir/api/responses/auths/login_response.dart';
 import 'package:lakasir/utils/auth.dart';
+import 'package:lakasir/utils/utils.dart';
 
 class LoginService {
   Future<void> login(LoginRequest loginRequest) async {
@@ -15,6 +16,7 @@ class LoginService {
       response,
       (json) => LoginResponse.fromJson(json),
     );
+    debug(apiResponse);
 
     storeToken(apiResponse.data!.value.token);
   }

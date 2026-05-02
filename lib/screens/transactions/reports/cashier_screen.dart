@@ -12,6 +12,7 @@ import 'package:lakasir/widgets/date_picker.dart';
 import 'package:lakasir/widgets/filled_button.dart';
 import 'package:lakasir/widgets/layout.dart';
 import 'package:lakasir/widgets/my_bottom_bar.dart';
+import 'package:lakasir/utils/utils.dart';
 import 'package:path_provider/path_provider.dart';
 
 class CashierReportScreen extends StatefulWidget {
@@ -164,11 +165,7 @@ class _PdfPreviewScreenState extends State<PdfPreviewScreen> {
         await file.create();
       }
       file.writeAsBytesSync(await widget.pdfFile.readAsBytes());
-      Get.rawSnackbar(
-        message: 'global_success_download'.tr,
-        duration: const Duration(seconds: 2),
-        backgroundColor: Colors.green,
-      );
+      show('global_success_download'.tr);
     } catch (e) {
       debugPrint(e.toString());
     }

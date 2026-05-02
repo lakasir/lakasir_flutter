@@ -9,6 +9,7 @@ import 'package:lakasir/controllers/members/member_controller.dart';
 import 'package:lakasir/offline/models/offline_member_model.dart';
 import 'package:lakasir/offline/repositories/member_repository.dart';
 import 'package:lakasir/utils/colors.dart';
+import 'package:lakasir/utils/utils.dart';
 
 class MemberAddController extends GetxController {
   final MemberController _memberController = Get.find();
@@ -24,6 +25,8 @@ class MemberAddController extends GetxController {
   ).obs;
 
   Future<void> addMember() async {
+    if (isSubmitting.value) return;
+
     try {
       isSubmitting(true);
       if (!formKey.currentState!.validate()) {
@@ -38,15 +41,10 @@ class MemberAddController extends GetxController {
           ..address = memberAddressController.text.isEmpty ? null : memberAddressController.text
           ..isLocal = true,
       );
-      Get.back();
-      Get.rawSnackbar(
-        message: "global_added_item".trParams({
-          'item': 'menu_member'.tr,
-        }),
-        backgroundColor: success,
-      );
-      isSubmitting(false);
       _memberController.fetchMembers();
+      isSubmitting(false);
+      show("global_added_item".trParams({'item': 'menu_member'.tr}));
+      Get.back();
     } catch (e) {
       isSubmitting(false);
       if (e is ValidationException) {
@@ -58,6 +56,10 @@ class MemberAddController extends GetxController {
           (json) => MemberErrorResponse.fromJson(json),
         );
         memberErrorResponse(errorResponse.errors);
+        show(errorResponse.message, color: error);
+      } else {
+        debugPrint('Unexpected error during member creation: $e');
+        show('global_error_occurred'.tr, color: error);
       }
     }
   }

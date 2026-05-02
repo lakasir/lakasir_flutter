@@ -6,6 +6,7 @@ enum AppMode { offline, online }
 class AppModeService extends GetxController {
   final Rx<AppMode> mode = AppMode.offline.obs;
   final RxBool hasDomainFlag = false.obs;
+  final RxBool intendsOnline = false.obs;
 
   bool get isOffline => mode.value == AppMode.offline;
   bool get isOnline => mode.value == AppMode.online;
@@ -25,11 +26,13 @@ class AppModeService extends GetxController {
       await storeSetup(domain);
     }
     hasDomainFlag.value = true;
+    intendsOnline.value = false;
     mode.value = AppMode.online;
     // TODO: trigger full sync via SyncService (Phase 4)
   }
 
   void switchToOffline() {
+    intendsOnline.value = false;
     mode.value = AppMode.offline;
   }
 }

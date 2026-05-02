@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lakasir/offline/services/app_mode_service.dart';
 import 'package:lakasir/screens/domain/setup_screen.dart';
 import 'package:lakasir/utils/colors.dart';
 import 'package:lakasir/widgets/layout.dart';
@@ -162,7 +163,7 @@ class ModeChooserScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.store, size: 80, color: primary),
+              const Icon(Icons.store, size: 80, color: primary),
               const SizedBox(height: 20),
               Text(
                 'get_started'.tr,
@@ -181,10 +182,13 @@ class ModeChooserScreen extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: FilledButton(
-                  onPressed: () => Get.toNamed('/auth/offline-register'),
+                  onPressed: () {
+                    Get.find<AppModeService>().intendsOnline.value = false;
+                    Get.toNamed('/auth/offline-register');
+                  },
                   style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(primary),
-                    shape: MaterialStateProperty.all(
+                    backgroundColor: WidgetStateProperty.all(primary),
+                    shape: WidgetStateProperty.all(
                       const RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(12)),
                       ),
@@ -209,9 +213,15 @@ class ModeChooserScreen extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: OutlinedButton(
-                  onPressed: () => Get.to(const SetupScreen()),
+                  onPressed: () {
+                    final appMode = Get.find<AppModeService>();
+                    appMode.intendsOnline.value = true;
+                    Get.to(const SetupScreen())?.then((_) {
+                      appMode.intendsOnline.value = false;
+                    });
+                  },
                   style: ButtonStyle(
-                    shape: MaterialStateProperty.all(
+                    shape: WidgetStateProperty.all(
                       const RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(12)),
                       ),

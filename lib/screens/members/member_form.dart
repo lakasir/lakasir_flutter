@@ -74,7 +74,7 @@ class _MemberFormState extends State<MemberForm> {
             margin: const EdgeInsets.only(top: 20),
             child: Obx(
               () => MyFilledButton(
-                onPressed: widget.onPressed,
+                onPressed: widget.controller.isSubmitting.value ? null : widget.onPressed,
                 isLoading: widget.controller.isSubmitting.value,
                 child: Text('global_save'.tr),
               ),
@@ -89,7 +89,7 @@ class _MemberFormState extends State<MemberForm> {
               margin: const EdgeInsets.only(top: 20),
               child: Obx(
                 () => MyFilledButton(
-                  onPressed: () => widget.controller.deleteMember(),
+                  onPressed: widget.controller.isDeleting.value ? null : () => widget.controller.deleteMember(),
                   isLoading: widget.controller.isDeleting.value,
                   color: error,
                   child: Row(

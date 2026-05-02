@@ -63,10 +63,12 @@ Future show(
   Duration duration = const Duration(seconds: 2),
   Color? color,
 }) async {
-  Get.rawSnackbar(
-    message: message,
-    duration: duration,
-    backgroundColor: color ?? success,
+  ScaffoldMessenger.of(Get.context!).showSnackBar(
+    SnackBar(
+      content: Text(message),
+      duration: duration,
+      backgroundColor: color ?? success,
+    ),
   );
 }
 

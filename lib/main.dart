@@ -260,7 +260,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
           seedColor: primary,
-          background: Colors.white,
+          surface: Colors.white,
         ),
         fontFamily: 'SourceSans',
         useMaterial3: true,

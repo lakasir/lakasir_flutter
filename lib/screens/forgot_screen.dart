@@ -8,6 +8,7 @@ import 'package:lakasir/api/responses/auths/forgot_password_error_response.dart'
 import 'package:lakasir/api/responses/error_response.dart';
 import 'package:lakasir/utils/auth.dart';
 import 'package:lakasir/utils/colors.dart';
+import 'package:lakasir/utils/utils.dart';
 import 'package:lakasir/widgets/filled_button.dart';
 import 'package:lakasir/widgets/layout.dart';
 import 'package:lakasir/widgets/text_field.dart';
@@ -114,20 +115,9 @@ class _ForgotScreenState extends State<ForgotScreen> {
                         });
                         if (value.isEmpty) {
                           Navigator.pushNamed(context, '/login');
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text("Please check your email"),
-                              backgroundColor: success,
-                            ),
-                          );
+                          show('Please check your email');
                         } else {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              duration: const Duration(seconds: 1),
-                              content: Text(value),
-                              backgroundColor: error,
-                            ),
-                          );
+                          show(value, duration: const Duration(seconds: 1), color: error);
                         }
                       })
                     },

@@ -10,6 +10,7 @@ import 'package:lakasir/models/printer.dart';
 import 'package:lakasir/offline/models/pending_transaction_model.dart';
 import 'package:lakasir/offline/repositories/transaction_repository.dart';
 import 'package:lakasir/utils/colors.dart';
+import 'package:lakasir/utils/utils.dart';
 
 class PaymentController extends GetxController {
   final _transactionRepository = TransactionRepository();
@@ -35,10 +36,7 @@ class PaymentController extends GetxController {
       if (e is ValidationException) {
         ErrorResponse errorResponse =
             ErrorResponse.fromJson(jsonDecode(e.toString()), (json) => ());
-        Get.rawSnackbar(
-          message: errorResponse.message,
-          backgroundColor: error,
-        );
+        show(errorResponse.message, color: error);
       }
     }
   }

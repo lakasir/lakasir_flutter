@@ -14,6 +14,7 @@ import 'package:lakasir/offline/models/offline_category_model.dart';
 import 'package:lakasir/offline/models/offline_product_model.dart';
 import 'package:lakasir/offline/repositories/product_repository.dart';
 import 'package:lakasir/utils/colors.dart';
+import 'package:lakasir/utils/utils.dart';
 import 'package:lakasir/widgets/select_input_feld.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -220,10 +221,7 @@ class ProductAddEditController extends GetxController {
       clearInput();
       isLoading(false);
       Get.back();
-      Get.rawSnackbar(
-        message: 'product_add_success'.tr,
-        backgroundColor: success,
-      );
+      show('product_add_success'.tr);
     } catch (e) {
       isLoading(false);
       if (e is ValidationException) {
@@ -235,16 +233,10 @@ class ProductAddEditController extends GetxController {
           (json) => ProductErrorResponse.fromJson(json),
         );
         productErrorResponse(errorResponse.errors);
-        Get.rawSnackbar(
-          message: errorResponse.message,
-          backgroundColor: error,
-        );
+        show(errorResponse.message, color: error);
       } else {
         debugPrint('Unexpected error during product creation: $e');
-        Get.rawSnackbar(
-          message: 'global_error_occurred'.tr,
-          backgroundColor: error,
-        );
+        show('global_error_occurred'.tr, color: error);
       }
     }
   }
@@ -311,10 +303,7 @@ class ProductAddEditController extends GetxController {
       clearInput();
       isLoading(false);
       Get.until((route) => route.settings.name == '/menu/product');
-      Get.rawSnackbar(
-        message: 'global_updated_item'.trParams({'item': 'menu_product'.tr}),
-        backgroundColor: success,
-      );
+      show('global_updated_item'.trParams({'item': 'menu_product'.tr}));
     } catch (e) {
       isLoading(false);
       if (e is ValidationException) {
@@ -326,16 +315,10 @@ class ProductAddEditController extends GetxController {
           (json) => ProductErrorResponse.fromJson(json),
         );
         productErrorResponse(errorResponse.errors);
-        Get.rawSnackbar(
-          message: errorResponse.message,
-          backgroundColor: error,
-        );
+        show(errorResponse.message, color: error);
       } else {
         debugPrint('Unexpected error during product update: $e');
-        Get.rawSnackbar(
-          message: 'global_error_occurred'.tr,
-          backgroundColor: error,
-        );
+        show('global_error_occurred'.tr, color: error);
       }
     }
   }
