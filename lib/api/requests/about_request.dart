@@ -3,7 +3,7 @@ class AboutRequest {
   final String? shopLocation;
   final String? businessType;
   final String? otherBusinessType;
-  final String? photoUrl;
+  final int? uploadedFileId;
   final String? ownerName;
 
   AboutRequest({
@@ -11,7 +11,7 @@ class AboutRequest {
     this.shopLocation,
     this.businessType,
     this.otherBusinessType,
-    this.photoUrl,
+    this.uploadedFileId,
     this.ownerName,
   });
 
@@ -21,7 +21,7 @@ class AboutRequest {
       'shop_location': shopLocation,
       'business_type': businessType,
       'other_business_type': otherBusinessType,
-      'photo_url': photoUrl ?? '',
+      if (uploadedFileId != null) 'uploaded_file_id': uploadedFileId,
       'owner_name': ownerName,
     };
   }

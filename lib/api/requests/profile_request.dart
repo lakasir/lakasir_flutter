@@ -2,7 +2,7 @@ class ProfileRequest {
   String? name;
   String? email;
   String? phone;
-  String? photoUrl;
+  int? uploadedFileId;
   String? address;
   String? locale;
 
@@ -10,7 +10,7 @@ class ProfileRequest {
     this.name,
     this.email,
     this.phone,
-    this.photoUrl,
+    this.uploadedFileId,
     this.address,
     this.locale,
   });
@@ -20,7 +20,7 @@ class ProfileRequest {
       'name': name,
       'email': email,
       'phone': phone,
-      'photo_url': photoUrl,
+      if (uploadedFileId != null) 'uploaded_file_id': uploadedFileId,
       'address': address,
       'locale': locale,
     };

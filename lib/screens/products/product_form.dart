@@ -68,8 +68,9 @@ class _ProductFormState extends State<ProductForm> {
               child: MyImagePicker(
                 usingDynamicSource: true,
                 onImageSelected: (file) {
-                  widget.controller.photoUrl = file;
+                  widget.controller.setUploadedFile(file);
                 },
+                defaultImage: widget.controller.defaultImageUrl ?? '',
               ),
             ),
             SizedBox(

@@ -193,7 +193,7 @@ class _AddPrinterPageScreenState extends State<AddPrinterPageScreen> {
                 usingLocalImage: true,
                 maxWidth: 150,
                 maxHeight: 150,
-                onImageSelected: (String? path) async {
+                onLocalImageSelected: (String? path) async {
                   if (path != null) {
                     _printerController.logoPath.text = path;
                   }
