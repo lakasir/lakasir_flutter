@@ -9,6 +9,7 @@ import 'package:lakasir/api/responses/abouts/about_error_response.dart';
 import 'package:lakasir/api/responses/abouts/about_response.dart';
 import 'package:lakasir/api/responses/error_response.dart';
 import 'package:lakasir/controllers/abouts/about_controller.dart';
+import 'package:lakasir/models/uploaded_file.dart';
 import 'package:lakasir/services/about_service.dart';
 import 'package:lakasir/utils/colors.dart';
 import 'package:lakasir/widgets/select_input_feld.dart';
@@ -27,6 +28,7 @@ class AboutEditController extends GetxController {
       SelectInputWidgetController();
   final TextEditingController otherBusinessType = TextEditingController();
   final Rx<AboutResponse> about = AboutResponse().obs;
+  Rx<UploadedFile?> uploadedFile = Rx<UploadedFile?>(null);
   final AboutService _aboutService = AboutService();
   final Rx<AboutErrorResponse> aboutErrorResponse = AboutErrorResponse().obs;
 
@@ -40,7 +42,7 @@ class AboutEditController extends GetxController {
           otherBusinessType: otherBusinessType.text,
           ownerName: ownerNameInputController.text,
           shopLocation: locationInputController.text,
-          photoUrl: about.value.photo,
+          uploadedFileId: uploadedFile.value?.id,
         ),
       );
       await aboutController.getShop();

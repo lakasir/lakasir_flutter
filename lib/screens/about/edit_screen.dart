@@ -58,7 +58,7 @@ class _EditAboutScreenState extends State<EditAboutScreen> {
                     child: MyImagePicker(
                       usingDynamicSource: true,
                       onImageSelected: (file) {
-                        _aboutEditController.about.value.photo = file;
+                        _aboutEditController.uploadedFile.value = file;
                       },
                       defaultImage: _aboutEditController.about.value.photo
                               ?.replaceFirst("https", "http") ??
