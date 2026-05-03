@@ -3,13 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart' as image_picker;
-import 'dart:convert';
-import 'package:lakasir/utils/auth.dart';
-import 'package:http/http.dart' as http;
-import 'package:http_parser/http_parser.dart';
+import 'package:lakasir/models/uploaded_file.dart';
+import 'package:lakasir/services/upload_service.dart';
 import 'package:lakasir/utils/colors.dart';
 
-typedef MyCallback = void Function(String?);
+typedef MyCallback = void Function(UploadedFile?);
+typedef MyLocalCallback = void Function(String?);
 
 class MyImagePicker extends StatefulWidget {
   const MyImagePicker({
@@ -22,9 +21,11 @@ class MyImagePicker extends StatefulWidget {
     this.usingLocalImage = false,
     this.maxWidth,
     this.maxHeight,
+    this.onLocalImageSelected,
   });
   final bool usingLocalImage;
   final MyCallback onImageSelected;
+  final MyLocalCallback? onLocalImageSelected;
   final image_picker.ImageSource source;
   final int? maxSize;
   final int? maxWidth;
@@ -40,39 +41,7 @@ class _MyImagePickerState extends State<MyImagePicker> {
   image_picker.XFile? _image;
   final image_picker.ImagePicker imagePicker = image_picker.ImagePicker();
   image_picker.ImageSource? dynamicSource;
-
-  Future<String> _uploadImage(File? selectedImage) async {
-    if (selectedImage == null) {
-      throw Exception('No image selected');
-    }
-
-    if (selectedImage.lengthSync() > widget.maxSize!) {
-      throw Exception('Image size is too large');
-    }
-
-    final url = Uri.parse('${await getDomain()}/temp/upload');
-    final request = http.MultipartRequest('POST', url);
-    request.headers.addAll({
-      'Authorization': 'Bearer ${await getToken()}',
-    });
-
-    request.files.add(await http.MultipartFile.fromPath(
-      'file',
-      selectedImage.path,
-      contentType: MediaType('png', 'jpeg'),
-    ));
-
-    final response = await request.send();
-
-    if (response.statusCode == 200) {
-      final responseBody = await response.stream.bytesToString();
-
-      return jsonDecode(responseBody)['data']['url'];
-    } else {
-      throw Exception(
-          'Failed to upload image. Status code: ${response.statusCode}');
-    }
-  }
+  final UploadService _uploadService = UploadService();
 
   Future<void> _pickImage() async {
     try {
@@ -109,15 +78,23 @@ class _MyImagePickerState extends State<MyImagePicker> {
           ),
         ],
       );
-      setState(() {
-        _image = image_picker.XFile(croppedFile!.path);
-      });
-      if (widget.usingLocalImage) {
-        widget.onImageSelected(croppedFile!.path);
+
+      if (croppedFile == null) {
         return;
       }
-      String url = await _uploadImage(File(croppedFile!.path));
-      widget.onImageSelected(url);
+
+      setState(() {
+        _image = image_picker.XFile(croppedFile.path);
+      });
+
+      if (widget.usingLocalImage) {
+        widget.onLocalImageSelected?.call(croppedFile.path);
+        return;
+      }
+
+      UploadedFile uploadedFile =
+          await _uploadService.uploadImage(File(croppedFile.path));
+      widget.onImageSelected(uploadedFile);
     } catch (e) {
       Get.rawSnackbar(
         title: 'Error',
