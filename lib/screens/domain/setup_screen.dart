@@ -42,14 +42,17 @@ class _SetupScreenState extends State<SetupScreen> {
     }
 
     try {
-      String certificated = "https://";
-      if (environment == "local") {
-        certificated = "http://";
-      }
-      String domain = "$certificated${registerDomainController.text}";
+      String rawDomain = registerDomainController.text.trim();
+      // Strip any existing URL scheme to avoid double-prefixing
+      rawDomain = rawDomain.replaceFirst(RegExp(r'^https?://'), '');
+      // Keep only the host (and port), removing any path component
+      rawDomain = rawDomain.split('/').first;
+
+      final String scheme = environment == "local" ? "http://" : "https://";
+      final String domain = "$scheme$rawDomain";
 
       await ApiService(domain).fetchData('api');
-      await storeSetup(registerDomainController.text);
+      await storeSetup(rawDomain);
       return true;
     } catch (e) {
       setState(() {

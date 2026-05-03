@@ -4,25 +4,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 Future<String> checkAuthentication() async {
   final setup = await isSetup();
   final token = await getToken();
+
   if (setup && token != null) {
     return "menu";
   }
 
-  if (setup && token == null) {
-    if (await isOfflineAuthenticated()) {
-      return "menu";
-    }
-    return "login";
-  }
-
   if (!setup) {
-    if (await isOfflineAuthenticated()) {
-      return "menu";
-    }
     return "setup";
   }
 
-  return "setup";
+  return "login";
 }
 
 Future<void> logout() async {
