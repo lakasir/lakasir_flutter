@@ -4,6 +4,7 @@ import 'package:lakasir/api/api_service.dart';
 import 'package:lakasir/config/app.dart';
 import 'package:lakasir/utils/auth.dart';
 import 'package:lakasir/utils/colors.dart';
+import 'package:lakasir/utils/utils.dart';
 import 'package:lakasir/widgets/filled_button.dart';
 import 'package:lakasir/widgets/layout.dart';
 import 'package:lakasir/widgets/text_field.dart';
@@ -41,7 +42,11 @@ class _SetupScreenState extends State<SetupScreen> {
     }
 
     try {
-      String domain = registerDomainController.text;
+      String certificated = "https://";
+      if (environment == "local") {
+        certificated = "http://";
+      }
+      String domain = "$certificated${registerDomainController.text}";
 
       await ApiService(domain).fetchData('api');
       await storeSetup(registerDomainController.text);
@@ -78,8 +83,7 @@ class _SetupScreenState extends State<SetupScreen> {
                         style: const TextStyle(color: Colors.black),
                       ),
                       const WidgetSpan(
-                        child:
-                            SizedBox(width: 8.0), // Add space between spans
+                        child: SizedBox(width: 8.0), // Add space between spans
                       ),
                       const TextSpan(
                         text: "LAKASIR",
@@ -118,12 +122,7 @@ class _SetupScreenState extends State<SetupScreen> {
                           if (value) {
                             Get.offAllNamed('/auth');
                           } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text("Something went wrong"),
-                                backgroundColor: error,
-                              ),
-                            );
+                            show('Something went wrong', color: error);
                           }
                         },
                       );
