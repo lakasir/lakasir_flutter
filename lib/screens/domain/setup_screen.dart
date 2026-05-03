@@ -4,6 +4,7 @@ import 'package:lakasir/api/api_service.dart';
 import 'package:lakasir/config/app.dart';
 import 'package:lakasir/utils/auth.dart';
 import 'package:lakasir/utils/colors.dart';
+import 'package:lakasir/utils/utils.dart';
 import 'package:lakasir/widgets/filled_button.dart';
 import 'package:lakasir/widgets/layout.dart';
 import 'package:lakasir/widgets/text_field.dart';
@@ -41,10 +42,17 @@ class _SetupScreenState extends State<SetupScreen> {
     }
 
     try {
-      String domain = registerDomainController.text;
+      String rawDomain = registerDomainController.text.trim();
+      // Strip any existing URL scheme to avoid double-prefixing
+      rawDomain = rawDomain.replaceFirst(RegExp(r'^https?://'), '');
+      // Keep only the host (and port), removing any path component
+      rawDomain = rawDomain.split('/').first;
+
+      final String scheme = environment == "local" ? "http://" : "https://";
+      final String domain = "$scheme$rawDomain";
 
       await ApiService(domain).fetchData('api');
-      await storeSetup(registerDomainController.text);
+      await storeSetup(rawDomain);
       return true;
     } catch (e) {
       setState(() {
@@ -78,8 +86,7 @@ class _SetupScreenState extends State<SetupScreen> {
                         style: const TextStyle(color: Colors.black),
                       ),
                       const WidgetSpan(
-                        child:
-                            SizedBox(width: 8.0), // Add space between spans
+                        child: SizedBox(width: 8.0), // Add space between spans
                       ),
                       const TextSpan(
                         text: "LAKASIR",
@@ -118,12 +125,7 @@ class _SetupScreenState extends State<SetupScreen> {
                           if (value) {
                             Get.offAllNamed('/auth');
                           } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text("Something went wrong"),
-                                backgroundColor: error,
-                              ),
-                            );
+                            show('Something went wrong', color: error);
                           }
                         },
                       );
