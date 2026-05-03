@@ -10,6 +10,7 @@ import 'package:lakasir/api/responses/products/product_response.dart';
 import 'package:lakasir/api/responses/products/produect_error_response.dart';
 import 'package:lakasir/controllers/products/product_controller.dart';
 import 'package:lakasir/services/product_service.dart';
+import 'package:lakasir/models/uploaded_file.dart';
 import 'package:lakasir/utils/colors.dart';
 import 'package:lakasir/widgets/select_input_feld.dart';
 
@@ -34,7 +35,14 @@ class ProductAddEditController extends GetxController {
   final TextEditingController expiredController = TextEditingController();
   final TextEditingController skuInputController = TextEditingController();
   final TextEditingController barcodeInputController = TextEditingController();
-  String? photoUrl = '';
+  UploadedFile? _uploadedFile;
+  String? _existingImageUrl;
+  int? get heroImagesUploadedFileId => _uploadedFile?.id;
+  String? get defaultImageUrl => _uploadedFile?.url ?? _existingImageUrl;
+
+  void setUploadedFile(UploadedFile? file) {
+    _uploadedFile = file;
+  }
   Rx<ProductErrorResponse> productErrorResponse = ProductErrorResponse().obs;
   final RxBool isLoading = false.obs;
   final ProductController _productController = Get.put(ProductController());
@@ -62,7 +70,7 @@ class ProductAddEditController extends GetxController {
         sellingPrice: sellingPriceInputController.numberValue,
         type: typeController.selectedOption,
         unit: unitInputController.text,
-        photoUrl: photoUrl,
+        heroImagesUploadedFileId: heroImagesUploadedFileId,
         expired: expiredController.text,
       ));
       isLoading(false);
@@ -115,7 +123,7 @@ class ProductAddEditController extends GetxController {
           sellingPrice: sellingPriceInputController.numberValue,
           type: typeController.selectedOption,
           unit: unitInputController.text,
-          photoUrl: photoUrl ?? '',
+          heroImagesUploadedFileId: heroImagesUploadedFileId,
         ),
       );
       isLoading(false);
@@ -149,7 +157,8 @@ class ProductAddEditController extends GetxController {
     initialPriceInputController.clear();
     sellingPriceInputController.clear();
     unitInputController.clear();
-    photoUrl = '';
+    _uploadedFile = null;
+    _existingImageUrl = null;
     categoryController.selectedOption = null;
     skuInputController.clear();
     barcodeInputController.clear();
@@ -175,7 +184,7 @@ class ProductAddEditController extends GetxController {
       initialPriceInputController.updateValue(products.initialPrice ?? 0);
       sellingPriceInputController.updateValue(products.sellingPrice ?? 0);
       unitInputController.text = products.unit;
-      photoUrl = products.image;
+      _existingImageUrl = products.image;
       skuInputController.text = products.sku;
       barcodeInputController.text = products.barcode ?? '';
       enabledStock(products.isNonStock);
