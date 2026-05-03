@@ -3,22 +3,25 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 Future<String> checkAuthentication() async {
   final setup = await isSetup();
-  final token = await getToken(); // Retrieve the user's token
+  final token = await getToken();
+
+  if (setup && token != null) {
+    return "menu";
+  }
+
   if (!setup) {
     return "setup";
   }
 
-  if (token == null) {
-    return "login";
-  }
-
-  return "menu";
+  return "login";
 }
 
 Future<void> logout() async {
   final prefs = await SharedPreferences.getInstance();
   await prefs.remove('token');
   await prefs.remove('permissions');
+  await prefs.remove('offline_auth');
+  await prefs.remove('offline_user_id');
 }
 
 Future<void> storeToken(String token) async {
@@ -63,4 +66,38 @@ void destroySetup() async {
   final prefs = await SharedPreferences.getInstance();
   await prefs.remove('setup');
   await prefs.remove('domain');
+}
+
+Future<void> storeOfflineUserId(int id) async {
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.setInt('offline_user_id', id);
+}
+
+Future<int?> getOfflineUserId() async {
+  final prefs = await SharedPreferences.getInstance();
+  return prefs.getInt('offline_user_id');
+}
+
+Future<void> storeOfflineAuth(bool value) async {
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.setBool('offline_auth', value);
+}
+
+Future<bool> isOfflineAuthenticated() async {
+  final prefs = await SharedPreferences.getInstance();
+  return prefs.getBool('offline_auth') ?? false;
+}
+
+Future<bool> isOfflineMode() async {
+  final prefs = await SharedPreferences.getInstance();
+  final domain = prefs.getString('domain');
+  return domain == null || domain.isEmpty || domain == 'offline';
+}
+
+Future<bool> hasDomain() async {
+  final prefs = await SharedPreferences.getInstance();
+  final setup = await isSetup();
+  if (!setup) return false;
+  final domain = prefs.getString('domain');
+  return domain != null && domain.isNotEmpty;
 }
