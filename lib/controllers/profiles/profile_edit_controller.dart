@@ -8,6 +8,7 @@ import 'package:lakasir/api/responses/auths/profile_error_response.dart';
 import 'package:lakasir/api/responses/auths/profile_response.dart';
 import 'package:lakasir/api/responses/error_response.dart';
 import 'package:lakasir/controllers/profiles/profile_controller.dart';
+import 'package:lakasir/models/uploaded_file.dart';
 import 'package:lakasir/services/profile_service.dart';
 import 'package:lakasir/utils/utils.dart';
 import 'package:lakasir/widgets/select_input_feld.dart';
@@ -22,6 +23,7 @@ class ProfileEditController extends GetxController {
 
   RxBool isLoading = false.obs;
   Rx<ProfileResponse> profile = ProfileResponse().obs;
+  Rx<UploadedFile?> uploadedFile = Rx<UploadedFile?>(null);
   final ProfileService _profileService = ProfileService();
   final ProfileController _profileController = Get.find();
   final formKey = GlobalKey<FormState>();
@@ -40,7 +42,7 @@ class ProfileEditController extends GetxController {
         email: emailInputController.text,
         address: addressInputController.text,
         locale: languageController.selectedOption,
-        photoUrl: profile.value.photoUrl,
+        uploadedFileId: uploadedFile.value?.id,
       ));
       clearError();
       await _profileController.getProfile();

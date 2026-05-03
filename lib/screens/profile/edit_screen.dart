@@ -45,7 +45,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     width: 100,
                     child: MyImagePicker(
                       onImageSelected: (file) {
-                        _profileController.profile.value.photoUrl = file;
+                        _profileController.uploadedFile.value = file;
                       },
                       usingDynamicSource: true,
                       defaultImage: _profileController.profile.value.photoUrl
