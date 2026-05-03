@@ -13,7 +13,7 @@ typedef MyLocalCallback = void Function(String?);
 class MyImagePicker extends StatefulWidget {
   const MyImagePicker({
     super.key,
-    required this.onImageSelected,
+    this.onImageSelected,
     this.source = image_picker.ImageSource.camera,
     this.maxSize = 1000000,
     this.usingDynamicSource = false,
@@ -22,9 +22,16 @@ class MyImagePicker extends StatefulWidget {
     this.maxWidth,
     this.maxHeight,
     this.onLocalImageSelected,
-  });
+  })  : assert(
+          !usingLocalImage || onLocalImageSelected != null,
+          'onLocalImageSelected is required when usingLocalImage is true',
+        ),
+        assert(
+          usingLocalImage || onImageSelected != null,
+          'onImageSelected is required when usingLocalImage is false',
+        );
   final bool usingLocalImage;
-  final MyCallback onImageSelected;
+  final MyCallback? onImageSelected;
   final MyLocalCallback? onLocalImageSelected;
   final image_picker.ImageSource source;
   final int? maxSize;
@@ -83,6 +90,18 @@ class _MyImagePickerState extends State<MyImagePicker> {
         return;
       }
 
+      if (widget.maxSize != null) {
+        final fileSize = await File(croppedFile.path).length();
+        if (fileSize > widget.maxSize!) {
+          Get.rawSnackbar(
+            title: 'global_error'.tr,
+            message: 'image_too_large'.tr,
+            backgroundColor: error,
+          );
+          return;
+        }
+      }
+
       setState(() {
         _image = image_picker.XFile(croppedFile.path);
       });
@@ -94,7 +113,7 @@ class _MyImagePickerState extends State<MyImagePicker> {
 
       UploadedFile uploadedFile =
           await _uploadService.uploadImage(File(croppedFile.path));
-      widget.onImageSelected(uploadedFile);
+      widget.onImageSelected?.call(uploadedFile);
     } catch (e) {
       Get.rawSnackbar(
         title: 'Error',

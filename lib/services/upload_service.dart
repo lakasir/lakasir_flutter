@@ -14,10 +14,20 @@ class UploadService {
       'Authorization': 'Bearer ${await getToken()}',
     });
 
+    final ext = image.path.split('.').last.toLowerCase();
+    const subtypeMap = {
+      'png': 'png',
+      'jpg': 'jpeg',
+      'jpeg': 'jpeg',
+      'gif': 'gif',
+      'webp': 'webp',
+      'bmp': 'bmp',
+    };
+    final subtype = subtypeMap[ext] ?? 'jpeg';
     request.files.add(await http.MultipartFile.fromPath(
       'file',
       image.path,
-      contentType: MediaType('png', 'jpeg'),
+      contentType: MediaType('image', subtype),
     ));
 
     final response = await request.send();
