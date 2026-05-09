@@ -41,7 +41,7 @@ class CartController extends GetxController {
     }
   }
 
-  void addToCart(CartItem cartItem) async {
+  Future<void> addToCart(CartItem cartItem) async {
     isAddToCartLoading(true);
     await _productDetailController.get(cartItem.product.id);
     if (isNotEnoughStock()) {
@@ -120,9 +120,9 @@ class CartController extends GetxController {
             ),
             Obx(
               () => MyFilledButton(
-                onPressed: () {
+                onPressed: () async {
                   try {
-                    addToCart(CartItem(
+                    await addToCart(CartItem(
                       product: product,
                       qty: int.parse(qtyController.text),
                     ));
