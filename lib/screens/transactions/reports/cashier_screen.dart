@@ -8,6 +8,7 @@ import 'package:lakasir/api/requests/cashier_report_request.dart';
 import 'package:lakasir/controllers/setting_controller.dart';
 import 'package:lakasir/controllers/settings/secure_initial_price_controller.dart';
 import 'package:lakasir/services/cashier_report_service.dart';
+import 'package:lakasir/utils/utils.dart';
 import 'package:lakasir/widgets/date_picker.dart';
 import 'package:lakasir/widgets/filled_button.dart';
 import 'package:lakasir/widgets/layout.dart';
@@ -164,11 +165,7 @@ class _PdfPreviewScreenState extends State<PdfPreviewScreen> {
         await file.create();
       }
       file.writeAsBytesSync(await widget.pdfFile.readAsBytes());
-      Get.rawSnackbar(
-        message: 'global_success_download'.tr,
-        duration: const Duration(seconds: 2),
-        backgroundColor: Colors.green,
-      );
+      show('global_success_download'.tr, duration: const Duration(seconds: 2));
     } catch (e) {
       debugPrint(e.toString());
     }

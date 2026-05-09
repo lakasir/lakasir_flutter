@@ -95,11 +95,7 @@ class CashDrawerController extends GetxController {
                         onPressed: () {
                           closeCashDrawer();
                           Get.back();
-                          Get.rawSnackbar(
-                            message: 'cashier_cash_drawer_closed'.tr,
-                            backgroundColor: success,
-                            duration: const Duration(seconds: 2),
-                          );
+                          show('cashier_cash_drawer_closed'.tr, color: success, duration: const Duration(seconds: 2));
                         },
                         child: Text(
                           'cashier_cash_drawer_close'.tr,
@@ -118,13 +114,9 @@ class CashDrawerController extends GetxController {
                       onPressed: () {
                         storeCashDrawer(cashDrawerController.numberValue);
                         Get.back();
-                        Get.rawSnackbar(
-                          message: 'global_added_item'.trParams(
+                        show('global_added_item'.trParams(
                             {'item': 'cashier_cash_drawer'.tr},
-                          ),
-                          backgroundColor: success,
-                          duration: const Duration(seconds: 2),
-                        );
+                          ), color: success, duration: const Duration(seconds: 2));
                       },
                       child: const Icon(
                         Icons.save,

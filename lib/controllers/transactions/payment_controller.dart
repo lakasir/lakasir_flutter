@@ -42,10 +42,7 @@ class PaymentController extends GetxController {
       if (e is ValidationException) {
         ErrorResponse errorResponse =
             ErrorResponse.fromJson(jsonDecode(e.toString()), (json) => ());
-        Get.rawSnackbar(
-          message: errorResponse.message,
-          backgroundColor: error,
-        );
+        show(errorResponse.message, color: error);
       }
     }
   }

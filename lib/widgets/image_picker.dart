@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart' as image_picker;
 import 'package:lakasir/models/uploaded_file.dart';
 import 'package:lakasir/services/upload_service.dart';
 import 'package:lakasir/utils/colors.dart';
+import 'package:lakasir/utils/utils.dart';
 
 typedef MyCallback = void Function(UploadedFile?);
 typedef MyLocalCallback = void Function(String?);
@@ -93,11 +94,7 @@ class _MyImagePickerState extends State<MyImagePicker> {
       if (widget.maxSize != null) {
         final fileSize = await File(croppedFile.path).length();
         if (fileSize > widget.maxSize!) {
-          Get.rawSnackbar(
-            title: 'global_error'.tr,
-            message: 'image_too_large'.tr,
-            backgroundColor: error,
-          );
+          show('image_too_large'.tr, color: error);
           return;
         }
       }
@@ -115,11 +112,7 @@ class _MyImagePickerState extends State<MyImagePicker> {
           await _uploadService.uploadImage(File(croppedFile.path));
       widget.onImageSelected?.call(uploadedFile);
     } catch (e) {
-      Get.rawSnackbar(
-        title: 'Error',
-        message: e.toString(),
-        backgroundColor: error,
-      );
+      show(e.toString(), color: error);
       debugPrint(e.toString());
     }
   }

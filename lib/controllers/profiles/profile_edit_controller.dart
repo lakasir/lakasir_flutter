@@ -10,6 +10,7 @@ import 'package:lakasir/api/responses/error_response.dart';
 import 'package:lakasir/controllers/profiles/profile_controller.dart';
 import 'package:lakasir/models/uploaded_file.dart';
 import 'package:lakasir/services/profile_service.dart';
+import 'package:lakasir/utils/colors.dart';
 import 'package:lakasir/utils/utils.dart';
 import 'package:lakasir/widgets/select_input_feld.dart';
 
@@ -47,11 +48,11 @@ class ProfileEditController extends GetxController {
       clearError();
       await _profileController.getProfile();
       Get.back();
-      Get.rawSnackbar(
-        message: 'global_updated_item'.trParams({
+      show(
+        'global_updated_item'.trParams({
           'item': 'menu_profile'.tr,
         }),
-        backgroundColor: Colors.green,
+        color: success,
       );
       isLoading(false);
       setLocale(languageController.selectedOption!);

@@ -12,6 +12,7 @@ import 'package:lakasir/controllers/products/product_controller.dart';
 import 'package:lakasir/services/product_service.dart';
 import 'package:lakasir/models/uploaded_file.dart';
 import 'package:lakasir/utils/colors.dart';
+import 'package:lakasir/utils/utils.dart';
 import 'package:lakasir/widgets/select_input_feld.dart';
 
 class ProductAddEditController extends GetxController {
@@ -53,8 +54,8 @@ class ProductAddEditController extends GetxController {
       clearError();
       isLoading(true);
       if (!formKey.currentState!.validate()) {
-        debugPrint('error');
         isLoading(false);
+        show('please_fill_form'.tr, color: error);
         return;
       }
       await _productService.create(ProductRequest(
@@ -75,12 +76,9 @@ class ProductAddEditController extends GetxController {
       ));
       isLoading(false);
       _productController.getProducts();
-      clearInput();
       Get.back();
-      Get.rawSnackbar(
-        message: 'product_add_success'.tr,
-        backgroundColor: success,
-      );
+      clearInput();
+      show('product_add_success'.tr, color: success);
     } catch (e) {
       isLoading(false);
       if (e is ValidationException) {
@@ -92,10 +90,9 @@ class ProductAddEditController extends GetxController {
           (json) => ProductErrorResponse.fromJson(json),
         );
         productErrorResponse(errorResponse.errors);
-        Get.rawSnackbar(
-          message: errorResponse.message,
-          backgroundColor: error,
-        );
+        show(errorResponse.message, color: error);
+      } else {
+        show('global_error'.tr, color: error);
       }
     }
   }
@@ -106,6 +103,7 @@ class ProductAddEditController extends GetxController {
       isLoading(true);
       if (!formKey.currentState!.validate()) {
         isLoading(false);
+        show('please_fill_form'.tr, color: error);
         return;
       }
       await _productService.update(
@@ -128,13 +126,9 @@ class ProductAddEditController extends GetxController {
       );
       isLoading(false);
       _productController.getProducts();
+      Get.until((route) => route.settings.name == '/menu/product');
       clearInput();
-      Get.back();
-      Get.back();
-      Get.rawSnackbar(
-        message: 'global_updated_item'.trParams({'item': 'menu_product'.tr}),
-        backgroundColor: success,
-      );
+      show('global_updated_item'.trParams({'item': 'menu_product'.tr}), color: success);
     } catch (e) {
       debugPrint(e.toString());
       isLoading(false);
@@ -147,6 +141,9 @@ class ProductAddEditController extends GetxController {
           (json) => ProductErrorResponse.fromJson(json),
         );
         productErrorResponse(errorResponse.errors);
+        show(errorResponse.message, color: error);
+      } else {
+        show('global_error'.tr, color: error);
       }
     }
   }
