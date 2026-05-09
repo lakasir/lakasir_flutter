@@ -9,6 +9,7 @@ import 'package:lakasir/api/responses/members/member_error_response.dart';
 import 'package:lakasir/controllers/members/member_controller.dart';
 import 'package:lakasir/services/member_service.dart';
 import 'package:lakasir/utils/colors.dart';
+import 'package:lakasir/utils/utils.dart';
 
 class MemberAddController extends GetxController {
   final MemberController _memberController = Get.find();
@@ -39,12 +40,9 @@ class MemberAddController extends GetxController {
         ),
       );
       Get.back();
-      Get.rawSnackbar(
-        message: "global_added_item".trParams({
-          'item': 'menu_member'.tr,
-        }),
-        backgroundColor: success,
-      );
+      show("global_added_item".trParams({
+        'item': 'menu_member'.tr,
+      }), color: success);
       isSubmitting(false);
       _memberController.fetchMembers();
     } catch (e) {

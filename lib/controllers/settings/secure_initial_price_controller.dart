@@ -7,6 +7,7 @@ import 'package:lakasir/api/responses/error_response.dart';
 import 'package:lakasir/controllers/setting_controller.dart';
 import 'package:lakasir/services/secure_initial_price_service.dart';
 import 'package:lakasir/utils/colors.dart';
+import 'package:lakasir/utils/utils.dart';
 import 'package:lakasir/widgets/dialog.dart';
 import 'package:lakasir/widgets/filled_button.dart';
 import 'package:lakasir/widgets/text_field.dart';
@@ -80,10 +81,7 @@ class SecureInitialPriceController extends GetxController {
                           null,
                         );
                         passwordError(errorResponse.message);
-                        Get.rawSnackbar(
-                          message: errorResponse.message,
-                          backgroundColor: error,
-                        );
+                        show(errorResponse.message, color: error);
                       }
                     }
                   },

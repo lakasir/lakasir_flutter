@@ -6,6 +6,7 @@ import 'package:lakasir/controllers/auths/auth_controller.dart';
 import 'package:lakasir/controllers/setting_controller.dart';
 import 'package:lakasir/utils/auth.dart';
 import 'package:lakasir/utils/colors.dart';
+import 'package:lakasir/utils/utils.dart';
 import 'package:lakasir/widgets/confirm_dialog.dart';
 import 'package:lakasir/widgets/dialog.dart';
 import 'package:lakasir/widgets/filled_button.dart';
@@ -72,10 +73,7 @@ class _TransactionSettingState extends State<TransactionSetting> {
                             taxController.numberValue,
                           );
                           Get.back();
-                          Get.rawSnackbar(
-                            message: "set_detault_tax_success".tr,
-                            backgroundColor: success,
-                          );
+                          show("set_detault_tax_success".tr, color: success);
                         },
                         child: Text("global_save".tr),
                       ),

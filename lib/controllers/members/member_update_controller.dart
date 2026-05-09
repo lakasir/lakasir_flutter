@@ -10,6 +10,7 @@ import 'package:lakasir/api/responses/members/member_response.dart';
 import 'package:lakasir/controllers/members/member_controller.dart';
 import 'package:lakasir/services/member_service.dart';
 import 'package:lakasir/utils/colors.dart';
+import 'package:lakasir/utils/utils.dart';
 
 class MemberUpdateController extends GetxController {
   final MemberController _memberController = Get.find();
@@ -51,12 +52,9 @@ class MemberUpdateController extends GetxController {
         ),
       );
       Get.back();
-      Get.rawSnackbar(
-        message: "global_updated_item".trParams({
-          'item': 'menu_member'.tr,
-        }),
-        backgroundColor: success,
-      );
+      show("global_updated_item".trParams({
+        'item': 'menu_member'.tr,
+      }), color: success);
       isSubmitting(false);
       _memberController.fetchMembers();
     } catch (e) {
@@ -97,26 +95,14 @@ class MemberUpdateController extends GetxController {
                   isDeleting(true);
                   await _memberService.delete(member.value.id);
                   Get.back();
-                  Get.rawSnackbar(
-                    message: "global_deleted_item".trParams({
-                      'item': 'menu_member'.tr,
-                    }),
-                    backgroundColor: success,
-                  );
+                  show("global_deleted_item".trParams({
+                    'item': 'menu_member'.tr,
+                  }), color: success);
                   isDeleting(false);
                   _memberController.fetchMembers();
                 } catch (e) {
                   isDeleting(false);
-                  Get.rawSnackbar(
-                    title: 'global_failed_delete_item'.trParams({
-                      'item': 'menu_member'.tr.toLowerCase(),
-                    }),
-                    message: 'has_an_item'.trParams({
-                      'item': 'menu_transaction'.tr.toLowerCase(),
-                    }),
-                    duration: const Duration(seconds: 2),
-                    backgroundColor: error,
-                  );
+                  show('${'global_failed_delete_item'.trParams({'item': 'menu_member'.tr.toLowerCase()})} - ${'has_an_item'.trParams({'item': 'menu_transaction'.tr.toLowerCase()})}', color: error, duration: const Duration(seconds: 2));
                 }
               },
               child: Text('global_yes'.tr),

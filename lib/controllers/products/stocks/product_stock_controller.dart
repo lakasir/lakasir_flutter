@@ -12,6 +12,7 @@ import 'package:lakasir/controllers/products/product_controller.dart';
 import 'package:lakasir/controllers/products/product_detail_controller.dart';
 import 'package:lakasir/services/product_stock_service.dart';
 import 'package:lakasir/utils/colors.dart';
+import 'package:lakasir/utils/utils.dart';
 
 class ProductStockController extends GetxController {
   final formKey = GlobalKey<FormState>();
@@ -65,11 +66,7 @@ class ProductStockController extends GetxController {
       isLoading(false);
       clear();
       Get.back();
-      Get.rawSnackbar(
-        title: 'Success',
-        message: 'Stock has been added',
-        backgroundColor: success,
-      );
+      show('Stock has been added', color: success);
     } catch (e) {
       isLoading(false);
       if (e is ValidationException) {
