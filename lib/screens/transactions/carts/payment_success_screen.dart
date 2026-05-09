@@ -54,10 +54,7 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      canPop: true,
-      onPopInvoked: (bool didPop) async {},
-      child: Layout(
+    return Layout(
         noAppBar: true,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -131,7 +128,6 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
               child: MyFilledButton(
                 color: grey,
                 onPressed: () {
-                  refreshCashier();
                   Get.back();
                 },
                 child: Row(
@@ -146,7 +142,6 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
             ),
           ],
         ),
-      ),
     );
   }
 }

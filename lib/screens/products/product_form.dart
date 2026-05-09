@@ -185,46 +185,33 @@ class _ProductFormState extends State<ProductForm> {
               ),
             ),
           ),
+        Visibility(
+          visible: showInitialPrice &&
+              _authController.feature(
+                feature: 'product-initial-price',
+              ),
+          child: Container(
+            margin: const EdgeInsets.only(top: 20),
+            child: Obx(
+              () => MyTextField(
+                readOnly: _isServiceType,
+                controller: widget.controller.initialPriceInputController,
+                label: 'field_initial_price'.tr,
+                keyboardType: TextInputType.number,
+                errorText: errorResponse.value.initialPrice ?? '',
+              ),
+            ),
+          ),
+        ),
         Container(
           margin: const EdgeInsets.only(top: 20),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Visibility(
-                visible: showInitialPrice &&
-                    _authController.feature(
-                      feature: 'product-initial-price',
-                    ),
-                child: Flexible(
-                  child: Obx(
-                    () => MyTextField(
-                      readOnly: _isServiceType,
-                      controller: widget.controller.initialPriceInputController,
-                      label: 'field_initial_price'.tr,
-                      keyboardType: TextInputType.number,
-                      errorText: errorResponse.value.initialPrice ?? '',
-                    ),
-                  ),
-                ),
-              ),
-              Visibility(
-                visible: showInitialPrice &&
-                    _authController.feature(
-                      feature: 'product-initial-price',
-                    ),
-                child: const SizedBox(width: 20),
-              ),
-              Flexible(
-                child: Obx(
-                  () => MyTextField(
-                    controller: widget.controller.sellingPriceInputController,
-                    label: 'field_selling_price'.tr,
-                    keyboardType: TextInputType.number,
-                    errorText: errorResponse.value.sellingPrice ?? '',
-                  ),
-                ),
-              ),
-            ],
+          child: Obx(
+            () => MyTextField(
+              controller: widget.controller.sellingPriceInputController,
+              label: 'field_selling_price'.tr,
+              keyboardType: TextInputType.number,
+              errorText: errorResponse.value.sellingPrice ?? '',
+            ),
           ),
         ),
         if (_authController.feature(feature: 'product-expired'))

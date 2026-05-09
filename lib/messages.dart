@@ -285,7 +285,8 @@ class Messages extends Translations {
           'payment_success': 'Payment Success',
           'setup_the_printer': 'Setup the printer first!',
           'printer_error':
-              'The printer is busy or you can set it first in the printer settings menu'
+              'The printer is busy or you can set it first in the printer settings menu',
+          'global_stock_not_enough': 'Stock is not enough for @item',
         },
         'id_ID': {
           'auth': 'Otentikasi',
@@ -447,7 +448,8 @@ class Messages extends Translations {
           'global_gallery': 'Galeri',
           'global_select_image_source': 'Pilih Sumber Gambar',
           'global_error': 'Kesalahan',
-          'image_too_large': 'Ukuran gambar melebihi batas maksimum yang diizinkan',
+          'image_too_large':
+              'Ukuran gambar melebihi batas maksimum yang diizinkan',
           'option_product': 'Produk',
           'option_service': 'Jasa',
           'validation_required': '@field ini wajib diisi',
@@ -570,7 +572,8 @@ class Messages extends Translations {
           'payment_success': 'Pembayaran berhasil',
           'setup_the_printer': 'Atur printer terlebih dahulu',
           'printer_error':
-              'Printer sedang sibuk atau kamu bisa atur dulu di menu pengaturan printer'
+              'Printer sedang sibuk atau kamu bisa atur dulu di menu pengaturan printer',
+          'global_stock_not_enough': 'Stok tidak cukup untuk @item',
         },
       };
 }

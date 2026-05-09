@@ -29,8 +29,9 @@ class PaymentController extends GetxController {
           _cartController.cartSessions.value.getTotalPrice;
       isLoading(true);
       procceedThePayment();
-      Get.offAllNamed("/auth");
-      Get.toNamed("/menu/transaction/cashier");
+      _cartController.cartSessions.value = CartSession(cartItems: []);
+      Get.back();
+      Get.until((route) => route.settings.name == "/menu/transaction/cashier");
       Get.toNamed(
         "/menu/transaction/cashier/payment/success",
         arguments: change,
