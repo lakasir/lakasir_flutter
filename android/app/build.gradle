@@ -34,8 +34,14 @@ if (keystorePropertiesFile.exists()) {
 
 android {
     namespace "com.lakasir.lakasir"
-    compileSdk 35
+    compileSdk 36
     ndkVersion flutter.ndkVersion
+
+    configurations.all {
+        resolutionStrategy {
+            force 'androidx.core:core-ktx:1.13.0'
+        }
+    }
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
