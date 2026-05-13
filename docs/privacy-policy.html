@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy — lakasir POS</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 720px;
+            margin: 40px auto;
+            padding: 0 20px;
+            color: #222;
+            line-height: 1.7;
+            font-size: 15px;
+        }
+        h1 { font-size: 24px; margin-bottom: 4px; }
+        h2 { font-size: 18px; margin-top: 32px; border-bottom: 1px solid #eee; padding-bottom: 6px; }
+        .updated { color: #888; font-size: 13px; margin-bottom: 24px; }
+        table { border-collapse: collapse; width: 100%; margin: 12px 0; }
+        th, td { border: 1px solid #ddd; padding: 8px 12px; text-align: left; font-size: 14px; }
+        th { background: #f5f5f5; }
+        ul { padding-left: 20px; }
+        li { margin-bottom: 4px; }
+        strong { color: #111; }
+        .highlight {
+            background: #FFF3E6;
+            border-left: 3px solid #FF6600;
+            padding: 12px 16px;
+            margin: 16px 0;
+            border-radius: 4px;
+        }
+        a { color: #FF6600; }
+    </style>
+</head>
+<body>
+
+<h1>Privacy Policy for lakasir POS</h1>
+<p class="updated"><strong>Last updated:</strong> May 13, 2026</p>
+
+<h2>Introduction</h2>
+<p>lakasir POS ("the App", "we", "our") is a point-of-sale application for small businesses. This Privacy Policy explains how the App handles information when you use it.</p>
+
+<div class="highlight">
+<strong>Important:</strong> lakasir POS connects to a server instance that <strong>you own and control</strong>. We do not operate, host, or have access to your server or the data stored on it. Your business data belongs exclusively to you.
+</div>
+
+<h2>Information the App Processes</h2>
+
+<h3>Data Stored on Your Device</h3>
+<p>The App stores the following locally on your device using app-private storage (SharedPreferences):</p>
+
+<table>
+    <tr><th>Data</th><th>Purpose</th></tr>
+    <tr><td>Authentication token</td><td>Keeps you signed in</td></tr>
+    <tr><td>Server domain / URL</td><td>Connects to your lakasir server</td></tr>
+    <tr><td>Setup status</td><td>Remembers onboarding completion</td></tr>
+    <tr><td>User permissions</td><td>Manages feature access within the app</td></tr>
+    <tr><td>Offline authentication state</td><td>Enables offline mode usage</td></tr>
+</table>
+
+<p>This data never leaves your device except to authenticate with your own server.</p>
+
+<h3>Data Sent to Your Server</h3>
+<p>The App communicates exclusively with the lakasir server instance <strong>that you configure</strong>. Data transmitted includes:</p>
+<ul>
+    <li><strong>Account information:</strong> email address and password for login</li>
+    <li><strong>Profile data:</strong> name, profile photo (if uploaded)</li>
+    <li><strong>Business data:</strong> products, inventory, categories, transactions, sales records, customer/member information</li>
+    <li><strong>Images:</strong> product photos uploaded via the image picker</li>
+    <li><strong>Settings:</strong> printer configurations, notification preferences</li>
+</ul>
+<p>You control what data is stored on your server. We do not have access to it.</p>
+
+<h3>Camera and Photos</h3>
+<p>The App may request access to your device camera or photo gallery when you:</p>
+<ul>
+    <li>Add product images</li>
+    <li>Update your profile photo</li>
+</ul>
+<p>Images are sent to your lakasir server and are not shared with any third party by us.</p>
+
+<h3>Bluetooth</h3>
+<p>The App may request Bluetooth access to connect to thermal printers for printing receipts. Bluetooth is used solely for printer communication.</p>
+
+<h3>Push Notifications (Firebase Cloud Messaging)</h3>
+<p>The App uses <strong>Firebase Cloud Messaging (FCM)</strong> to deliver push notifications such as order updates and stock alerts. To enable this, a unique device token is sent to Google's Firebase service. This token does not identify you personally and is used solely for delivering notifications to your device.</p>
+<p>Firebase is a service provided by Google LLC. You can review Google's privacy policy at <a href="https://policies.google.com/privacy">https://policies.google.com/privacy</a>.</p>
+
+<h2>Data We Do NOT Collect</h2>
+<p>We do <strong>not</strong> collect, store, or have access to:</p>
+<ul>
+    <li>Your business transaction data</li>
+    <li>Your product inventory</li>
+    <li>Your customer or member information</li>
+    <li>Your sales reports or financial data</li>
+    <li>Your server credentials or configuration</li>
+    <li>Your location data</li>
+    <li>Your device contacts or calendar</li>
+</ul>
+
+<h2>Third-Party Services</h2>
+<p>The App integrates the following third-party services:</p>
+
+<table>
+    <tr><th>Service</th><th>Purpose</th><th>Privacy Policy</th></tr>
+    <tr><td>Firebase (Google)</td><td>Push notifications</td><td><a href="https://policies.google.com/privacy">policies.google.com/privacy</a></td></tr>
+</table>
+
+<p>No other third-party analytics, advertising, or tracking services are included.</p>
+
+<h2>Data Retention and Deletion</h2>
+<ul>
+    <li><strong>Local data:</strong> Uninstalling the App removes all locally stored data from your device.</li>
+    <li><strong>Server data:</strong> You control data retention on your lakasir server. Refer to your server's documentation for data management.</li>
+    <li><strong>FCM token:</strong> The device token registered with Firebase is automatically invalidated when you uninstall the App or clear app data.</li>
+</ul>
+
+<h2>Children's Privacy</h2>
+<p>The App is not intended for use by children under the age of 13. We do not knowingly collect personal information from children.</p>
+
+<h2>Security</h2>
+<p>The App communicates with your server over HTTPS (encrypted connection). Authentication tokens are stored securely in app-private storage. We recommend you secure your lakasir server with HTTPS and strong passwords.</p>
+
+<h2>Your Rights</h2>
+<p>Since your data resides on your own server, you have full control over:</p>
+<ul>
+    <li>Accessing your data through your server</li>
+    <li>Correcting or updating your data</li>
+    <li>Deleting your data from your server</li>
+    <li>Exporting your data through your server's features</li>
+</ul>
+
+<h2>Changes to This Policy</h2>
+<p>We may update this Privacy Policy from time to time. Changes will be posted within the App and on this page. Continued use of the App after changes constitutes acceptance.</p>
+
+<h2>Contact</h2>
+<p>If you have questions about this Privacy Policy, contact us at:</p>
+<ul>
+    <li><strong>Email:</strong> <a href="mailto:support@lakasir.com">support@lakasir.com</a></li>
+    <li><strong>Website:</strong> <a href="https://lakasir.com">https://lakasir.com</a></li>
+</ul>
+
+</body>
+</html>
