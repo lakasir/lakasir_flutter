@@ -17,6 +17,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Sync version from tag
+        run: |
+          TAG="${{ github.ref_name }}"
+          echo "Setting pubspec.yaml version to: $TAG"
+          sed -i "s/^version: .*/version: $TAG/" pubspec.yaml
+          cat pubspec.yaml | head -5
+
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
