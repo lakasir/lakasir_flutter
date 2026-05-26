@@ -38,6 +38,11 @@ subprojects {
                 }
             }
         }
+        tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+            kotlinOptions {
+                jvmTarget = "17"
+            }
+        }
         configurations.all {
             resolutionStrategy {
                 force 'androidx.core:core-ktx:1.13.0'
