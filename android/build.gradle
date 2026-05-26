@@ -30,6 +30,14 @@ subprojects {
                 compileSdk = 34
             }
         }
+        project.plugins.withId('com.android.library') {
+            project.android {
+                compileOptions {
+                    sourceCompatibility JavaVersion.VERSION_17
+                    targetCompatibility JavaVersion.VERSION_17
+                }
+            }
+        }
         configurations.all {
             resolutionStrategy {
                 force 'androidx.core:core-ktx:1.13.0'
