@@ -26,17 +26,6 @@ jobs:
           sed -i "s/^version: .*/version: $TAG/" pubspec.yaml
           cat pubspec.yaml | head -5
 
-      - name: Set Android versionCode from tag
-        run: |
-          TAG="${{ github.ref_name }}"
-          MAJOR=$(echo "$TAG" | cut -d. -f1)
-          MINOR=$(echo "$TAG" | cut -d. -f2)
-          PATCH=$(echo "$TAG" | cut -d. -f3)
-          VERSION_CODE=$((MAJOR * 10000 + MINOR * 100 + PATCH))
-          echo "flutter.versionCode=$VERSION_CODE" >> android/local.properties
-          echo "flutter.versionName=$TAG" >> android/local.properties
-          echo "versionCode=$VERSION_CODE versionName=$TAG"
-
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
@@ -60,11 +49,23 @@ jobs:
           storeFile=upload-keystore.jks
           EOF
 
+      - name: Compute version from tag
+        id: version
+        run: |
+          TAG="${{ github.ref_name }}"
+          MAJOR=$(echo "$TAG" | cut -d. -f1)
+          MINOR=$(echo "$TAG" | cut -d. -f2)
+          PATCH=$(echo "$TAG" | cut -d. -f3)
+          VERSION_CODE=$((MAJOR * 10000 + MINOR * 100 + PATCH))
+          echo "version_code=$VERSION_CODE" >> $GITHUB_OUTPUT
+          echo "version_name=$TAG" >> $GITHUB_OUTPUT
+          echo "versionCode=$VERSION_CODE versionName=$TAG"
+
       - name: Build APK
-        run: flutter build apk --release
+        run: flutter build apk --release --build-number=${{ steps.version.outputs.version_code }} --build-name=${{ steps.version.outputs.version_name }}
 
       - name: Build AAB
-        run: flutter build appbundle
+        run: flutter build appbundle --build-number=${{ steps.version.outputs.version_code }} --build-name=${{ steps.version.outputs.version_name }}
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
