@@ -18,6 +18,7 @@ class Messages extends Translations {
           'menu_about_subtitle': 'Every bussiness is has an iconic purpose',
           'menu_setting': 'Setting',
           'menu_setting_subtitle': 'Lakasir is configurable',
+          'user_management': 'User Management',
           'setting': 'Setting',
           'setting_general': 'General',
           'setting_category': 'Category',
@@ -287,6 +288,10 @@ class Messages extends Translations {
           'printer_error':
               'The printer is busy or you can set it first in the printer settings menu',
           'global_stock_not_enough': 'Stock is not enough for @item',
+          'global_delete_owner_title': 'Delete Owner Account',
+          'global_delete_owner_content':
+              'This account is the shop owner. Deleting it will permanently delete the entire shop and all its data. This action cannot be undone. Are you sure?',
+          'global_delete_server': 'Delete Server',
         },
         'id_ID': {
           'auth': 'Otentikasi',
@@ -303,6 +308,7 @@ class Messages extends Translations {
           'menu_about_subtitle': 'Setiap bisnis memiliki tujuan yang ikonik',
           'menu_setting': 'Pengaturan',
           'menu_setting_subtitle': 'Lakasir mudah dikonfigurasi',
+          'user_management': 'Manajemen Pengguna',
           'setting': 'Pengaturan',
           'setting_general': 'Umum',
           'setting_category': 'Kategori',
@@ -574,6 +580,10 @@ class Messages extends Translations {
           'printer_error':
               'Printer sedang sibuk atau kamu bisa atur dulu di menu pengaturan printer',
           'global_stock_not_enough': 'Stok tidak cukup untuk @item',
+          'global_delete_owner_title': 'Hapus Akun Pemilik',
+          'global_delete_owner_content':
+              'Akun ini adalah pemilik toko. Menghapusnya akan menghapus seluruh toko dan semua data secara permanen. Tindakan ini tidak dapat dibatalkan. Apakah Anda yakin?',
+          'global_delete_server': 'Hapus Server',
         },
       };
 }

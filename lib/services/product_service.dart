@@ -11,16 +11,19 @@ class ProductService {
       'master/product?${productRequest?.toQuery()}',
     );
 
-    final apiResponse = ApiResponse.fromJson(response, (contentJson) {
-      return PaginationResponse<ProductResponse>.fromJson(
-        contentJson,
-        (dataJson) {
-          return ProductResponse.fromJson(dataJson);
-        },
-      );
-    });
+    final List rawData = response['data'] ?? [];
+    final linksJson = response['links'];
 
-    return apiResponse.data?.value ?? PaginationResponse();
+    final products = rawData
+        .map((e) => ProductResponse.fromJson(e as Map<String, dynamic>))
+        .toList();
+
+    return PaginationResponse<ProductResponse>(
+      links: linksJson != null
+          ? ListPaginationResponse.fromJson(linksJson as Map<String, dynamic>)
+          : null,
+      data: products,
+    );
   }
 
   Future<void> create(ProductRequest productRequest) async {

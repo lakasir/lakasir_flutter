@@ -11,7 +11,7 @@ class ProfileService {
       response,
       (json) => ProfileResponse.fromJson(json),
     );
-    
+
     return profileResponse.data!.value;
   }
 
@@ -20,5 +20,19 @@ class ProfileService {
       'auth/me',
       profileRequest.toJson(),
     );
+  }
+
+  Future<List<ProfileResponse>> getUsers() async {
+    final response =
+        await ApiService(await getDomain()).fetchData('auth/users');
+    final apiResponse = ApiResponse.fromJsonList(response, (json) {
+      return json.map((x) => ProfileResponse.fromJson(x)).toList();
+    });
+
+    return apiResponse.data!.value;
+  }
+
+  Future<void> deleteUser(int id) async {
+    await ApiService(await getDomain()).deleteData('auth/users/$id');
   }
 }

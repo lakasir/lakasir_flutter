@@ -48,7 +48,7 @@ class _SettingScreenState extends State<SettingScreen> {
                 feature: 'product-initial-price',
               ))
                 const ProductSetting(),
-              const AuthSetting(),
+              AuthSetting(authController: _authController),
             ],
           );
         },

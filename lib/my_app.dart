@@ -27,6 +27,7 @@ import 'package:lakasir/screens/setting/printers/add_printer_page_screen.dart';
 import 'package:lakasir/screens/setting/printers/printer_page_screen.dart';
 import 'package:lakasir/screens/setting/selling_method_screen.dart';
 import 'package:lakasir/screens/setting/setting_screen.dart';
+import 'package:lakasir/screens/setting/user_management_screen.dart';
 import 'package:lakasir/screens/transactions/carts/cashier_cart_menu_screen.dart';
 import 'package:lakasir/screens/transactions/carts/payment_screen.dart';
 import 'package:lakasir/screens/transactions/cashier_menu_screen.dart';
@@ -145,6 +146,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         '/notifications': (context) => const NotificationScreen(),
         '/menu/setting/notification': (context) =>
             const SettingNotificationScreen(),
+        '/menu/setting/users': (context) => const UserManagementScreen(),
       },
     );
   }

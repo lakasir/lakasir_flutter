@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lakasir/api/requests/product_request.dart';
+import 'package:lakasir/api/responses/pagination_response.dart';
 import 'package:lakasir/api/responses/products/product_response.dart';
 import 'package:lakasir/controllers/category_controller.dart';
 import 'package:lakasir/services/product_service.dart';
@@ -13,34 +14,36 @@ import 'package:lakasir/widgets/text_field.dart';
 class ProductController extends GetxController {
   final CategoryController _categoryController = Get.put(CategoryController());
   RxBool isLoading = false.obs;
-  RxList<ProductResponse> products = <ProductResponse>[].obs;
   final ProductService _productService = ProductService();
   final searchByNameController = TextEditingController();
   final searchByCategoryController = SelectInputWidgetController();
   final searchByTypeController = SelectInputWidgetController();
   final searchByUnitController = TextEditingController();
   RxBool isFiltered = false.obs;
+  RxInt refreshTrigger = 0.obs;
+  static const int perPage = 20;
 
-  void getProducts() async {
-    isLoading(true);
-    final response = await _productService.get(ProductRequest());
-    products.value = response.data!;
-    isLoading(false);
+  void getProducts() {
+    refreshTrigger++;
   }
 
-  void searchProduct() async {
-    isLoading(true);
-    final response = await _productService.get(ProductRequest(
-      name: searchByNameController.text,
+  Future<PaginationResponse<ProductResponse>> fetchPage(int pageKey) async {
+    final request = ProductRequest(
+      name: searchByNameController.text.isEmpty
+          ? null
+          : searchByNameController.text,
       categoryId: searchByCategoryController.selectedOption,
       type: searchByTypeController.selectedOption,
-      unit: searchByUnitController.text,
-    ));
-    products.value = response.data!;
-    isLoading(false);
+      unit: searchByUnitController.text.isEmpty
+          ? null
+          : searchByUnitController.text,
+      page: pageKey + 1,
+      perPage: perPage,
+    );
+    return await _productService.get(request);
   }
 
-  void showSearchDialog() {
+  void showSearchDialog({VoidCallback? onRefresh}) {
     Get.dialog(
       MyDialog(
         noPadding: true,
@@ -51,10 +54,14 @@ class ProductController extends GetxController {
               controller: searchByNameController,
               textInputAction: TextInputAction.search,
               onSubmitted: (value) {
-                searchProduct();
+                onRefresh?.call();
+                Get.back();
               },
               rightIcon: IconButton(
-                onPressed: searchProduct,
+                onPressed: () {
+                  onRefresh?.call();
+                  Get.back();
+                },
                 icon: const Icon(Icons.search),
               ),
             ),
@@ -64,7 +71,7 @@ class ProductController extends GetxController {
     );
   }
 
-  void showFilterDialog() {
+  void showFilterDialog({VoidCallback? onRefresh}) {
     Get.dialog(MyDialog(
       title: 'global_filter_item'.trParams({'item': 'menu_product'.tr}),
       content: Column(
@@ -115,7 +122,7 @@ class ProductController extends GetxController {
           MyFilledButton(
             onPressed: () {
               isFiltered(true);
-              searchProduct();
+              onRefresh?.call();
               Get.back();
             },
             child: Text("global_filter".tr),
@@ -130,21 +137,12 @@ class ProductController extends GetxController {
     searchByCategoryController.selectedOption = null;
     searchByTypeController.selectedOption = null;
     searchByUnitController.clear();
-    getProducts();
+    isFiltered(false);
   }
 
-  String buildPrice(index) {
-    if (products.isEmpty) {
-      return '';
-    }
-    final price = products[index].sellingPrice;
-    final unit = products[index].unit;
+  String buildPrice(ProductResponse product) {
+    final price = product.sellingPrice;
+    final unit = product.unit;
     return '${formatPrice(price!, isSymbol: false)} / $unit';
-  }
-
-  @override
-  void onInit() {
-    getProducts();
-    super.onInit();
   }
 }

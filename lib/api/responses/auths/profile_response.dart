@@ -1,4 +1,5 @@
 class ProfileResponse {
+  final int? id;
   final String? name;
   final String? roles;
   final String? email;
@@ -10,8 +11,10 @@ class ProfileResponse {
   final String? updatedAt;
   final List<String>? permissions;
   final Map<String, dynamic>? features;
+  final bool? isOwner;
 
   ProfileResponse({
+    this.id,
     this.name,
     this.roles,
     this.permissions,
@@ -23,10 +26,12 @@ class ProfileResponse {
     this.createdAt,
     this.updatedAt,
     this.features,
+    this.isOwner,
   });
 
   factory ProfileResponse.fromJson(Map<String, dynamic> json) {
     return ProfileResponse(
+      id: json['id'],
       name: json['name'],
       email: json['email'],
       phone: json['phone'],
@@ -40,6 +45,7 @@ class ProfileResponse {
       locale: json['locale'] ?? 'en',
       createdAt: json['created_at'],
       updatedAt: json['updated_at'],
+      isOwner: json['is_owner'],
     );
   }
 }

@@ -13,6 +13,8 @@ class ProductRequest {
   String? sku;
   String? barcode;
   String? expired;
+  int? page;
+  int? perPage;
 
   ProductRequest({
     this.name,
@@ -27,6 +29,8 @@ class ProductRequest {
     this.sku,
     this.barcode,
     this.expired,
+    this.page,
+    this.perPage,
   });
 
   Map<String, dynamic> toJson() {
@@ -68,6 +72,12 @@ class ProductRequest {
     }
     if (stock != null) {
       query.add('filter[stock-gt]=$stock');
+    }
+    if (page != null) {
+      query.add('page=$page');
+    }
+    if (perPage != null) {
+      query.add('per_page=$perPage');
     }
     return query.join('&');
   }

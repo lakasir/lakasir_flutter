@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:lakasir/api/responses/products/product_response.dart';
 import 'package:lakasir/controllers/auths/auth_controller.dart';
 import 'package:lakasir/controllers/products/product_controller.dart';
@@ -32,11 +33,31 @@ class _CashierMenuScreenState extends State<CashierMenuScreen> {
   final _settingController = Get.put(SettingController());
   final _cashDrawerController = Get.put(CashDrawerController());
   final _authController = Get.put(AuthController());
-  bool showCashDrawer = false;
+  final PagingController<int, ProductResponse> _pagingController =
+      PagingController(firstPageKey: 0);
   final Duration initialDuration = const Duration(milliseconds: 300);
 
   @override
   void initState() {
+    _pagingController.addPageRequestListener((pageKey) async {
+      try {
+        final response = await _productController.fetchPage(pageKey);
+        final items = response.data ?? [];
+        final isLastPage = response.links?.next == null;
+        if (isLastPage) {
+          _pagingController.appendLastPage(items);
+        } else {
+          _pagingController.appendPage(items, pageKey + 1);
+        }
+      } catch (error) {
+        _pagingController.error = error;
+      }
+    });
+
+    ever(_productController.refreshTrigger, (_) {
+      _pagingController.refresh();
+    });
+
     Timer(initialDuration, () {
       if (_settingController.setting.value.cashDrawerEnabled) {
         if (!_cashDrawerController.isOpened.value) return;
@@ -47,12 +68,27 @@ class _CashierMenuScreenState extends State<CashierMenuScreen> {
   }
 
   @override
+  void dispose() {
+    _pagingController.dispose();
+    super.dispose();
+  }
+
+  void _onSearchChanged(String value) {
+    if (value.length >= 3) {
+      _pagingController.refresh();
+    }
+    if (value.isEmpty) {
+      _pagingController.refresh();
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return PopScope(
       canPop: true,
       onPopInvoked: (isPop) {
-        _productController.searchByNameController.clear();
-        _productController.getProducts();
+        _productController.clearSearch();
+        _pagingController.refresh();
       },
       child: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
@@ -109,7 +145,8 @@ class _CashierMenuScreenState extends State<CashierMenuScreen> {
                 }
 
                 if (cartSession.cartItems.isEmpty) {
-                  show('Cart is empty', color: error, duration: const Duration(seconds: 2));
+                  show('Cart is empty',
+                      color: error, duration: const Duration(seconds: 2));
                   return;
                 }
 
@@ -139,17 +176,10 @@ class _CashierMenuScreenState extends State<CashierMenuScreen> {
                         margin: const EdgeInsets.only(bottom: 10, top: 10),
                         child: MyTextField(
                           key: const ValueKey('search'),
-                          controller: _productController.searchByNameController,
+                          controller:
+                              _productController.searchByNameController,
                           hintText: 'cashier_search_trigger'.tr,
-                          onChanged: (value) {
-                            if (value.length >= 3) {
-                              _productController.searchProduct();
-                            }
-
-                            if (value.isEmpty) {
-                              _productController.getProducts();
-                            }
-                          },
+                          onChanged: _onSearchChanged,
                           textInputAction: TextInputAction.search,
                           rightIcon: Row(
                             mainAxisSize: MainAxisSize.min,
@@ -157,7 +187,7 @@ class _CashierMenuScreenState extends State<CashierMenuScreen> {
                               IconButton(
                                 color: primary,
                                 onPressed: () {
-                                  _productController.searchProduct();
+                                  _pagingController.refresh();
                                 },
                                 icon: const Icon(Icons.search),
                               ),
@@ -166,28 +196,27 @@ class _CashierMenuScreenState extends State<CashierMenuScreen> {
                         ),
                       ),
                       Expanded(
-                        child: Obx(
-                          () {
-                            if (_productController.isLoading.value) {
-                              return const Center(
-                                child: CircularProgressIndicator(),
-                              );
-                            }
-                            if (_productController.products.isEmpty) {
-                              return Center(
-                                child: Text('global_no_item'.trParams(
-                                  {'item': 'menu_product'.tr},
-                                )),
-                              );
-                            }
-                            return ListView(
-                              children: [
-                                for (var product in _productController.products)
-                                  buildMyCardList(product, _cartController),
-                                const SizedBox(height: 80),
-                              ],
-                            );
-                          },
+                        child: PagedListView<int, ProductResponse>(
+                          pagingController: _pagingController,
+                          builderDelegate:
+                              PagedChildBuilderDelegate<ProductResponse>(
+                            noItemsFoundIndicatorBuilder: (_) => Center(
+                              child: Text('global_no_item'.trParams(
+                                {'item': 'menu_product'.tr},
+                              )),
+                            ),
+                            firstPageProgressIndicatorBuilder: (_) =>
+                                const Center(
+                                    child: CircularProgressIndicator()),
+                            newPageProgressIndicatorBuilder: (_) =>
+                                const Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child:
+                                  Center(child: CircularProgressIndicator()),
+                            ),
+                            itemBuilder: (context, product, index) =>
+                                buildMyCardList(product, _cartController),
+                          ),
                         ),
                       ),
                     ],
@@ -223,9 +252,7 @@ class _CashierMenuScreenState extends State<CashierMenuScreen> {
         list: [
           Text(
             product.name,
-            style: const TextStyle(
-              fontSize: 20,
-            ),
+            style: const TextStyle(fontSize: 20),
           ),
           if (_authController.feature(feature: 'product-stock'))
             Text(
@@ -242,9 +269,7 @@ class _CashierMenuScreenState extends State<CashierMenuScreen> {
             width: 220,
             child: Text(
               formatPrice(product.sellingPrice!),
-              style: const TextStyle(
-                fontSize: 14,
-              ),
+              style: const TextStyle(fontSize: 14),
             ),
           ),
         ],

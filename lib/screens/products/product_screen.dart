@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:lakasir/controllers/auths/auth_controller.dart';
 import 'package:lakasir/controllers/products/product_controller.dart';
 import 'package:lakasir/controllers/setting_controller.dart';
@@ -10,17 +11,56 @@ import 'package:lakasir/widgets/layout.dart';
 import 'package:lakasir/widgets/my_bottom_bar.dart';
 import 'package:lakasir/widgets/my_bottom_bar_actions.dart';
 import 'package:lakasir/widgets/my_card_list.dart';
+import 'package:lakasir/api/responses/products/product_response.dart';
 
 class ProductScreen extends StatefulWidget {
   const ProductScreen({super.key});
+
   @override
-  State<ProductScreen> createState() => _ProductScreen();
+  State<ProductScreen> createState() => _ProductScreenState();
 }
 
-class _ProductScreen extends State<ProductScreen> {
+class _ProductScreenState extends State<ProductScreen> {
   final ProductController _productController = Get.put(ProductController());
   final SettingController _settingController = Get.put(SettingController());
   final AuthController _authController = Get.put(AuthController());
+  final PagingController<int, ProductResponse> _pagingController =
+      PagingController(firstPageKey: 0);
+
+  @override
+  void initState() {
+    _pagingController.addPageRequestListener((pageKey) async {
+      try {
+        final response = await _productController.fetchPage(pageKey);
+        final items = response.data ?? [];
+        final isLastPage = response.links?.next == null;
+        if (isLastPage) {
+          _pagingController.appendLastPage(items);
+        } else {
+          _pagingController.appendPage(items, pageKey + 1);
+        }
+      } catch (error) {
+        _pagingController.error = error;
+      }
+    });
+
+    ever(_productController.refreshTrigger, (_) {
+      _pagingController.refresh();
+    });
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _pagingController.dispose();
+    super.dispose();
+  }
+
+  void _clearSearchAndRefresh() {
+    _productController.clearSearch();
+    _pagingController.refresh();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,14 +81,18 @@ class _ProductScreen extends State<ProductScreen> {
           MyBottomBarActions(
             badge: 'global_filter'.tr,
             onPressed: () {
-              _productController.showFilterDialog();
+              _productController.showFilterDialog(
+                onRefresh: () => _pagingController.refresh(),
+              );
             },
             icon: const Icon(Icons.filter_list, color: Colors.white),
           ),
           MyBottomBarActions(
             badge: 'global_search'.tr,
             onPressed: () {
-              _productController.showSearchDialog();
+              _productController.showSearchDialog(
+                onRefresh: () => _pagingController.refresh(),
+              );
             },
             icon: const Icon(Icons.search, color: Colors.white),
           ),
@@ -63,91 +107,84 @@ class _ProductScreen extends State<ProductScreen> {
             ),
         ],
       ),
-      child: Obx(
-        () {
-          if (_productController.isLoading.value) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-
-          if (_productController.products.isEmpty) {
-            return Column(
-              children: [
-                if (_productController.isFiltered.value)
-                  FilteredWidget(productController: _productController),
-                if (_productController.searchByNameController.text.isNotEmpty)
-                  SearchedWidget(productController: _productController),
-                Expanded(
-                  child: Center(
-                    child: Text('global_no_item'.trParams(
-                      {
-                        'item': 'menu_product'.tr,
-                      },
-                    )),
-                  ),
+      child: Column(
+        children: [
+          Obx(() {
+            if (_productController.isFiltered.value) {
+              return FilteredWidget(
+                productController: _productController,
+                onClear: _clearSearchAndRefresh,
+              );
+            }
+            if (_productController.searchByNameController.text.isNotEmpty) {
+              return SearchedWidget(
+                onClear: _clearSearchAndRefresh,
+              );
+            }
+            return const SizedBox.shrink();
+          }),
+          Expanded(
+            child: PagedListView<int, ProductResponse>(
+              pagingController: _pagingController,
+              builderDelegate:
+                  PagedChildBuilderDelegate<ProductResponse>(
+                noItemsFoundIndicatorBuilder: (_) => Center(
+                  child: Text('global_no_item'.trParams(
+                    {'item': 'menu_product'.tr},
+                  )),
                 ),
-              ],
-            );
-          }
-
-          return Column(
-            children: [
-              if (_productController.isFiltered.value)
-                FilteredWidget(productController: _productController),
-              if (_productController.searchByNameController.text.isNotEmpty)
-                SearchedWidget(productController: _productController),
-              Expanded(
-                child: ListView.separated(
-                  itemCount: _productController.products.length + 1,
-                  separatorBuilder: (context, index) {
-                    return const SizedBox(
-                      height: 10,
+                firstPageProgressIndicatorBuilder: (_) => const Center(
+                  child: CircularProgressIndicator(),
+                ),
+                newPageProgressIndicatorBuilder: (_) => const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Center(child: CircularProgressIndicator()),
+                ),
+                itemBuilder: (context, product, index) {
+                  if (index == _pagingController.itemList!.length - 1) {
+                    return Column(
+                      children: [
+                        buildMyCardList(product, context),
+                        SizedBox(height: height * 10.0 / 100),
+                      ],
                     );
-                  },
-                  itemBuilder: (context, index) {
-                    if (index == _productController.products.length) {
-                      return SizedBox(
-                        height: height * 10.0 / 100,
-                      );
-                    }
-                    return buildMyCardList(index, context);
-                  },
-                ),
+                  }
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: buildMyCardList(product, context),
+                  );
+                },
               ),
-            ],
-          );
-        },
+            ),
+          ),
+        ],
       ),
     );
   }
 
-  MyCardList buildMyCardList(int index, BuildContext context) {
+  MyCardList buildMyCardList(ProductResponse product, BuildContext context) {
     return MyCardList(
-      key: ValueKey(_productController.products[index].id),
+      key: ValueKey(product.id),
       list: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              _productController.products[index].name,
-              overflow: TextOverflow.ellipsis,
-              maxLines: 4,
-              style: const TextStyle(
-                fontSize: 20,
+            Expanded(
+              child: Text(
+                product.name,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 4,
+                style: const TextStyle(fontSize: 20),
               ),
             ),
-            if (!_productController.products[index].isNonStock)
-              if (_productController.products[index].stock! <=
+            if (!product.isNonStock)
+              if (product.stock! <=
                   _settingController.setting.value.minimumStock!)
-                const Icon(
-                  Icons.warning,
-                  color: error,
-                ),
+                const Icon(Icons.warning, color: error),
           ],
         ),
         if (_authController.feature(feature: 'product-stock'))
-          if (_productController.products[index].isNonStock)
+          if (product.isNonStock)
             Text(
               "field_is_non_stock".tr,
               style: const TextStyle(
@@ -157,31 +194,28 @@ class _ProductScreen extends State<ProductScreen> {
               ),
             ),
         if (_authController.feature(feature: 'product-stock'))
-          if (!_productController.products[index].isNonStock)
+          if (!product.isNonStock)
             Text(
-              "stock: ${_productController.products[index].stock}",
+              "stock: ${product.stock}",
               style: const TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w200,
               ),
             ),
         Text(
-          _productController.buildPrice(index),
+          _productController.buildPrice(product),
           style: const TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w400,
           ),
-        )
+        ),
       ],
       imagebox: Hero(
-        tag: 'product-${_productController.products[index].id}',
-        child: BuildListImage(url: _productController.products[index].image),
+        tag: 'product-${product.id}',
+        child: BuildListImage(url: product.image),
       ),
       onTap: () {
-        Get.toNamed(
-          '/menu/product/detail',
-          arguments: _productController.products[index],
-        );
+        Get.toNamed('/menu/product/detail', arguments: product);
       },
     );
   }
@@ -190,28 +224,21 @@ class _ProductScreen extends State<ProductScreen> {
 class SearchedWidget extends StatelessWidget {
   const SearchedWidget({
     super.key,
-    required ProductController productController,
-  }) : _productController = productController;
+    required this.onClear,
+  });
 
-  final ProductController _productController;
+  final VoidCallback onClear;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(
-        vertical: 10,
-      ),
+      padding: const EdgeInsets.symmetric(vertical: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Text(
-            'Search Result',
-          ),
+          const Text('Search Result'),
           IconButton(
-            onPressed: () {
-              _productController.searchByNameController.clear();
-              _productController.getProducts();
-            },
+            onPressed: onClear,
             icon: const Icon(Icons.close),
           ),
         ],
@@ -224,31 +251,25 @@ class FilteredWidget extends StatelessWidget {
   const FilteredWidget({
     super.key,
     required ProductController productController,
+    required this.onClear,
   }) : _productController = productController;
 
   final ProductController _productController;
+  final VoidCallback onClear;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(
-        vertical: 10,
-      ),
+      padding: const EdgeInsets.symmetric(vertical: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
-                'Filtered Result',
-              ),
+              const Text('Filtered Result'),
               IconButton(
-                onPressed: () {
-                  _productController.isFiltered(false);
-                  _productController.clearSearch();
-                  _productController.getProducts();
-                },
+                onPressed: onClear,
                 icon: const Icon(Icons.close),
               ),
             ],
@@ -256,9 +277,7 @@ class FilteredWidget extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
-                'Category: ',
-              ),
+              const Text('Category: '),
               Text(
                 _productController.searchByCategoryController.selectedLabel ??
                     '',
@@ -268,9 +287,7 @@ class FilteredWidget extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
-                'Type: ',
-              ),
+              const Text('Type: '),
               Text(
                 _productController.searchByTypeController.selectedLabel ?? '',
               ),
@@ -279,23 +296,15 @@ class FilteredWidget extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
-                'Unit: ',
-              ),
-              Text(
-                _productController.searchByUnitController.text,
-              ),
+              const Text('Unit: '),
+              Text(_productController.searchByUnitController.text),
             ],
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
-                'Name: ',
-              ),
-              Text(
-                _productController.searchByNameController.text,
-              ),
+              const Text('Name: '),
+              Text(_productController.searchByNameController.text),
             ],
           ),
         ],
