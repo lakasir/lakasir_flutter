@@ -13,6 +13,8 @@ env:
 jobs:
   release:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -23,6 +25,17 @@ jobs:
           echo "Setting pubspec.yaml version to: $TAG"
           sed -i "s/^version: .*/version: $TAG/" pubspec.yaml
           cat pubspec.yaml | head -5
+
+      - name: Set Android versionCode from tag
+        run: |
+          TAG="${{ github.ref_name }}"
+          MAJOR=$(echo "$TAG" | cut -d. -f1)
+          MINOR=$(echo "$TAG" | cut -d. -f2)
+          PATCH=$(echo "$TAG" | cut -d. -f3)
+          VERSION_CODE=$((MAJOR * 10000 + MINOR * 100 + PATCH))
+          echo "flutter.versionCode=$VERSION_CODE" >> android/local.properties
+          echo "flutter.versionName=$TAG" >> android/local.properties
+          echo "versionCode=$VERSION_CODE versionName=$TAG"
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
@@ -64,3 +77,12 @@ jobs:
             build/app/outputs/bundle/release/app-release.aab
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Commit version bump
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add pubspec.yaml
+          git commit -m "chore: bump version to ${{ github.ref_name }}" || echo "Nothing to commit"
+          git push origin HEAD:main
