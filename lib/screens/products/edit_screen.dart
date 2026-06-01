@@ -23,8 +23,8 @@ class _EditProductScreenState extends State<EditProductScreen> {
 
   @override
   void dispose() {
-    super.dispose();
     _productAddEditController.clearInput();
+    super.dispose();
   }
 
   @override

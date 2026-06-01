@@ -73,7 +73,7 @@ class _TransactionSettingState extends State<TransactionSetting> {
                             taxController.numberValue,
                           );
                           Get.back();
-                          show("set_detault_tax_success".tr);
+                          show("set_detault_tax_success".tr, color: success);
                         },
                         child: Text("global_save".tr),
                       ),

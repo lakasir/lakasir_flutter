@@ -49,7 +49,7 @@ class MemberUpdateController extends GetxController {
       isSubmitting(false);
       show("global_updated_item".trParams({
         'item': 'menu_member'.tr,
-      }));
+      }), color: success);
       Get.until((route) => route.settings.name == '/menu/member');
     } catch (e) {
       isSubmitting(false);

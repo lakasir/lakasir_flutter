@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:lakasir/api/api_service.dart';
 import 'package:lakasir/api/requests/profile_request.dart';
 import 'package:lakasir/api/responses/api_response.dart';
@@ -19,6 +20,14 @@ class ProfileService {
     await ApiService(await getDomain()).putData(
       'auth/me',
       profileRequest.toJson(),
+    );
+  }
+
+  Future<dynamic> uploadImage(File image) async {
+    return await ApiService(await getDomain()).uploadFile(
+      '${await getDomain()}/temp/upload',
+      'file',
+      image,
     );
   }
 }

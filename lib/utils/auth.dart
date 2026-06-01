@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 Future<String> checkAuthentication() async {
   final setup = await isSetup();
   final token = await getToken();
+
   if (setup && token != null) {
     return "menu";
   }

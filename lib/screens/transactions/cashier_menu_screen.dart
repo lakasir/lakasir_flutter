@@ -109,7 +109,7 @@ class _CashierMenuScreenState extends State<CashierMenuScreen> {
                 }
 
                 if (cartSession.cartItems.isEmpty) {
-                  show('Cart is empty', color: error);
+                  show('Cart is empty', color: error, duration: const Duration(seconds: 2));
                   return;
                 }
 

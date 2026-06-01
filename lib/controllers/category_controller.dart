@@ -38,7 +38,9 @@ class CategoryController extends GetxController {
       categoryNameController.clear();
       fetchCategories();
       Get.back();
-      show('global_added_item'.trParams({'item': 'setting_category'.tr}));
+      show('global_added_item'.trParams({
+        'item': 'setting_category'.tr,
+      }), color: success);
     } catch (e) {
       if (e is ValidationException) {
         ErrorResponse<CategoryErrorResponse> errorResponses =
@@ -78,7 +80,9 @@ class CategoryController extends GetxController {
       categoryNameController.clear();
       fetchCategories();
       Get.back();
-      show('global_updated_item'.trParams({'item': 'setting_category'.tr}));
+      show('global_updated_item'.trParams({
+        'item': 'setting_category'.tr,
+      }), color: success);
     } catch (e) {
       if (e is ValidationException) {
         ErrorResponse<CategoryErrorResponse> errorResponses =

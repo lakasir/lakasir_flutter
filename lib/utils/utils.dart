@@ -63,11 +63,19 @@ Future show(
   Duration duration = const Duration(seconds: 2),
   Color? color,
 }) async {
-  ScaffoldMessenger.of(Get.context!).showSnackBar(
+  final context = Get.overlayContext;
+  if (context == null) {
+    debug("No overlay context available. Cannot show SnackBar.");
+    return;
+  }
+
+  debug("Showing SnackBar with message: $message");
+
+  ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       content: Text(message),
+      backgroundColor: color ?? Colors.green,
       duration: duration,
-      backgroundColor: color ?? success,
     ),
   );
 }

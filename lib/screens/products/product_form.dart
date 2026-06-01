@@ -67,9 +67,10 @@ class _ProductFormState extends State<ProductForm> {
               child: MyImagePicker(
                 usingDynamicSource: true,
                 usingLocalImage: true,
-                onImageSelected: (file) {
-                  widget.controller.photoUrl = file;
+                onLocalImageSelected: (path) {
+                  widget.controller.setLocalImagePath(path);
                 },
+                defaultImage: widget.controller.defaultImageUrl ?? '',
               ),
             ),
             SizedBox(
@@ -228,8 +229,6 @@ class _ProductFormState extends State<ProductForm> {
                   DateTime now = DateTime.now();
 
                   return MyDatePicker(
-                    mandatory: true,
-                    initialDate: now,
                     firstDate: now,
                     lastDate: DateTime(now.year + 3, now.month, now.day),
                     controller: widget.controller.expiredController,

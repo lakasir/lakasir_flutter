@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:lakasir/Exceptions/unauthenticated.dart';
 import 'package:lakasir/Exceptions/validation.dart';
 import 'package:lakasir/utils/auth.dart';
@@ -159,6 +161,52 @@ class ApiService<T> {
       return response.bodyBytes;
     } else {
       throw Exception('Failed to load data');
+    }
+  }
+
+  Future<T> uploadFile(
+    String url,
+    String fieldName,
+    File file, {
+    Map<String, String>? headers,
+  }) async {
+    final token = await getToken();
+    final request = http.MultipartRequest('POST', Uri.parse(url));
+    request.headers.addAll({
+      'Authorization': 'Bearer $token',
+      ...?headers,
+    });
+
+    final ext = file.path.split('.').last.toLowerCase();
+    final subtypeMap = {
+      'png': 'png',
+      'jpg': 'jpeg',
+      'jpeg': 'jpeg',
+      'gif': 'gif',
+      'webp': 'webp',
+      'bmp': 'bmp',
+    };
+    final subtype = subtypeMap[ext] ?? 'jpeg';
+    request.files.add(await http.MultipartFile.fromPath(
+      fieldName,
+      file.path,
+      contentType: MediaType('image', subtype),
+    ));
+
+    final streamedResponse = await request.send();
+    final response = await http.Response.fromStream(streamedResponse);
+
+    logApi(response);
+
+    if (response.statusCode == 401) {
+      logout();
+      throw UnauthorizedException(jsonDecode(response.body)['message']);
+    }
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception('Failed to upload file: ${response.statusCode}');
     }
   }
 }

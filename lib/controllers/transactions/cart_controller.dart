@@ -68,15 +68,17 @@ class CartController extends GetxController {
     }
   }
 
-  void addToCart(CartItem cartItem) async {
+  Future<void> addToCart(CartItem cartItem) async {
     isAddToCartLoading(true);
     await _productDetailController.get(cartItem.product.id);
     if (isNotEnoughStock()) {
-      return;
+      throw Exception("global_stock_not_enough".trParams({
+        "item": cartItem.product.name,
+      }));
     }
     if (!globalKey.currentState!.validate()) {
       isAddToCartLoading(false);
-      return;
+      throw Exception('Invalid form');
     }
     if (cartSessions.value.cartItems.contains(cartItem)) {
       cartSessions
@@ -151,11 +153,20 @@ class CartController extends GetxController {
             ),
             Obx(
               () => MyFilledButton(
-                onPressed: () {
-                  addToCart(CartItem(
-                    product: product,
-                    qty: int.parse(qtyController.text),
-                  ));
+                onPressed: () async {
+                  try {
+                    await addToCart(CartItem(
+                      product: product,
+                      qty: int.parse(qtyController.text),
+                    ));
+                    Get.back();
+                  } catch (e) {
+                    Get.back();
+                    show(
+                      e.toString().replaceAll('Exception: ', ''),
+                      color: error,
+                    );
+                  }
                 },
                 isLoading: isAddToCartLoading.value,
                 child: Text("global_save".tr),

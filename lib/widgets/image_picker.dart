@@ -8,12 +8,13 @@ import 'package:path_provider/path_provider.dart';
 import 'package:lakasir/utils/colors.dart';
 import 'package:lakasir/utils/utils.dart';
 
-typedef MyCallback = void Function(String?);
+typedef MyCallback = void Function(dynamic);
+typedef MyLocalCallback = void Function(String?);
 
 class MyImagePicker extends StatefulWidget {
   const MyImagePicker({
     super.key,
-    required this.onImageSelected,
+    this.onImageSelected,
     this.source = image_picker.ImageSource.camera,
     this.maxSize = 1000000,
     this.usingDynamicSource = false,
@@ -21,9 +22,20 @@ class MyImagePicker extends StatefulWidget {
     this.usingLocalImage = false,
     this.maxWidth,
     this.maxHeight,
-  });
+    this.onLocalImageSelected,
+    this.onUploadComplete,
+  })  : assert(
+          !usingLocalImage || onLocalImageSelected != null,
+          'onLocalImageSelected is required when usingLocalImage is true',
+        ),
+        assert(
+          usingLocalImage || onImageSelected != null,
+          'onImageSelected is required when usingLocalImage is false',
+        );
   final bool usingLocalImage;
-  final MyCallback onImageSelected;
+  final MyCallback? onImageSelected;
+  final MyLocalCallback? onLocalImageSelected;
+  final Function(String path)? onUploadComplete;
   final image_picker.ImageSource source;
   final int? maxSize;
   final int? maxWidth;
@@ -45,22 +57,18 @@ class _MyImagePickerState extends State<MyImagePicker> {
       final File imageFile = File(filePath);
       final bytes = await imageFile.readAsBytes();
       final img.Image? image = img.decodeImage(bytes);
-      if (image == null) return filePath; // fallback to original path
+      if (image == null) return filePath;
 
-      // Resize if width > 512 pixels for better offline performance
       img.Image processedImage = image;
       if (image.width > 512) {
         final int newHeight = (image.height * 512 / image.width).round();
         processedImage = img.copyResize(image, width: 512, height: newHeight);
       }
 
-      // Encode as JPEG with quality 70 for compression
       final compressedBytes = img.encodeJpg(processedImage, quality: 70);
 
-      // Save to app documents directory
       final dir = await getApplicationDocumentsDirectory();
-      final String fileName =
-          'img_${DateTime.now().millisecondsSinceEpoch}.jpg';
+      final String fileName = 'img_${DateTime.now().millisecondsSinceEpoch}.jpg';
       final String savedPath = '${dir.path}/$fileName';
       final File savedFile = File(savedPath);
       await savedFile.writeAsBytes(compressedBytes);
@@ -68,7 +76,7 @@ class _MyImagePickerState extends State<MyImagePicker> {
       return savedPath;
     } catch (e) {
       debugPrint('Error saving image locally: $e');
-      return filePath; // fallback to original path
+      return filePath;
     }
   }
 
@@ -79,9 +87,7 @@ class _MyImagePickerState extends State<MyImagePicker> {
         imageQuality: 50,
       );
 
-      if (selected == null) {
-        return;
-      }
+      if (selected == null) return;
 
       CroppedFile? croppedFile = await ImageCropper().cropImage(
         sourcePath: selected.path,
@@ -94,31 +100,39 @@ class _MyImagePickerState extends State<MyImagePicker> {
             toolbarWidgetColor: Colors.white,
             initAspectRatio: CropAspectRatioPreset.square,
             lockAspectRatio: true,
-            aspectRatioPresets: [
-              CropAspectRatioPreset.square,
-            ],
+            aspectRatioPresets: [CropAspectRatioPreset.square],
           ),
           IOSUiSettings(
             title: 'Cropper',
-            aspectRatioPresets: [
-              CropAspectRatioPreset.square,
-            ],
+            aspectRatioPresets: [CropAspectRatioPreset.square],
             aspectRatioLockEnabled: true,
           ),
         ],
       );
 
-      if (croppedFile == null) {
-        return;
+      if (croppedFile == null) return;
+
+      if (widget.maxSize != null) {
+        final fileSize = await File(croppedFile.path).length();
+        if (fileSize > widget.maxSize!) {
+          show('image_too_large'.tr, color: error);
+          return;
+        }
       }
 
       setState(() {
         _image = image_picker.XFile(croppedFile.path);
       });
 
-      // Save and compress image locally for offline use
-      String localPath = await _saveAndCompressImageLocally(croppedFile.path);
-      widget.onImageSelected(localPath);
+      final String localPath = await _saveAndCompressImageLocally(croppedFile.path);
+
+      if (widget.usingLocalImage) {
+        widget.onLocalImageSelected?.call(localPath);
+        return;
+      }
+
+      widget.onImageSelected?.call(localPath);
+      widget.onUploadComplete?.call(localPath);
     } catch (e) {
       show(e.toString(), color: error);
       debugPrint(e.toString());
@@ -135,9 +149,7 @@ class _MyImagePickerState extends State<MyImagePicker> {
             leading: const Icon(Icons.camera_alt),
             title: Text('global_camera'.tr),
             onTap: () {
-              setState(() {
-                dynamicSource = image_picker.ImageSource.camera;
-              });
+              setState(() => dynamicSource = image_picker.ImageSource.camera);
               _pickImage();
               Get.back();
             },
@@ -146,9 +158,7 @@ class _MyImagePickerState extends State<MyImagePicker> {
             title: Text('global_gallery'.tr),
             leading: const Icon(Icons.photo),
             onTap: () {
-              setState(() {
-                dynamicSource = image_picker.ImageSource.gallery;
-              });
+              setState(() => dynamicSource = image_picker.ImageSource.gallery);
               _pickImage();
               Get.back();
             },
@@ -166,9 +176,7 @@ class _MyImagePickerState extends State<MyImagePicker> {
           if (widget.usingDynamicSource) {
             getImageSource();
           } else {
-            setState(() {
-              dynamicSource = widget.source;
-            });
+            setState(() => dynamicSource = widget.source);
             _pickImage();
           }
         },
@@ -189,7 +197,7 @@ class _MyImagePickerState extends State<MyImagePicker> {
                     fit: BoxFit.fitHeight,
                   ),
                 )
-              : widget.defaultImage != ''
+              : widget.defaultImage.isNotEmpty
                   ? ClipRRect(
                       borderRadius: BorderRadius.circular(20),
                       child: _buildImage(widget.defaultImage),
@@ -197,10 +205,7 @@ class _MyImagePickerState extends State<MyImagePicker> {
                   : SizedBox(
                       width: 50,
                       height: 50,
-                      child: Icon(
-                        Icons.camera_alt,
-                        color: Colors.grey[800],
-                      ),
+                      child: Icon(Icons.camera_alt, color: Colors.grey[800]),
                     ),
         ),
       ),
@@ -208,33 +213,21 @@ class _MyImagePickerState extends State<MyImagePicker> {
   }
 
   Widget _buildImage(String imageUrl) {
-    // Check if it's a local file path
     if (imageUrl.startsWith('/') || imageUrl.startsWith('file://')) {
       return Image.file(
         File(imageUrl.replaceAll('file://', '')),
         width: 50.0,
         height: 50.0,
         fit: BoxFit.fitHeight,
-        errorBuilder: (context, error, stackTrace) {
-          return Image.asset(
-            'assets/no-image-100.png',
-            fit: BoxFit.cover,
-          );
-        },
+        errorBuilder: (_, __, ___) => Image.asset('assets/no-image-100.png', fit: BoxFit.cover),
       );
     }
-    // Network image
     return Image.network(
       imageUrl,
       width: 50.0,
       height: 50.0,
       fit: BoxFit.fitHeight,
-      errorBuilder: (context, error, stackTrace) {
-        return Image.asset(
-          'assets/no-image-100.png',
-          fit: BoxFit.cover,
-        );
-      },
+      errorBuilder: (_, __, ___) => Image.asset('assets/no-image-100.png', fit: BoxFit.cover),
     );
   }
 }

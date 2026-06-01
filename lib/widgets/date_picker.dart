@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:lakasir/widgets/text_field.dart';
 
 class MyDatePicker extends StatefulWidget {
-  final DateTime initialDate;
+  final DateTime? initialDate;
   final DateTime firstDate;
   final DateTime lastDate;
   final TextEditingController controller;
@@ -15,7 +15,7 @@ class MyDatePicker extends StatefulWidget {
   final bool mandatory;
   const MyDatePicker({
     super.key,
-    required this.initialDate,
+    this.initialDate,
     required this.firstDate,
     required this.lastDate,
     required this.controller,
@@ -36,13 +36,15 @@ class _MyDatePickerState extends State<MyDatePicker> {
   @override
   void initState() {
     super.initState();
-    _selectedDate = widget.initialDate;
-    if (widget.usingTimePicker) {
-      widget.controller.text =
-          DateFormat("yyyy-MM-dd HH:mm:ss").format(_selectedDate).toString();
-    } else {
-      widget.controller.text =
-          DateFormat("yyyy-MM-dd").format(_selectedDate).toString();
+    if (widget.initialDate != null) {
+      _selectedDate = widget.initialDate!;
+      if (widget.usingTimePicker) {
+        widget.controller.text =
+            DateFormat("yyyy-MM-dd HH:mm:ss").format(_selectedDate).toString();
+      } else {
+        widget.controller.text =
+            DateFormat("yyyy-MM-dd").format(_selectedDate).toString();
+      }
     }
   }
 

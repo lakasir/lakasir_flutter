@@ -43,7 +43,9 @@ class MemberAddController extends GetxController {
       );
       _memberController.fetchMembers();
       isSubmitting(false);
-      show("global_added_item".trParams({'item': 'menu_member'.tr}));
+      show("global_added_item".trParams({
+        'item': 'menu_member'.tr,
+      }), color: success);
       Get.back();
     } catch (e) {
       isSubmitting(false);

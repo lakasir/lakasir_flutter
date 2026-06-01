@@ -1,4 +1,4 @@
-package com.lakasir.lakasir
+package com.lakasir.com
 
 import io.flutter.embedding.android.FlutterActivity
 

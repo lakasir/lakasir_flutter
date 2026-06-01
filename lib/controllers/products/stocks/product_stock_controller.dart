@@ -11,6 +11,7 @@ import 'package:lakasir/api/responses/products/stocks/stock_response.dart';
 import 'package:lakasir/controllers/products/product_controller.dart';
 import 'package:lakasir/controllers/products/product_detail_controller.dart';
 import 'package:lakasir/services/product_stock_service.dart';
+import 'package:lakasir/utils/colors.dart';
 import 'package:lakasir/utils/utils.dart';
 
 class ProductStockController extends GetxController {
@@ -65,7 +66,7 @@ class ProductStockController extends GetxController {
       isLoading(false);
       clear();
       Get.back();
-      show('Stock has been added');
+      show('Stock has been added', color: success);
     } catch (e) {
       isLoading(false);
       if (e is ValidationException) {

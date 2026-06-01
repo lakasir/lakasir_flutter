@@ -28,7 +28,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
       bottomNavigationBar: MyBottomBar(
         onPressed: () {
           if (cartSession.payedMoney! < subTotalPrice) {
-            show('Payed money is not enough', color: error);
+            show('Payed money is not enough', color: error, duration: const Duration(seconds: 2));
             return;
           }
           openSunmiCashDrawer();

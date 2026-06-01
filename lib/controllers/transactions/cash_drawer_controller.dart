@@ -95,7 +95,7 @@ class CashDrawerController extends GetxController {
                         onPressed: () {
                           closeCashDrawer();
                           Get.back();
-                          show('cashier_cash_drawer_closed'.tr);
+                          show('cashier_cash_drawer_closed'.tr, color: success, duration: const Duration(seconds: 2));
                         },
                         child: Text(
                           'cashier_cash_drawer_close'.tr,
@@ -114,7 +114,9 @@ class CashDrawerController extends GetxController {
                       onPressed: () {
                         storeCashDrawer(cashDrawerController.numberValue);
                         Get.back();
-                        show('global_added_item'.trParams({'item': 'cashier_cash_drawer'.tr}));
+                        show('global_added_item'.trParams(
+                            {'item': 'cashier_cash_drawer'.tr},
+                          ), color: success, duration: const Duration(seconds: 2));
                       },
                       child: const Icon(
                         Icons.save,

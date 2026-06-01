@@ -44,8 +44,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   () => SizedBox(
                     width: 100,
                     child: MyImagePicker(
-                      onImageSelected: (file) {
-                        _profileController.profile.value.photoUrl = file;
+                      usingLocalImage: true,
+                      onLocalImageSelected: (path) {
+                        _profileController.localImagePath.value = path ?? '';
                       },
                       usingDynamicSource: true,
                       defaultImage: _profileController.profile.value.photoUrl

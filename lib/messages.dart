@@ -161,6 +161,8 @@ class Messages extends Translations {
           'global_camera': 'Camera',
           'global_gallery': 'Gallery',
           'global_select_image_source': 'Select Image Source',
+          'global_error': 'Error',
+          'image_too_large': 'Image size exceeds the maximum allowed limit',
           'option_product': 'Product',
           'option_service': 'Service',
           'validation_required': 'This @field is required',
@@ -299,6 +301,7 @@ class Messages extends Translations {
           'syncing_pending': 'Syncing {count} pending transactions...',
           'sync_now': 'SYNC NOW',
           'offline_mode_indicator': 'OFFLINE',
+          'global_stock_not_enough': 'Stock is not enough for @item',
         },
         'id_ID': {
           'auth': 'Otentikasi',
@@ -459,6 +462,9 @@ class Messages extends Translations {
           'global_camera': 'Kamera',
           'global_gallery': 'Galeri',
           'global_select_image_source': 'Pilih Sumber Gambar',
+          'global_error': 'Kesalahan',
+          'image_too_large':
+              'Ukuran gambar melebihi batas maksimum yang diizinkan',
           'option_product': 'Produk',
           'option_service': 'Jasa',
           'validation_required': '@field ini wajib diisi',
@@ -597,6 +603,7 @@ class Messages extends Translations {
           'syncing_pending': 'Menyinkronkan {count} transaksi tertunda...',
           'sync_now': 'SINKRONKAN',
           'offline_mode_indicator': 'OFFLINE',
+          'global_stock_not_enough': 'Stok tidak cukup untuk @item',
         },
       };
 }

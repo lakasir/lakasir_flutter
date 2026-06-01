@@ -17,6 +17,7 @@ import 'package:lakasir/utils/colors.dart';
 import 'package:lakasir/utils/utils.dart';
 import 'package:lakasir/widgets/select_input_feld.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:lakasir/models/uploaded_file.dart';
 
 class ProductAddEditController extends GetxController {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -39,7 +40,19 @@ class ProductAddEditController extends GetxController {
   final TextEditingController expiredController = TextEditingController();
   final TextEditingController skuInputController = TextEditingController();
   final TextEditingController barcodeInputController = TextEditingController();
-  String? photoUrl = '';
+  UploadedFile? _uploadedFile;
+  String? _existingImageUrl;
+  Rx<String> localImagePath = ''.obs;
+  int? get heroImagesUploadedFileId => _uploadedFile?.id;
+  String? get defaultImageUrl => _uploadedFile?.url ?? _existingImageUrl;
+
+  void setUploadedFile(UploadedFile? file) {
+    _uploadedFile = file;
+  }
+
+  void setLocalImagePath(String? path) {
+    localImagePath.value = path ?? '';
+  }
   Rx<ProductErrorResponse> productErrorResponse = ProductErrorResponse().obs;
   final RxBool isLoading = false.obs;
   final ProductController _productController = Get.put(ProductController());
@@ -171,15 +184,17 @@ class ProductAddEditController extends GetxController {
 
       if (!formKey.currentState!.validate()) {
         isLoading(false);
+        show('please_fill_form'.tr, color: error);
         return;
       }
 
       String? savedImagePath;
-      if (photoUrl != null && photoUrl!.isNotEmpty) {
-        if (!photoUrl!.startsWith('http') && !photoUrl!.contains('product_')) {
-          savedImagePath = await _saveAndCompressImage(photoUrl!);
+      final imageUrl = _uploadedFile?.url ?? _existingImageUrl;
+      if (imageUrl != null && imageUrl.isNotEmpty) {
+        if (!imageUrl.startsWith('http') && !imageUrl.contains('product_')) {
+          savedImagePath = await _saveAndCompressImage(imageUrl);
         } else {
-          savedImagePath = photoUrl;
+          savedImagePath = imageUrl;
         }
       }
 
@@ -250,15 +265,17 @@ class ProductAddEditController extends GetxController {
 
       if (!formKey.currentState!.validate()) {
         isLoading(false);
+        show('please_fill_form'.tr, color: error);
         return;
       }
 
       String? savedImagePath;
-      if (photoUrl != null && photoUrl!.isNotEmpty) {
-        if (!photoUrl!.startsWith('http') && !photoUrl!.contains('product_')) {
-          savedImagePath = await _saveAndCompressImage(photoUrl!);
+      final imageUrl = _uploadedFile?.url ?? _existingImageUrl;
+      if (imageUrl != null && imageUrl.isNotEmpty) {
+        if (!imageUrl.startsWith('http') && !imageUrl.contains('product_')) {
+          savedImagePath = await _saveAndCompressImage(imageUrl);
         } else {
-          savedImagePath = photoUrl;
+          savedImagePath = imageUrl;
         }
       }
 
@@ -329,7 +346,8 @@ class ProductAddEditController extends GetxController {
     initialPriceInputController.clear();
     sellingPriceInputController.clear();
     unitInputController.clear();
-    photoUrl = '';
+    _uploadedFile = null;
+    _existingImageUrl = null;
     categoryController.selectedOption = null;
     skuInputController.clear();
     barcodeInputController.clear();
@@ -355,7 +373,7 @@ class ProductAddEditController extends GetxController {
       initialPriceInputController.updateValue(products.initialPrice ?? 0);
       sellingPriceInputController.updateValue(products.sellingPrice ?? 0);
       unitInputController.text = products.unit;
-      photoUrl = products.image;
+      _existingImageUrl = products.image;
       skuInputController.text = products.sku;
       barcodeInputController.text = products.barcode ?? '';
       enabledStock(products.isNonStock);

@@ -8,7 +8,7 @@ class ProductRequest {
   double? sellingPrice;
   String? type;
   String? unit;
-  String? photoUrl;
+  int? heroImagesUploadedFileId;
   bool isNonStock;
   String? sku;
   String? barcode;
@@ -22,7 +22,7 @@ class ProductRequest {
     this.sellingPrice,
     this.type,
     this.unit,
-    this.photoUrl,
+    this.heroImagesUploadedFileId,
     this.isNonStock = false,
     this.sku,
     this.barcode,
@@ -41,10 +41,12 @@ class ProductRequest {
       'is_non_stock': isNonStock,
       'sku': sku,
       'barcode': barcode ?? '',
-      'expired': expired ?? ''
     };
-    if (photoUrl != '') {
-      data['hero_images_url'] = photoUrl;
+    if (heroImagesUploadedFileId != null) {
+      data['hero_images_uploaded_file_id'] = heroImagesUploadedFileId;
+    }
+    if (expired != null && expired!.isNotEmpty) {
+      data['expired'] = expired;
     }
 
     return data;

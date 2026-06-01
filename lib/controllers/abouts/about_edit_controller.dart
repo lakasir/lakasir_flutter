@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -9,8 +10,10 @@ import 'package:lakasir/api/responses/abouts/about_error_response.dart';
 import 'package:lakasir/api/responses/abouts/about_response.dart';
 import 'package:lakasir/api/responses/error_response.dart';
 import 'package:lakasir/controllers/abouts/about_controller.dart';
+import 'package:lakasir/models/uploaded_file.dart';
 import 'package:lakasir/services/about_service.dart';
 
+import 'package:lakasir/utils/colors.dart';
 import 'package:lakasir/utils/utils.dart';
 import 'package:lakasir/widgets/select_input_feld.dart';
 
@@ -28,12 +31,23 @@ class AboutEditController extends GetxController {
       SelectInputWidgetController();
   final TextEditingController otherBusinessType = TextEditingController();
   final Rx<AboutResponse> about = AboutResponse().obs;
+  Rx<UploadedFile?> uploadedFile = Rx<UploadedFile?>(null);
+  Rx<String> localImagePath = ''.obs;
   final AboutService _aboutService = AboutService();
   final Rx<AboutErrorResponse> aboutErrorResponse = AboutErrorResponse().obs;
 
   Future<void> updateAbout() async {
     try {
       isLoading(true);
+      
+      int? finalFileId;
+      if (localImagePath.value.isNotEmpty) {
+        final response = await _aboutService.uploadImage(File(localImagePath.value));
+        finalFileId = response['data']['id'];
+      } else if (uploadedFile.value != null) {
+        finalFileId = uploadedFile.value!.id;
+      }
+      
       await _aboutService.update(
         AboutRequest(
           shopName: nameInputController.text,
@@ -41,12 +55,12 @@ class AboutEditController extends GetxController {
           otherBusinessType: otherBusinessType.text,
           ownerName: ownerNameInputController.text,
           shopLocation: locationInputController.text,
-          photoUrl: about.value.photo,
+          uploadedFileId: finalFileId,
         ),
       );
       await aboutController.getShop();
       Get.back();
-      show('About Updated');
+      show('About Updated', color: success);
       isLoading(false);
       setData();
     } catch (e) {

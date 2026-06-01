@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -8,7 +9,9 @@ import 'package:lakasir/api/responses/auths/profile_error_response.dart';
 import 'package:lakasir/api/responses/auths/profile_response.dart';
 import 'package:lakasir/api/responses/error_response.dart';
 import 'package:lakasir/controllers/profiles/profile_controller.dart';
+import 'package:lakasir/models/uploaded_file.dart';
 import 'package:lakasir/services/profile_service.dart';
+import 'package:lakasir/utils/colors.dart';
 import 'package:lakasir/utils/utils.dart';
 import 'package:lakasir/widgets/select_input_feld.dart';
 
@@ -22,6 +25,8 @@ class ProfileEditController extends GetxController {
 
   RxBool isLoading = false.obs;
   Rx<ProfileResponse> profile = ProfileResponse().obs;
+  Rx<UploadedFile?> uploadedFile = Rx<UploadedFile?>(null);
+  Rx<String> localImagePath = ''.obs;
   final ProfileService _profileService = ProfileService();
   final ProfileController _profileController = Get.find();
   final formKey = GlobalKey<FormState>();
@@ -34,20 +39,31 @@ class ProfileEditController extends GetxController {
         isLoading(false);
         return;
       }
+      int? finalFileId;
+      if (localImagePath.value.isNotEmpty) {
+        final response = await _profileService.uploadImage(File(localImagePath.value));
+        finalFileId = response['data']['id'];
+      } else if (uploadedFile.value != null) {
+        finalFileId = uploadedFile.value!.id;
+      }
+
       await _profileService.update(ProfileRequest(
         name: nameInputController.text,
         phone: phoneInputController.text,
         email: emailInputController.text,
         address: addressInputController.text,
         locale: languageController.selectedOption,
-        photoUrl: profile.value.photoUrl,
+        uploadedFileId: finalFileId,
       ));
       clearError();
       await _profileController.getProfile();
       Get.back();
-      show('global_updated_item'.trParams({
-        'item': 'menu_profile'.tr,
-      }));
+      show(
+        'global_updated_item'.trParams({
+          'item': 'menu_profile'.tr,
+        }),
+        color: success,
+      );
       isLoading(false);
       setLocale(languageController.selectedOption!);
       await Get.forceAppUpdate();

@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:lakasir/api/api_service.dart';
 import 'package:lakasir/api/requests/about_request.dart';
 import 'package:lakasir/api/responses/abouts/about_response.dart';
@@ -19,5 +20,18 @@ class AboutService {
 
   Future<void> update(AboutRequest data) async {
     await ApiService(await getDomain()).putData('about', data.toJson());
+  }
+
+  Future<dynamic> uploadImage(File image) async {
+    final url = '${await getDomain()}/temp/upload';
+    final apiService = ApiService(await getDomain());
+    final token = await getToken();
+    
+    return await apiService.uploadFile(
+      url,
+      'file',
+      image,
+      headers: {'Authorization': 'Bearer $token'},
+    );
   }
 }
